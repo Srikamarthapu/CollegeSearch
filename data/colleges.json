@@ -1,0 +1,3971 @@
+{
+  "release": {
+    "cohortName": "College Compass verified starting cohort",
+    "institutionCount": 50,
+    "accessedOn": "2026-07-25",
+    "institutionMetricsYear": 2024,
+    "earningsCohortYear": 2020,
+    "publisher": "U.S. Department of Education",
+    "sourceName": "College Scorecard",
+    "sourceUrl": "https://collegescorecard.ed.gov/data/",
+    "ucAdmissionsSourceUrl": "https://www.universityofcalifornia.edu/about-us/information-center/freshman-admissions-summary",
+    "ucDisciplineSourceUrl": "https://www.universityofcalifornia.edu/about-us/information-center/freshman-admission-discipline",
+    "notes": "Major evidence reflects recent federal degree-completion shares. Admit rates shown with a major are institution-wide unless explicitly labeled otherwise."
+  },
+  "colleges": [
+    {
+      "unitId": 104151,
+      "slug": "arizona-state-university-campus-immersion",
+      "name": "Arizona State University Campus Immersion",
+      "aliases": [
+        "ASU",
+        "Arizona State"
+      ],
+      "city": "Tempe",
+      "state": "AZ",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://www.asu.edu/",
+      "undergraduateEnrollment": 64674,
+      "admitRate": 0.8989,
+      "averageNetPrice": 14967,
+      "graduationRate": 0.6804,
+      "medianEarnings": 62668,
+      "tuitionInState": 12223,
+      "tuitionOutOfState": 33139,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.066,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.2456,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0835,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0754,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0724,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0565,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0532,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0477,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0474,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0102,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0115,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0059,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 110404,
+      "slug": "california-institute-of-technology",
+      "name": "California Institute of Technology",
+      "aliases": [],
+      "city": "Pasadena",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Private nonprofit",
+      "setting": "City",
+      "website": "https://www.caltech.edu/",
+      "undergraduateEnrollment": 987,
+      "admitRate": 0.0257,
+      "averageNetPrice": 16075,
+      "graduationRate": 0.9437,
+      "medianEarnings": 128566,
+      "tuitionInState": 65898,
+      "tuitionOutOfState": 65898,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.4085,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.0085,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.3106,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0511,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0766,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.1447,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 110422,
+      "slug": "california-polytechnic-state-university-san-luis-obispo",
+      "name": "California Polytechnic State University-San Luis Obispo",
+      "aliases": [
+        "Cal Poly",
+        "Cal Poly SLO"
+      ],
+      "city": "San Luis Obispo",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "Suburb",
+      "website": "https://calpoly.edu/",
+      "undergraduateEnrollment": 21996,
+      "admitRate": 0.3132,
+      "averageNetPrice": 16665,
+      "graduationRate": 0.864,
+      "medianEarnings": 90768,
+      "tuitionInState": 13596,
+      "tuitionOutOfState": 34665,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0439,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.1751,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.2126,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0407,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0104,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0305,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0491,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0158,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.01,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0225,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0179,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0018,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 110529,
+      "slug": "california-state-polytechnic-university-pomona",
+      "name": "California State Polytechnic University-Pomona",
+      "aliases": [
+        "Cal Poly Pomona",
+        "CPP"
+      ],
+      "city": "Pomona",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "Suburb",
+      "website": "https://www.cpp.edu/",
+      "undergraduateEnrollment": 25042,
+      "admitRate": 0.7517,
+      "averageNetPrice": 11531,
+      "graduationRate": 0.6843,
+      "medianEarnings": 71902,
+      "tuitionInState": 7780,
+      "tuitionOutOfState": 20380,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0551,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.2584,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.1763,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0418,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.062,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0824,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0329,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0236,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0142,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0198,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0029,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 110556,
+      "slug": "california-state-university-fresno",
+      "name": "California State University-Fresno",
+      "aliases": [
+        "Fresno State",
+        "CSU Fresno"
+      ],
+      "city": "Fresno",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://www.fresnostate.edu/",
+      "undergraduateEnrollment": 21605,
+      "admitRate": 0.9526,
+      "averageNetPrice": 7000,
+      "graduationRate": 0.5696,
+      "medianEarnings": 61244,
+      "tuitionInState": 7350,
+      "tuitionOutOfState": 19950,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0134,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.1372,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0314,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.044,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0731,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.1248,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.1244,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0374,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0178,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0074,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0079,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0132,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 110565,
+      "slug": "california-state-university-fullerton",
+      "name": "California State University-Fullerton",
+      "aliases": [
+        "Cal State Fullerton",
+        "CSUF"
+      ],
+      "city": "Fullerton",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "Suburb",
+      "website": "https://https://www.fullerton.edu/",
+      "undergraduateEnrollment": 38546,
+      "admitRate": 0.9052,
+      "averageNetPrice": 6555,
+      "graduationRate": 0.7018,
+      "medianEarnings": 62951,
+      "tuitionInState": 7470,
+      "tuitionOutOfState": 20070,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0477,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.2393,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0329,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0314,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0821,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.1137,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0581,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0626,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0535,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0067,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0053,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0052,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 110583,
+      "slug": "california-state-university-long-beach",
+      "name": "California State University-Long Beach",
+      "aliases": [
+        "Cal State Long Beach",
+        "CSULB",
+        "Long Beach State"
+      ],
+      "city": "Long Beach",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://www.csulb.edu/",
+      "undergraduateEnrollment": 35924,
+      "admitRate": 0.4627,
+      "averageNetPrice": 10440,
+      "graduationRate": 0.6888,
+      "medianEarnings": 64403,
+      "tuitionInState": 7350,
+      "tuitionOutOfState": 19950,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0381,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.1591,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0876,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0546,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0685,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0783,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0707,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.1081,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0056,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.01,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0082,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0096,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 110592,
+      "slug": "california-state-university-los-angeles",
+      "name": "California State University-Los Angeles",
+      "aliases": [
+        "Cal State LA",
+        "CSULA"
+      ],
+      "city": "Los Angeles",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://https://www.calstatela.edu/",
+      "undergraduateEnrollment": 19562,
+      "admitRate": 0.9125,
+      "averageNetPrice": 3967,
+      "graduationRate": 0.5298,
+      "medianEarnings": 59211,
+      "tuitionInState": 7160,
+      "tuitionOutOfState": 19760,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0537,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.1642,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0444,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0386,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0857,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0789,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.083,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0426,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0674,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0032,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0066,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0049,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 110608,
+      "slug": "california-state-university-northridge",
+      "name": "California State University-Northridge",
+      "aliases": [
+        "Cal State Northridge",
+        "CSUN"
+      ],
+      "city": "Northridge",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://https://www.csun.edu/",
+      "undergraduateEnrollment": 32691,
+      "admitRate": 0.9345,
+      "averageNetPrice": 7021,
+      "graduationRate": 0.5695,
+      "medianEarnings": 59115,
+      "tuitionInState": 7458,
+      "tuitionOutOfState": 20058,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0423,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.1917,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0462,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0334,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0675,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.1263,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0887,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0574,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0458,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0057,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0045,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0057,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 110617,
+      "slug": "california-state-university-sacramento",
+      "name": "California State University-Sacramento",
+      "aliases": [
+        "Sac State",
+        "Sacramento State"
+      ],
+      "city": "Sacramento",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://https://www.csus.edu/",
+      "undergraduateEnrollment": 28350,
+      "admitRate": 0.9399,
+      "averageNetPrice": 9338,
+      "graduationRate": 0.5629,
+      "medianEarnings": 64876,
+      "tuitionInState": 8018,
+      "tuitionOutOfState": 20618,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0463,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.1318,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0573,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0373,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.1449,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0847,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0914,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0404,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0479,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0071,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0067,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0033,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 111948,
+      "slug": "chapman-university",
+      "name": "Chapman University",
+      "aliases": [
+        "Chapman"
+      ],
+      "city": "Orange",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Private nonprofit",
+      "setting": "City",
+      "website": "https://https://www.chapman.edu/",
+      "undergraduateEnrollment": 7478,
+      "admitRate": 0.6543,
+      "averageNetPrice": 46555,
+      "graduationRate": 0.8188,
+      "medianEarnings": 70070,
+      "tuitionInState": 64984,
+      "tuitionOutOfState": 64984,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.046,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.303,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0092,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0422,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0433,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0817,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0341,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.2132,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0254,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0179,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0022,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0054,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 190150,
+      "slug": "columbia-university-in-the-city-of-new-york",
+      "name": "Columbia University in the City of New York",
+      "aliases": [
+        "Columbia"
+      ],
+      "city": "New York",
+      "state": "NY",
+      "region": "Northeast",
+      "ownership": "Private nonprofit",
+      "setting": "City",
+      "website": "https://www.columbia.edu/",
+      "undergraduateEnrollment": 8973,
+      "admitRate": 0.0399,
+      "averageNetPrice": 21590,
+      "graduationRate": 0.961,
+      "medianEarnings": 102491,
+      "tuitionInState": 71845,
+      "tuitionOutOfState": 71845,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.1722,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.1241,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0793,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0477,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.24,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0469,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0506,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0345,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0279,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 198419,
+      "slug": "duke-university",
+      "name": "Duke University",
+      "aliases": [
+        "Duke"
+      ],
+      "city": "Durham",
+      "state": "NC",
+      "region": "South",
+      "ownership": "Private nonprofit",
+      "setting": "City",
+      "website": "https://www.duke.edu/",
+      "undergraduateEnrollment": 6442,
+      "admitRate": 0.0571,
+      "averageNetPrice": 29612,
+      "graduationRate": 0.9678,
+      "medianEarnings": 97800,
+      "tuitionInState": 68758,
+      "tuitionOutOfState": 68758,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.1288,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.1278,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.1288,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0968,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0531,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.1325,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0099,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0061,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0409,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0174,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0042,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 139755,
+      "slug": "georgia-institute-of-technology-main-campus",
+      "name": "Georgia Institute of Technology-Main Campus",
+      "aliases": [
+        "Georgia Tech",
+        "GT"
+      ],
+      "city": "Atlanta",
+      "state": "GA",
+      "region": "South",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://www.gatech.edu/",
+      "undergraduateEnrollment": 18785,
+      "admitRate": 0.1407,
+      "averageNetPrice": 12116,
+      "graduationRate": 0.9402,
+      "medianEarnings": 102772,
+      "tuitionInState": 12058,
+      "tuitionOutOfState": 34484,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.2834,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.0857,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.4447,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0662,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0085,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0144,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0177,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0236,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0079,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 166027,
+      "slug": "harvard-university",
+      "name": "Harvard University",
+      "aliases": [
+        "Harvard"
+      ],
+      "city": "Cambridge",
+      "state": "MA",
+      "region": "Northeast",
+      "ownership": "Private nonprofit",
+      "setting": "City",
+      "website": "https://www.harvard.edu/",
+      "undergraduateEnrollment": 7601,
+      "admitRate": 0.0365,
+      "averageNetPrice": 19066,
+      "graduationRate": 0.9758,
+      "medianEarnings": 101817,
+      "tuitionInState": 61676,
+      "tuitionOutOfState": 61676,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.1011,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.0207,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0474,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.1204,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.034,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.295,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0207,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.1095,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0548,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0173,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 117946,
+      "slug": "loyola-marymount-university",
+      "name": "Loyola Marymount University",
+      "aliases": [
+        "LMU",
+        "Loyola Marymount"
+      ],
+      "city": "Los Angeles",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Private nonprofit",
+      "setting": "City",
+      "website": "https://https://www.lmu.edu/",
+      "undergraduateEnrollment": 7094,
+      "admitRate": 0.4508,
+      "averageNetPrice": 48381,
+      "graduationRate": 0.7887,
+      "medianEarnings": 78349,
+      "tuitionInState": 62357,
+      "tuitionOutOfState": 62357,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0308,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.2745,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0397,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0415,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0741,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.1464,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.1873,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0101,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.003,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.003,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 166683,
+      "slug": "massachusetts-institute-of-technology",
+      "name": "Massachusetts Institute of Technology",
+      "aliases": [
+        "MIT",
+        "Massachusetts Institute of Technology"
+      ],
+      "city": "Cambridge",
+      "state": "MA",
+      "region": "Northeast",
+      "ownership": "Private nonprofit",
+      "setting": "City",
+      "website": "https://web.mit.edu/",
+      "undergraduateEnrollment": 4535,
+      "admitRate": 0.0455,
+      "averageNetPrice": 20111,
+      "graduationRate": 0.9641,
+      "medianEarnings": 143372,
+      "tuitionInState": 62396,
+      "tuitionOutOfState": 62396,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.3112,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.0136,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.323,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0473,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0091,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.1065,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0719,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 193900,
+      "slug": "new-york-university",
+      "name": "New York University",
+      "aliases": [
+        "NYU",
+        "New York University"
+      ],
+      "city": "New York",
+      "state": "NY",
+      "region": "Northeast",
+      "ownership": "Private nonprofit",
+      "setting": "City",
+      "website": "https://https://www.nyu.edu/",
+      "undergraduateEnrollment": 28663,
+      "admitRate": 0.0923,
+      "averageNetPrice": 37050,
+      "graduationRate": 0.8757,
+      "medianEarnings": 82509,
+      "tuitionInState": 62796,
+      "tuitionOutOfState": 62796,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0934,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.1284,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0327,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0415,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0694,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0634,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.1334,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.1646,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0077,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0383,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0126,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0034,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 147767,
+      "slug": "northwestern-university",
+      "name": "Northwestern University",
+      "aliases": [
+        "Northwestern"
+      ],
+      "city": "Evanston",
+      "state": "IL",
+      "region": "Midwest",
+      "ownership": "Private nonprofit",
+      "setting": "City",
+      "website": "https://www.northwestern.edu/",
+      "undergraduateEnrollment": 9201,
+      "admitRate": 0.0769,
+      "averageNetPrice": 29167,
+      "graduationRate": 0.9513,
+      "medianEarnings": 89363,
+      "tuitionInState": 68322,
+      "tuitionOutOfState": 68322,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.101,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.0503,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.1518,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.108,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0131,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0547,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.1487,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0774,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0057,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0241,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0149,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0074,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 204796,
+      "slug": "ohio-state-university-main-campus",
+      "name": "Ohio State University-Main Campus",
+      "aliases": [
+        "Ohio State",
+        "OSU"
+      ],
+      "city": "Columbus",
+      "state": "OH",
+      "region": "Midwest",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://www.osu.edu/",
+      "undergraduateEnrollment": 45638,
+      "admitRate": 0.6057,
+      "averageNetPrice": 17339,
+      "graduationRate": 0.8772,
+      "medianEarnings": 60409,
+      "tuitionInState": 13244,
+      "tuitionOutOfState": 40022,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0116,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.2071,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.1456,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0924,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.1086,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0576,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0748,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0231,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0364,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0187,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0134,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0133,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 209542,
+      "slug": "oregon-state-university",
+      "name": "Oregon State University",
+      "aliases": [
+        "Oregon State",
+        "OSU"
+      ],
+      "city": "Corvallis",
+      "state": "OR",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://https://oregonstate.edu/",
+      "undergraduateEnrollment": 30743,
+      "admitRate": 0.773,
+      "averageNetPrice": 19604,
+      "graduationRate": 0.7011,
+      "medianEarnings": 64010,
+      "tuitionInState": 14400,
+      "tuitionOutOfState": 38190,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.1573,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.1336,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.1611,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0731,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0398,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0648,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0614,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0287,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.01,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0094,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0159,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0051,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 121345,
+      "slug": "pomona-college",
+      "name": "Pomona College",
+      "aliases": [
+        "Pomona"
+      ],
+      "city": "Claremont",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Private nonprofit",
+      "setting": "Suburb",
+      "website": "https://www.pomona.edu/",
+      "undergraduateEnrollment": 1666,
+      "admitRate": 0.0709,
+      "averageNetPrice": 19285,
+      "graduationRate": 0.932,
+      "medianEarnings": 77779,
+      "tuitionInState": 65420,
+      "tuitionOutOfState": 65420,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.1441,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.1552,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0377,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.1796,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.02,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0576,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0621,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0244,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 186131,
+      "slug": "princeton-university",
+      "name": "Princeton University",
+      "aliases": [
+        "Princeton"
+      ],
+      "city": "Princeton",
+      "state": "NJ",
+      "region": "Northeast",
+      "ownership": "Private nonprofit",
+      "setting": "City",
+      "website": "https://www.princeton.edu/",
+      "undergraduateEnrollment": 5709,
+      "admitRate": 0.0462,
+      "averageNetPrice": 6128,
+      "graduationRate": 0.9761,
+      "medianEarnings": 110066,
+      "tuitionInState": 62688,
+      "tuitionOutOfState": 62688,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.1609,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.1722,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.1005,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0287,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.1949,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0144,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0219,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0476,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0415,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 243780,
+      "slug": "purdue-university-main-campus",
+      "name": "Purdue University-Main Campus",
+      "aliases": [
+        "Purdue"
+      ],
+      "city": "West Lafayette",
+      "state": "IN",
+      "region": "Midwest",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://https://www.purdue.edu/",
+      "undergraduateEnrollment": 44503,
+      "admitRate": 0.4987,
+      "averageNetPrice": 14600,
+      "graduationRate": 0.831,
+      "medianEarnings": 72424,
+      "tuitionInState": 9992,
+      "tuitionOutOfState": 28794,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.1057,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.1565,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.2332,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0601,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0464,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0362,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0481,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0147,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.029,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.029,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0177,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0058,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 122409,
+      "slug": "san-diego-state-university",
+      "name": "San Diego State University",
+      "aliases": [
+        "San Diego State",
+        "SDSU"
+      ],
+      "city": "San Diego",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://https://www.sdsu.edu/",
+      "undergraduateEnrollment": 35377,
+      "admitRate": 0.3619,
+      "averageNetPrice": 15364,
+      "graduationRate": 0.7643,
+      "medianEarnings": 64909,
+      "tuitionInState": 8728,
+      "tuitionOutOfState": 21328,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0254,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.2708,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0737,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0326,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0592,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0777,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0769,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.046,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0163,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0079,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0087,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0106,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 122755,
+      "slug": "san-jose-state-university",
+      "name": "San Jose State University",
+      "aliases": [
+        "San Jose State",
+        "SJSU"
+      ],
+      "city": "San Jose",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://www.sjsu.edu/",
+      "undergraduateEnrollment": 27601,
+      "admitRate": 0.8461,
+      "averageNetPrice": 13760,
+      "graduationRate": 0.6922,
+      "medianEarnings": 78988,
+      "tuitionInState": 8410,
+      "tuitionOutOfState": 21010,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0372,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.2565,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.1252,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0297,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0591,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0686,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0613,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0752,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0253,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0122,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0106,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0048,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 122931,
+      "slug": "santa-clara-university",
+      "name": "Santa Clara University",
+      "aliases": [
+        "Santa Clara",
+        "SCU"
+      ],
+      "city": "Santa Clara",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Private nonprofit",
+      "setting": "City",
+      "website": "https://www.scu.edu/",
+      "undergraduateEnrollment": 6552,
+      "admitRate": 0.48,
+      "averageNetPrice": 50062,
+      "graduationRate": 0.8792,
+      "medianEarnings": 109183,
+      "tuitionInState": 61293,
+      "tuitionOutOfState": 61293,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0689,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.2702,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.1497,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0599,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.024,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0734,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.107,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0127,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0045,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.006,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0067,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 243744,
+      "slug": "stanford-university",
+      "name": "Stanford University",
+      "aliases": [
+        "Stanford"
+      ],
+      "city": "Stanford",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Private nonprofit",
+      "setting": "Suburb",
+      "website": "https://www.stanford.edu/",
+      "undergraduateEnrollment": 7554,
+      "admitRate": 0.0361,
+      "averageNetPrice": 13807,
+      "graduationRate": 0.9192,
+      "medianEarnings": 124080,
+      "tuitionInState": 65910,
+      "tuitionOutOfState": 65910,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.1866,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.1669,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0416,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0405,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.1571,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0192,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0493,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0432,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0192,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 228778,
+      "slug": "the-university-of-texas-at-austin",
+      "name": "The University of Texas at Austin",
+      "aliases": [
+        "UT Austin",
+        "Texas"
+      ],
+      "city": "Austin",
+      "state": "TX",
+      "region": "South",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://https://www.utexas.edu/",
+      "undergraduateEnrollment": 42855,
+      "admitRate": 0.2664,
+      "averageNetPrice": 19857,
+      "graduationRate": 0.889,
+      "medianEarnings": 75121,
+      "tuitionInState": 11688,
+      "tuitionOutOfState": 44908,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0727,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.0967,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0975,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.1003,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0457,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0418,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0714,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.033,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0018,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0304,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0207,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0387,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 104179,
+      "slug": "university-of-arizona",
+      "name": "University of Arizona",
+      "aliases": [],
+      "city": "Tucson",
+      "state": "AZ",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://https://www.arizona.edu/",
+      "undergraduateEnrollment": 42537,
+      "admitRate": 0.8614,
+      "averageNetPrice": 16674,
+      "graduationRate": 0.6752,
+      "medianEarnings": 59979,
+      "tuitionInState": 13926,
+      "tuitionOutOfState": 42278,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.054,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.1507,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0659,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0985,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0852,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0769,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0478,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0402,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.035,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0112,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0193,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0162,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 110635,
+      "slug": "university-of-california-berkeley",
+      "name": "University of California-Berkeley",
+      "aliases": [
+        "UC Berkeley",
+        "Berkeley",
+        "Cal"
+      ],
+      "city": "Berkeley",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://www.berkeley.edu/",
+      "undergraduateEnrollment": 33068,
+      "admitRate": 0.1098,
+      "averageNetPrice": 13481,
+      "graduationRate": 0.9284,
+      "medianEarnings": 92446,
+      "tuitionInState": 16347,
+      "tuitionOutOfState": 50547,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.1702,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.0462,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.1282,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.1016,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0185,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0333,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.1651,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0312,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0356,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.032,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0131,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 110644,
+      "slug": "university-of-california-davis",
+      "name": "University of California-Davis",
+      "aliases": [
+        "UC Davis",
+        "UCD"
+      ],
+      "city": "Davis",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "Suburb",
+      "website": "https://ucdavis.edu/",
+      "undergraduateEnrollment": 32253,
+      "admitRate": 0.4183,
+      "averageNetPrice": 14741,
+      "graduationRate": 0.8567,
+      "medianEarnings": 80838,
+      "tuitionInState": 16774,
+      "tuitionOutOfState": 50974,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0492,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.0592,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0858,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.1879,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0075,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.1073,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.1293,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0499,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0004,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0396,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0153,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0118,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 110653,
+      "slug": "university-of-california-irvine",
+      "name": "University of California-Irvine",
+      "aliases": [
+        "UC Irvine",
+        "UCI"
+      ],
+      "city": "Irvine",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://www.uci.edu/",
+      "undergraduateEnrollment": 30197,
+      "admitRate": 0.2857,
+      "averageNetPrice": 14251,
+      "graduationRate": 0.8687,
+      "medianEarnings": 80735,
+      "tuitionInState": 15722,
+      "tuitionOutOfState": 49922,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0941,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.1174,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.1024,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.1163,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0616,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.1258,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.1598,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.044,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0315,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0249,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0292,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0058,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 110662,
+      "slug": "university-of-california-los-angeles",
+      "name": "University of California-Los Angeles",
+      "aliases": [
+        "UCLA",
+        "UC Los Angeles"
+      ],
+      "city": "Los Angeles",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://www.ucla.edu/",
+      "undergraduateEnrollment": 33475,
+      "admitRate": 0.0897,
+      "averageNetPrice": 12548,
+      "graduationRate": 0.9262,
+      "medianEarnings": 82511,
+      "tuitionInState": 15203,
+      "tuitionOutOfState": 49403,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0367,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.0037,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0786,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.1632,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0052,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.1155,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.2438,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.039,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0106,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0756,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0234,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0165,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 445188,
+      "slug": "university-of-california-merced",
+      "name": "University of California-Merced",
+      "aliases": [
+        "UC Merced",
+        "UCM"
+      ],
+      "city": "Merced",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "Suburb",
+      "website": "https://ucmerced.edu/",
+      "undergraduateEnrollment": 8372,
+      "admitRate": 0.9053,
+      "averageNetPrice": 11983,
+      "graduationRate": 0.6872,
+      "medianEarnings": 64368,
+      "tuitionInState": 15623,
+      "tuitionOutOfState": 49823,
+      "majors": [
+        {
+          "name": "Business",
+          "share": 0.1085,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.2353,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.1752,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.057,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.1998,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0987,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0092,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0153,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0294,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.008,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 110671,
+      "slug": "university-of-california-riverside",
+      "name": "University of California-Riverside",
+      "aliases": [
+        "UC Riverside",
+        "UCR"
+      ],
+      "city": "Riverside",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://www.ucr.edu/",
+      "undergraduateEnrollment": 22593,
+      "admitRate": 0.7639,
+      "averageNetPrice": 14304,
+      "graduationRate": 0.7596,
+      "medianEarnings": 67699,
+      "tuitionInState": 15606,
+      "tuitionOutOfState": 49806,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0715,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.151,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0722,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.17,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.1085,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.1708,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.05,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0296,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.028,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0217,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0156,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 110680,
+      "slug": "university-of-california-san-diego",
+      "name": "University of California-San Diego",
+      "aliases": [
+        "UC San Diego",
+        "UCSD"
+      ],
+      "city": "La Jolla",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://www.ucsd.edu/",
+      "undergraduateEnrollment": 34948,
+      "admitRate": 0.2671,
+      "averageNetPrice": 12470,
+      "graduationRate": 0.8605,
+      "medianEarnings": 84943,
+      "tuitionInState": 16758,
+      "tuitionOutOfState": 50958,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0727,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.0481,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.1158,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.2064,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0355,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0908,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0944,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0256,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0066,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0394,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.03,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0007,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 110705,
+      "slug": "university-of-california-santa-barbara",
+      "name": "University of California-Santa Barbara",
+      "aliases": [
+        "UC Santa Barbara",
+        "UCSB"
+      ],
+      "city": "Santa Barbara",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "Suburb",
+      "website": "https://www.ucsb.edu/",
+      "undergraduateEnrollment": 23113,
+      "admitRate": 0.3297,
+      "averageNetPrice": 16109,
+      "graduationRate": 0.8303,
+      "medianEarnings": 74915,
+      "tuitionInState": 16414,
+      "tuitionOutOfState": 50614,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0261,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.0061,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.042,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.1112,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.1028,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.2664,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0579,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0946,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0406,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0219,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 110714,
+      "slug": "university-of-california-santa-cruz",
+      "name": "University of California-Santa Cruz",
+      "aliases": [
+        "UC Santa Cruz",
+        "UCSC"
+      ],
+      "city": "Santa Cruz",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://www.ucsc.edu/",
+      "undergraduateEnrollment": 17940,
+      "admitRate": 0.6579,
+      "averageNetPrice": 17890,
+      "graduationRate": 0.7509,
+      "medianEarnings": 68396,
+      "tuitionInState": 16005,
+      "tuitionOutOfState": 50205,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.1627,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.0653,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0444,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.1492,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0041,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0962,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.102,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.1007,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0163,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0206,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0485,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0389,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 145637,
+      "slug": "university-of-illinois-urbana-champaign",
+      "name": "University of Illinois Urbana-Champaign",
+      "aliases": [
+        "UIUC",
+        "Illinois"
+      ],
+      "city": "Champaign",
+      "state": "IL",
+      "region": "Midwest",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://www.illinois.edu/",
+      "undergraduateEnrollment": 36258,
+      "admitRate": 0.4237,
+      "averageNetPrice": 14355,
+      "graduationRate": 0.8513,
+      "medianEarnings": 81054,
+      "tuitionInState": 16004,
+      "tuitionOutOfState": 35124,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0779,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.0967,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.2163,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0599,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0424,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.07,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0701,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0225,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0296,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0466,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0233,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0056,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 166629,
+      "slug": "university-of-massachusetts-amherst",
+      "name": "University of Massachusetts-Amherst",
+      "aliases": [
+        "UMass Amherst",
+        "Massachusetts Amherst"
+      ],
+      "city": "Amherst",
+      "state": "MA",
+      "region": "Northeast",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://www.umass.edu/",
+      "undergraduateEnrollment": 23671,
+      "admitRate": 0.5973,
+      "averageNetPrice": 22383,
+      "graduationRate": 0.8326,
+      "medianEarnings": 71631,
+      "tuitionInState": 17772,
+      "tuitionOutOfState": 40449,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0698,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.1609,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.073,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0964,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0497,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.075,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.1002,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0221,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0119,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0246,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.014,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0213,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 170976,
+      "slug": "university-of-michigan-ann-arbor",
+      "name": "University of Michigan-Ann Arbor",
+      "aliases": [
+        "Michigan",
+        "UMich"
+      ],
+      "city": "Ann Arbor",
+      "state": "MI",
+      "region": "Midwest",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://https://umich.edu/",
+      "undergraduateEnrollment": 34177,
+      "admitRate": 0.1564,
+      "averageNetPrice": 13138,
+      "graduationRate": 0.932,
+      "medianEarnings": 83648,
+      "tuitionInState": 17736,
+      "tuitionOutOfState": 60946,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.1604,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.0776,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.1378,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0947,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0429,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0765,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.124,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0473,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.006,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.029,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0178,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0105,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 199120,
+      "slug": "university-of-north-carolina-at-chapel-hill",
+      "name": "University of North Carolina at Chapel Hill",
+      "aliases": [
+        "UNC",
+        "UNC Chapel Hill"
+      ],
+      "city": "Chapel Hill",
+      "state": "NC",
+      "region": "South",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://https://www.unc.edu/",
+      "undergraduateEnrollment": 20752,
+      "admitRate": 0.1534,
+      "averageNetPrice": 11655,
+      "graduationRate": 0.9117,
+      "medianEarnings": 72200,
+      "tuitionInState": 8994,
+      "tuitionOutOfState": 41203,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0816,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.0946,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0276,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.146,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0644,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.14,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0128,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0216,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0396,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0248,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0056,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 122612,
+      "slug": "university-of-san-francisco",
+      "name": "University of San Francisco",
+      "aliases": [
+        "USF",
+        "University of San Francisco"
+      ],
+      "city": "San Francisco",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Private nonprofit",
+      "setting": "City",
+      "website": "https://https://www.usfca.edu/",
+      "undergraduateEnrollment": 5287,
+      "admitRate": 0.6171,
+      "averageNetPrice": 41431,
+      "graduationRate": 0.7006,
+      "medianEarnings": 89812,
+      "tuitionInState": 60492,
+      "tuitionOutOfState": 60492,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0533,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.2093,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0068,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0578,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.1963,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0944,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.1043,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.032,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0061,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0175,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0023,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 123961,
+      "slug": "university-of-southern-california",
+      "name": "University of Southern California",
+      "aliases": [
+        "USC",
+        "Southern California"
+      ],
+      "city": "Los Angeles",
+      "state": "CA",
+      "region": "West",
+      "ownership": "Private nonprofit",
+      "setting": "City",
+      "website": "https://www.usc.edu/",
+      "undergraduateEnrollment": 20443,
+      "admitRate": 0.0981,
+      "averageNetPrice": 32740,
+      "graduationRate": 0.9183,
+      "medianEarnings": 92498,
+      "tuitionInState": 72097,
+      "tuitionOutOfState": 72097,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.072,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.2337,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0774,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0483,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0231,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0387,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.0953,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.1182,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0281,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0078,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0073,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 234076,
+      "slug": "university-of-virginia-main-campus",
+      "name": "University of Virginia-Main Campus",
+      "aliases": [
+        "UVA",
+        "Virginia"
+      ],
+      "city": "Charlottesville",
+      "state": "VA",
+      "region": "South",
+      "ownership": "Public",
+      "setting": "Suburb",
+      "website": "https://https://www.virginia.edu/",
+      "undergraduateEnrollment": 17597,
+      "admitRate": 0.1681,
+      "averageNetPrice": 21565,
+      "graduationRate": 0.956,
+      "medianEarnings": 86863,
+      "tuitionInState": 21803,
+      "tuitionOutOfState": 59512,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0767,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.0859,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0948,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.057,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0378,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0389,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.1193,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0102,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0072,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0311,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.037,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0133,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 236948,
+      "slug": "university-of-washington-seattle-campus",
+      "name": "University of Washington-Seattle Campus",
+      "aliases": [
+        "UW",
+        "University of Washington"
+      ],
+      "city": "Seattle",
+      "state": "WA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://https://www.washington.edu/",
+      "undergraduateEnrollment": 31942,
+      "admitRate": 0.3915,
+      "averageNetPrice": 14091,
+      "graduationRate": 0.8518,
+      "medianEarnings": 78466,
+      "tuitionInState": 12973,
+      "tuitionOutOfState": 43209,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.1254,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.0813,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.1039,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.1141,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0738,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0546,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.1044,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0387,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0252,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0379,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0314,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0167,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 240444,
+      "slug": "university-of-wisconsin-madison",
+      "name": "University of Wisconsin-Madison",
+      "aliases": [
+        "Wisconsin",
+        "UW Madison"
+      ],
+      "city": "Madison",
+      "state": "WI",
+      "region": "Midwest",
+      "ownership": "Public",
+      "setting": "City",
+      "website": "https://www.wisc.edu/",
+      "undergraduateEnrollment": 36902,
+      "admitRate": 0.452,
+      "averageNetPrice": 17354,
+      "graduationRate": 0.8955,
+      "medianEarnings": 73792,
+      "tuitionInState": 11603,
+      "tuitionOutOfState": 42103,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.068,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.1616,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.083,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0911,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.0565,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0338,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.085,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0319,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.0258,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0224,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0123,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.023,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 236939,
+      "slug": "washington-state-university",
+      "name": "Washington State University",
+      "aliases": [
+        "Washington State",
+        "WSU"
+      ],
+      "city": "Pullman",
+      "state": "WA",
+      "region": "West",
+      "ownership": "Public",
+      "setting": "Town",
+      "website": "https://https://wsu.edu/",
+      "undergraduateEnrollment": 21099,
+      "admitRate": 0.8664,
+      "averageNetPrice": 14971,
+      "graduationRate": 0.605,
+      "medianEarnings": 68905,
+      "tuitionInState": 13391,
+      "tuitionOutOfState": 29950,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0512,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Business",
+          "share": 0.1909,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0932,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.0939,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Health Professions",
+          "share": 0.057,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0915,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.1044,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0145,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Education",
+          "share": 0.035,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0095,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0272,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0038,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    },
+    {
+      "unitId": 130794,
+      "slug": "yale-university",
+      "name": "Yale University",
+      "aliases": [],
+      "city": "New Haven",
+      "state": "CT",
+      "region": "Northeast",
+      "ownership": "Private nonprofit",
+      "setting": "City",
+      "website": "https://https://www.yale.edu/",
+      "undergraduateEnrollment": 6758,
+      "admitRate": 0.0387,
+      "averageNetPrice": 23777,
+      "graduationRate": 0.9574,
+      "medianEarnings": 100533,
+      "tuitionInState": 67250,
+      "tuitionOutOfState": 67250,
+      "majors": [
+        {
+          "name": "Computer Science",
+          "share": 0.0966,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Engineering",
+          "share": 0.0654,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Biology",
+          "share": 0.1158,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Psychology",
+          "share": 0.0372,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Social Sciences",
+          "share": 0.2292,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Arts & Design",
+          "share": 0.0402,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Mathematics",
+          "share": 0.0654,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "Physical Sciences",
+          "share": 0.0408,
+          "evidence": "Recent degree completions"
+        },
+        {
+          "name": "English",
+          "share": 0.0132,
+          "evidence": "Recent degree completions"
+        }
+      ]
+    }
+  ]
+}
