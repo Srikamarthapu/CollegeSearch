@@ -23,21 +23,48 @@ rate.
 
 ## Data
 
-The committed starting cohort is generated from the U.S. Department of
-Education College Scorecard API:
+Refresh the committed evidence files with:
 
 ```bash
-node scripts/import-scorecard.mjs
+npm run data:refresh
 ```
 
-The importer requests 2024 institution metrics and the available 2020
-ten-years-after-entry earnings cohort, validates the 50 expected IPEDS UNITIDs,
-checks rate ranges, and writes `data/colleges.json`. It uses the public
-`DEMO_KEY` by default; set `DATA_GOV_API_KEY` to use a dedicated data.gov key.
+That command runs two source-specific importers in order:
 
-Official UC admissions and discipline dashboards are linked separately in the
-product because their cohorts and definitions should not be silently merged
-with the national baseline.
+1. `scripts/import-uc-accountability.mjs` downloads the official
+   [UC Accountability Report 2026 Chapter 2 workbook](https://accountability.universityofcalifornia.edu/2026/documents/data-tables/chapter02data2026.xlsx).
+   It reads sheet `2.1.1`, validates all nine undergraduate UC campuses, and
+   writes the reported Fall 2025 freshman applicant, admit, and enrollee counts
+   to `data/uc-admissions-2025.json`. Campus admit and yield rates are derived
+   directly from those counts. The source URL, worksheet, access date, and
+   workbook SHA-256 remain attached to the release. Campus rows count
+   applications, so they must not be summed to infer unduplicated
+   university-wide applicants.
+2. `scripts/import-scorecard.mjs` requests the 50-college cohort from the
+   official [U.S. Department of Education College Scorecard](https://collegescorecard.ed.gov/data/),
+   validates the expected IPEDS UNITIDs and metric ranges, then writes
+   `data/colleges.json`. It uses the public `DEMO_KEY` by default; set
+   `DATA_GOV_API_KEY` to use a dedicated data.gov key.
+
+These sources describe different cohorts and are intentionally kept distinct:
+
+- UC headline admission rates use Fall 2025 freshman campus counts from the UC
+  workbook. The 2024 College Scorecard admission observation is retained as
+  alternate evidence for those campuses.
+- Other colleges use the 2024 College Scorecard institution-wide admission
+  observation.
+- Enrollment, cost, tuition, completion, and academic-field evidence use 2024
+  College Scorecard fields. Earnings use the available 2020 federal
+  ten-years-after-entry cohort.
+
+Major filters are **not** major-specific admission rates. They show the share of
+recent federal degree completions in broad academic fields. That evidence does
+not establish that a program currently accepts students, admits directly,
+offers a particular concentration, or has the same selectivity as the college
+overall. The official
+[UC freshman admission-by-discipline dashboard](https://www.universityofcalifornia.edu/about-us/information-center/freshman-admission-discipline)
+is linked for additional context but is not silently normalized into the
+federal degree-share fields.
 
 ## Local development
 
@@ -57,9 +84,10 @@ npm test
 npm run lint
 ```
 
-The test suite builds the production worker, checks the rendered product shell,
-and validates cohort uniqueness, coverage, source lineage, UC inclusion, metric
-ranges, and major-evidence labels.
+The test suite builds the production worker, checks the canonical rendered
+routes, and validates cohort uniqueness, observation completeness, source
+lineage, all nine UC Fall 2025 counts and derived rates, metric ranges, and
+major-evidence labels.
 
 ## Current scope
 

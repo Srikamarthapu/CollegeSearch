@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -76,6 +76,52 @@ const programFields = {
   English: "language",
 };
 
+const scriptDirectory = dirname(fileURLToPath(import.meta.url));
+const ucDataset = JSON.parse(
+  await readFile(
+    resolve(scriptDirectory, "../data/uc-admissions-2025.json"),
+    "utf8",
+  ),
+);
+const ucAdmissionsByUnitId = new Map(
+  ucDataset.campuses.map((campus) => [campus.unitId, campus]),
+);
+
+const federalSource = {
+  id: "college-scorecard-2024",
+  publisher: "U.S. Department of Education",
+  sourceName: "College Scorecard",
+  sourceUrl: "https://collegescorecard.ed.gov/data/",
+  accessedOn: new Date().toISOString().slice(0, 10),
+};
+
+function observation({
+  value,
+  unit,
+  reportingYear,
+  sourceField,
+  cohort,
+  definition,
+  status,
+  source = federalSource,
+}) {
+  return {
+    value: Number.isFinite(value) ? value : null,
+    unit,
+    reportingYear,
+    sourceId: source.id,
+    publisher: source.publisher,
+    sourceName: source.sourceName,
+    sourceUrl: source.sourcePage || source.sourceUrl,
+    accessedOn: source.accessedOn,
+    sourceField,
+    cohort,
+    definition,
+    status:
+      status || (Number.isFinite(value) ? "reported" : "unavailable"),
+  };
+}
+
 const fields = [
   "id",
   "school.name",
@@ -145,6 +191,33 @@ if (payload.results?.length !== cohortUnitIds.length) {
 
 const colleges = payload.results
   .map((row) => {
+    const ucAdmission = ucAdmissionsByUnitId.get(row.id);
+    const federalAdmitRate = field(
+      row,
+      "2024.admissions.admission_rate.overall",
+    );
+    const federalAdmitObservation = observation({
+      value: federalAdmitRate,
+      unit: "ratio",
+      reportingYear: 2024,
+      sourceField: "2024.admissions.admission_rate.overall",
+      cohort: "IPEDS fall admissions reporting cohort",
+      definition:
+        "Admitted undergraduate applicants divided by undergraduate applicants.",
+    });
+    const primaryAdmitObservation = ucAdmission
+      ? observation({
+          value: ucAdmission.admitRate,
+          unit: "ratio",
+          reportingYear: ucAdmission.fall,
+          sourceField: ucDataset.release.sourceField,
+          cohort: ucDataset.release.cohort,
+          definition:
+            "Fall freshman admits divided by fall freshman applicants for this UC campus.",
+          status: "derived",
+          source: ucDataset.release,
+        })
+      : federalAdmitObservation;
     const majors = Object.entries(programFields)
       .map(([name, apiField]) => ({
         name,
@@ -168,28 +241,131 @@ const colleges = payload.results
       ownership: ownershipLabel(field(row, "school.ownership")),
       setting: settingLabel(field(row, "school.locale")),
       website: `https://${field(row, "school.school_url")}`,
-      undergraduateEnrollment: field(row, "2024.student.size"),
-      admitRate: field(row, "2024.admissions.admission_rate.overall"),
-      averageNetPrice: field(row, "2024.cost.avg_net_price.overall"),
-      graduationRate: field(
-        row,
-        "2024.completion.completion_rate_4yr_150nt",
-      ),
-      medianEarnings: field(
-        row,
-        "2020.earnings.10_yrs_after_entry.median",
-      ),
-      tuitionInState: field(row, "2024.cost.tuition.in_state"),
-      tuitionOutOfState: field(row, "2024.cost.tuition.out_of_state"),
+      observations: {
+        admitRate: primaryAdmitObservation,
+        applicants: ucAdmission
+          ? observation({
+              value: ucAdmission.applicants,
+              unit: "count",
+              reportingYear: ucAdmission.fall,
+              sourceField: "Fall Applicants",
+              cohort: ucDataset.release.cohort,
+              definition:
+                "Applications submitted to this UC campus for fall freshman admission.",
+              source: ucDataset.release,
+            })
+          : null,
+        admits: ucAdmission
+          ? observation({
+              value: ucAdmission.admits,
+              unit: "count",
+              reportingYear: ucAdmission.fall,
+              sourceField: "Fall Admits",
+              cohort: ucDataset.release.cohort,
+              definition:
+                "Applicants admitted to this UC campus for fall freshman admission.",
+              source: ucDataset.release,
+            })
+          : null,
+        enrollees: ucAdmission
+          ? observation({
+              value: ucAdmission.enrollees,
+              unit: "count",
+              reportingYear: ucAdmission.fall,
+              sourceField: "Fall Enrollees",
+              cohort: ucDataset.release.cohort,
+              definition:
+                "Admitted fall freshman applicants who enrolled at this UC campus.",
+              source: ucDataset.release,
+            })
+          : null,
+        yieldRate: ucAdmission
+          ? observation({
+              value: ucAdmission.yieldRate,
+              unit: "ratio",
+              reportingYear: ucAdmission.fall,
+              sourceField:
+                "Derived yield rate: Fall Enrollees divided by Fall Admits",
+              cohort: ucDataset.release.cohort,
+              definition:
+                "Fall freshman enrollees divided by fall freshman admits for this UC campus.",
+              status: "derived",
+              source: ucDataset.release,
+            })
+          : null,
+        undergraduateEnrollment: observation({
+          value: field(row, "2024.student.size"),
+          unit: "count",
+          reportingYear: 2024,
+          sourceField: "2024.student.size",
+          cohort: "College Scorecard institutional reporting cohort",
+          definition: "Reported undergraduate enrollment.",
+        }),
+        averageNetPrice: observation({
+          value: field(row, "2024.cost.avg_net_price.overall"),
+          unit: "usd",
+          reportingYear: 2024,
+          sourceField: "2024.cost.avg_net_price.overall",
+          cohort: "Title IV federal aid recipients",
+          definition:
+            "Average annual net price after grants and scholarships for the reported federal cohort.",
+        }),
+        graduationRate: observation({
+          value: field(
+            row,
+            "2024.completion.completion_rate_4yr_150nt",
+          ),
+          unit: "ratio",
+          reportingYear: 2024,
+          sourceField: "2024.completion.completion_rate_4yr_150nt",
+          cohort: "First-time, full-time students",
+          definition:
+            "Completion of a four-year award within 150% of expected time.",
+        }),
+        medianEarnings: observation({
+          value: field(
+            row,
+            "2020.earnings.10_yrs_after_entry.median",
+          ),
+          unit: "usd",
+          reportingYear: 2020,
+          sourceField: "2020.earnings.10_yrs_after_entry.median",
+          cohort: "Federal earnings cohort, 10 years after entry",
+          definition:
+            "Median earnings 10 years after entering the institution for the reported federal cohort.",
+        }),
+        tuitionInState: observation({
+          value: field(row, "2024.cost.tuition.in_state"),
+          unit: "usd",
+          reportingYear: 2024,
+          sourceField: "2024.cost.tuition.in_state",
+          cohort: "Published institutional price",
+          definition: "Published in-state tuition and required fees.",
+        }),
+        tuitionOutOfState: observation({
+          value: field(row, "2024.cost.tuition.out_of_state"),
+          unit: "usd",
+          reportingYear: 2024,
+          sourceField: "2024.cost.tuition.out_of_state",
+          cohort: "Published institutional price",
+          definition: "Published out-of-state tuition and required fees.",
+        }),
+      },
+      alternateObservations: ucAdmission
+        ? {
+            admitRate: federalAdmitObservation,
+          }
+        : {},
       majors,
     };
   })
   .sort((a, b) => a.name.localeCompare(b.name));
 
 for (const college of colleges) {
+  const admitRate = college.observations.admitRate.value;
   if (
-    college.admitRate !== null &&
-    (college.admitRate < 0 || college.admitRate > 1)
+    admitRate !== null &&
+    (admitRate < 0 || admitRate > 1)
   ) {
     throw new Error(`Invalid admit rate for ${college.name}.`);
   }
@@ -210,12 +386,12 @@ const output = {
     ucDisciplineSourceUrl:
       "https://www.universityofcalifornia.edu/about-us/information-center/freshman-admission-discipline",
     notes:
-      "Major evidence reflects recent federal degree-completion shares. Admit rates shown with a major are institution-wide unless explicitly labeled otherwise.",
+      "UC headline admit rates use official Fall 2025 campus counts from the UC Accountability Report. Other colleges use the 2024 College Scorecard institution rate. Major evidence reflects recent federal degree-completion shares and is not a major-specific admit rate.",
+    sources: [federalSource, ucDataset.release],
   },
   colleges,
 };
 
-const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const outputPath = resolve(scriptDirectory, "../data/colleges.json");
 await mkdir(dirname(outputPath), { recursive: true });
 await writeFile(outputPath, `${JSON.stringify(output, null, 2)}\n`);

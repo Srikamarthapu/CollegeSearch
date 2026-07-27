@@ -1,0 +1,117 @@
+{
+  "release": {
+    "id": "uc-accountability-2026-chapter-2",
+    "publisher": "University of California",
+    "sourceName": "UC Accountability Report 2026 — Chapter 2 data tables",
+    "sourcePage": "https://accountability.universityofcalifornia.edu/2026/chapters/chapter-2.html",
+    "sourceUrl": "https://accountability.universityofcalifornia.edu/2026/documents/data-tables/chapter02data2026.xlsx",
+    "sourceSheet": "2.1.1",
+    "reportingYear": 2025,
+    "cohort": "Fall 2025 freshman applicants",
+    "sourceField": "Derived admit rate: Fall Admits divided by Fall Applicants",
+    "accessedOn": "2026-07-26",
+    "workbookSha256": "2397265364f6433a285d79074a12cd30b0e69e3889aad789f29b5a67f744b2f0",
+    "notes": "Campus rows are application-level counts. Universitywide counts are unduplicated and should not be summed from campus rows."
+  },
+  "campuses": [
+    {
+      "unitId": 110635,
+      "name": "University of California-Berkeley",
+      "campus": "Berkeley",
+      "fall": 2025,
+      "applicants": 126830,
+      "admits": 14360,
+      "enrollees": 6688,
+      "admitRate": 0.11322242371678624,
+      "yieldRate": 0.46573816155988856
+    },
+    {
+      "unitId": 110644,
+      "name": "University of California-Davis",
+      "campus": "Davis",
+      "fall": 2025,
+      "applicants": 102988,
+      "admits": 45673,
+      "enrollees": 6805,
+      "admitRate": 0.4434788519050763,
+      "yieldRate": 0.14899393514768025
+    },
+    {
+      "unitId": 110653,
+      "name": "University of California-Irvine",
+      "campus": "Irvine",
+      "fall": 2025,
+      "applicants": 124223,
+      "admits": 35658,
+      "enrollees": 6423,
+      "admitRate": 0.28704829218421707,
+      "yieldRate": 0.1801278815413091
+    },
+    {
+      "unitId": 110662,
+      "name": "University of California-Los Angeles",
+      "campus": "Los Angeles",
+      "fall": 2025,
+      "applicants": 145060,
+      "admits": 13659,
+      "enrollees": 6551,
+      "admitRate": 0.09416103681235351,
+      "yieldRate": 0.4796105132147302
+    },
+    {
+      "unitId": 110671,
+      "name": "University of California-Riverside",
+      "campus": "Riverside",
+      "fall": 2025,
+      "applicants": 70863,
+      "admits": 61312,
+      "enrollees": 6682,
+      "admitRate": 0.865218802478021,
+      "yieldRate": 0.10898355949895616
+    },
+    {
+      "unitId": 110680,
+      "name": "University of California-San Diego",
+      "campus": "San Diego",
+      "fall": 2025,
+      "applicants": 136727,
+      "admits": 38457,
+      "enrollees": 7801,
+      "admitRate": 0.2812685131685768,
+      "yieldRate": 0.20284993629248252
+    },
+    {
+      "unitId": 110705,
+      "name": "University of California-Santa Barbara",
+      "campus": "Santa Barbara",
+      "fall": 2025,
+      "applicants": 110173,
+      "admits": 42094,
+      "enrollees": 5081,
+      "admitRate": 0.3820718324816425,
+      "yieldRate": 0.12070603886539649
+    },
+    {
+      "unitId": 110714,
+      "name": "University of California-Santa Cruz",
+      "campus": "Santa Cruz",
+      "fall": 2025,
+      "applicants": 66393,
+      "admits": 48122,
+      "enrollees": 4597,
+      "admitRate": 0.7248053258626662,
+      "yieldRate": 0.09552803291633764
+    },
+    {
+      "unitId": 445188,
+      "name": "University of California-Merced",
+      "campus": "Merced",
+      "fall": 2025,
+      "applicants": 49366,
+      "admits": 46565,
+      "enrollees": 1982,
+      "admitRate": 0.9432605436940404,
+      "yieldRate": 0.04256415762912059
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import { headers } from "next/headers";
+import { Providers } from "./providers";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -11,6 +12,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -27,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "College Compass",
     description:
-      "Search and compare 50 verified U.S. colleges using source-transparent admissions, cost, completion, and major evidence.",
+      "Search and compare 50 verified U.S. colleges with current UC admissions and source-transparent federal data.",
     applicationName: "College Compass",
     keywords: [
       "college search",
@@ -42,7 +49,8 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     openGraph: {
       title: "College Compass — Build a college list you can explain",
-      description: "Evidence for the college list only you can build.",
+      description:
+        "Current UC admissions and source-transparent federal college data.",
       type: "website",
       images: [
         {
@@ -56,7 +64,7 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: "College Compass",
-      description: "Build a college list you can explain.",
+      description: "Evidence for the college list only you can build.",
       images: [`${origin}/og.png`],
     },
   };
@@ -69,8 +77,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable}`}
+      >
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
