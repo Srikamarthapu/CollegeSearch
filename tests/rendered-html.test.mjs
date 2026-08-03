@@ -12,9 +12,26 @@ const coreObservationUnits = {
   tuitionOutOfState: "usd",
 };
 
-const ucCountObservationUnits = {
+const federalSourceId = "college-scorecard-institution-2026-06-10";
+const federalArtifactUrl =
+  "https://ed-public-download.scorecard.network/downloads/Most-Recent-Cohorts-Institution_06102026.zip";
+const federalArtifactSha256 =
+  "f56a181b000ca4914e924c16b6b81dcc656e25aeb2ac68ab7d271ac0f29ffd58";
+
+const expectedAsuFederalAlternates = {
+  admitRate: { unit: "ratio", sourceField: "ADM_RATE" },
+  undergraduateEnrollment: { unit: "count", sourceField: "UGDS" },
+  graduationRate: { unit: "ratio", sourceField: "C150_4" },
+  tuitionInState: { unit: "usd", sourceField: "TUITIONFEE_IN" },
+  tuitionOutOfState: { unit: "usd", sourceField: "TUITIONFEE_OUT" },
+};
+
+const ucHeadlineObservationUnits = {
   applicants: "count",
   admits: "count",
+};
+
+const ucFinalizedObservationUnits = {
   enrollees: "count",
   yieldRate: "ratio",
 };
@@ -37,6 +54,18 @@ const expectedUcFall2025 = new Map([
   [110705, { campus: "Santa Barbara", applicants: 110173, admits: 42094, enrollees: 5081 }],
   [110714, { campus: "Santa Cruz", applicants: 66393, admits: 48122, enrollees: 4597 }],
   [445188, { campus: "Merced", applicants: 49366, admits: 46565, enrollees: 1982 }],
+]);
+
+const expectedUcFall2026 = new Map([
+  [110635, { campus: "Berkeley", applicants: 133154, admits: 13967 }],
+  [110644, { campus: "Davis", applicants: 104864, admits: 48015 }],
+  [110653, { campus: "Irvine", applicants: 126005, admits: 38165 }],
+  [110662, { campus: "Los Angeles", applicants: 146692, admits: 15903 }],
+  [110671, { campus: "Riverside", applicants: 72542, admits: 63958 }],
+  [110680, { campus: "San Diego", applicants: 141767, admits: 38571 }],
+  [110705, { campus: "Santa Barbara", applicants: 108512, admits: 47716 }],
+  [110714, { campus: "Santa Cruz", applicants: 79048, admits: 64867 }],
+  [445188, { campus: "Merced", applicants: 49426, admits: 46812 }],
 ]);
 
 async function render(pathname = "/") {
@@ -81,6 +110,9 @@ function assertObservation({
     Number.isInteger(observation.reportingYear),
     `${label} has an integer reporting year`,
   );
+  assert.ok(observation.periodLabel, `${label} has an exact period label`);
+  assert.ok(observation.finality, `${label} identifies snapshot finality`);
+  assert.ok(observation.comparabilityKey, `${label} has a comparability key`);
   assert.match(observation.accessedOn, /^\d{4}-\d{2}-\d{2}$/, `${label} has an access date`);
   assert.match(observation.sourceUrl, /^https:\/\//, `${label} has an official source URL`);
   assert.ok(observation.sourceField, `${label} identifies the source field`);
@@ -91,10 +123,10 @@ function assertObservation({
   assert.ok(source, `${label} sourceId is registered in release.sources`);
   assert.equal(observation.publisher, source.publisher, `${label} publisher matches its release`);
   assert.equal(observation.sourceName, source.sourceName, `${label} source name matches its release`);
-  assert.equal(
-    observation.sourceUrl,
-    source.sourcePage || source.sourceUrl,
-    `${label} URL matches its registered source`,
+  assert.ok(
+    observation.sourceUrl === (source.sourcePage || source.sourceUrl) ||
+      source.sourceUrls?.includes(observation.sourceUrl),
+    `${label} URL matches one of its registered sources`,
   );
 
   if (mustHaveValue) {
@@ -108,19 +140,19 @@ function assertObservation({
   }
 }
 
-test("server-renders the College Compass product shell", async () => {
+test("server-renders the CollegeSearch product shell", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>College Compass<\/title>/i);
+  assert.match(html, /<title>CollegeSearch<\/title>/i);
   assert.match(html, /Find a college you can/);
-  assert.match(html, /College discovery, with receipts/);
-  assert.match(html, /UC freshman admissions/);
-  assert.match(html, /Fall 2025/);
+  assert.match(html, /College discovery, clearly sourced/);
+  assert.match(html, /UC admissions/);
+  assert.match(html, /Fall 2026/);
   assert.match(html, /College Scorecard/);
-  assert.match(html, /Recent degree-completion shares/);
+  assert.match(html, /Broad bachelor(?:&#x27;|')s fields \+ award shares/);
   assert.match(html, /http:\/\/localhost\/og\.png/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/i);
   assert.doesNotMatch(html, /react-loading-skeleton/);
@@ -132,13 +164,13 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
       path: "/explore",
       markers: [
         /Search the evidence, not a ranking\./,
-        /Major filters show degree evidence—not a major admit rate\./,
+        /Field filters use 2024-2025 federal program and award data\./,
       ],
     },
     {
       path: "/colleges/university-of-california-berkeley",
       markers: [
-        /UC Berkeley evidence profile · College Compass/,
+        /UC Berkeley evidence profile · CollegeSearch/,
         /University of California-Berkeley/,
         /Official UC admissions record/,
         /Why two rates appear/,
@@ -150,13 +182,13 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
         /Compare the record, not a ranking\./,
         /UC Berkeley/,
         /Stanford/,
-        /different publishers or years/,
+        /different definitions or reporting periods/,
       ],
     },
     {
       path: "/methodology",
       markers: [
-        /Methodology · College Compass/,
+        /Methodology · CollegeSearch/,
         /Every number should explain itself\./,
         /A suppressed or unavailable value remains missing; it never/,
       ],
@@ -164,7 +196,7 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
     {
       path: "/data-sources",
       markers: [
-        /Data sources · College Compass/,
+        /Data sources · CollegeSearch/,
         /Primary sources, plainly labeled\./,
         /Linked, not yet normalized/,
       ],
@@ -205,25 +237,59 @@ test("the published cohort has complete, source-registered observations", async 
   assert.match(payload.release.sourceUrl, /^https:\/\/collegescorecard\.ed\.gov\//);
   assert.match(
     payload.release.notes,
-    /UC headline admit rates use official Fall 2025 campus counts/i,
+    /UC headline admit rates use official Fall 2026 UC Admissions campus snapshots/i,
   );
   assert.match(
     payload.release.notes,
-    /Major evidence reflects recent federal degree-completion shares and is not a major-specific admit rate/i,
+    /Broad field filters require a 2024-2025 bachelor's-program indicator and pair it with the field's share of all awards; neither is a major-specific admit rate/i,
   );
 
   const sourcesById = new Map(
     payload.release.sources.map((source) => [source.id, source]),
   );
   assert.equal(sourcesById.size, payload.release.sources.length);
-  assert.ok(sourcesById.has("college-scorecard-2024"));
+  assert.ok(sourcesById.has(federalSourceId));
+  assert.ok(sourcesById.has("uc-admissions-fall-2026-snapshots"));
   assert.ok(sourcesById.has("uc-accountability-2026-chapter-2"));
+  assert.ok(sourcesById.has("asu-cds-2025-26"));
+
+  const federalSource = sourcesById.get(federalSourceId);
+  assert.equal(federalSource.publisher, "U.S. Department of Education");
+  assert.equal(
+    federalSource.sourceName,
+    "College Scorecard — June 2026 institution release",
+  );
+  assert.equal(federalSource.releaseDate, "2026-06-10");
+  assert.equal(federalSource.artifactUrl, federalArtifactUrl);
+  assert.equal(federalSource.artifactSha256, federalArtifactSha256);
+  assert.ok(federalSource.sourceUrls.includes(federalArtifactUrl));
+  assert.ok(
+    federalSource.sourceUrls.includes(
+      "https://collegescorecard.ed.gov/files/CollegeScorecardDataDictionary.xlsx",
+    ),
+  );
 
   const unitIds = payload.colleges.map((college) => college.unitId);
   assert.equal(new Set(unitIds).size, 50);
 
   for (const college of payload.colleges) {
     assert.ok(Number.isInteger(college.unitId), `${college.name} has a UNITID`);
+    assert.match(college.opeId, /^\d{8}$/, `${college.name} has an eight-digit OPEID`);
+    assert.match(college.opeId6, /^\d{6}$/, `${college.name} has a six-digit OPEID`);
+    assert.ok(
+      college.opeId.startsWith(college.opeId6),
+      `${college.name} OPE identity fields agree`,
+    );
+    assert.equal(college.mainCampus, true, `${college.name} is the main campus record`);
+    assert.equal(
+      college.currentlyOperating,
+      true,
+      `${college.name} is currently operating`,
+    );
+    assert.ok(
+      Number.isInteger(college.branchCount) && college.branchCount >= 1,
+      `${college.name} retains a valid federal branch count`,
+    );
     assert.ok(college.slug, `${college.name} has a canonical slug`);
     assert.ok(college.name, "College name is present");
     assert.ok(college.city && college.state, `${college.name} has a location`);
@@ -264,47 +330,74 @@ test("the published cohort has complete, source-registered observations", async 
       `${college.name} has undergraduate enrollment`,
     );
     assert.ok(college.majors.length > 0, `${college.name} has major evidence`);
-    assert.ok(
-      college.majors.every(
-        (major) =>
-          major.evidence === "Recent degree completions" &&
-          major.share > 0 &&
-          major.share <= 1,
-      ),
-      `${college.name} labels broad federal degree-share evidence`,
-    );
+    for (const major of college.majors) {
+      const label = `${college.name} ${major.name}`;
+      assert.equal(major.evidence, "Broad federal bachelor's field", `${label} labels its evidence`);
+      assert.equal(major.reportingYear, 2025, `${label} identifies the federal reporting year`);
+      assert.equal(
+        major.periodLabel,
+        "2024-2025 programs and awards",
+        `${label} identifies the exact evidence period`,
+      );
+      assert.equal(major.sourceId, federalSourceId, `${label} uses the registered federal release`);
+      const sourceFields = major.sourceField.match(/^PCIP(\d{2}) \+ CIP(\d{2})BACHL$/);
+      assert.ok(sourceFields, `${label} identifies both award share and bachelor's availability fields`);
+      assert.equal(sourceFields[1], sourceFields[2], `${label} source fields use the same CIP family`);
+      assert.equal(major.bachelorsAvailable, true, `${label} is available at the bachelor's level`);
+      assert.ok(
+        Number.isFinite(major.share) && major.share >= 0 && major.share <= 1,
+        `${label} has a valid award share, including an explicit zero-award value`,
+      );
+      assert.ok(major.cohort, `${label} identifies the award cohort`);
+      assert.ok(major.definition, `${label} defines the field evidence`);
+    }
   }
 });
 
-test("all nine UC headline rates are derived from the official Fall 2025 counts", async () => {
+test("all nine UC headlines use Fall 2026 snapshots without mixing Fall 2025 yield", async () => {
   const payload = JSON.parse(
     await readFile(new URL("../data/colleges.json", import.meta.url), "utf8"),
   );
   const sourcesById = new Map(
     payload.release.sources.map((source) => [source.id, source]),
   );
-  const ucSource = sourcesById.get("uc-accountability-2026-chapter-2");
+  const headlineSource = sourcesById.get("uc-admissions-fall-2026-snapshots");
+  const finalizedSource = sourcesById.get("uc-accountability-2026-chapter-2");
 
-  assert.ok(ucSource);
-  assert.equal(ucSource.publisher, "University of California");
-  assert.equal(ucSource.reportingYear, 2025);
-  assert.equal(ucSource.sourceSheet, "2.1.1");
-  assert.equal(ucSource.cohort, "Fall 2025 freshman applicants");
-  assert.match(ucSource.sourceUrl, /chapter02data2026\.xlsx$/);
-  assert.match(ucSource.sourcePage, /accountability\.universityofcalifornia\.edu\/2026\/chapters\/chapter-2\.html$/);
-  assert.match(ucSource.workbookSha256, /^[a-f0-9]{64}$/);
+  assert.ok(headlineSource);
+  assert.equal(headlineSource.publisher, "University of California");
+  assert.equal(headlineSource.reportingYear, 2026);
+  assert.equal(headlineSource.cohort, "Fall 2026 first-year admission snapshot");
+  assert.equal(headlineSource.sourceUrls.length, 9);
+  assert.ok(finalizedSource);
+  assert.equal(finalizedSource.reportingYear, 2025);
+  assert.equal(finalizedSource.sourceSheet, "2.1.1");
+  assert.match(finalizedSource.workbookSha256, /^[a-f0-9]{64}$/);
 
   const ucColleges = payload.colleges.filter((college) =>
-    expectedUcFall2025.has(college.unitId),
+    expectedUcFall2026.has(college.unitId),
   );
   assert.equal(ucColleges.length, 9);
 
   for (const college of ucColleges) {
-    const expected = expectedUcFall2025.get(college.unitId);
-    assert.ok(expected, `${college.name} has an expected UC row`);
-    assert.match(college.name, new RegExp(expected.campus.replace(" ", "[- ]"), "i"));
+    const current = expectedUcFall2026.get(college.unitId);
+    const finalized = expectedUcFall2025.get(college.unitId);
+    assert.ok(current && finalized, `${college.name} has current and finalized rows`);
+    assert.match(college.name, new RegExp(current.campus.replace(" ", "[- ]"), "i"));
 
-    for (const [key, expectedUnit] of Object.entries(ucCountObservationUnits)) {
+    assertObservation({
+      observation: college.observations.admitRate,
+      expectedUnit: "ratio",
+      label: `${college.name} headline admit rate`,
+      sourcesById,
+    });
+    assert.equal(college.observations.admitRate.reportingYear, 2026);
+    assert.equal(
+      college.observations.admitRate.sourceId,
+      "uc-admissions-fall-2026-snapshots",
+    );
+
+    for (const [key, expectedUnit] of Object.entries(ucHeadlineObservationUnits)) {
       assertObservation({
         observation: college.observations[key],
         expectedUnit,
@@ -313,32 +406,46 @@ test("all nine UC headline rates are derived from the official Fall 2025 counts"
       });
       assert.equal(
         college.observations[key].reportingYear,
-        2025,
-        `${college.name} ${key} uses Fall 2025`,
+        2026,
+        `${college.name} ${key} uses Fall 2026`,
       );
       assert.equal(
         college.observations[key].sourceId,
-        "uc-accountability-2026-chapter-2",
-        `${college.name} ${key} uses the UC workbook release`,
+        "uc-admissions-fall-2026-snapshots",
+        `${college.name} ${key} uses the current UC campus snapshot`,
       );
     }
 
-    assert.equal(college.observations.applicants.value, expected.applicants);
-    assert.equal(college.observations.admits.value, expected.admits);
-    assert.equal(college.observations.enrollees.value, expected.enrollees);
+    for (const [key, expectedUnit] of Object.entries(ucFinalizedObservationUnits)) {
+      assertObservation({
+        observation: college.observations[key],
+        expectedUnit,
+        label: `${college.name} finalized ${key}`,
+        sourcesById,
+      });
+      assert.equal(college.observations[key].reportingYear, 2025);
+      assert.equal(
+        college.observations[key].sourceId,
+        "uc-accountability-2026-chapter-2",
+      );
+    }
+
+    assert.equal(college.observations.applicants.value, current.applicants);
+    assert.equal(college.observations.admits.value, current.admits);
+    assert.equal(college.observations.enrollees.value, finalized.enrollees);
     assert.equal(college.observations.admitRate.status, "derived");
     assert.equal(college.observations.yieldRate.status, "derived");
     assert.ok(
       Math.abs(
         college.observations.admitRate.value -
-          expected.admits / expected.applicants,
+          current.admits / current.applicants,
       ) < Number.EPSILON,
       `${college.name} admit rate is admits divided by applicants`,
     );
     assert.ok(
       Math.abs(
         college.observations.yieldRate.value -
-          expected.enrollees / expected.admits,
+          finalized.enrollees / finalized.admits,
       ) < Number.EPSILON,
       `${college.name} yield is enrollees divided by admits`,
     );
@@ -351,19 +458,23 @@ test("all nine UC headline rates are derived from the official Fall 2025 counts"
     });
     assert.equal(
       college.alternateObservations.admitRate.sourceId,
-      "college-scorecard-2024",
+      federalSourceId,
     );
     assert.equal(college.alternateObservations.admitRate.reportingYear, 2024);
   }
 
   const nonUcColleges = payload.colleges.filter(
-    (college) => !expectedUcFall2025.has(college.unitId),
+    (college) =>
+      !expectedUcFall2026.has(college.unitId) && college.unitId !== 104151,
   );
-  assert.equal(nonUcColleges.length, 41);
+  assert.equal(nonUcColleges.length, 40);
   for (const college of nonUcColleges) {
-    assert.equal(college.observations.admitRate.sourceId, "college-scorecard-2024");
+    assert.equal(college.observations.admitRate.sourceId, federalSourceId);
     assert.equal(college.observations.admitRate.reportingYear, 2024);
-    for (const key of Object.keys(ucCountObservationUnits)) {
+    for (const key of [
+      ...Object.keys(ucHeadlineObservationUnits),
+      ...Object.keys(ucFinalizedObservationUnits),
+    ]) {
       assert.equal(
         college.observations[key],
         null,
@@ -371,4 +482,80 @@ test("all nine UC headline rates are derived from the official Fall 2025 counts"
       );
     }
   }
+});
+
+test("ASU uses its latest official campus-immersion record and keeps the federal alternate", async () => {
+  const payload = JSON.parse(
+    await readFile(new URL("../data/colleges.json", import.meta.url), "utf8"),
+  );
+  const sourcesById = new Map(
+    payload.release.sources.map((source) => [source.id, source]),
+  );
+  const asu = payload.colleges.find((college) => college.unitId === 104151);
+
+  assert.ok(asu);
+  for (const [key, expectedUnit] of Object.entries({
+    admitRate: "ratio",
+    applicants: "count",
+    admits: "count",
+    enrollees: "count",
+    yieldRate: "ratio",
+    undergraduateEnrollment: "count",
+    graduationRate: "ratio",
+    tuitionInState: "usd",
+    tuitionOutOfState: "usd",
+  })) {
+    assertObservation({
+      observation: asu.observations[key],
+      expectedUnit,
+      label: `ASU official ${key}`,
+      sourcesById,
+    });
+    assert.equal(asu.observations[key].sourceId, "asu-cds-2025-26");
+  }
+  assert.equal(asu.observations.admitRate.reportingYear, 2025);
+  assert.equal(asu.observations.applicants.value, 69617);
+  assert.equal(asu.observations.admits.value, 61533);
+  assert.equal(asu.observations.enrollees.value, 13665);
+  assert.equal(asu.observations.undergraduateEnrollment.value, 64662);
+  assert.equal(asu.observations.graduationRate.value, 0.693);
+  assert.equal(asu.observations.tuitionInState.value, 13534);
+  assert.equal(asu.observations.tuitionOutOfState.value, 37072);
+  assert.equal(asu.observations.tuitionInState.reportingYear, 2026);
+  assert.equal(asu.observations.tuitionOutOfState.reportingYear, 2026);
+  assert.equal(asu.observations.tuitionInState.periodLabel, "2026-2027");
+  assert.equal(asu.observations.tuitionOutOfState.periodLabel, "2026-2027");
+  assert.equal(
+    asu.observations.tuitionInState.sourceField,
+    "CDS G1: $12,527 in-state tuition + $1,007 required fees",
+  );
+  assert.equal(
+    asu.observations.tuitionOutOfState.sourceField,
+    "CDS G1: $36,065 out-of-state tuition + $1,007 required fees",
+  );
+  assert.ok(
+    Math.abs(asu.observations.admitRate.value - 61533 / 69617) < 1e-9,
+    "ASU's derived admit rate agrees with its reported counts to at least nine decimal places",
+  );
+  assert.deepEqual(
+    Object.keys(asu.alternateObservations).sort(),
+    Object.keys(expectedAsuFederalAlternates).sort(),
+    "ASU retains every federal observation replaced by campus-specific evidence",
+  );
+  for (const [key, expected] of Object.entries(expectedAsuFederalAlternates)) {
+    const alternate = asu.alternateObservations[key];
+    assertObservation({
+      observation: alternate,
+      expectedUnit: expected.unit,
+      label: `ASU alternate federal ${key}`,
+      sourcesById,
+    });
+    assert.equal(alternate.sourceId, federalSourceId);
+    assert.equal(alternate.sourceField, expected.sourceField);
+  }
+  assert.equal(asu.alternateObservations.admitRate.value, 0.8989);
+  assert.equal(asu.alternateObservations.undergraduateEnrollment.value, 64674);
+  assert.equal(asu.alternateObservations.graduationRate.value, 0.6804);
+  assert.equal(asu.alternateObservations.tuitionInState.value, 12223);
+  assert.equal(asu.alternateObservations.tuitionOutOfState.value, 33139);
 });

@@ -8,11 +8,15 @@ export type ObservationStatus =
   | "stale";
 
 export type ObservationUnit = "ratio" | "usd" | "count";
+export type ObservationFinality = "snapshot" | "provisional" | "finalized";
 
 export type Observation = {
   value: number | null;
   unit: ObservationUnit;
   reportingYear: number;
+  periodLabel: string;
+  finality: ObservationFinality;
+  comparabilityKey: string;
   sourceId: string;
   publisher: string;
   sourceName: string;
@@ -27,21 +31,17 @@ export type Observation = {
 export type MajorEvidence = {
   name: string;
   share: number;
+  bachelorsAvailable: boolean;
   evidence: string;
+  reportingYear: number;
+  periodLabel: string;
+  sourceId: string;
+  sourceField: string;
+  cohort: string;
+  definition: string;
 };
 
-export type College = {
-  unitId: number;
-  slug: string;
-  name: string;
-  aliases: string[];
-  city: string;
-  state: string;
-  region: string;
-  ownership: string;
-  setting: string;
-  website: string;
-  observations: {
+export type CollegeObservations = {
     admitRate: Observation;
     applicants: Observation | null;
     admits: Observation | null;
@@ -53,10 +53,26 @@ export type College = {
     medianEarnings: Observation;
     tuitionInState: Observation;
     tuitionOutOfState: Observation;
-  };
-  alternateObservations: {
-    admitRate?: Observation;
-  };
+};
+
+export type College = {
+  unitId: number;
+  opeId: string;
+  opeId6: string;
+  mainCampus: boolean;
+  branchCount: number;
+  currentlyOperating: boolean;
+  slug: string;
+  name: string;
+  aliases: string[];
+  city: string;
+  state: string;
+  region: string;
+  ownership: string;
+  setting: string;
+  website: string;
+  observations: CollegeObservations;
+  alternateObservations: Partial<CollegeObservations>;
   majors: MajorEvidence[];
 };
 
@@ -65,13 +81,19 @@ export type SourceRelease = {
   publisher: string;
   sourceName: string;
   sourceUrl: string;
+  sourceUrls?: string[];
+  sourceHashes?: Array<{ sourceUrl: string; sha256: string }>;
   sourcePage?: string;
   sourceSheet?: string;
   reportingYear?: number;
+  finality?: ObservationFinality;
   accessedOn: string;
   cohort?: string;
   notes?: string;
   workbookSha256?: string;
+  artifactUrl?: string;
+  artifactSha256?: string;
+  releaseDate?: string;
 };
 
 export type CollegeDataset = {
@@ -79,8 +101,10 @@ export type CollegeDataset = {
     cohortName: string;
     institutionCount: number;
     accessedOn: string;
+    federalReleaseDate: string;
     institutionMetricsYear: number;
     earningsCohortYear: number;
+    earningsPeriodLabel: string;
     publisher: string;
     sourceName: string;
     sourceUrl: string;
@@ -132,6 +156,9 @@ function assertObservation(
 
   if (
     !Number.isInteger(observation.reportingYear) ||
+    !observation.periodLabel ||
+    !observation.finality ||
+    !observation.comparabilityKey ||
     !observation.sourceId ||
     !observation.sourceName ||
     !observation.publisher ||
@@ -165,6 +192,17 @@ function validateDataset(value: unknown): CollegeDataset {
     }
     unitIds.add(college.unitId);
 
+    if (
+      !college.opeId ||
+      !college.opeId6 ||
+      !college.mainCampus ||
+      !college.currentlyOperating ||
+      !Number.isInteger(college.branchCount) ||
+      college.branchCount < 1
+    ) {
+      throw new Error(`${college.name} has incomplete federal identity data.`);
+    }
+
     for (const key of requiredObservationKeys) {
       assertObservation(college.observations?.[key], college.name, key);
     }
@@ -180,10 +218,26 @@ function validateDataset(value: unknown): CollegeDataset {
     if (
       college.majors.some(
         (major) =>
-          !Number.isFinite(major.share) || major.share <= 0 || major.share > 1,
+          !Number.isFinite(major.share) ||
+          major.share < 0 ||
+          major.share > 1 ||
+          major.bachelorsAvailable !== true,
       )
     ) {
       throw new Error(`${college.name} has invalid major evidence.`);
+    }
+    if (
+      college.majors.some(
+        (major) =>
+          !Number.isInteger(major.reportingYear) ||
+          !major.periodLabel ||
+          !major.sourceId ||
+          !major.sourceField ||
+          !major.cohort ||
+          !major.definition,
+      )
+    ) {
+      throw new Error(`${college.name} has incomplete broad-field lineage.`);
     }
   }
 
@@ -218,6 +272,24 @@ export function formatObservation(observation: Observation) {
   return numberFormatter.format(observation.value);
 }
 
+export function observationSourceKind(observation: Observation) {
+  if (observation.sourceId.startsWith("uc-")) {
+    return { label: "UC official", className: "uc-source", isFederal: false };
+  }
+  if (observation.publisher === "U.S. Department of Education") {
+    return {
+      label: "Federal baseline",
+      className: "federal-source",
+      isFederal: true,
+    };
+  }
+  return {
+    label: "College official",
+    className: "official-source",
+    isFederal: false,
+  };
+}
+
 export function compactName(college: College) {
   return (
     college.aliases.find((alias) => alias.startsWith("UC ")) ||
@@ -243,10 +315,10 @@ export function isUniversityOfCalifornia(college: College) {
 
 export function selectivityLabel(rate: number | null) {
   if (rate === null) return "Insufficient data";
-  if (rate <= 0.1) return "Very high reach";
-  if (rate <= 0.25) return "Reach";
-  if (rate <= 0.5) return "Competitive";
-  return "More broadly accessible";
+  if (rate <= 0.1) return "10% or fewer admitted";
+  if (rate <= 0.25) return "11%–25% admitted";
+  if (rate <= 0.5) return "26%–50% admitted";
+  return "More than 50% admitted";
 }
 
 export function majorEvidenceFor(college: College, major: string) {

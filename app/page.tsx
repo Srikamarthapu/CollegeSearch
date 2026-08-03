@@ -1,5 +1,5 @@
-import { CollegeCompassApp } from "./CollegeCompassApp";
+import { CollegeSearchApp } from "./CollegeCompassApp";
 
 export default function Home() {
-  return <CollegeCompassApp />;
+  return <CollegeSearchApp />;
 }

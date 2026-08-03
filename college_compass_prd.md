@@ -1,6 +1,6 @@
-# College Compass — Product Requirements Document
+# CollegeSearch — Product Requirements Document
 
-**Working title:** College Compass  
+**Product name:** CollegeSearch
 **Product type:** Responsive web application  
 **Primary audience:** High-school students applying as first-year college applicants  
 **MVP coverage:** 50 verified U.S. four-year colleges, including all nine undergraduate University of California campuses  
@@ -12,7 +12,7 @@
 
 ## 1. Executive summary
 
-College Compass helps high-school students discover, evaluate, and build a balanced list of colleges using reliable public data rather than rankings, rumors, or unexplained recommendations.
+CollegeSearch helps high-school students discover, evaluate, and build a balanced list of colleges using reliable public data rather than rankings, rumors, or unexplained recommendations.
 
 A student should be able to arrive with only a possible major, a rough academic profile, and a few preferences. Within five minutes, the student should leave with:
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import { headers } from "next/headers";
 import { Providers } from "./providers";
+import "lenis/dist/lenis.css";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -32,10 +33,10 @@ export async function generateMetadata(): Promise<Metadata> {
   const origin = `${protocol}://${host}`;
 
   return {
-    title: "College Compass",
+    title: "CollegeSearch",
     description:
       "Search and compare 50 verified U.S. colleges with current UC admissions and source-transparent federal data.",
-    applicationName: "College Compass",
+    applicationName: "CollegeSearch",
     keywords: [
       "college search",
       "college comparison",
@@ -48,7 +49,7 @@ export async function generateMetadata(): Promise<Metadata> {
       shortcut: "/favicon.svg",
     },
     openGraph: {
-      title: "College Compass — Build a college list you can explain",
+      title: "CollegeSearch — Build a college list you can explain",
       description:
         "Current UC admissions and source-transparent federal college data.",
       type: "website",
@@ -57,13 +58,13 @@ export async function generateMetadata(): Promise<Metadata> {
           url: `${origin}/og.png`,
           width: 1731,
           height: 909,
-          alt: "College Compass — Build a college list you can explain.",
+          alt: "CollegeSearch — Build a college list you can explain.",
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: "College Compass",
+      title: "CollegeSearch",
       description: "Evidence for the college list only you can build.",
       images: [`${origin}/og.png`],
     },

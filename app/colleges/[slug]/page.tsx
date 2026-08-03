@@ -11,12 +11,14 @@ import {
 
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
+import { CollegeLogo } from "@/app/components/CollegeLogo";
 import {
   collegeBySlug,
   colleges,
   compactName,
   formatObservation,
   isUniversityOfCalifornia,
+  observationSourceKind,
   percentFormatter,
   selectivityLabel,
   type Observation,
@@ -41,7 +43,7 @@ function MetricRecord({ label, observation }: MetricDefinition) {
         </strong>
         {observation ? (
           <span>
-            {observation.reportingYear} · {observation.status}
+            {observation.periodLabel} · {observation.finality}
           </span>
         ) : (
           <span>No comparable value in this release</span>
@@ -54,9 +56,11 @@ function MetricRecord({ label, observation }: MetricDefinition) {
 function EvidenceNote({
   observation,
   label,
+  definition,
 }: {
   observation: Observation;
   label: string;
+  definition?: string;
 }) {
   return (
     <article className="profile-evidence-note">
@@ -64,11 +68,15 @@ function EvidenceNote({
         <span>{label}</span>
         <strong>{formatObservation(observation)}</strong>
       </div>
-      <p>{observation.definition}</p>
+      <p>{definition ?? observation.definition}</p>
       <dl>
         <div>
-          <dt>Reporting year</dt>
-          <dd>{observation.reportingYear}</dd>
+          <dt>Period</dt>
+          <dd>{observation.periodLabel}</dd>
+        </div>
+        <div>
+          <dt>Finality</dt>
+          <dd>{observation.finality}</dd>
         </div>
         <div>
           <dt>Cohort</dt>
@@ -109,12 +117,12 @@ export async function generateMetadata({
   const college = collegeBySlug(slug);
 
   if (!college) {
-    return { title: "College not found · College Compass" };
+    return { title: "College not found · CollegeSearch" };
   }
 
   return {
-    title: `${compactName(college)} evidence profile · College Compass`,
-    description: `Admissions, cost, completion, and degree evidence for ${college.name}, with reporting years and source lineage.`,
+    title: `${compactName(college)} evidence profile · CollegeSearch`,
+    description: `Admissions, cost, completion, and degree evidence for ${college.name}, with reporting periods and source lineage.`,
   };
 }
 
@@ -129,6 +137,15 @@ export default async function CollegeProfilePage({
   const isUc = isUniversityOfCalifornia(college);
   const admissions = college.observations.admitRate;
   const federalAlternate = college.alternateObservations.admitRate;
+  const admissionSource = observationSourceKind(admissions);
+  const hasOfficialAdmission = !admissionSource.isFederal;
+  const undergraduateEnrollment = college.observations.undergraduateEnrollment;
+  const averageNetPrice = college.observations.averageNetPrice;
+  const graduationRate = college.observations.graduationRate;
+  const enrollmentIsFederal =
+    observationSourceKind(undergraduateEnrollment).isFederal;
+  const netPriceIsFederal = observationSourceKind(averageNetPrice).isFederal;
+  const graduationIsFederal = observationSourceKind(graduationRate).isFederal;
   const admissionMetrics: MetricDefinition[] = [
     { label: "Admit rate", observation: admissions },
     { label: "Applicants", observation: college.observations.applicants },
@@ -138,16 +155,18 @@ export default async function CollegeProfilePage({
   ];
   const outcomeMetrics: MetricDefinition[] = [
     {
-      label: "Undergraduate enrollment",
-      observation: college.observations.undergraduateEnrollment,
+      label: enrollmentIsFederal
+        ? "Certificate/degree-seeking undergraduates"
+        : "Undergraduate enrollment",
+      observation: undergraduateEnrollment,
     },
     {
       label: "Average net price",
-      observation: college.observations.averageNetPrice,
+      observation: averageNetPrice,
     },
     {
-      label: "Graduation rate",
-      observation: college.observations.graduationRate,
+      label: graduationIsFederal ? "150% completion rate" : "Graduation rate",
+      observation: graduationRate,
     },
     {
       label: "Median earnings",
@@ -181,6 +200,7 @@ export default async function CollegeProfilePage({
 
         <header className="profile-masthead">
           <div className="profile-masthead-copy">
+            <CollegeLogo college={college} variant="profile" />
             <span className="page-eyebrow">
               <Landmark size={15} aria-hidden="true" />
               {college.ownership} · {college.setting}
@@ -190,8 +210,8 @@ export default async function CollegeProfilePage({
               {college.city}, {college.state} · UNITID {college.unitId}
             </p>
             <p className="profile-deck">
-              A source-led record of admissions, cost, completion, and recent
-              degree evidence. Every value keeps its own reporting year.
+              Current official records where available, plus clearly dated
+              federal context. Every value keeps its own reporting period.
             </p>
           </div>
 
@@ -219,10 +239,14 @@ export default async function CollegeProfilePage({
           <FileCheck2 size={20} aria-hidden="true" />
           <div>
             <strong>
-              {isUc ? "Official UC admissions record" : "Federal institution record"}
+              {isUc
+                ? "Official UC admissions record"
+                : hasOfficialAdmission
+                  ? "Official college record"
+                  : "Historical federal record"}
             </strong>
             <p>
-              Headline admit rate: {admissions.reportingYear}{" "}
+              Headline admit rate: {admissions.periodLabel}{" "}
               {admissions.publisher}. Accessed {admissions.accessedOn}.
             </p>
           </div>
@@ -255,25 +279,29 @@ export default async function CollegeProfilePage({
 
           <EvidenceNote observation={admissions} label="Headline admit rate" />
 
-          {isUc && federalAlternate ? (
+          {hasOfficialAdmission && federalAlternate ? (
             <aside className="profile-source-comparison">
               <div className="profile-source-comparison-intro">
                 <span className="page-evidence-label">Why two rates appear</span>
-                <h3>Official UC and federal values are not interchangeable.</h3>
+                <h3>
+                  {isUc
+                    ? "Official UC and federal values are not interchangeable."
+                    : "Official college and federal values are not interchangeable."}
+                </h3>
                 <p>
-                  College Compass leads with the official UC campus count for
-                  Fall {admissions.reportingYear}. The federal rate remains
-                  visible as an alternate observation because its cohort and
-                  reporting year differ.
+                  CollegeSearch leads with the newer official record from{" "}
+                  {admissions.publisher}. The federal rate remains visible as an
+                  alternate observation because its cohort and reporting period
+                  differ.
                 </p>
               </div>
               <dl>
                 <div>
-                  <dt>Official UC record</dt>
+                  <dt>{isUc ? "Official UC record" : "Official college record"}</dt>
                   <dd>
                     <strong>{formatObservation(admissions)}</strong>
                     <span>
-                      {admissions.reportingYear} · {admissions.cohort}
+                      {admissions.periodLabel} · {admissions.cohort}
                     </span>
                   </dd>
                 </div>
@@ -282,7 +310,7 @@ export default async function CollegeProfilePage({
                   <dd>
                     <strong>{formatObservation(federalAlternate)}</strong>
                     <span>
-                      {federalAlternate.reportingYear} ·{" "}
+                      {federalAlternate.periodLabel} ·{" "}
                       {federalAlternate.cohort}
                     </span>
                   </dd>
@@ -302,8 +330,10 @@ export default async function CollegeProfilePage({
               <h2 id="outcomes-heading">Cost and outcome context</h2>
             </div>
             <p>
-              These federal measures describe different cohorts. Read the year
-              and definition before comparing.
+              Enrollment definitions vary: the federal baseline counts
+              certificate/degree-seeking undergraduates, while official
+              overlays may report total undergraduates. Current tuition is not
+              the same measure as historical net price.
             </p>
           </div>
           <dl className="profile-metric-grid profile-outcome-grid">
@@ -313,12 +343,26 @@ export default async function CollegeProfilePage({
           </dl>
           <div className="profile-evidence-notes">
             <EvidenceNote
-              observation={college.observations.averageNetPrice}
+              observation={averageNetPrice}
               label="Average net price"
+              definition={
+                netPriceIsFederal && college.ownership === "Public"
+                  ? "For public colleges, this federal measure is the average annual price after grants and scholarships for first-time, full-time, degree/certificate-seeking undergraduates who pay in-state tuition and receive Title IV aid. It is not a personalized aid estimate."
+                  : undefined
+              }
             />
             <EvidenceNote
-              observation={college.observations.graduationRate}
-              label="Graduation rate"
+              observation={graduationRate}
+              label={
+                graduationIsFederal
+                  ? "150% completion rate"
+                  : "Graduation rate"
+              }
+              definition={
+                graduationIsFederal
+                  ? "Completion of a degree or certificate at a four-year institution within 150% of normal time for the reported first-time, full-time degree/certificate-seeking cohort."
+                  : undefined
+              }
             />
             <EvidenceNote
               observation={college.observations.medianEarnings}
@@ -331,12 +375,12 @@ export default async function CollegeProfilePage({
           <div className="page-section-heading">
             <div>
               <span className="page-section-index">03</span>
-              <h2 id="majors-heading">Recent degree mix</h2>
+              <h2 id="majors-heading">Broad bachelor&apos;s fields</h2>
             </div>
             <p>
-              Completion share shows what graduates studied. It is not a
-              major-specific admission rate, capacity estimate, or promise that
-              a program is open.
+              Each field has a federal bachelor&apos;s-program indicator for
+              2024-2025. The percentage still covers all awards in that broad
+              category, so verify the exact major and campus before applying.
             </p>
           </div>
           <ol className="profile-major-list">
@@ -349,9 +393,11 @@ export default async function CollegeProfilePage({
                 <progress
                   max={1}
                   value={major.share}
-                  aria-label={`${major.name}: ${percentFormatter.format(major.share)} of recent degree completions`}
+                  aria-label={`${major.name}: ${percentFormatter.format(major.share)} of reported awards`}
                 />
-                <small>{major.evidence}</small>
+                <small>
+                  {major.periodLabel} · {major.evidence}
+                </small>
               </li>
             ))}
           </ol>

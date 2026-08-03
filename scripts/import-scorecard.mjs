@@ -1,6 +1,8 @@
+import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { unzipSync } from "fflate";
 
 const cohortUnitIds = [
   110635, 110644, 110653, 110662, 445188, 110671, 110680, 110705, 110714,
@@ -62,43 +64,104 @@ const aliases = {
 };
 
 const programFields = {
-  "Computer Science": "computer",
-  Business: "business_marketing",
-  Engineering: "engineering",
-  Biology: "biological",
-  "Health Professions": "health",
-  Psychology: "psychology",
-  "Social Sciences": "social_science",
-  "Arts & Design": "visual_performing",
-  Education: "education",
-  Mathematics: "mathematics",
-  "Physical Sciences": "physical_science",
-  English: "language",
+  "Computing & Information Sciences": {
+    shareField: "PCIP11",
+    bachelorField: "CIP11BACHL",
+  },
+  "Business & Marketing": {
+    shareField: "PCIP52",
+    bachelorField: "CIP52BACHL",
+  },
+  Engineering: { shareField: "PCIP14", bachelorField: "CIP14BACHL" },
+  "Biological & Biomedical Sciences": {
+    shareField: "PCIP26",
+    bachelorField: "CIP26BACHL",
+  },
+  "Health Professions": {
+    shareField: "PCIP51",
+    bachelorField: "CIP51BACHL",
+  },
+  Psychology: { shareField: "PCIP42", bachelorField: "CIP42BACHL" },
+  "Social Sciences": {
+    shareField: "PCIP45",
+    bachelorField: "CIP45BACHL",
+  },
+  "Visual & Performing Arts": {
+    shareField: "PCIP50",
+    bachelorField: "CIP50BACHL",
+  },
+  Education: { shareField: "PCIP13", bachelorField: "CIP13BACHL" },
+  "Mathematics & Statistics": {
+    shareField: "PCIP27",
+    bachelorField: "CIP27BACHL",
+  },
+  "Physical Sciences": {
+    shareField: "PCIP40",
+    bachelorField: "CIP40BACHL",
+  },
+  "English Language & Literature": {
+    shareField: "PCIP23",
+    bachelorField: "CIP23BACHL",
+  },
 };
 
+const scorecardArtifactUrl =
+  process.env.SCORECARD_INSTITUTION_ZIP_URL ||
+  "https://ed-public-download.scorecard.network/downloads/Most-Recent-Cohorts-Institution_06102026.zip";
+const scorecardLandingUrl = "https://collegescorecard.ed.gov/data/";
+const scorecardDictionaryUrl =
+  "https://collegescorecard.ed.gov/files/CollegeScorecardDataDictionary.xlsx";
+
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
-const ucDataset = JSON.parse(
+const localIsoDate = () => {
+  const date = new Date();
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("-");
+};
+const accessedOn = process.env.SOURCE_ACCESSED_ON || localIsoDate();
+const ucFinalizedDataset = JSON.parse(
   await readFile(
     resolve(scriptDirectory, "../data/uc-admissions-2025.json"),
     "utf8",
   ),
 );
-const ucAdmissionsByUnitId = new Map(
-  ucDataset.campuses.map((campus) => [campus.unitId, campus]),
+const ucHeadlineDataset = JSON.parse(
+  await readFile(
+    resolve(scriptDirectory, "../data/uc-admissions-latest.json"),
+    "utf8",
+  ),
+);
+const institutionOverlays = JSON.parse(
+  await readFile(
+    resolve(scriptDirectory, "../data/institution-overlays.json"),
+    "utf8",
+  ),
+);
+const ucHeadlineByUnitId = new Map(
+  ucHeadlineDataset.campuses.map((campus) => [campus.unitId, campus]),
+);
+const ucFinalizedByUnitId = new Map(
+  ucFinalizedDataset.campuses.map((campus) => [campus.unitId, campus]),
+);
+const overlaySourcesById = new Map(
+  institutionOverlays.sources.map((source) => [source.id, source]),
+);
+const overlaysByUnitId = new Map(
+  institutionOverlays.colleges.map((college) => [college.unitId, college]),
 );
 
-const federalSource = {
-  id: "college-scorecard-2024",
-  publisher: "U.S. Department of Education",
-  sourceName: "College Scorecard",
-  sourceUrl: "https://collegescorecard.ed.gov/data/",
-  accessedOn: new Date().toISOString().slice(0, 10),
-};
+let federalSource;
 
 function observation({
   value,
   unit,
   reportingYear,
+  periodLabel,
+  finality = "finalized",
+  comparabilityKey,
   sourceField,
   cohort,
   definition,
@@ -109,6 +172,9 @@ function observation({
     value: Number.isFinite(value) ? value : null,
     unit,
     reportingYear,
+    periodLabel: periodLabel || String(reportingYear),
+    finality,
+    comparabilityKey: comparabilityKey || sourceField,
     sourceId: source.id,
     publisher: source.publisher,
     sourceName: source.sourceName,
@@ -122,27 +188,162 @@ function observation({
   };
 }
 
-const fields = [
-  "id",
-  "school.name",
-  "school.city",
-  "school.state",
-  "school.ownership",
-  "school.school_url",
-  "school.locale",
-  "2024.student.size",
-  "2024.admissions.admission_rate.overall",
-  "2024.cost.avg_net_price.overall",
-  "2024.completion.completion_rate_4yr_150nt",
-  "2020.earnings.10_yrs_after_entry.median",
-  "2024.cost.tuition.in_state",
-  "2024.cost.tuition.out_of_state",
-  ...Object.values(programFields).map(
-    (field) => `2024.academics.program_percentage.${field}`,
-  ),
-];
-
 const field = (row, key) => row[key] ?? null;
+
+function numericField(row, key) {
+  const value = row[key];
+  if (
+    value === undefined ||
+    value === null ||
+    value === "" ||
+    value === "NA" ||
+    value === "NULL" ||
+    value === "PrivacySuppressed"
+  ) {
+    return null;
+  }
+
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function parseCsvLine(line) {
+  const values = [];
+  let value = "";
+  let inQuotes = false;
+
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index];
+    if (character === '"') {
+      if (inQuotes && line[index + 1] === '"') {
+        value += '"';
+        index += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (character === "," && !inQuotes) {
+      values.push(value);
+      value = "";
+    } else {
+      value += character;
+    }
+  }
+
+  values.push(value.replace(/\r$/, ""));
+  return values;
+}
+
+async function loadScorecardRows() {
+  const response = await fetch(scorecardArtifactUrl);
+  if (!response.ok) {
+    throw new Error(
+      `College Scorecard download failed (${response.status}) from ${scorecardArtifactUrl}.`,
+    );
+  }
+
+  const zipBytes = new Uint8Array(await response.arrayBuffer());
+  const artifactSha256 = createHash("sha256")
+    .update(zipBytes)
+    .digest("hex");
+  const archive = unzipSync(zipBytes);
+  const csvEntry = Object.entries(archive).find(
+    ([name]) =>
+      name.endsWith("Most-Recent-Cohorts-Institution.csv") &&
+      !name.startsWith("__MACOSX/"),
+  );
+
+  if (!csvEntry) {
+    throw new Error("The College Scorecard archive did not contain the expected institution CSV.");
+  }
+
+  const csvText = new TextDecoder("utf-8").decode(csvEntry[1]);
+  const headerEnd = csvText.indexOf("\n");
+  if (headerEnd < 0) {
+    throw new Error("The College Scorecard institution CSV has no data rows.");
+  }
+
+  const headers = parseCsvLine(csvText.slice(0, headerEnd));
+  const headerIndexes = new Map(headers.map((header, index) => [header, index]));
+  const requiredFields = [
+    "UNITID",
+    "OPEID",
+    "OPEID6",
+    "INSTNM",
+    "CITY",
+    "STABBR",
+    "CONTROL",
+    "INSTURL",
+    "LOCALE",
+    "MAIN",
+    "NUMBRANCH",
+    "CURROPER",
+    "ADM_RATE",
+    "UGDS",
+    "NPT4_PUB",
+    "NPT4_PRIV",
+    "C150_4",
+    "MD_EARN_WNE_P10",
+    "TUITIONFEE_IN",
+    "TUITIONFEE_OUT",
+    ...Object.values(programFields).flatMap(
+      ({ shareField, bachelorField }) => [shareField, bachelorField],
+    ),
+  ];
+
+  for (const requiredField of requiredFields) {
+    if (!headerIndexes.has(requiredField)) {
+      throw new Error(
+        `The College Scorecard release is missing required field ${requiredField}.`,
+      );
+    }
+  }
+
+  const requestedUnitIds = new Set(cohortUnitIds);
+  const rows = [];
+  let lineStart = headerEnd + 1;
+
+  while (lineStart < csvText.length) {
+    let lineEnd = csvText.indexOf("\n", lineStart);
+    if (lineEnd < 0) lineEnd = csvText.length;
+    const line = csvText.slice(lineStart, lineEnd);
+    lineStart = lineEnd + 1;
+    if (!line) continue;
+
+    const firstComma = line.indexOf(",");
+    const unitId = Number(line.slice(0, firstComma));
+    if (!requestedUnitIds.has(unitId)) continue;
+
+    const values = parseCsvLine(line);
+    const row = Object.fromEntries(
+      requiredFields.map((requiredField) => [
+        requiredField,
+        values[headerIndexes.get(requiredField)],
+      ]),
+    );
+    rows.push(row);
+  }
+
+  const returnedUnitIds = new Set(rows.map((row) => Number(row.UNITID)));
+  const missingUnitIds = cohortUnitIds.filter(
+    (unitId) => !returnedUnitIds.has(unitId),
+  );
+  const unexpectedUnitIds = [...returnedUnitIds].filter(
+    (unitId) => !requestedUnitIds.has(unitId),
+  );
+  if (missingUnitIds.length || unexpectedUnitIds.length) {
+    throw new Error(
+      `College Scorecard identity mismatch. Missing: ${missingUnitIds.join(", ") || "none"}; unexpected: ${unexpectedUnitIds.join(", ") || "none"}.`,
+    );
+  }
+
+  return { rows, artifactSha256 };
+}
+
+function normalizeWebsite(value) {
+  const trimmed = String(value ?? "").trim();
+  if (!trimmed) return "";
+  return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+}
 
 function ownershipLabel(value) {
   return value === 1
@@ -167,80 +368,101 @@ function regionLabel(state) {
   return "Northeast";
 }
 
-const params = new URLSearchParams({
-  api_key: process.env.DATA_GOV_API_KEY || "DEMO_KEY",
-  id: cohortUnitIds.join(","),
-  per_page: "100",
-  fields: fields.join(","),
-});
+const scorecardSnapshot = await loadScorecardRows();
+federalSource = {
+  id: "college-scorecard-institution-2026-06-10",
+  publisher: "U.S. Department of Education",
+  sourceName: "College Scorecard — June 2026 institution release",
+  sourceUrl: scorecardLandingUrl,
+  sourceUrls: [scorecardArtifactUrl, scorecardDictionaryUrl],
+  artifactUrl: scorecardArtifactUrl,
+  artifactSha256: scorecardSnapshot.artifactSha256,
+  releaseDate: "2026-06-10",
+  accessedOn,
+  notes:
+    "This June 2026 release combines metrics with different reporting lags. Every observation retains its exact academic year, fall term, entry cohort, or measurement period from the official cohort map.",
+  finality: "finalized",
+};
 
-const response = await fetch(
-  `https://api.data.gov/ed/collegescorecard/v1/schools.json?${params}`,
-);
-
-if (!response.ok) {
-  throw new Error(`College Scorecard request failed (${response.status}).`);
-}
-
-const payload = await response.json();
-if (payload.results?.length !== cohortUnitIds.length) {
-  throw new Error(
-    `Expected ${cohortUnitIds.length} colleges; received ${payload.results?.length ?? 0}.`,
-  );
-}
-
-const colleges = payload.results
+const colleges = scorecardSnapshot.rows
   .map((row) => {
-    const ucAdmission = ucAdmissionsByUnitId.get(row.id);
-    const federalAdmitRate = field(
-      row,
-      "2024.admissions.admission_rate.overall",
-    );
+    const unitId = Number(row.UNITID);
+    const ucAdmission = ucHeadlineByUnitId.get(unitId);
+    const ucFinalizedAdmission = ucFinalizedByUnitId.get(unitId);
+    const ucHeadlineSource = ucAdmission
+      ? { ...ucHeadlineDataset.release, sourcePage: ucAdmission.sourceUrl }
+      : null;
+    const federalAdmitRate = numericField(row, "ADM_RATE");
     const federalAdmitObservation = observation({
       value: federalAdmitRate,
       unit: "ratio",
       reportingYear: 2024,
-      sourceField: "2024.admissions.admission_rate.overall",
-      cohort: "IPEDS fall admissions reporting cohort",
+      periodLabel: "Fall 2024",
+      finality: "finalized",
+      comparabilityKey: "admissions.undergraduate.overall.rate",
+      sourceField: "ADM_RATE",
+      cohort: "IPEDS Fall 2024 admissions collection",
       definition:
-        "Admitted undergraduate applicants divided by undergraduate applicants.",
+        "Admitted first-time, degree/certificate-seeking undergraduate applicants divided by applicants in that same IPEDS admissions population.",
     });
     const primaryAdmitObservation = ucAdmission
       ? observation({
           value: ucAdmission.admitRate,
           unit: "ratio",
           reportingYear: ucAdmission.fall,
-          sourceField: ucDataset.release.sourceField,
-          cohort: ucDataset.release.cohort,
+          periodLabel: `Fall ${ucAdmission.fall} snapshot`,
+          finality: "snapshot",
+          comparabilityKey: "admissions.first-year.rate",
+          sourceField: ucHeadlineDataset.release.sourceField,
+          cohort: ucHeadlineDataset.release.cohort,
           definition:
             "Fall freshman admits divided by fall freshman applicants for this UC campus.",
           status: "derived",
-          source: ucDataset.release,
+          source: ucHeadlineSource,
         })
       : federalAdmitObservation;
     const majors = Object.entries(programFields)
-      .map(([name, apiField]) => ({
+      .map(([name, { shareField, bachelorField }]) => ({
         name,
-        share: field(row, `2024.academics.program_percentage.${apiField}`),
-        evidence: "Recent degree completions",
+        share: numericField(row, shareField),
+        evidence: "Broad federal bachelor's field",
+        reportingYear: 2025,
+        periodLabel: "2024-2025 programs and awards",
+        sourceId: federalSource.id,
+        sourceField: `${shareField} + ${bachelorField}`,
+        cohort:
+          "IPEDS 2024-2025 awards; bachelor's program availability reported for the broad CIP family",
+        definition:
+          "The bachelor's indicator confirms at least one program in this broad field. The percentage is this field's share of all institution-wide awards, not a major-specific admission rate.",
+        bachelorsAvailable: numericField(row, bachelorField) === 1,
       }))
-      .filter((major) => typeof major.share === "number" && major.share > 0);
+      .filter(
+        (major) =>
+          major.bachelorsAvailable &&
+          typeof major.share === "number" &&
+          major.share >= 0,
+      );
 
     return {
-      unitId: row.id,
-      slug: field(row, "school.name")
+      unitId,
+      opeId: field(row, "OPEID"),
+      opeId6: field(row, "OPEID6"),
+      mainCampus: numericField(row, "MAIN") === 1,
+      branchCount: numericField(row, "NUMBRANCH"),
+      currentlyOperating: numericField(row, "CURROPER") === 1,
+      slug: field(row, "INSTNM")
         .toLowerCase()
         .replace(/&/g, "and")
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, ""),
-      name: field(row, "school.name"),
-      aliases: aliases[row.id] || [],
-      city: field(row, "school.city"),
-      state: field(row, "school.state"),
-      region: regionLabel(field(row, "school.state")),
-      ownership: ownershipLabel(field(row, "school.ownership")),
-      setting: settingLabel(field(row, "school.locale")),
-      website: `https://${field(row, "school.school_url")}`,
+      name: field(row, "INSTNM"),
+      aliases: aliases[unitId] || [],
+      city: field(row, "CITY"),
+      state: field(row, "STABBR"),
+      region: regionLabel(field(row, "STABBR")),
+      ownership: ownershipLabel(numericField(row, "CONTROL")),
+      setting: settingLabel(numericField(row, "LOCALE")),
+      website: normalizeWebsite(field(row, "INSTURL")),
       observations: {
         admitRate: primaryAdmitObservation,
         applicants: ucAdmission
@@ -248,11 +470,14 @@ const colleges = payload.results
               value: ucAdmission.applicants,
               unit: "count",
               reportingYear: ucAdmission.fall,
+              periodLabel: `Fall ${ucAdmission.fall} snapshot`,
+              finality: "snapshot",
+              comparabilityKey: "admissions.first-year.applicants",
               sourceField: "Fall Applicants",
-              cohort: ucDataset.release.cohort,
+              cohort: ucHeadlineDataset.release.cohort,
               definition:
                 "Applications submitted to this UC campus for fall freshman admission.",
-              source: ucDataset.release,
+              source: ucHeadlineSource,
             })
           : null,
         admits: ucAdmission
@@ -260,94 +485,125 @@ const colleges = payload.results
               value: ucAdmission.admits,
               unit: "count",
               reportingYear: ucAdmission.fall,
+              periodLabel: `Fall ${ucAdmission.fall} snapshot`,
+              finality: "snapshot",
+              comparabilityKey: "admissions.first-year.admits",
               sourceField: "Fall Admits",
-              cohort: ucDataset.release.cohort,
+              cohort: ucHeadlineDataset.release.cohort,
               definition:
                 "Applicants admitted to this UC campus for fall freshman admission.",
-              source: ucDataset.release,
+              source: ucHeadlineSource,
             })
           : null,
-        enrollees: ucAdmission
+        enrollees: ucFinalizedAdmission
           ? observation({
-              value: ucAdmission.enrollees,
+              value: ucFinalizedAdmission.enrollees,
               unit: "count",
-              reportingYear: ucAdmission.fall,
+              reportingYear: ucFinalizedAdmission.fall,
+              periodLabel: `Fall ${ucFinalizedAdmission.fall} finalized`,
+              finality: "finalized",
+              comparabilityKey: "admissions.first-year.enrollees",
               sourceField: "Fall Enrollees",
-              cohort: ucDataset.release.cohort,
+              cohort: ucFinalizedDataset.release.cohort,
               definition:
                 "Admitted fall freshman applicants who enrolled at this UC campus.",
-              source: ucDataset.release,
+              source: ucFinalizedDataset.release,
             })
           : null,
-        yieldRate: ucAdmission
+        yieldRate: ucFinalizedAdmission
           ? observation({
-              value: ucAdmission.yieldRate,
+              value: ucFinalizedAdmission.yieldRate,
               unit: "ratio",
-              reportingYear: ucAdmission.fall,
+              reportingYear: ucFinalizedAdmission.fall,
+              periodLabel: `Fall ${ucFinalizedAdmission.fall} finalized`,
+              finality: "finalized",
+              comparabilityKey: "admissions.first-year.yield",
               sourceField:
                 "Derived yield rate: Fall Enrollees divided by Fall Admits",
-              cohort: ucDataset.release.cohort,
+              cohort: ucFinalizedDataset.release.cohort,
               definition:
                 "Fall freshman enrollees divided by fall freshman admits for this UC campus.",
               status: "derived",
-              source: ucDataset.release,
+              source: ucFinalizedDataset.release,
             })
           : null,
         undergraduateEnrollment: observation({
-          value: field(row, "2024.student.size"),
+          value: numericField(row, "UGDS"),
           unit: "count",
           reportingYear: 2024,
-          sourceField: "2024.student.size",
-          cohort: "College Scorecard institutional reporting cohort",
-          definition: "Reported undergraduate enrollment.",
+          periodLabel: "Fall 2024",
+          finality: "finalized",
+          comparabilityKey:
+            "undergraduate-enrollment.degree-certificate-seeking",
+          sourceField: "UGDS",
+          cohort:
+            "IPEDS Fall 2024 certificate/degree-seeking undergraduate enrollment",
+          definition:
+            "Certificate- or degree-seeking undergraduate enrollment reported at the fall census date.",
         }),
         averageNetPrice: observation({
-          value: field(row, "2024.cost.avg_net_price.overall"),
+          value:
+            numericField(row, "NPT4_PUB") ?? numericField(row, "NPT4_PRIV"),
           unit: "usd",
           reportingYear: 2024,
-          sourceField: "2024.cost.avg_net_price.overall",
-          cohort: "Title IV federal aid recipients",
+          periodLabel: "2023-2024 aid cohort",
+          finality: "finalized",
+          comparabilityKey: "net-price.title-iv.overall",
+          sourceField:
+            numericField(row, "NPT4_PUB") !== null ? "NPT4_PUB" : "NPT4_PRIV",
+          cohort:
+            numericField(row, "NPT4_PUB") !== null
+              ? "Academic year 2023-2024 first-time, full-time, degree/certificate-seeking in-state students receiving Title IV aid"
+              : "Academic year 2023-2024 first-time, full-time, degree/certificate-seeking students receiving Title IV aid",
           definition:
-            "Average annual net price after grants and scholarships for the reported federal cohort.",
+            "Average annual net price after grants and scholarships for the exact reported federal cohort.",
         }),
         graduationRate: observation({
-          value: field(
-            row,
-            "2024.completion.completion_rate_4yr_150nt",
-          ),
+          value: numericField(row, "C150_4"),
           unit: "ratio",
           reportingYear: 2024,
-          sourceField: "2024.completion.completion_rate_4yr_150nt",
-          cohort: "First-time, full-time students",
+          periodLabel: "Fall 2018 entering cohort",
+          finality: "finalized",
+          comparabilityKey: "completion.four-year-institution.150-percent",
+          sourceField: "C150_4",
+          cohort:
+            "Fall 2018 or academic-year 2018-2019 first-time, full-time degree/certificate-seeking cohort",
           definition:
-            "Completion of a four-year award within 150% of expected time.",
+            "Share completing a degree or certificate at a four-year institution within 150% of normal time.",
         }),
         medianEarnings: observation({
-          value: field(
-            row,
-            "2020.earnings.10_yrs_after_entry.median",
-          ),
+          value: numericField(row, "MD_EARN_WNE_P10"),
           unit: "usd",
           reportingYear: 2020,
-          sourceField: "2020.earnings.10_yrs_after_entry.median",
-          cohort: "Federal earnings cohort, 10 years after entry",
+          periodLabel: "Measured 2020-2021",
+          finality: "finalized",
+          comparabilityKey: "earnings.median.10-years",
+          sourceField: "MD_EARN_WNE_P10",
+          cohort:
+            "2009-2010 and 2010-2011 entrants; earnings measured in 2020-2021",
           definition:
-            "Median earnings 10 years after entering the institution for the reported federal cohort.",
+            "Median earnings 10 years after entry for the pooled federal cohort, expressed in 2022 dollars.",
         }),
         tuitionInState: observation({
-          value: field(row, "2024.cost.tuition.in_state"),
+          value: numericField(row, "TUITIONFEE_IN"),
           unit: "usd",
           reportingYear: 2024,
-          sourceField: "2024.cost.tuition.in_state",
-          cohort: "Published institutional price",
+          periodLabel: "2024-2025",
+          finality: "finalized",
+          comparabilityKey: "tuition-fees.in-state",
+          sourceField: "TUITIONFEE_IN",
+          cohort: "Academic year 2024-2025 published institutional price",
           definition: "Published in-state tuition and required fees.",
         }),
         tuitionOutOfState: observation({
-          value: field(row, "2024.cost.tuition.out_of_state"),
+          value: numericField(row, "TUITIONFEE_OUT"),
           unit: "usd",
           reportingYear: 2024,
-          sourceField: "2024.cost.tuition.out_of_state",
-          cohort: "Published institutional price",
+          periodLabel: "2024-2025",
+          finality: "finalized",
+          comparabilityKey: "tuition-fees.out-of-state",
+          sourceField: "TUITIONFEE_OUT",
+          cohort: "Academic year 2024-2025 published institutional price",
           definition: "Published out-of-state tuition and required fees.",
         }),
       },
@@ -359,9 +615,35 @@ const colleges = payload.results
       majors,
     };
   })
+  .map((college) => {
+    const overlay = overlaysByUnitId.get(college.unitId);
+    if (!overlay) return college;
+
+    const source = overlaySourcesById.get(overlay.sourceId);
+    if (!source) {
+      throw new Error(
+        `Missing registered source ${overlay.sourceId} for UNITID ${college.unitId}.`,
+      );
+    }
+
+    for (const [metric, value] of Object.entries(overlay.observations)) {
+      if (college.observations[metric]) {
+        college.alternateObservations[metric] = college.observations[metric];
+      }
+      college.observations[metric] = observation({ ...value, source });
+    }
+
+    return college;
+  })
   .sort((a, b) => a.name.localeCompare(b.name));
 
 for (const college of colleges) {
+  if (!college.mainCampus || !college.currentlyOperating) {
+    throw new Error(
+      `${college.name} is no longer a current main-campus Scorecard record. Review the institution identity before publishing.`,
+    );
+  }
+
   const admitRate = college.observations.admitRate.value;
   if (
     admitRate !== null &&
@@ -373,21 +655,28 @@ for (const college of colleges) {
 
 const output = {
   release: {
-    cohortName: "College Compass verified starting cohort",
+    cohortName: "CollegeSearch verified starting cohort",
     institutionCount: colleges.length,
-    accessedOn: new Date().toISOString().slice(0, 10),
+    accessedOn,
+    federalReleaseDate: "2026-06-10",
     institutionMetricsYear: 2024,
     earningsCohortYear: 2020,
+    earningsPeriodLabel: "Measured 2020-2021",
     publisher: "U.S. Department of Education",
     sourceName: "College Scorecard",
     sourceUrl: "https://collegescorecard.ed.gov/data/",
     ucAdmissionsSourceUrl:
-      "https://www.universityofcalifornia.edu/about-us/information-center/freshman-admissions-summary",
+      "https://admission.universityofcalifornia.edu/campuses-majors/",
     ucDisciplineSourceUrl:
       "https://www.universityofcalifornia.edu/about-us/information-center/freshman-admission-discipline",
     notes:
-      "UC headline admit rates use official Fall 2025 campus counts from the UC Accountability Report. Other colleges use the 2024 College Scorecard institution rate. Major evidence reflects recent federal degree-completion shares and is not a major-specific admit rate.",
-    sources: [federalSource, ucDataset.release],
+      "UC headline admit rates use official Fall 2026 UC Admissions campus snapshots; Fall 2025 Accountability data remains the finalized source for enrollees and yield. The federal baseline comes from the official June 2026 College Scorecard release, whose underlying metrics carry different reporting lags. Verified institution observations retain replaced federal records as alternates. Broad field filters require a 2024-2025 bachelor's-program indicator and pair it with the field's share of all awards; neither is a major-specific admit rate.",
+    sources: [
+      federalSource,
+      ucHeadlineDataset.release,
+      ucFinalizedDataset.release,
+      ...institutionOverlays.sources,
+    ],
   },
   colleges,
 };

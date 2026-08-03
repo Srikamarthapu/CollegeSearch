@@ -1,0 +1,182 @@
+{
+  "release": {
+    "id": "uc-admissions-fall-2026-snapshots",
+    "publisher": "University of California",
+    "sourceName": "UC Admissions Fall 2026 campus snapshots",
+    "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/",
+    "sourceUrls": [
+      "https://admission.universityofcalifornia.edu/campuses-majors/berkeley/first-year-admit-data.html",
+      "https://admission.universityofcalifornia.edu/campuses-majors/davis/first-year-admit-data.html",
+      "https://admission.universityofcalifornia.edu/campuses-majors/irvine/first-year-admit-data.html",
+      "https://admission.universityofcalifornia.edu/campuses-majors/ucla/first-year-admit-data.html",
+      "https://admission.universityofcalifornia.edu/campuses-majors/riverside/first-year-admit-data.html",
+      "https://admission.universityofcalifornia.edu/campuses-majors/san-diego/first-year-admit-data.html",
+      "https://admission.universityofcalifornia.edu/campuses-majors/santa-barbara/first-year-admit-data.html",
+      "https://admission.universityofcalifornia.edu/campuses-majors/santa-cruz/first-year-admit-data.html",
+      "https://admission.universityofcalifornia.edu/campuses-majors/merced/first-year-admit-data.html"
+    ],
+    "sourceHashes": [
+      {
+        "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/berkeley/first-year-admit-data.html",
+        "sha256": "4afe061598b6c7f87896ba93b15eebaced6e0eb8e683e8aa023ca6103c047683"
+      },
+      {
+        "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/davis/first-year-admit-data.html",
+        "sha256": "6e55fa931e5448c71e0b17ac72f40ecb0fde9fb9c8a0c69260bd887169988c9e"
+      },
+      {
+        "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/irvine/first-year-admit-data.html",
+        "sha256": "e77c533589708ea7806a144caa21f79265ea0aa6dc219178cb8dff78dbe7e0f0"
+      },
+      {
+        "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/ucla/first-year-admit-data.html",
+        "sha256": "2e33b4607f5e0af7641bcbc4da066aaddbbc3f9c8704d37483fca1f916ca9701"
+      },
+      {
+        "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/riverside/first-year-admit-data.html",
+        "sha256": "6d603a25474b8abef56a7b15984e6ef9dc450c28907cc3a5890fafb2a79005b5"
+      },
+      {
+        "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/san-diego/first-year-admit-data.html",
+        "sha256": "bf630bbdec82890dc060ce333b93c225a8eebe1421365e1e2a292afccc8d2134"
+      },
+      {
+        "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/santa-barbara/first-year-admit-data.html",
+        "sha256": "395277bf7c6697d543531209346efe0fd62dae5d10c4e84b652274ad699e3e2e"
+      },
+      {
+        "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/santa-cruz/first-year-admit-data.html",
+        "sha256": "4d5da5a4934e715027e34e78b2c7fdaa2b4da0943b0951cbd36b5a3de7ea9e17"
+      },
+      {
+        "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/merced/first-year-admit-data.html",
+        "sha256": "27c5d51b3bd9535724aa05a40a208b95bcac0b43e6b27813939aa5517ce59e2d"
+      }
+    ],
+    "reportingYear": 2026,
+    "cohort": "Fall 2026 first-year admission snapshot",
+    "finality": "snapshot",
+    "sourceField": "Applicants, admits, and overall admit rate",
+    "accessedOn": "2026-08-01",
+    "notes": "These campus snapshots publish applicants and admits, but not enrollees. Finalized enrollment and yield remain attached to the prior UC Accountability cohort."
+  },
+  "campuses": [
+    {
+      "slug": "berkeley",
+      "campus": "Berkeley",
+      "unitId": 110635,
+      "name": "University of California-Berkeley",
+      "fall": 2026,
+      "applicants": 133154,
+      "admits": 13967,
+      "admitRate": 0.10489358186761194,
+      "publishedAdmitRate": 10.5,
+      "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/berkeley/first-year-admit-data.html",
+      "sourceSha256": "4afe061598b6c7f87896ba93b15eebaced6e0eb8e683e8aa023ca6103c047683"
+    },
+    {
+      "slug": "davis",
+      "campus": "Davis",
+      "unitId": 110644,
+      "name": "University of California-Davis",
+      "fall": 2026,
+      "applicants": 104864,
+      "admits": 48015,
+      "admitRate": 0.4578787763198047,
+      "publishedAdmitRate": 45.8,
+      "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/davis/first-year-admit-data.html",
+      "sourceSha256": "6e55fa931e5448c71e0b17ac72f40ecb0fde9fb9c8a0c69260bd887169988c9e"
+    },
+    {
+      "slug": "irvine",
+      "campus": "Irvine",
+      "unitId": 110653,
+      "name": "University of California-Irvine",
+      "fall": 2026,
+      "applicants": 126005,
+      "admits": 38165,
+      "admitRate": 0.3028848061584858,
+      "publishedAdmitRate": 30.3,
+      "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/irvine/first-year-admit-data.html",
+      "sourceSha256": "e77c533589708ea7806a144caa21f79265ea0aa6dc219178cb8dff78dbe7e0f0"
+    },
+    {
+      "slug": "ucla",
+      "campus": "Los Angeles",
+      "unitId": 110662,
+      "name": "University of California-Los Angeles",
+      "fall": 2026,
+      "applicants": 146692,
+      "admits": 15903,
+      "admitRate": 0.10841081994928149,
+      "publishedAdmitRate": 10.8,
+      "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/ucla/first-year-admit-data.html",
+      "sourceSha256": "2e33b4607f5e0af7641bcbc4da066aaddbbc3f9c8704d37483fca1f916ca9701"
+    },
+    {
+      "slug": "riverside",
+      "campus": "Riverside",
+      "unitId": 110671,
+      "name": "University of California-Riverside",
+      "fall": 2026,
+      "applicants": 72542,
+      "admits": 63958,
+      "admitRate": 0.8816685506327369,
+      "publishedAdmitRate": 88.2,
+      "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/riverside/first-year-admit-data.html",
+      "sourceSha256": "6d603a25474b8abef56a7b15984e6ef9dc450c28907cc3a5890fafb2a79005b5"
+    },
+    {
+      "slug": "san-diego",
+      "campus": "San Diego",
+      "unitId": 110680,
+      "name": "University of California-San Diego",
+      "fall": 2026,
+      "applicants": 141767,
+      "admits": 38571,
+      "admitRate": 0.272073190516834,
+      "publishedAdmitRate": 27.2,
+      "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/san-diego/first-year-admit-data.html",
+      "sourceSha256": "bf630bbdec82890dc060ce333b93c225a8eebe1421365e1e2a292afccc8d2134"
+    },
+    {
+      "slug": "santa-barbara",
+      "campus": "Santa Barbara",
+      "unitId": 110705,
+      "name": "University of California-Santa Barbara",
+      "fall": 2026,
+      "applicants": 108512,
+      "admits": 47716,
+      "admitRate": 0.43973016809200827,
+      "publishedAdmitRate": 44,
+      "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/santa-barbara/first-year-admit-data.html",
+      "sourceSha256": "395277bf7c6697d543531209346efe0fd62dae5d10c4e84b652274ad699e3e2e"
+    },
+    {
+      "slug": "santa-cruz",
+      "campus": "Santa Cruz",
+      "unitId": 110714,
+      "name": "University of California-Santa Cruz",
+      "fall": 2026,
+      "applicants": 79048,
+      "admits": 64867,
+      "admitRate": 0.8206026717943528,
+      "publishedAdmitRate": 82.1,
+      "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/santa-cruz/first-year-admit-data.html",
+      "sourceSha256": "4d5da5a4934e715027e34e78b2c7fdaa2b4da0943b0951cbd36b5a3de7ea9e17"
+    },
+    {
+      "slug": "merced",
+      "campus": "Merced",
+      "unitId": 445188,
+      "name": "University of California-Merced",
+      "fall": 2026,
+      "applicants": 49426,
+      "admits": 46812,
+      "admitRate": 0.9471128555820824,
+      "publishedAdmitRate": 94.7,
+      "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/merced/first-year-admit-data.html",
+      "sourceSha256": "27c5d51b3bd9535724aa05a40a208b95bcac0b43e6b27813939aa5517ce59e2d"
+    }
+  ]
+}

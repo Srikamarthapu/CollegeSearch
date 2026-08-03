@@ -1,0 +1,131 @@
+{
+  "sources": [
+    {
+      "id": "asu-cds-2025-26",
+      "publisher": "Arizona State University",
+      "sourceName": "ASU Campus Immersion Common Data Set 2025-2026",
+      "sourcePage": "https://uoia.asu.edu/common-data-set",
+      "sourceUrl": "https://uoia.asu.edu/sites/g/files/litvpz1436/files/2026-06/CDS%202025-26%20-%20ASU%20Campus%20Immersion.pdf",
+      "accessedOn": "2026-08-01",
+      "finality": "finalized",
+      "cohort": "Fall 2025 admissions and enrollment; Fall 2019 graduation cohort; 2026-2027 tuition",
+      "notes": "Newer ASU Campus Immersion observations are shown with their first-party definitions and exact periods. Replaced federal observations are retained as standardized alternates, and comparisons warn when periods or populations differ."
+    }
+  ],
+  "colleges": [
+    {
+      "unitId": 104151,
+      "sourceId": "asu-cds-2025-26",
+      "observations": {
+        "admitRate": {
+          "value": 0.8838789367533792,
+          "unit": "ratio",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "finalized",
+          "comparabilityKey": "admissions.first-year.rate",
+          "sourceField": "CDS C1: 61,533 admits divided by 69,617 applicants",
+          "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
+          "definition": "First-time, first-year applicants admitted to ASU Campus Immersion divided by actionable applicants.",
+          "status": "derived"
+        },
+        "applicants": {
+          "value": 69617,
+          "unit": "count",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "finalized",
+          "comparabilityKey": "admissions.first-year.applicants",
+          "sourceField": "CDS C1: total first-time, first-year applicants",
+          "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
+          "definition": "Actionable first-time, first-year applications reported by ASU Campus Immersion.",
+          "status": "reported"
+        },
+        "admits": {
+          "value": 61533,
+          "unit": "count",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "finalized",
+          "comparabilityKey": "admissions.first-year.admits",
+          "sourceField": "CDS C1: total first-time, first-year admits",
+          "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
+          "definition": "First-time, first-year applicants admitted to ASU Campus Immersion.",
+          "status": "reported"
+        },
+        "enrollees": {
+          "value": 13665,
+          "unit": "count",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "finalized",
+          "comparabilityKey": "admissions.first-year.enrollees",
+          "sourceField": "CDS C1: total first-time, first-year enrollees",
+          "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
+          "definition": "Admitted first-time, first-year students who enrolled at ASU Campus Immersion.",
+          "status": "reported"
+        },
+        "yieldRate": {
+          "value": 0.22207595893731754,
+          "unit": "ratio",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "finalized",
+          "comparabilityKey": "admissions.first-year.yield",
+          "sourceField": "Derived yield rate: 13,665 enrollees divided by 61,533 admits",
+          "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
+          "definition": "First-time, first-year enrollees divided by admitted applicants for ASU Campus Immersion.",
+          "status": "derived"
+        },
+        "undergraduateEnrollment": {
+          "value": 64662,
+          "unit": "count",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "finalized",
+          "comparabilityKey": "undergraduate-enrollment.total",
+          "sourceField": "CDS B1: total all undergraduates",
+          "cohort": "ASU Campus Immersion enrollment as of the Fall 2025 reporting date",
+          "definition": "All full-time and part-time undergraduate students reported by ASU Campus Immersion.",
+          "status": "reported"
+        },
+        "graduationRate": {
+          "value": 0.693,
+          "unit": "ratio",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2019 entering cohort",
+          "finality": "finalized",
+          "comparabilityKey": "completion.bachelors.150-percent",
+          "sourceField": "CDS B4: six-year graduation rate for the Fall 2019 cohort",
+          "cohort": "Fall 2019 first-time, full-time bachelor's degree-seeking cohort",
+          "definition": "Share of the adjusted Fall 2019 cohort graduating within six years.",
+          "status": "reported"
+        },
+        "tuitionInState": {
+          "value": 13534,
+          "unit": "usd",
+          "reportingYear": 2026,
+          "periodLabel": "2026-2027",
+          "finality": "finalized",
+          "comparabilityKey": "tuition-fees.in-state",
+          "sourceField": "CDS G1: $12,527 in-state tuition + $1,007 required fees",
+          "cohort": "Full-time undergraduate, 2026-2027 academic year",
+          "definition": "Published in-state undergraduate tuition and required fees for 2026-2027.",
+          "status": "reported"
+        },
+        "tuitionOutOfState": {
+          "value": 37072,
+          "unit": "usd",
+          "reportingYear": 2026,
+          "periodLabel": "2026-2027",
+          "finality": "finalized",
+          "comparabilityKey": "tuition-fees.out-of-state",
+          "sourceField": "CDS G1: $36,065 out-of-state tuition + $1,007 required fees",
+          "cohort": "Full-time undergraduate, 2026-2027 academic year",
+          "definition": "Published out-of-state undergraduate tuition and required fees for 2026-2027.",
+          "status": "reported"
+        }
+      }
+    }
+  ]
+}

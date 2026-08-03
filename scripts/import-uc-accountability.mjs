@@ -10,6 +10,14 @@ const SOURCE_URL =
   "https://accountability.universityofcalifornia.edu/2026/documents/data-tables/chapter02data2026.xlsx";
 const SOURCE_SHEET = "2.1.1";
 const REPORTING_YEAR = 2025;
+const localIsoDate = () => {
+  const date = new Date();
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("-");
+};
 
 const campuses = new Map([
   ["Berkeley", { unitId: 110635, name: "University of California-Berkeley" }],
@@ -204,11 +212,12 @@ const output = {
     sourceSheet: SOURCE_SHEET,
     reportingYear: REPORTING_YEAR,
     cohort: "Fall 2025 freshman applicants",
+    finality: "finalized",
     sourceField:
       "Derived admit rate: Fall Admits divided by Fall Applicants",
     accessedOn:
       process.env.SOURCE_ACCESSED_ON ||
-      new Date().toISOString().slice(0, 10),
+      localIsoDate(),
     workbookSha256: createHash("sha256").update(workbookBytes).digest("hex"),
     notes:
       "Campus rows are application-level counts. Universitywide counts are unduplicated and should not be summed from campus rows.",

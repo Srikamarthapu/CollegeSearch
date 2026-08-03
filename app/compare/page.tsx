@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, ExternalLink, Scale } from "lucide-react";
 
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
+import { CollegeLogo } from "@/app/components/CollegeLogo";
 import {
   collegesByUnitIds,
   compactName,
@@ -99,6 +100,25 @@ function comparisonHref(colleges: College[], major: string | undefined) {
   return suffix ? `/compare?${suffix}` : "/compare";
 }
 
+function mixedEvidenceRows(colleges: College[]) {
+  return comparisonRows.filter((row) => {
+    const observations = colleges
+      .map(row.observation)
+      .filter((observation): observation is Observation => Boolean(observation));
+
+    if (observations.length < 2) return false;
+
+    return (
+      new Set(
+        observations.map(
+          (observation) =>
+            `${observation.comparabilityKey}:${observation.periodLabel}`,
+        ),
+      ).size > 1
+    );
+  });
+}
+
 function ObservationValue({
   observation,
 }: {
@@ -117,7 +137,7 @@ function ObservationValue({
     <span className="comparison-value">
       <strong>{formatObservation(observation)}</strong>
       <small>
-        {observation.reportingYear} · {observation.publisher}
+        {observation.periodLabel} · {observation.publisher}
       </small>
     </span>
   );
@@ -143,13 +163,7 @@ export default async function ComparePage({
       requestedIds.indexOf(left.unitId) - requestedIds.indexOf(right.unitId),
   );
   const selectedMajor = first(query.major)?.trim() || undefined;
-  const hasMixedAdmissionEvidence =
-    new Set(
-      selected.map(
-        (college) =>
-          `${college.observations.admitRate.publisher}:${college.observations.admitRate.reportingYear}`,
-      ),
-    ).size > 1;
+  const mixedRows = mixedEvidenceRows(selected);
 
   return (
     <>
@@ -173,7 +187,7 @@ export default async function ComparePage({
             <h1>Compare the record, not a ranking.</h1>
             <p>
               Place up to four colleges side by side. Every cell carries its
-              own reporting year and publisher so unlike cohorts stay visible.
+              own reporting period and publisher so unlike cohorts stay visible.
             </p>
           </div>
           <Link className="page-secondary-action" href="/explore">
@@ -204,12 +218,12 @@ export default async function ComparePage({
               </ComparisonNotice>
             ) : null}
 
-            {hasMixedAdmissionEvidence ? (
+            {mixedRows.length > 0 ? (
               <ComparisonNotice>
-                Headline admissions values in this table come from different
-                publishers or years. UC campuses use official Fall 2025 UC
-                counts; other colleges use 2024 federal institution data. Read
-                the source line beneath each rate.
+                These rows use different definitions or reporting periods: {" "}
+                {mixedRows.map((row) => row.label).join(", ")}. Treat them as
+                context, not direct rankings, and read the period and source
+                beneath each value.
               </ComparisonNotice>
             ) : null}
 
@@ -238,6 +252,7 @@ export default async function ComparePage({
                       <th scope="col">Measure</th>
                       {selected.map((college) => (
                         <th scope="col" key={college.unitId}>
+                          <CollegeLogo college={college} variant="comparison" />
                           <Link href={`/colleges/${college.slug}`}>
                             {compactName(college)}
                           </Link>
@@ -277,7 +292,7 @@ export default async function ComparePage({
                       <tr>
                         <th scope="row">
                           {selectedMajor}
-                          <small>Share of recent degree completions</small>
+                          <small>Bachelor&apos;s field · share of all awards</small>
                         </th>
                         {selected.map((college) => {
                           const evidence = majorEvidenceFor(
@@ -291,13 +306,15 @@ export default async function ComparePage({
                                   <strong>
                                     {percentFormatter.format(evidence.share)}
                                   </strong>
-                                  <small>{evidence.evidence}</small>
+                                  <small>
+                                    {evidence.periodLabel} · {evidence.evidence}
+                                  </small>
                                 </span>
                               ) : (
                                 <span className="comparison-missing">
                                   Not listed
                                   <small>
-                                    No completion share in this evidence set
+                                    No bachelor&apos;s-field indicator in this set
                                   </small>
                                 </span>
                               )}
@@ -318,6 +335,7 @@ export default async function ComparePage({
                   >
                     <header>
                       <div>
+                        <CollegeLogo college={college} variant="comparison" />
                         <span className="page-evidence-label">
                           {college.city}, {college.state}
                         </span>
@@ -353,7 +371,7 @@ export default async function ComparePage({
                       ))}
                       {selectedMajor ? (
                         <div>
-                          <dt>{selectedMajor} degree share</dt>
+                          <dt>{selectedMajor} bachelor&apos;s field</dt>
                           <dd>
                             {majorEvidenceFor(college, selectedMajor) ? (
                               <span className="comparison-value">
@@ -363,7 +381,10 @@ export default async function ComparePage({
                                       .share,
                                   )}
                                 </strong>
-                                <small>Recent degree completions</small>
+                                <small>
+                                  {majorEvidenceFor(college, selectedMajor)!
+                                    .periodLabel} · share of all awards
+                                </small>
                               </span>
                             ) : (
                               <span className="comparison-missing">

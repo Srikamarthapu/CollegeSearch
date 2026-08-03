@@ -13,9 +13,9 @@ import { SiteHeader } from "@/app/components/SiteHeader";
 import { release } from "@/app/lib/college-data";
 
 export const metadata: Metadata = {
-  title: "Methodology · College Compass",
+  title: "Methodology · CollegeSearch",
   description:
-    "How College Compass selects, labels, compares, and limits college evidence.",
+    "How CollegeSearch selects, labels, compares, and limits college evidence.",
 };
 
 export default function MethodologyPage() {
@@ -39,8 +39,8 @@ export default function MethodologyPage() {
           </span>
           <h1>Every number should explain itself.</h1>
           <p>
-            College Compass is a decision aid, not a ranking. We preserve a
-            metric&apos;s publisher, reporting year, cohort, field, definition,
+            CollegeSearch is a decision aid, not a ranking. We preserve a
+            metric&apos;s publisher, reporting period, cohort, field, definition,
             and missing-data status so a clean interface does not erase the
             limits of the evidence.
           </p>
@@ -62,10 +62,10 @@ export default function MethodologyPage() {
               <div>
                 <h3>Use the most direct authoritative source available.</h3>
                 <p>
-                  UC campus freshman admission counts come from the University
-                  of California&apos;s own Accountability Report. Other
-                  institution-level fields use the U.S. Department of
-                  Education&apos;s College Scorecard release.
+                  UC headline counts come from official Fall 2026 campus
+                  snapshots; finalized Fall 2025 yield remains in the UC
+                  Accountability Report. Verified college records may replace
+                  older federal fields with their definitions kept visible.
                 </p>
               </div>
             </li>
@@ -74,9 +74,10 @@ export default function MethodologyPage() {
               <div>
                 <h3>Do not force unlike years into one false snapshot.</h3>
                 <p>
-                  Admissions and institutional measures currently report 2025
-                  and 2024 values, while the earnings observation reports a
-                  2020 cohort. The year stays beside the metric.
+                  UC admissions report a Fall 2026 snapshot, ASU admissions
+                  report Fall 2025, tuition may describe 2026-2027, and federal
+                  outcomes retain older cohorts. The exact period stays beside
+                  every metric.
                 </p>
               </div>
             </li>
@@ -96,9 +97,10 @@ export default function MethodologyPage() {
               <div>
                 <h3>Separate degree evidence from admissions evidence.</h3>
                 <p>
-                  Major shares describe recent degree completions at the
-                  institution. They do not measure program selectivity,
-                  capacity, enrollment access, or an applicant&apos;s odds.
+                  Broad field filters require a 2024-2025 federal
+                  bachelor&apos;s-program indicator. Their percentages still
+                  describe all reported awards in the CIP family and do not
+                  measure program selectivity or capacity.
                 </p>
               </div>
             </li>
@@ -150,7 +152,7 @@ export default function MethodologyPage() {
               <span className="methodology-step">Product</span>
               <h3>Present</h3>
               <p>
-                Keep reporting years and publishers close to the value, with a
+                Keep reporting periods and publishers close to the value, with a
                 direct path back to the underlying source.
               </p>
             </article>
@@ -172,22 +174,37 @@ export default function MethodologyPage() {
               <dt>Headline admit rate</dt>
               <dd>
                 Admitted applicants divided by applicants for the named
-                reporting cohort. UC rates use Fall 2025 freshman campus
-                counts; other rates use the 2024 federal admissions field.
+                reporting cohort. UC rates use Fall 2026 campus snapshots;
+                verified college overlays may also supersede the 2024 federal
+                admissions field.
               </dd>
             </div>
             <div>
               <dt>Average net price</dt>
               <dd>
-                Average annual price after grants and scholarships for Title
-                IV federal aid recipients, not a personalized aid estimate.
+                For public colleges, the federal measure is the average annual
+                price after grants and scholarships for first-time, full-time,
+                degree/certificate-seeking undergraduates who pay in-state
+                tuition and receive Title IV aid. It is not a personalized aid
+                estimate.
+              </dd>
+            </div>
+            <div>
+              <dt>Federal undergraduate enrollment</dt>
+              <dd>
+                The federal UGDS measure counts certificate/degree-seeking
+                undergraduates in the institution&apos;s fall census. It is not
+                total enrollment and does not include every non-degree
+                undergraduate.
               </dd>
             </div>
             <div>
               <dt>Graduation rate</dt>
               <dd>
-                Four-year award completion within 150% of expected time for
-                the reported first-time, full-time cohort.
+                For the federal baseline, completion of a degree or certificate
+                at a four-year institution within 150% of normal time for the
+                reported first-time, full-time degree/certificate-seeking
+                cohort. Official overlays keep their own definitions visible.
               </dd>
             </div>
             <div>
@@ -201,9 +218,10 @@ export default function MethodologyPage() {
             <div>
               <dt>Degree share</dt>
               <dd>
-                A field&apos;s share of recent degree completions. It is useful
-                evidence of academic activity, not direct evidence of program
-                admission or quality.
+                A broad federal field&apos;s share of all reported awards for
+                2024-2025, shown only when a bachelor&apos;s-program indicator is
+                present. It is not confirmation of an exact current major or
+                access to that program.
               </dd>
             </div>
           </dl>
@@ -255,7 +273,7 @@ export default function MethodologyPage() {
           <ShieldCheck size={24} aria-hidden="true" />
           <div>
             <span className="page-evidence-label">Interpretation boundary</span>
-            <h2>Use College Compass to ask better questions.</h2>
+            <h2>Use CollegeSearch to ask better questions.</h2>
             <p>
               Before applying, verify current majors, deadlines, residency
               rules, costs, and admission policies on the institution&apos;s

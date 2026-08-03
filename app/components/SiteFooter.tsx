@@ -10,7 +10,7 @@ export function SiteFooter() {
             <Compass size={18} strokeWidth={1.8} />
           </span>
           <span className="brand-wordmark">
-            College Compass
+            CollegeSearch
             <small>Evidence edition</small>
           </span>
         </Link>
@@ -33,7 +33,8 @@ export function SiteFooter() {
       </div>
       <p className="footer-disclaimer">
         Admissions context is educational, never a guarantee. Verify current
-        programs and policies with each institution.
+        programs and policies with each institution. College marks identify
+        schools and do not imply university endorsement.
       </p>
     </footer>
   );

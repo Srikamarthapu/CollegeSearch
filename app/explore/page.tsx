@@ -1,5 +1,5 @@
-import { CollegeCompassApp } from "@/app/CollegeCompassApp";
+import { CollegeSearchApp } from "@/app/CollegeCompassApp";
 
 export default function ExplorePage() {
-  return <CollegeCompassApp mode="explore" />;
+  return <CollegeSearchApp mode="explore" />;
 }
