@@ -166,10 +166,10 @@ export function AuthDialog({
         : "Welcome back";
   const description =
     mode === "sign-up"
-      ? "Save a college list and keep your research together."
+      ? "Create an account for sign-in. Saved colleges stay in this browser and are not synced."
       : mode === "forgot"
         ? "We’ll email you a secure link to choose a new password."
-        : "Sign in to pick up where you left off.";
+        : "Sign in to your account. Saved colleges stay in this browser and are not synced.";
 
   return (
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>

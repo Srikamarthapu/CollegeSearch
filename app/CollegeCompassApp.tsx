@@ -41,7 +41,6 @@ import { SiteHeader } from "@/app/components/SiteHeader";
 import { SourceSpotlight } from "@/app/components/SourceSpotlight";
 import { CollegeLogo } from "@/app/components/CollegeLogo";
 import {
-  colleges,
   compactName,
   formatObservation,
   isUniversityOfCalifornia,
@@ -49,9 +48,15 @@ import {
   observationSourceKind,
   percentFormatter,
   selectivityLabel,
-  type College,
-  type Observation,
-} from "@/app/lib/college-data";
+  type ClientCollege,
+  type ClientObservation,
+} from "@/app/lib/college-client-record";
+import {
+  filterCollegesByQuery,
+  MAJOR_OPTIONS,
+  matchingMajors,
+  STATE_NAMES,
+} from "@/app/lib/college-search";
 
 type ExplorerState = {
   query: string;
@@ -100,69 +105,8 @@ const defaultExplorerState: ExplorerState = {
   visibleCount: 12,
 };
 
-const stateNames: Record<string, string> = {
-  AZ: "Arizona",
-  CA: "California",
-  CT: "Connecticut",
-  GA: "Georgia",
-  IL: "Illinois",
-  IN: "Indiana",
-  MA: "Massachusetts",
-  MI: "Michigan",
-  NC: "North Carolina",
-  NJ: "New Jersey",
-  NY: "New York",
-  OH: "Ohio",
-  OR: "Oregon",
-  PA: "Pennsylvania",
-  TX: "Texas",
-  VA: "Virginia",
-  WA: "Washington",
-  WI: "Wisconsin",
-};
-
-const stopWords = new Set(["in", "near", "with", "and", "for", "at", "the"]);
-const majorAliases: Record<string, string[]> = {
-  "Computing & Information Sciences": [
-    "computer science",
-    "cs",
-    "computing",
-    "software",
-  ],
-  "Business & Marketing": ["business", "marketing", "finance", "management"],
-  Engineering: ["engineer"],
-  "Biological & Biomedical Sciences": ["biology", "bio", "life science", "pre med"],
-  "Health Professions": ["health", "nursing", "public health"],
-  Psychology: ["psych"],
-  "Social Sciences": ["political science", "economics", "sociology"],
-  "Visual & Performing Arts": ["art", "design", "music", "theater"],
-  Education: ["teaching"],
-  "Mathematics & Statistics": ["math", "statistics"],
-  "Physical Sciences": ["physics", "chemistry"],
-  "English Language & Literature": ["english", "writing", "literature"],
-};
-
-const majorOptions = Object.keys(majorAliases);
-const stateOptions = Array.from(
-  new Set(colleges.map((college) => college.state)),
-).sort();
-const collegeIds = new Set(colleges.map((college) => college.unitId));
-
-const searchIndex = colleges.map((college) => ({
-  college,
-  text: [
-    college.name,
-    ...college.aliases,
-    college.city,
-    college.state,
-    stateNames[college.state],
-    ...college.majors.map((major) => major.name),
-    ...college.majors.flatMap((major) => majorAliases[major.name] ?? []),
-  ]
-    .join(" ")
-    .toLowerCase(),
-}));
-
+const stateNames = STATE_NAMES;
+const majorOptions = MAJOR_OPTIONS;
 function explorerReducer(
   state: ExplorerState,
   action: ExplorerAction,
@@ -209,7 +153,7 @@ function compareNullable(
   return direction === "asc" ? left - right : right - left;
 }
 
-function hasCompleteCoreData(college: College) {
+function hasCompleteCoreData(college: ClientCollege) {
   return [
     college.observations.admitRate,
     college.observations.averageNetPrice,
@@ -218,7 +162,7 @@ function hasCompleteCoreData(college: College) {
   ].every((observation) => observation.value !== null);
 }
 
-function SourceBadge({ observation }: { observation: Observation }) {
+function SourceBadge({ observation }: { observation: ClientObservation }) {
   const source = observationSourceKind(observation);
   return (
     <span className={`source-badge ${source.className}`}>
@@ -235,7 +179,7 @@ function MetricStamp({
   emphasis = false,
 }: {
   label: string;
-  observation: Observation;
+  observation: ClientObservation;
   note?: string;
   emphasis?: boolean;
 }) {
@@ -247,6 +191,15 @@ function MetricStamp({
       </div>
       <strong>{formatObservation(observation)}</strong>
       {note ? <span className="metric-stamp-note">{note}</span> : null}
+      <a
+        className="metric-stamp-source"
+        href={observation.sourceUrl}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {observation.publisher}
+        <ArrowUpRight size={12} aria-hidden="true" />
+      </a>
     </div>
   );
 }
@@ -259,12 +212,12 @@ const CollegeCard = memo(function CollegeCard({
   onCompare,
   onSave,
 }: {
-  college: College;
+  college: ClientCollege;
   selectedMajor: string;
   isSelected: boolean;
   isSaved: boolean;
-  onCompare: (college: College) => void;
-  onSave: (college: College) => void;
+  onCompare: (college: ClientCollege) => void;
+  onSave: (college: ClientCollege) => void;
 }) {
   const admitRate = college.observations.admitRate;
   const graduationSource = observationSourceKind(
@@ -422,11 +375,13 @@ function FilterControls({
   dispatch,
   savedCount,
   idPrefix,
+  stateOptions,
 }: {
   state: ExplorerState;
   dispatch: (action: ExplorerAction) => void;
   savedCount: number;
   idPrefix: string;
+  stateOptions: string[];
 }) {
   return (
     <div className="filter-controls">
@@ -554,10 +509,11 @@ function FilterControls({
 }
 
 type AutocompleteItem =
-  | { kind: "college"; college: College; label: string }
+  | { kind: "college"; college: ClientCollege; label: string }
   | { kind: "major"; major: string; label: string };
 
 function SearchBox({
+  colleges,
   value,
   onChange,
   onMajor,
@@ -565,6 +521,7 @@ function SearchBox({
   resultCount,
   size = "large",
 }: {
+  colleges: ClientCollege[];
   value: string;
   onChange: (value: string) => void;
   onMajor: (major: string) => void;
@@ -579,25 +536,18 @@ function SearchBox({
 
   const items = useMemo<AutocompleteItem[]>(() => {
     if (normalized.length < 2) return [];
-    const collegeMatches = searchIndex
-      .filter(({ text }) => text.includes(normalized))
-      .slice(0, 5)
-      .map(({ college }) => ({
+    const majorMatches = matchingMajors(normalized)
+      .slice(0, 3)
+      .map((major) => ({ kind: "major" as const, major, label: major }));
+    const collegeMatches = filterCollegesByQuery(colleges, normalized)
+      .slice(0, majorMatches.length ? 3 : 5)
+      .map((college) => ({
         kind: "college" as const,
         college,
         label: compactName(college),
       }));
-    const majorMatches = majorOptions
-      .filter((major) =>
-        [major, ...(majorAliases[major] ?? [])]
-          .join(" ")
-          .toLowerCase()
-          .includes(normalized),
-      )
-      .slice(0, 3)
-      .map((major) => ({ kind: "major" as const, major, label: major }));
-    return [...collegeMatches, ...majorMatches];
-  }, [normalized]);
+    return [...majorMatches, ...collegeMatches];
+  }, [colleges, normalized]);
 
   const open = focused && items.length > 0;
 
@@ -754,8 +704,10 @@ function SearchBox({
 }
 
 export function CollegeSearchApp({
+  colleges,
   mode = "home",
 }: {
+  colleges: ClientCollege[];
   mode?: "home" | "explore";
 }) {
   const [state, dispatch] = useReducer(explorerReducer, defaultExplorerState);
@@ -766,6 +718,14 @@ export function CollegeSearchApp({
   const [hydrated, setHydrated] = useState(false);
   const deferredQuery = useDeferredValue(state.query);
   const lenis = useLenis();
+  const stateOptions = useMemo(
+    () => Array.from(new Set(colleges.map((college) => college.state))).sort(),
+    [colleges],
+  );
+  const collegeIds = useMemo(
+    () => new Set(colleges.map((college) => college.unitId)),
+    [colleges],
+  );
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -858,7 +818,7 @@ export function CollegeSearchApp({
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [collegeIds, stateOptions]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -889,18 +849,18 @@ export function CollegeSearchApp({
   }, [status]);
 
   const results = useMemo(() => {
-    const tokens = deferredQuery
-      .toLowerCase()
-      .split(/[^a-z0-9]+/)
-      .filter((token) => token && !stopWords.has(token));
+    const queryMatches = new Set(
+      filterCollegesByQuery(colleges, deferredQuery).map(
+        (college) => college.unitId,
+      ),
+    );
     const maxPrice = Number(state.maxPrice) || null;
 
-    const filtered = searchIndex
-      .filter(({ college, text }) => {
+    const filtered = colleges.filter((college) => {
         const admitRate = college.observations.admitRate.value;
         const netPrice = college.observations.averageNetPrice.value;
         return (
-          tokens.every((token) => text.includes(token)) &&
+          queryMatches.has(college.unitId) &&
           (!state.major || Boolean(majorEvidenceFor(college, state.major))) &&
           (!state.stateCode || college.state === state.stateCode) &&
           (!state.ownership || college.ownership === state.ownership) &&
@@ -910,8 +870,7 @@ export function CollegeSearchApp({
           (!state.completeOnly || hasCompleteCoreData(college)) &&
           (!state.savedOnly || saved.includes(college.unitId))
         );
-      })
-      .map(({ college }) => college);
+      });
 
     return filtered.sort((left, right) => {
       if (state.sort === "major" && state.major) {
@@ -974,13 +933,14 @@ export function CollegeSearchApp({
     state.sort,
     state.stateCode,
     state.ucOnly,
+    colleges,
   ]);
 
   const selectedColleges = selected
     .map((unitId) => colleges.find((college) => college.unitId === unitId))
-    .filter(Boolean) as College[];
+    .filter(Boolean) as ClientCollege[];
 
-  function toggleSaved(college: College) {
+  function toggleSaved(college: ClientCollege) {
     setSaved((current) => {
       const next = current.includes(college.unitId)
         ? current.filter((unitId) => unitId !== college.unitId)
@@ -997,7 +957,7 @@ export function CollegeSearchApp({
     });
   }
 
-  function toggleCompare(college: College) {
+  function toggleCompare(college: ClientCollege) {
     setSelected((current) => {
       if (current.includes(college.unitId)) {
         return current.filter((unitId) => unitId !== college.unitId);
@@ -1124,11 +1084,12 @@ export function CollegeSearchApp({
               Find a college you can <em>understand.</em>
             </h1>
             <p>
-              Search and compare 50 reviewed colleges using the latest
-              available UC admissions and source-transparent federal
+              Search and compare 50 reviewed colleges using current UC and
+              selected manually reviewed college records alongside source-transparent federal
               evidence—without rankings, mystery scores, or fake predictions.
             </p>
             <SearchBox
+              colleges={colleges}
               value={state.query}
               onChange={(value) =>
                 dispatch({ type: "set", key: "query", value })
@@ -1168,7 +1129,7 @@ export function CollegeSearchApp({
             <div className="ledger-card-head">
               <div>
                 <span>Data at a glance</span>
-                <strong>Newest verified records first</strong>
+                <strong>Newest reviewed records first</strong>
               </div>
               <ShieldCheck size={23} aria-hidden="true" />
             </div>
@@ -1177,30 +1138,30 @@ export function CollegeSearchApp({
                 <span className="ledger-index">01</span>
                 <span>
                   <strong>UC admissions</strong>
-                  <small>Preliminary UC Fall 2026 + verified updates</small>
+                  <small>Preliminary UC Fall 2026 + reviewed updates</small>
                 </span>
                 <span className="release-status">2026</span>
               </div>
               <div>
                 <span className="ledger-index">02</span>
                 <span>
-                  <strong>Comparable federal baseline</strong>
-                  <small>College Scorecard · metric periods vary</small>
+                  <strong>College-reported updates</strong>
+                  <small>ASU, Stanford, and MIT · 2025-26 CDS</small>
                 </span>
-                <span className="release-status neutral">VARIES</span>
+                <span className="release-status neutral">3 CDS</span>
               </div>
               <div>
                 <span className="ledger-index">03</span>
                 <span>
-                  <strong>Fields of study</strong>
-                  <small>Broad bachelor&apos;s fields + award shares · 2024-2025</small>
+                  <strong>Federal baseline + fields</strong>
+                  <small>College Scorecard · reporting periods vary</small>
                 </span>
-                <span className="release-status neutral">2025</span>
+                <span className="release-status neutral">DATED</span>
               </div>
             </div>
             <div className="ledger-card-foot">
               <span>50 colleges</span>
-              <span>9 UC campuses</span>
+              <span>12 first-party admission records</span>
               <Link href="/data-sources">
                 View all sources
                 <ArrowRight size={14} aria-hidden="true" />
@@ -1268,12 +1229,14 @@ export function CollegeSearchApp({
               dispatch={dispatch}
               savedCount={saved.length}
               idPrefix="sidebar"
+              stateOptions={stateOptions}
             />
           </aside>
 
           <div className="results-panel">
             <div className="results-search-dock">
               <SearchBox
+                colleges={colleges}
                 size="compact"
                 value={state.query}
                 onChange={(value) =>
@@ -1316,6 +1279,7 @@ export function CollegeSearchApp({
                         dispatch={dispatch}
                         savedCount={saved.length}
                         idPrefix="dialog"
+                        stateOptions={stateOptions}
                       />
                       <Dialog.Close asChild>
                         <button className="apply-filters-button" type="button">

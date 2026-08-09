@@ -89,10 +89,20 @@ function SourceRecord({
         ) : null}
         {source.artifactSha256 ? (
           <div className="sources-hash">
-            <dt>Artifact SHA-256</dt>
+            <dt>
+              {source.artifactHashMode && source.artifactHashMode !== "raw"
+                ? "Normalized content fingerprint"
+                : "Artifact SHA-256"}
+            </dt>
             <dd>
               <code>{source.artifactSha256}</code>
             </dd>
+          </div>
+        ) : null}
+        {source.review ? (
+          <div>
+            <dt>Manual review</dt>
+            <dd>Approved {source.review.reviewedOn}</dd>
           </div>
         ) : null}
         {source.sourceHashes?.length ? (
@@ -116,7 +126,7 @@ function SourceRecord({
         </a>
         {source.artifactUrl ? (
           <a href={source.artifactUrl} target="_blank" rel="noreferrer">
-            Download release
+            {source.artifactKind === "html" ? "Open reviewed page" : "Open source file"}
             <ExternalLink size={14} aria-hidden="true" />
           </a>
         ) : null}
@@ -203,7 +213,7 @@ export default function DataSourcesPage() {
           </div>
           <div className="sources-field-map">
             <article>
-              <span className="sources-status">Primary when verified</span>
+              <span className="sources-status">Primary after review</span>
               <h3>Official college records</h3>
               <p>
                 Preliminary UC Fall 2026 campus counts and

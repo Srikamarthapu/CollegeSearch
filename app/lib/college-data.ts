@@ -40,6 +40,7 @@ export type MajorEvidence = {
   sourceField: string;
   cohort: string;
   definition: string;
+  deliveryMode?: "campus-or-mixed" | "exclusively-distance";
 };
 
 export type CollegeObservations = {
@@ -97,6 +98,15 @@ export type SourceRelease = {
   workbookSha256?: string;
   artifactUrl?: string;
   artifactSha256?: string;
+  artifactHashMode?: "raw" | "html-without-volatile-assets-and-edge-challenge";
+  artifactKind?: "html" | "pdf";
+  review?: {
+    status: "approved";
+    reviewedOn: string;
+    approvedSha256: string;
+    method: "manual";
+    notes: string;
+  };
   releaseDate?: string;
 };
 

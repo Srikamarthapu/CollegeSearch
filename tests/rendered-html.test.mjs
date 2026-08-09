@@ -153,7 +153,7 @@ test("server-renders the CollegeSearch product shell", async () => {
   assert.match(html, /UC admissions/);
   assert.match(html, /Fall 2026/);
   assert.match(html, /College Scorecard/);
-  assert.match(html, /Broad bachelor(?:&#x27;|')s fields \+ award shares/);
+  assert.match(html, /Federal baseline \+ fields/);
   assert.match(html, /http:\/\/localhost\/og\.png/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/i);
   assert.doesNotMatch(html, /react-loading-skeleton/);
@@ -191,7 +191,7 @@ test("global responses prevent framing and set conservative browser policies", a
   }
 });
 
-test("the unconfigured account fallback is student-facing", async () => {
+test("account copy is student-facing and keeps the local-save boundary explicit", async () => {
   const source = await readFile(
     new URL("../app/components/auth/AuthDialog.tsx", import.meta.url),
     "utf8",
@@ -201,6 +201,16 @@ test("the unconfigured account fallback is student-facing", async () => {
   assert.match(
     source,
     /You can still search, compare, and save colleges on this\s+device\./,
+  );
+  assert.equal(
+    source.match(
+      /Saved colleges stay in this browser and are not synced\./g,
+    )?.length,
+    2,
+  );
+  assert.doesNotMatch(
+    source,
+    /pick up where you left off|keep your research together/i,
   );
   assert.doesNotMatch(source, /NEXT_PUBLIC_SUPABASE|config\.missing/);
 });
@@ -246,6 +256,58 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
         /Data sources · CollegeSearch/,
         /Primary sources, plainly labeled\./,
         /Linked, not yet normalized/,
+      ],
+    },
+    {
+      path: "/majors",
+      markers: [
+        /Broad fields of study · CollegeSearch/,
+        /Start with a field\. Keep the claim honest\./,
+        /A zero and a missing record mean different things\./,
+      ],
+    },
+    {
+      path: "/match",
+      markers: [
+        /Preference match · CollegeSearch/,
+        /A college list with reasons attached\./,
+        /Fit and admission likelihood are different questions\./,
+      ],
+    },
+    {
+      path: "/chances",
+      markers: [
+        /Admit-rate context · CollegeSearch/,
+        /Read the rate\. Keep its limits in view\./,
+        /No “87% chance\.” No reach, target, or safety labels\./,
+      ],
+    },
+    {
+      path: "/saved",
+      markers: [/Saved colleges \| CollegeSearch/, /Saved on this device\./],
+    },
+    {
+      path: "/account",
+      markers: [
+        /Account \| CollegeSearch/,
+        /A clear boundary for your account\./,
+        /does not claim to[\s\S]*sync saved colleges/,
+      ],
+    },
+    {
+      path: "/privacy",
+      markers: [
+        /Privacy \| CollegeSearch/,
+        /Your college list is yours\./,
+        /No academic profile is collected in this release\./,
+      ],
+    },
+    {
+      path: "/data-health",
+      markers: [
+        /Data health \| CollegeSearch/,
+        /What is current—and what is still a baseline\./,
+        /Known refresh work is visible, not hidden\./,
       ],
     },
   ];
@@ -392,7 +454,18 @@ test("the published cohort has complete, source-registered observations", async 
     assert.ok(college.majors.length > 0, `${college.name} has major evidence`);
     for (const major of college.majors) {
       const label = `${college.name} ${major.name}`;
-      assert.equal(major.evidence, "Broad federal bachelor's field", `${label} labels its evidence`);
+      assert.match(
+        major.evidence,
+        /^Broad federal bachelor's field(?: · exclusively distance education)?$/,
+        `${label} labels its evidence and delivery modality`,
+      );
+      if (major.deliveryMode === "exclusively-distance") {
+        assert.match(
+          major.evidence,
+          /exclusively distance education/,
+          `${label} discloses distance-only delivery`,
+        );
+      }
       assert.equal(major.reportingYear, 2025, `${label} identifies the federal reporting year`);
       assert.equal(
         major.periodLabel,
@@ -532,11 +605,13 @@ test("all nine UC headlines use Fall 2026 snapshots without mixing Fall 2025 yie
     assert.equal(college.alternateObservations.admitRate.reportingYear, 2024);
   }
 
+  const firstPartyOverlayUnitIds = new Set([104151, 166683, 243744]);
   const nonUcColleges = payload.colleges.filter(
     (college) =>
-      !expectedUcFall2026.has(college.unitId) && college.unitId !== 104151,
+      !expectedUcFall2026.has(college.unitId) &&
+      !firstPartyOverlayUnitIds.has(college.unitId),
   );
-  assert.equal(nonUcColleges.length, 40);
+  assert.equal(nonUcColleges.length, 38);
   for (const college of nonUcColleges) {
     assert.equal(college.observations.admitRate.sourceId, federalSourceId);
     assert.equal(college.observations.admitRate.reportingYear, 2024);
@@ -628,4 +703,72 @@ test("ASU uses its latest official campus-immersion record and keeps the federal
   assert.equal(asu.alternateObservations.medianEarnings.value, 62668);
   assert.equal(asu.alternateObservations.tuitionInState.value, 12223);
   assert.equal(asu.alternateObservations.tuitionOutOfState.value, 33139);
+});
+
+test("Stanford and MIT use reviewed current Common Data Set records", async () => {
+  const payload = JSON.parse(
+    await readFile(new URL("../data/colleges.json", import.meta.url), "utf8"),
+  );
+  const sourcesById = new Map(
+    payload.release.sources.map((source) => [source.id, source]),
+  );
+  const expected = [
+    {
+      unitId: 243744,
+      sourceId: "stanford-cds-2025-26",
+      applicants: 60646,
+      admits: 2302,
+      enrollees: 1839,
+      enrollment: 7346,
+      graduationRate: 0.9164,
+      tuition: 68574,
+    },
+    {
+      unitId: 166683,
+      sourceId: "mit-cds-2025-26",
+      applicants: 29281,
+      admits: 1334,
+      enrollees: 1152,
+      enrollment: 4561,
+      graduationRate: 0.96,
+      tuition: 67140,
+    },
+  ];
+
+  for (const record of expected) {
+    const college = payload.colleges.find(
+      (candidate) => candidate.unitId === record.unitId,
+    );
+    assert.ok(college);
+    for (const key of [
+      "admitRate",
+      "applicants",
+      "admits",
+      "enrollees",
+      "undergraduateEnrollment",
+      "graduationRate",
+      "tuitionInState",
+      "tuitionOutOfState",
+    ]) {
+      assert.equal(college.observations[key].sourceId, record.sourceId);
+      assert.ok(sourcesById.has(record.sourceId));
+    }
+    assert.equal(college.observations.applicants.value, record.applicants);
+    assert.equal(college.observations.admits.value, record.admits);
+    assert.equal(college.observations.enrollees.value, record.enrollees);
+    assert.equal(
+      college.observations.undergraduateEnrollment.value,
+      record.enrollment,
+    );
+    assert.equal(
+      college.observations.graduationRate.value,
+      record.graduationRate,
+    );
+    assert.equal(college.observations.tuitionInState.value, record.tuition);
+    assert.equal(college.observations.tuitionOutOfState.value, record.tuition);
+    assert.equal(college.observations.admitRate.reportingYear, 2025);
+    assert.equal(college.observations.tuitionInState.reportingYear, 2026);
+    assert.equal(college.observations.tuitionInState.periodLabel, "2026-2027");
+    assert.equal(college.alternateObservations.admitRate.sourceId, federalSourceId);
+  }
 });

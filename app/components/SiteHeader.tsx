@@ -3,36 +3,86 @@
 import {
   Bookmark,
   Compass,
-  Database,
+  Gauge,
+  GraduationCap,
   Menu,
   Search,
+  Sparkles,
   X,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AuthAccountControl } from "./auth/AuthAccountControl";
 
 const navigation = [
   { href: "/explore", label: "Explore", icon: Search },
-  { href: "/methodology", label: "How it works", icon: Compass },
-  { href: "/data-sources", label: "Sources", icon: Database },
-  { href: "/explore?saved=1", label: "Saved", icon: Bookmark },
+  { href: "/majors", label: "Fields", icon: GraduationCap },
+  { href: "/match", label: "Match", icon: Sparkles },
+  { href: "/chances", label: "Chances", icon: Gauge },
+  { href: "/saved", label: "Saved", icon: Bookmark },
 ];
 
 export function SiteHeader({ savedCount = 0 }: { savedCount?: number }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const mobileNavigationRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (!menuOpen) return;
 
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenuOpen(false);
+    const menuButton = menuButtonRef.current;
+    const mobileNavigation = mobileNavigationRef.current;
+
+    menuButton?.focus();
+
+    const handleMenuKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setMenuOpen(false);
+        menuButton?.focus();
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+
+      const navigationControls = Array.from(
+        mobileNavigation?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ) ?? [],
+      );
+      const focusableControls = menuButton
+        ? [menuButton, ...navigationControls]
+        : navigationControls;
+
+      if (focusableControls.length === 0) return;
+
+      const firstControl = focusableControls[0];
+      const lastControl = focusableControls[focusableControls.length - 1];
+      const activeControl = document.activeElement;
+      const focusIsContained = focusableControls.some(
+        (control) => control === activeControl,
+      );
+
+      if (
+        event.shiftKey &&
+        (activeControl === firstControl || !focusIsContained)
+      ) {
+        event.preventDefault();
+        lastControl.focus();
+      } else if (
+        !event.shiftKey &&
+        (activeControl === lastControl || !focusIsContained)
+      ) {
+        event.preventDefault();
+        firstControl.focus();
+      }
     };
-    window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
+
+    document.addEventListener("keydown", handleMenuKeyDown);
+    return () => document.removeEventListener("keydown", handleMenuKeyDown);
   }, [menuOpen]);
 
   return (
@@ -50,7 +100,8 @@ export function SiteHeader({ savedCount = 0 }: { savedCount?: number }) {
       <div className="header-actions">
         <nav className="desktop-nav" aria-label="Primary navigation">
           {navigation.map(({ href, label, icon: Icon }) => {
-            const isActive = href === pathname;
+            const isActive =
+              href === pathname || pathname.startsWith(`${href}/`);
 
             return (
               <Link
@@ -72,6 +123,7 @@ export function SiteHeader({ savedCount = 0 }: { savedCount?: number }) {
         <AuthAccountControl />
 
         <button
+          ref={menuButtonRef}
           className="menu-button"
           type="button"
           aria-label={menuOpen ? "Close navigation" : "Open navigation"}
@@ -89,13 +141,18 @@ export function SiteHeader({ savedCount = 0 }: { savedCount?: number }) {
             <motion.button
               className="mobile-nav-scrim"
               type="button"
+              tabIndex={-1}
               aria-label="Close navigation"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setMenuOpen(false)}
+              onClick={() => {
+                setMenuOpen(false);
+                menuButtonRef.current?.focus();
+              }}
             />
             <motion.nav
+              ref={mobileNavigationRef}
               id="mobile-navigation"
               className="mobile-nav"
               aria-label="Mobile navigation"
@@ -108,6 +165,11 @@ export function SiteHeader({ savedCount = 0 }: { savedCount?: number }) {
                 <Link
                   href={href}
                   key={href}
+                  aria-current={
+                    href === pathname || pathname.startsWith(`${href}/`)
+                      ? "page"
+                      : undefined
+                  }
                   onClick={() => setMenuOpen(false)}
                 >
                   <Icon size={18} aria-hidden="true" />

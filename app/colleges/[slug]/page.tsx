@@ -42,9 +42,37 @@ function MetricRecord({ label, observation }: MetricDefinition) {
           {observation ? formatObservation(observation) : "Not reported"}
         </strong>
         {observation ? (
-          <span>
-            {observation.periodLabel} · {observation.finality}
-          </span>
+          <>
+            <span>
+              {observation.periodLabel} · {observation.finality}
+            </span>
+            <details className="profile-metric-disclosure">
+              <summary>Source details</summary>
+              <dl>
+                <div>
+                  <dt>Publisher</dt>
+                  <dd>
+                    <a
+                      href={observation.sourceUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {observation.publisher}
+                      <ExternalLink size={11} aria-hidden="true" />
+                    </a>
+                  </dd>
+                </div>
+                <div>
+                  <dt>Cohort</dt>
+                  <dd>{observation.cohort}</dd>
+                </div>
+                <div>
+                  <dt>Definition</dt>
+                  <dd>{observation.definition}</dd>
+                </div>
+              </dl>
+            </details>
+          </>
         ) : (
           <span>No comparable value in this release</span>
         )}

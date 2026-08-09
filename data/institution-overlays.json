@@ -8,12 +8,83 @@
       "sourceUrl": "https://uoia.asu.edu/sites/g/files/litvpz1436/files/2026-06/CDS%202025-26%20-%20ASU%20Campus%20Immersion.pdf",
       "artifactUrl": "https://uoia.asu.edu/sites/g/files/litvpz1436/files/2026-06/CDS%202025-26%20-%20ASU%20Campus%20Immersion.pdf",
       "artifactSha256": "b54845c9772df11a02d19e8ef2f91bffd21c8b94c0d4abb34f0ff527fb77725d",
+      "artifactKind": "pdf",
+      "allowedArtifactHosts": [
+        "uoia.asu.edu"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewedOn": "2026-08-09",
+        "approvedSha256": "b54845c9772df11a02d19e8ef2f91bffd21c8b94c0d4abb34f0ff527fb77725d",
+        "method": "manual",
+        "notes": "Checked CDS sections B1, B4-B21, C1, G1, and J1 against the registered observations."
+      },
       "accessedOn": "2026-08-09",
       "finality": "finalized",
       "publicationStatus": "published",
       "revisionStatus": "finalized",
       "cohort": "Fall 2025 admissions and enrollment; Fall 2019 graduation cohort; 2026-2027 tuition",
       "notes": "Newer ASU Campus Immersion observations are shown with their first-party definitions and exact periods. Replaced federal observations are retained as standardized alternates, and comparisons warn when periods or populations differ."
+    },
+    {
+      "id": "stanford-cds-2025-26",
+      "publisher": "Stanford University",
+      "sourceName": "Stanford Common Data Set 2025-2026",
+      "sourcePage": "https://irds.stanford.edu/data-findings/cds",
+      "sourceUrl": "https://drive.google.com/file/d/1GIPKgVj1d86dkmLkHI_mZVCk_iY6kiCp/view?usp=sharing",
+      "artifactUrl": "https://drive.google.com/uc?export=download&id=1GIPKgVj1d86dkmLkHI_mZVCk_iY6kiCp",
+      "artifactSha256": "dd67ed4e2996f9019cdc9ec35835f6654a178644fea9fa7ce78d79dcfc35ef0f",
+      "artifactKind": "pdf",
+      "allowedArtifactHosts": [
+        "drive.google.com",
+        "drive.usercontent.google.com"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewedOn": "2026-08-09",
+        "approvedSha256": "dd67ed4e2996f9019cdc9ec35835f6654a178644fea9fa7ce78d79dcfc35ef0f",
+        "method": "manual",
+        "notes": "Checked CDS sections B1, B4-B21, C1, and G1 against the registered observations."
+      },
+      "accessedOn": "2026-08-09",
+      "finality": "snapshot",
+      "publicationStatus": "published",
+      "revisionStatus": "published snapshot",
+      "cohort": "Fall 2025 admissions and enrollment; Fall 2019 graduation cohort; 2026-2027 tuition",
+      "notes": "Current first-party Common Data Set values are used for the exact Stanford cohorts shown. Replaced federal observations remain standardized alternates because their definitions and periods differ."
+    },
+    {
+      "id": "mit-cds-2025-26",
+      "publisher": "Massachusetts Institute of Technology",
+      "sourceName": "MIT Common Data Set 2025-2026",
+      "sourcePage": "https://ir.mit.edu/projects/2025-26-common-data-set/",
+      "sourceUrl": "https://ir.mit.edu/projects/2025-26-common-data-set/",
+      "artifactUrl": "https://ir.mit.edu/projects/2025-26-common-data-set/",
+      "artifactSha256": "3859ffa5fa224f928e7659e81c205af4d2ecc5d90de96556a4fb2ffae60b54b4",
+      "artifactHashMode": "html-without-volatile-assets-and-edge-challenge",
+      "artifactKind": "html",
+      "allowedArtifactHosts": [
+        "ir.mit.edu"
+      ],
+      "evidenceAnchors": [
+        "2025-26 Common Data Set",
+        "29,281",
+        "1,334",
+        "66,720"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewedOn": "2026-08-09",
+        "approvedSha256": "3859ffa5fa224f928e7659e81c205af4d2ecc5d90de96556a4fb2ffae60b54b4",
+        "method": "manual",
+        "notes": "Checked the admissions, enrollment, graduation, and tuition tables against the registered observations."
+      },
+      "accessedOn": "2026-08-09",
+      "finality": "snapshot",
+      "publicationStatus": "published",
+      "revisionStatus": "published snapshot",
+      "cohort": "Fall 2025 admissions and enrollment; Fall 2019 graduation cohort; 2026-2027 tuition",
+      "notes": "Current first-party Common Data Set values are used for the exact MIT cohorts shown. Replaced federal observations remain standardized alternates because their definitions and periods differ."
     }
   ],
   "colleges": [
@@ -22,7 +93,7 @@
       "sourceId": "asu-cds-2025-26",
       "observations": {
         "admitRate": {
-          "value": 0.8838789367533792,
+          "value": 0.8838789376158123,
           "unit": "ratio",
           "reportingYear": 2025,
           "periodLabel": "Fall 2025",
@@ -70,7 +141,7 @@
           "status": "reported"
         },
         "yieldRate": {
-          "value": 0.22207595893731754,
+          "value": 0.22207595924138268,
           "unit": "ratio",
           "reportingYear": 2025,
           "periodLabel": "Fall 2025",
@@ -127,6 +198,234 @@
           "sourceField": "CDS G1: $36,065 out-of-state tuition + $1,007 required fees",
           "cohort": "Full-time undergraduate, 2026-2027 academic year",
           "definition": "Published out-of-state undergraduate tuition and required fees for 2026-2027.",
+          "status": "reported"
+        }
+      }
+    },
+    {
+      "unitId": 243744,
+      "sourceId": "stanford-cds-2025-26",
+      "observations": {
+        "admitRate": {
+          "value": 0.03795798568743198,
+          "unit": "ratio",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "snapshot",
+          "comparabilityKey": "admissions.first-year.rate",
+          "sourceField": "CDS C1: 2,302 admits divided by 60,646 applicants",
+          "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
+          "definition": "First-time, first-year applicants admitted by Stanford divided by actionable applicants.",
+          "status": "derived"
+        },
+        "applicants": {
+          "value": 60646,
+          "unit": "count",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "snapshot",
+          "comparabilityKey": "admissions.first-year.applicants",
+          "sourceField": "CDS C1: total first-time, first-year applicants",
+          "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
+          "definition": "Actionable first-time, first-year applications reported by Stanford.",
+          "status": "reported"
+        },
+        "admits": {
+          "value": 2302,
+          "unit": "count",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "snapshot",
+          "comparabilityKey": "admissions.first-year.admits",
+          "sourceField": "CDS C1: total first-time, first-year admits",
+          "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
+          "definition": "First-time, first-year applicants admitted by Stanford.",
+          "status": "reported"
+        },
+        "enrollees": {
+          "value": 1839,
+          "unit": "count",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "snapshot",
+          "comparabilityKey": "admissions.first-year.enrollees",
+          "sourceField": "CDS C1: total first-time, first-year enrollees",
+          "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
+          "definition": "Admitted first-time, first-year students who enrolled at Stanford, excluding prior-year deferrals per the CDS note.",
+          "status": "reported"
+        },
+        "yieldRate": {
+          "value": 0.7988705473501303,
+          "unit": "ratio",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "snapshot",
+          "comparabilityKey": "admissions.first-year.yield",
+          "sourceField": "Derived yield rate: 1,839 enrollees divided by 2,302 admits",
+          "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
+          "definition": "First-time, first-year enrollees divided by admitted applicants for Stanford.",
+          "status": "derived"
+        },
+        "undergraduateEnrollment": {
+          "value": 7346,
+          "unit": "count",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "snapshot",
+          "comparabilityKey": "undergraduate-enrollment.total",
+          "sourceField": "CDS B1: total all undergraduates",
+          "cohort": "Stanford enrollment as of the Fall 2025 reporting date",
+          "definition": "All undergraduate students reported by Stanford.",
+          "status": "reported"
+        },
+        "graduationRate": {
+          "value": 0.9164,
+          "unit": "ratio",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2019 entering cohort",
+          "finality": "snapshot",
+          "comparabilityKey": "completion.bachelors.150-percent",
+          "sourceField": "CDS B4-B21: 91.64% six-year graduation rate",
+          "cohort": "Adjusted Fall 2019 first-time, full-time bachelor's degree-seeking cohort",
+          "definition": "Share of the adjusted Fall 2019 cohort graduating within six years.",
+          "status": "reported"
+        },
+        "tuitionInState": {
+          "value": 68574,
+          "unit": "usd",
+          "reportingYear": 2026,
+          "periodLabel": "2026-2027",
+          "finality": "snapshot",
+          "comparabilityKey": "tuition-fees.private",
+          "sourceField": "CDS G1: $67,731 tuition + $843 required fees",
+          "cohort": "Full-time undergraduate, 2026-2027 academic year",
+          "definition": "Published private undergraduate tuition and required fees for 2026-2027.",
+          "status": "reported"
+        },
+        "tuitionOutOfState": {
+          "value": 68574,
+          "unit": "usd",
+          "reportingYear": 2026,
+          "periodLabel": "2026-2027",
+          "finality": "snapshot",
+          "comparabilityKey": "tuition-fees.private",
+          "sourceField": "CDS G1: $67,731 tuition + $843 required fees",
+          "cohort": "Full-time undergraduate, 2026-2027 academic year",
+          "definition": "Published private undergraduate tuition and required fees for 2026-2027.",
+          "status": "reported"
+        }
+      }
+    },
+    {
+      "unitId": 166683,
+      "sourceId": "mit-cds-2025-26",
+      "observations": {
+        "admitRate": {
+          "value": 0.04555855332809672,
+          "unit": "ratio",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "snapshot",
+          "comparabilityKey": "admissions.first-year.rate",
+          "sourceField": "CDS C1: 1,334 admits divided by 29,281 applicants",
+          "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
+          "definition": "First-time, first-year applicants admitted by MIT divided by actionable applicants.",
+          "status": "derived"
+        },
+        "applicants": {
+          "value": 29281,
+          "unit": "count",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "snapshot",
+          "comparabilityKey": "admissions.first-year.applicants",
+          "sourceField": "CDS C1: total first-time, first-year applicants",
+          "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
+          "definition": "Actionable first-time, first-year applications reported by MIT.",
+          "status": "reported"
+        },
+        "admits": {
+          "value": 1334,
+          "unit": "count",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "snapshot",
+          "comparabilityKey": "admissions.first-year.admits",
+          "sourceField": "CDS C1: total first-time, first-year admits",
+          "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
+          "definition": "First-time, first-year applicants admitted by MIT.",
+          "status": "reported"
+        },
+        "enrollees": {
+          "value": 1152,
+          "unit": "count",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "snapshot",
+          "comparabilityKey": "admissions.first-year.enrollees",
+          "sourceField": "CDS C1: total first-time, first-year enrollees",
+          "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
+          "definition": "Admitted first-time, first-year students who enrolled at MIT.",
+          "status": "reported"
+        },
+        "yieldRate": {
+          "value": 0.863568215892054,
+          "unit": "ratio",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "snapshot",
+          "comparabilityKey": "admissions.first-year.yield",
+          "sourceField": "Derived yield rate: 1,152 enrollees divided by 1,334 admits",
+          "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
+          "definition": "First-time, first-year enrollees divided by admitted applicants for MIT.",
+          "status": "derived"
+        },
+        "undergraduateEnrollment": {
+          "value": 4561,
+          "unit": "count",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2025",
+          "finality": "snapshot",
+          "comparabilityKey": "undergraduate-enrollment.total",
+          "sourceField": "CDS B1: total all undergraduates",
+          "cohort": "MIT enrollment as of the Fall 2025 reporting date",
+          "definition": "All undergraduate students reported by MIT.",
+          "status": "reported"
+        },
+        "graduationRate": {
+          "value": 0.96,
+          "unit": "ratio",
+          "reportingYear": 2025,
+          "periodLabel": "Fall 2019 entering cohort",
+          "finality": "snapshot",
+          "comparabilityKey": "completion.bachelors.150-percent",
+          "sourceField": "CDS B4-B21: 96% six-year graduation rate",
+          "cohort": "Adjusted Fall 2019 first-time, full-time bachelor's degree-seeking cohort",
+          "definition": "Share of the adjusted Fall 2019 cohort graduating within six years.",
+          "status": "reported"
+        },
+        "tuitionInState": {
+          "value": 67140,
+          "unit": "usd",
+          "reportingYear": 2026,
+          "periodLabel": "2026-2027",
+          "finality": "snapshot",
+          "comparabilityKey": "tuition-fees.private",
+          "sourceField": "CDS G1: $66,720 tuition + $420 required fees",
+          "cohort": "Full-time undergraduate, 2026-2027 academic year",
+          "definition": "Published private undergraduate tuition and required fees for 2026-2027.",
+          "status": "reported"
+        },
+        "tuitionOutOfState": {
+          "value": 67140,
+          "unit": "usd",
+          "reportingYear": 2026,
+          "periodLabel": "2026-2027",
+          "finality": "snapshot",
+          "comparabilityKey": "tuition-fees.private",
+          "sourceField": "CDS G1: $66,720 tuition + $420 required fees",
+          "cohort": "Full-time undergraduate, 2026-2027 academic year",
+          "definition": "Published private undergraduate tuition and required fees for 2026-2027.",
           "status": "reported"
         }
       }

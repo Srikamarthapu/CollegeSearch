@@ -309,6 +309,10 @@
   background: var(--forest-pale);
 }
 
+.accountTriggerLabel {
+  display: inline;
+}
+
 .accountSkeleton {
   width: 88px;
   height: 40px;
@@ -450,6 +454,27 @@
 
   .switchRow {
     flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 360px) {
+  .accountTrigger {
+    min-width: 42px;
+    width: 42px;
+    padding: 0;
+  }
+
+  .accountTriggerLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .accountSkeleton {
+    width: 42px;
   }
 }
 

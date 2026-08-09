@@ -35,7 +35,8 @@ Refresh the committed evidence files with:
 npm run data:refresh
 ```
 
-That command runs three source-specific importers in order:
+That command runs one source-integrity preflight and three source-specific
+importers in order:
 
 1. `scripts/import-uc-accountability.mjs` downloads the official
    [UC Accountability Report 2026 Chapter 2 workbook](https://accountability.universityofcalifornia.edu/2026/documents/data-tables/chapter02data2026.xlsx).
@@ -52,11 +53,16 @@ That command runs three source-specific importers in order:
    archive and `data/uc-admissions-latest.json`. A SHA-256 is recorded for each
    page. Fall 2026 applicants, admits, and headline rates come from these
    current snapshots; they do not publish enrollees or yield.
-3. `scripts/import-scorecard.mjs` downloads the Department of Education&apos;s
+3. `scripts/verify-institution-overlays.mjs` validates every manually reviewed
+   institution override, recomputes each pinned artifact hash or normalized
+   content fingerprint, checks its allowlisted host and file type, and rejects
+   any changed source before the refresh writes data. The review record remains
+   bound to the approved fingerprint.
+4. `scripts/import-scorecard.mjs` downloads the Department of Education&apos;s
    official [June 2026 Most Recent Institution file](https://ed-public-download.scorecard.network/downloads/Most-Recent-Cohorts-Institution_06102026.zip),
    records its SHA-256, selects the exact 50 IPEDS UNITIDs, and checks their
    OPE identity, current operating status, and main-campus status. It applies
-   verified institution observations from `data/institution-overlays.json`
+   manually reviewed institution observations from `data/institution-overlays.json`
    while retaining replaced federal records as alternates, then writes
    `data/colleges.json`. No API key is required.
 
@@ -65,16 +71,21 @@ These sources describe different cohorts and are intentionally kept distinct:
 - UC headline admission rates use Fall 2026 campus snapshots. Fall 2025
   Accountability counts remain only for finalized enrollees and yield, and the
   federal admission observation remains alternate evidence.
-- ASU Campus Immersion uses its latest official Common Data Set for Fall 2025
-  admission and enrollment, the Fall 2019 completion cohort, and 2026-2027
-  tuition plus required fees.
-- Colleges without a verified official override use the latest available
+- ASU Campus Immersion, Stanford, and MIT use manually reviewed 2025-2026
+  Common Data Set records for Fall 2025 admission and enrollment, each
+  institution's stated completion cohort, and 2026-2027 tuition plus required
+  fees. Replaced federal values stay available as standardized alternates.
+- Colleges without a reviewed official override use the latest available
   federal value, with its real period shown: Fall 2024 admission/enrollment,
   2023-2024 net price, 2024-2025 tuition, the Fall 2018 completion cohort, and
-  earnings measured in 2020-2021.
+  pooled 2017-18 and 2018-19 completer earnings measured in 2022-23 and
+  adjusted to 2024 dollars. The older ten-years-after-entry earnings field,
+  measured in 2020-2021, is retained only as alternate evidence.
 - Broad field filters require a 2024-2025 federal bachelor&apos;s-program
-  indicator. The displayed percentage remains that CIP family&apos;s share of all
-  institution-wide awards, so it is not an exact current major catalog.
+  indicator, including code `2` when the field is offered exclusively through
+  distance education. The displayed percentage remains that CIP family&apos;s
+  share of all institution-wide awards, so it is not an exact current major
+  catalog.
 
 Major filters are **not** major-specific admission rates. They only include
 broad fields with a federal bachelor&apos;s-program indicator and pair that signal
@@ -122,17 +133,22 @@ Then open the local URL printed by the development server.
 ```bash
 npm test
 npm run lint
+npm run data:verify-overlays
 ```
 
 The test suite builds the production worker, checks the canonical rendered
 routes, and validates cohort uniqueness, observation completeness, source
 lineage, all nine UC Fall 2026 headline snapshots, finalized Fall 2025 UC yield,
-the official ASU overlay, metric ranges, and broad-field evidence labels.
+the official ASU, Stanford, and MIT overlays, metric ranges, and broad-field
+evidence labels.
 
 ## Current scope
 
-This is the fully functional discovery and authentication foundation requested
-for the current milestone. Local saves are still deliberately device-local;
-syncing saved colleges into user-owned, RLS-protected Supabase rows comes next.
-The preference quiz, AI agents, and any future admissions-model work remain
-later phases and must preserve the app's current evidence limits.
+This milestone ships the discovery, comparison, account-integration foundation,
+and transparent preference-matching workspace at `/match`. Match scores use only
+the selected fit signals, keep missing evidence out of the denominator, and
+never use overall admit rate as a fit signal or admission prediction. Local
+saves remain deliberately device-local; syncing them into user-owned,
+RLS-protected Supabase rows comes next. AI agents and any future personalized
+admissions-model work remain later phases and must preserve the app's current
+evidence limits.

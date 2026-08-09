@@ -1,7 +1,9 @@
 import { createHash } from "node:crypto";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { atomicWriteFile } from "./lib/atomic-write.mjs";
+import { fetchWithTimeout, readResponseText } from "./lib/limited-response.mjs";
 
 const SOURCE_ROOT =
   "https://admission.universityofcalifornia.edu/campuses-majors";
@@ -48,14 +50,18 @@ function percentageStat(html, label) {
 
 async function fetchCampus(identity) {
   const sourceUrl = `${SOURCE_ROOT}/${identity.slug}/first-year-admit-data.html`;
-  const response = await fetch(sourceUrl);
+  const response = await fetchWithTimeout(sourceUrl, 20_000);
   if (!response.ok) {
     throw new Error(
       `UC ${identity.campus} admissions page failed (${response.status}).`,
     );
   }
 
-  const html = await response.text();
+  const html = await readResponseText(
+    response,
+    2 * 1024 * 1024,
+    `UC ${identity.campus} admissions page`,
+  );
   const sourceSha256 = createHash("sha256").update(html).digest("hex");
   const fall = Number(
     html.match(/snapshot of the admitted first-year class for fall (\d{4})/i)?.[1],
@@ -97,12 +103,16 @@ async function fetchCampus(identity) {
 }
 
 async function fetchReleaseContext() {
-  const response = await fetch(SOURCE_OVERVIEW_URL);
+  const response = await fetchWithTimeout(SOURCE_OVERVIEW_URL, 20_000);
   if (!response.ok) {
     throw new Error(`UC admissions overview failed (${response.status}).`);
   }
 
-  const html = await response.text();
+  const html = await readResponseText(
+    response,
+    2 * 1024 * 1024,
+    "UC admissions overview",
+  );
   const preliminaryDate = html.match(
     /figures are preliminary, as of ([A-Za-z]+) (\d{4})/i,
   );
@@ -190,8 +200,8 @@ const latestPath = resolve(scriptDirectory, "../data/uc-admissions-latest.json")
 await mkdir(dirname(archivePath), { recursive: true });
 const serialized = `${JSON.stringify(output, null, 2)}\n`;
 await Promise.all([
-  writeFile(archivePath, serialized),
-  writeFile(latestPath, serialized),
+  atomicWriteFile(archivePath, serialized),
+  atomicWriteFile(latestPath, serialized),
 ]);
 
 console.log(

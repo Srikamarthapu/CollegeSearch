@@ -43,6 +43,7 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  overflow-x: clip;
 }
 
 .page-atlas {
@@ -1407,6 +1408,22 @@ a {
   font-size: 11px;
 }
 
+.metric-stamp-source {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 4px;
+  color: var(--forest-raised);
+  font-size: 10px;
+  font-weight: 680;
+  line-height: 1.25;
+}
+
+.metric-stamp-source:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .college-card-footer {
   display: flex;
   min-height: 60px;
@@ -2200,6 +2217,57 @@ a {
   font-family: var(--font-geist-mono), monospace;
   font-size: 9px;
   text-transform: uppercase;
+}
+
+.profile-metric-disclosure {
+  margin-top: 4px;
+  color: var(--ink-soft);
+  font-size: 10px;
+}
+
+.profile-metric-disclosure summary {
+  width: fit-content;
+  min-height: 30px;
+  padding: 7px 0;
+  color: var(--forest-raised);
+  cursor: pointer;
+  font-weight: 690;
+}
+
+.profile-metric-disclosure > dl {
+  display: grid;
+  margin: 5px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  gap: 9px;
+}
+
+.profile-metric-disclosure > dl > div {
+  display: grid;
+  gap: 2px;
+}
+
+.profile-metric-disclosure dt {
+  color: var(--ink-faint);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.profile-metric-disclosure dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--ink-soft);
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.profile-metric-disclosure a {
+  display: inline-flex;
+  align-items: center;
+  color: var(--forest);
+  gap: 4px;
 }
 
 .profile-evidence-note {
@@ -3903,6 +3971,41 @@ a {
   .sources-reference-card {
     align-items: start;
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 360px) {
+  .site-header {
+    min-height: 64px;
+    padding: 0 10px;
+  }
+
+  .brand {
+    gap: 6px;
+  }
+
+  .brand-mark {
+    width: 34px;
+    height: 34px;
+    flex-basis: 34px;
+  }
+
+  .brand-wordmark {
+    font-size: 14px;
+  }
+
+  .header-actions {
+    gap: 5px;
+  }
+
+  .menu-button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .mobile-nav-scrim,
+  .mobile-nav {
+    top: 64px;
   }
 }
 

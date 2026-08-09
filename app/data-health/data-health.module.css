@@ -1,0 +1,240 @@
+.page {
+  width: min(var(--page-width), calc(100% - 48px));
+  margin: 0 auto;
+  padding: 78px 0 100px;
+}
+
+.masthead {
+  max-width: 980px;
+  padding-bottom: 58px;
+}
+
+.eyebrow {
+  color: var(--oxblood);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  font-weight: 720;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.masthead h1 {
+  margin: 16px 0 18px;
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-size: clamp(52px, 7.5vw, 88px);
+  font-weight: 520;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+
+.masthead p {
+  max-width: 730px;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.summary,
+.releases {
+  padding: 48px 0 66px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 26px;
+  gap: 12px;
+}
+
+.sectionHeading > span {
+  color: var(--ochre);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+}
+
+.sectionHeading h2 {
+  margin: 0;
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-size: 40px;
+  font-weight: 520;
+}
+
+.summaryGrid {
+  display: grid;
+  border-top: 1px solid var(--line-strong);
+  border-left: 1px solid var(--line-strong);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.summaryGrid article {
+  display: grid;
+  min-height: 260px;
+  align-content: start;
+  padding: 23px;
+  border-right: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
+  background: rgba(251, 249, 243, 0.88);
+  color: var(--forest);
+}
+
+.summaryGrid strong {
+  margin-top: 30px;
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-size: 58px;
+  font-weight: 520;
+  line-height: 1;
+}
+
+.summaryGrid span {
+  margin-top: 3px;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.summaryGrid p {
+  margin: 16px 0 0;
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.releaseList {
+  display: grid;
+  gap: 11px;
+}
+
+.releaseList article {
+  display: grid;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid var(--line);
+  background: rgba(251, 249, 243, 0.86);
+  gap: 24px;
+  grid-template-columns: minmax(250px, 0.85fr) minmax(0, 1.4fr) auto;
+}
+
+.releaseList article > div > span {
+  color: var(--forest-raised);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.releaseList h3 {
+  margin: 5px 0 0;
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-size: 21px;
+  font-weight: 540;
+  line-height: 1.05;
+}
+
+.releaseList dl {
+  display: grid;
+  margin: 0;
+  gap: 10px;
+  grid-template-columns: 0.55fr 0.7fr 1fr;
+}
+
+.releaseList dl > div {
+  min-width: 0;
+}
+
+.releaseList dt {
+  color: var(--ink-faint);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.releaseList dd {
+  margin: 3px 0 0;
+  overflow-wrap: anywhere;
+  color: var(--ink-soft);
+  font-size: 11px;
+}
+
+.releaseList a,
+.caveat a {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: var(--forest);
+  font-size: 11px;
+  font-weight: 720;
+}
+
+.caveat {
+  display: grid;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #8aaa9b;
+  background: var(--forest-pale);
+  color: var(--forest);
+  gap: 14px;
+  grid-template-columns: auto 1fr auto;
+}
+
+.caveat strong {
+  font-size: 13px;
+}
+
+.caveat p {
+  max-width: 780px;
+  margin: 4px 0 0;
+  color: #3e5d53;
+  font-size: 11px;
+}
+
+.caveat a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .summaryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .summaryGrid article {
+    min-height: 210px;
+  }
+
+  .releaseList article {
+    align-items: start;
+    grid-template-columns: 1fr;
+  }
+
+  .releaseList a {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .page {
+    width: calc(100% - 32px);
+    padding-top: 48px;
+  }
+
+  .masthead h1 {
+    font-size: clamp(47px, 15vw, 66px);
+  }
+
+  .releaseList dl {
+    grid-template-columns: 1fr;
+  }
+
+  .caveat {
+    align-items: start;
+    grid-template-columns: auto 1fr;
+  }
+
+  .caveat a {
+    justify-content: flex-start;
+    grid-column: 2;
+  }
+}

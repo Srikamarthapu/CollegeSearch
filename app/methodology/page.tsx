@@ -175,7 +175,7 @@ export default function MethodologyPage() {
               <dd>
                 Admitted applicants divided by applicants for the named
                 reporting cohort. UC rates use preliminary Fall 2026 campus
-                snapshots; verified college overlays may also supersede the
+                snapshots; manually reviewed college overlays may also supersede the
                 2024 federal admissions field.
               </dd>
             </div>
@@ -210,9 +210,11 @@ export default function MethodologyPage() {
             <div>
               <dt>Median earnings</dt>
               <dd>
-                Median earnings ten years after entry for the federal earnings
-                cohort. This is not a projection or a measure of every
-                graduate.
+                Median earnings four years after completion for the pooled
+                2017-18 and 2018-19 federal completer cohort, measured in
+                2022-23 and adjusted to 2024 dollars. This is not a projection
+                or a measure of every graduate. The older ten-years-after-entry
+                field remains alternate evidence where available.
               </dd>
             </div>
             <div>
@@ -220,8 +222,9 @@ export default function MethodologyPage() {
               <dd>
                 A broad federal field&apos;s share of all reported awards for
                 2024-2025, shown only when a bachelor&apos;s-program indicator is
-                present. It is not confirmation of an exact current major or
-                access to that program.
+                present. Distance-only program indicators are labeled as such.
+                This is not confirmation of an exact current major or access to
+                that program.
               </dd>
             </div>
           </dl>

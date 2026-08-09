@@ -14,6 +14,7 @@ import {
   type College,
   type Observation,
 } from "@/app/lib/college-data";
+import { MAJOR_OPTIONS } from "@/app/lib/college-search";
 
 type ComparePageProps = {
   searchParams: Promise<{
@@ -100,6 +101,19 @@ function comparisonHref(colleges: College[], major: string | undefined) {
   return suffix ? `/compare?${suffix}` : "/compare";
 }
 
+function explorerContinuationHref(
+  colleges: College[],
+  major: string | undefined,
+) {
+  const query = new URLSearchParams();
+  if (colleges.length > 0) {
+    query.set("compare", colleges.map((college) => college.unitId).join(","));
+  }
+  if (major) query.set("major", major);
+  const suffix = query.toString();
+  return suffix ? `/explore?${suffix}` : "/explore";
+}
+
 function mixedEvidenceRows(colleges: College[]) {
   return comparisonRows.filter((row) => {
     const observations = colleges
@@ -162,7 +176,11 @@ export default async function ComparePage({
     (left, right) =>
       requestedIds.indexOf(left.unitId) - requestedIds.indexOf(right.unitId),
   );
-  const selectedMajor = first(query.major)?.trim() || undefined;
+  const requestedMajor = first(query.major)?.trim();
+  const selectedMajor =
+    requestedMajor && MAJOR_OPTIONS.includes(requestedMajor)
+      ? requestedMajor
+      : undefined;
   const mixedRows = mixedEvidenceRows(selected);
 
   return (
@@ -190,7 +208,10 @@ export default async function ComparePage({
               own reporting period and publisher so unlike cohorts stay visible.
             </p>
           </div>
-          <Link className="page-secondary-action" href="/explore">
+          <Link
+            className="page-secondary-action"
+            href={explorerContinuationHref(selected, selectedMajor)}
+          >
             Add or change colleges
             <ArrowRight size={16} aria-hidden="true" />
           </Link>
@@ -408,7 +429,10 @@ export default async function ComparePage({
             </ComparisonNotice>
 
             <div className="comparison-actions">
-              <Link className="page-primary-action" href="/explore">
+              <Link
+                className="page-primary-action"
+                href={explorerContinuationHref(selected, selectedMajor)}
+              >
                 Add another college
                 <ArrowRight size={16} aria-hidden="true" />
               </Link>

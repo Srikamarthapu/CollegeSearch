@@ -1,7 +1,9 @@
 import { createHash } from "node:crypto";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { atomicWriteFile } from "./lib/atomic-write.mjs";
+import { fetchWithTimeout, readResponseBytes } from "./lib/limited-response.mjs";
 import { strFromU8, unzipSync } from "fflate";
 
 const SOURCE_PAGE =
@@ -139,18 +141,47 @@ function validateCounts({ campus, applicants, admits, enrollees }) {
   }
 }
 
-const response = await fetch(SOURCE_URL);
+const response = await fetchWithTimeout(SOURCE_URL, 45_000);
 if (!response.ok) {
   throw new Error(`UC Accountability workbook request failed (${response.status}).`);
 }
 
-const workbookBytes = new Uint8Array(await response.arrayBuffer());
-const files = unzipSync(workbookBytes);
-const sharedStrings = files["xl/sharedStrings.xml"]
-  ? parseSharedStrings(strFromU8(files["xl/sharedStrings.xml"]))
+const workbookBytes = await readResponseBytes(
+  response,
+  40 * 1024 * 1024,
+  "UC Accountability workbook",
+);
+const maximumWorkbookEntryBytes = 25 * 1024 * 1024;
+const workbookFiles = unzipSync(workbookBytes, {
+  filter: ({ name, originalSize }) => {
+    const needed =
+      name === "xl/workbook.xml" ||
+      name === "xl/_rels/workbook.xml.rels" ||
+      name === "xl/sharedStrings.xml";
+    if (needed && originalSize > maximumWorkbookEntryBytes) {
+      throw new Error(
+        `UC workbook entry ${name} exceeds the ${maximumWorkbookEntryBytes}-byte safety limit.`,
+      );
+    }
+    return needed;
+  },
+});
+const sharedStrings = workbookFiles["xl/sharedStrings.xml"]
+  ? parseSharedStrings(strFromU8(workbookFiles["xl/sharedStrings.xml"]))
   : [];
-const sheetPath = parseWorkbookSheetPath(files, SOURCE_SHEET);
-const sheetXml = files[sheetPath];
+const sheetPath = parseWorkbookSheetPath(workbookFiles, SOURCE_SHEET);
+const sheetFiles = unzipSync(workbookBytes, {
+  filter: ({ name, originalSize }) => {
+    if (name !== sheetPath) return false;
+    if (originalSize > maximumWorkbookEntryBytes) {
+      throw new Error(
+        `UC workbook entry ${name} exceeds the ${maximumWorkbookEntryBytes}-byte safety limit.`,
+      );
+    }
+    return true;
+  },
+});
+const sheetXml = sheetFiles[sheetPath];
 
 if (!sheetXml) {
   throw new Error(`UC workbook sheet file ${sheetPath} is missing.`);
@@ -228,7 +259,7 @@ const output = {
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const outputPath = resolve(scriptDirectory, "../data/uc-admissions-2025.json");
 await mkdir(dirname(outputPath), { recursive: true });
-await writeFile(outputPath, `${JSON.stringify(output, null, 2)}\n`);
+await atomicWriteFile(outputPath, `${JSON.stringify(output, null, 2)}\n`);
 
 console.log(
   `Imported ${observations.length} UC campuses from ${SOURCE_SHEET} to ${outputPath}.`,

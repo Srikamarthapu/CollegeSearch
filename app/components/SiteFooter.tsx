@@ -20,8 +20,14 @@ export function SiteFooter() {
       </div>
       <div className="footer-links">
         <Link href="/explore">Explore colleges</Link>
+        <Link href="/majors">Explore fields</Link>
+        <Link href="/match">Build a match list</Link>
+        <Link href="/chances">Read admit-rate context</Link>
+        <Link href="/saved">Saved colleges</Link>
         <Link href="/methodology">Methodology</Link>
         <Link href="/data-sources">Data sources</Link>
+        <Link href="/data-health">Data health</Link>
+        <Link href="/privacy">Privacy</Link>
         <a
           href="https://collegescorecard.ed.gov/data/"
           target="_blank"

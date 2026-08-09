@@ -1,8 +1,11 @@
 import { createHash } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { unzipSync } from "fflate";
+import { atomicWriteFile } from "./lib/atomic-write.mjs";
+import { validateInstitutionOverlays } from "./lib/institution-overlays.mjs";
+import { fetchWithTimeout, readResponseBytes } from "./lib/limited-response.mjs";
 
 const cohortUnitIds = [
   110635, 110644, 110653, 110662, 445188, 110671, 110680, 110705, 110714,
@@ -16,6 +19,7 @@ const cohortUnitIds = [
 const aliases = {
   104151: ["ASU", "Arizona State"],
   110422: ["Cal Poly", "Cal Poly SLO"],
+  110404: ["Caltech", "California Institute of Technology"],
   110529: ["Cal Poly Pomona", "CPP"],
   110565: ["Cal State Fullerton", "CSUF"],
   110583: ["Cal State Long Beach", "CSULB", "Long Beach State"],
@@ -128,19 +132,19 @@ const federalMetricPeriods = {
   averageNetPrice: {
     reportingYear: 2024,
     periodLabel: "2023-2024 aid cohort",
-    revisionStatus: "finalized",
+    revisionStatus: "provisional",
     sourceFields: ["NPT4_PUB", "NPT4_PRIV"],
   },
   graduationRate: {
     reportingYear: 2024,
     periodLabel: "Fall 2018 entering cohort",
-    revisionStatus: "finalized",
+    revisionStatus: "provisional",
     sourceFields: ["C150_4"],
   },
   medianEarnings: {
     reportingYear: 2023,
     periodLabel: "2022-23 earnings",
-    revisionStatus: "published",
+    revisionStatus: "snapshot",
     sourceFields: ["MD_EARN_WNE_4YR"],
   },
   tuitionAndFees: {
@@ -187,6 +191,14 @@ const institutionOverlays = JSON.parse(
     "utf8",
   ),
 );
+validateInstitutionOverlays(institutionOverlays);
+for (const overlay of institutionOverlays.colleges) {
+  if (!cohortUnitIds.includes(overlay.unitId)) {
+    throw new Error(
+      `Institution overlay UNITID ${overlay.unitId} is outside the published cohort.`,
+    );
+  }
+}
 const ucHeadlineByUnitId = new Map(
   ucHeadlineDataset.campuses.map((campus) => [campus.unitId, campus]),
 );
@@ -281,18 +293,42 @@ function parseCsvLine(line) {
 }
 
 async function loadScorecardRows() {
-  const response = await fetch(scorecardArtifactUrl);
+  const response = await fetchWithTimeout(scorecardArtifactUrl, 60_000);
   if (!response.ok) {
     throw new Error(
       `College Scorecard download failed (${response.status}) from ${scorecardArtifactUrl}.`,
     );
   }
 
-  const zipBytes = new Uint8Array(await response.arrayBuffer());
+  const zipBytes = await readResponseBytes(
+    response,
+    250 * 1024 * 1024,
+    "College Scorecard archive",
+  );
   const artifactSha256 = createHash("sha256")
     .update(zipBytes)
     .digest("hex");
-  const archive = unzipSync(zipBytes);
+  const maximumCsvBytes = 250 * 1024 * 1024;
+  let matchingCsvEntries = 0;
+  const archive = unzipSync(zipBytes, {
+    filter: ({ name, originalSize }) => {
+      const expected =
+        name.endsWith("Most-Recent-Cohorts-Institution.csv") &&
+        !name.startsWith("__MACOSX/");
+      if (expected && originalSize > maximumCsvBytes) {
+        throw new Error(
+          `College Scorecard CSV exceeds the ${maximumCsvBytes}-byte safety limit.`,
+        );
+      }
+      if (expected && matchingCsvEntries > 0) {
+        throw new Error(
+          "College Scorecard archive contains more than one institution CSV.",
+        );
+      }
+      if (expected) matchingCsvEntries += 1;
+      return expected;
+    },
+  });
   const csvEntry = Object.entries(archive).find(
     ([name]) =>
       name.endsWith("Most-Recent-Cohorts-Institution.csv") &&
@@ -303,6 +339,11 @@ async function loadScorecardRows() {
     throw new Error("The College Scorecard archive did not contain the expected institution CSV.");
   }
 
+  if (csvEntry[1].byteLength > maximumCsvBytes) {
+    throw new Error(
+      `College Scorecard CSV exceeds the ${maximumCsvBytes}-byte safety limit.`,
+    );
+  }
   const csvText = new TextDecoder("utf-8").decode(csvEntry[1]);
   const headerEnd = csvText.indexOf("\n");
   if (headerEnd < 0) {
@@ -471,21 +512,29 @@ const colleges = scorecardSnapshot.rows
         })
       : federalAdmitObservation;
     const majors = Object.entries(programFields)
-      .map(([name, { shareField, bachelorField }]) => ({
-        name,
-        share: numericField(row, shareField),
-        evidence: "Broad federal bachelor's field",
-        reportingYear: federalMetricPeriods.fieldEvidence.reportingYear,
-        periodLabel: federalMetricPeriods.fieldEvidence.periodLabel,
-        finality: federalMetricPeriods.fieldEvidence.revisionStatus,
-        sourceId: federalSource.id,
-        sourceField: `${shareField} + ${bachelorField}`,
-        cohort:
-          "IPEDS 2024-2025 awards; bachelor's program availability reported for the broad CIP family",
-        definition:
-          "The bachelor's indicator confirms at least one program in this broad field. The percentage is this field's share of all institution-wide awards, not a major-specific admission rate.",
-        bachelorsAvailable: numericField(row, bachelorField) === 1,
-      }))
+      .map(([name, { shareField, bachelorField }]) => {
+        const availabilityCode = numericField(row, bachelorField);
+        const distanceOnly = availabilityCode === 2;
+        return {
+          name,
+          share: numericField(row, shareField),
+          evidence: distanceOnly
+            ? "Broad federal bachelor's field · exclusively distance education"
+            : "Broad federal bachelor's field",
+          reportingYear: federalMetricPeriods.fieldEvidence.reportingYear,
+          periodLabel: federalMetricPeriods.fieldEvidence.periodLabel,
+          finality: federalMetricPeriods.fieldEvidence.revisionStatus,
+          sourceId: federalSource.id,
+          sourceField: `${shareField} + ${bachelorField}`,
+          cohort:
+            "IPEDS 2024-2025 awards; bachelor's program availability reported for the broad CIP family",
+          definition: distanceOnly
+            ? "The bachelor's indicator reports this broad field only through exclusively distance-education programs. The percentage is this field's share of all institution-wide awards, not a major-specific admission rate."
+            : "The bachelor's indicator confirms at least one program in this broad field. The percentage is this field's share of all institution-wide awards, not a major-specific admission rate.",
+          bachelorsAvailable: availabilityCode === 1 || distanceOnly,
+          deliveryMode: distanceOnly ? "exclusively-distance" : "campus-or-mixed",
+        };
+      })
       .filter(
         (major) =>
           major.bachelorsAvailable &&
@@ -629,13 +678,13 @@ const colleges = scorecardSnapshot.rows
           unit: "usd",
           reportingYear: federalMetricPeriods.medianEarnings.reportingYear,
           periodLabel: federalMetricPeriods.medianEarnings.periodLabel,
-          finality: "finalized",
+          finality: federalMetricPeriods.medianEarnings.revisionStatus,
           comparabilityKey: "earnings.median.4-years-after-completion",
           sourceField: "MD_EARN_WNE_4YR",
           cohort:
             "2017-18 and 2018-19 completers, measured four years after completion",
           definition:
-            "Median earnings four years after completion for the pooled federal completer cohort, measured in 2022-23.",
+            "Median earnings four years after completion for the pooled federal completer cohort, measured in 2022-23 and inflation-adjusted to 2024 dollars.",
         }),
         tuitionInState: observation({
           value: numericField(row, "TUITIONFEE_IN"),
@@ -746,7 +795,7 @@ const output = {
 
 const outputPath = resolve(scriptDirectory, "../data/colleges.json");
 await mkdir(dirname(outputPath), { recursive: true });
-await writeFile(outputPath, `${JSON.stringify(output, null, 2)}\n`);
+await atomicWriteFile(outputPath, `${JSON.stringify(output, null, 2)}\n`);
 
 console.log(
   `Imported ${colleges.length} colleges to ${outputPath} from College Scorecard.`,

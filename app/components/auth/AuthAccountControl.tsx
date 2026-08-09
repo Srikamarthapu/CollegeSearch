@@ -17,9 +17,13 @@ export function AuthAccountControl() {
   if (status !== "signed-in" || !user) {
     return (
       <AuthDialog onSignedIn={refreshUser}>
-        <button className={styles.accountTrigger} type="button">
+        <button
+          className={styles.accountTrigger}
+          type="button"
+          aria-label="Sign in to CollegeSearch"
+        >
           <LogIn size={16} aria-hidden="true" />
-          Sign in
+          <span className={styles.accountTriggerLabel}>Sign in</span>
         </button>
       </AuthDialog>
     );
