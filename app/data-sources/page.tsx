@@ -129,7 +129,7 @@ export default function DataSourcesPage() {
   return (
     <>
       <SiteHeader />
-      <main className="page-shell sources-page">
+      <main id="main-content" className="page-shell sources-page">
         <nav className="page-breadcrumbs" aria-label="Breadcrumb">
           <Link href="/">
             <ArrowLeft size={15} aria-hidden="true" />
@@ -206,8 +206,9 @@ export default function DataSourcesPage() {
               <span className="sources-status">Primary when verified</span>
               <h3>Official college records</h3>
               <p>
-                UC Fall 2026 campus counts and institution-specific official
-                updates supersede older federal fields only after review.
+                Preliminary UC Fall 2026 campus counts and
+                institution-specific official updates supersede older federal
+                fields only after review.
               </p>
             </article>
             <article>

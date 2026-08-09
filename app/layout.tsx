@@ -35,7 +35,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "CollegeSearch",
     description:
-      "Search and compare 50 verified U.S. colleges with current UC admissions and source-transparent federal data.",
+      "Search and compare 50 verified U.S. colleges with the latest available UC admissions and source-transparent federal data.",
     applicationName: "CollegeSearch",
     keywords: [
       "college search",
@@ -51,7 +51,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: "CollegeSearch — Build a college list you can explain",
       description:
-        "Current UC admissions and source-transparent federal college data.",
+        "Latest available UC admissions and source-transparent federal college data.",
       type: "website",
       images: [
         {

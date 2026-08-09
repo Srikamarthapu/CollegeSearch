@@ -153,6 +153,29 @@ a {
 
 /* Header */
 
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: 10px;
+  left: 12px;
+  min-height: 42px;
+  padding: 11px 15px;
+  border: 2px solid var(--paper-bright);
+  border-radius: 3px;
+  background: var(--forest);
+  color: white;
+  font-size: 13px;
+  font-weight: 720;
+  box-shadow: var(--shadow-large);
+  transform: translateY(-140%);
+  transition: transform 160ms ease;
+}
+
+.skip-link:focus-visible {
+  outline-color: var(--ochre);
+  transform: translateY(0);
+}
+
 .site-header {
   position: sticky;
   z-index: 50;
@@ -425,6 +448,46 @@ a {
 
 .search-input-shell button:hover {
   background: var(--paper-deep);
+}
+
+.search-results-action {
+  display: flex;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 8px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 13px 8px 16px;
+  border: 1px solid rgba(18, 63, 53, 0.26);
+  border-left: 4px solid var(--ochre);
+  border-radius: 3px;
+  background: rgba(226, 235, 228, 0.78);
+  color: var(--forest);
+  text-align: left;
+}
+
+.search-results-action > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.search-results-action > span:last-child {
+  font-weight: 720;
+}
+
+.search-results-action strong {
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-size: 19px;
+  font-weight: 560;
+}
+
+.search-results-action:hover {
+  border-color: var(--forest);
+  background: var(--forest);
+  color: white;
 }
 
 .search-suggestions {
@@ -3453,6 +3516,63 @@ a {
     padding-top: 52px;
   }
 
+  .explore-page .explore-masthead {
+    padding: 23px 0 18px;
+    gap: 11px;
+  }
+
+  .explore-page .explore-masthead .edition-label {
+    gap: 8px;
+    font-size: 9px;
+  }
+
+  .explore-page .explore-masthead .edition-label > span {
+    padding: 4px 6px;
+  }
+
+  .explore-page .explore-masthead h1 {
+    margin-bottom: 3px;
+    font-size: clamp(34px, 10.5vw, 44px);
+    line-height: 0.98;
+  }
+
+  .explore-page .explore-masthead p {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .explore-page .trust-strip {
+    width: calc(100% - 32px);
+  }
+
+  .explore-page .trust-strip > * {
+    min-height: 46px;
+    padding: 8px 0;
+    font-size: 11px;
+  }
+
+  .explore-page .trust-detail {
+    display: none;
+  }
+
+  .explore-page .explore-section {
+    padding-top: 18px;
+  }
+
+  .explore-page .section-intro {
+    display: none;
+  }
+
+  .explore-page .explorer-shell {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .explore-page .results-search-dock {
+    padding-top: 6px;
+  }
+
   .section-intro h2,
   .foundation-section h2 {
     font-size: clamp(38px, 12vw, 53px);
@@ -3633,6 +3753,62 @@ a {
   .methodology-masthead h1,
   .sources-masthead h1 {
     font-size: clamp(44px, 14vw, 64px);
+  }
+
+  .comparison-page .page-breadcrumbs {
+    min-height: 46px;
+  }
+
+  .comparison-page .comparison-masthead {
+    padding: 23px 0 19px;
+    gap: 15px;
+  }
+
+  .comparison-page .comparison-masthead h1 {
+    margin: 9px 0 6px;
+    font-size: clamp(34px, 10.5vw, 43px);
+    line-height: 0.98;
+  }
+
+  .comparison-page .comparison-masthead p {
+    font-size: 13px;
+    line-height: 1.48;
+  }
+
+  .comparison-page .comparison-masthead .page-secondary-action {
+    min-height: 42px;
+    justify-self: start;
+  }
+
+  .comparison-page .comparison-notice {
+    min-height: 0;
+    margin-bottom: 8px;
+    align-items: start;
+    gap: 8px;
+    padding: 10px 11px;
+  }
+
+  .comparison-page .comparison-notice > svg {
+    width: 16px;
+    height: 16px;
+    margin-top: 1px;
+  }
+
+  .comparison-page .comparison-notice p {
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .comparison-page .comparison-table-section {
+    padding: 24px 0 50px;
+  }
+
+  .comparison-page .page-section-heading h2 {
+    font-size: 32px;
+  }
+
+  .comparison-page .comparison-mobile-stack {
+    margin-top: 17px;
   }
 
   .profile-source-banner {

@@ -2,9 +2,11 @@
   "release": {
     "id": "uc-admissions-fall-2026-snapshots",
     "publisher": "University of California",
-    "sourceName": "UC Admissions Fall 2026 campus snapshots",
+    "sourceName": "UC Admissions Fall 2026 preliminary campus snapshots",
+    "sourcePage": "https://admission.universityofcalifornia.edu/campuses-majors/first-year-admit-data.html",
     "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/",
     "sourceUrls": [
+      "https://admission.universityofcalifornia.edu/campuses-majors/first-year-admit-data.html",
       "https://admission.universityofcalifornia.edu/campuses-majors/berkeley/first-year-admit-data.html",
       "https://admission.universityofcalifornia.edu/campuses-majors/davis/first-year-admit-data.html",
       "https://admission.universityofcalifornia.edu/campuses-majors/irvine/first-year-admit-data.html",
@@ -16,6 +18,10 @@
       "https://admission.universityofcalifornia.edu/campuses-majors/merced/first-year-admit-data.html"
     ],
     "sourceHashes": [
+      {
+        "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/first-year-admit-data.html",
+        "sha256": "17a60afc0499e6824b76cca07617474a758da233f157ebed3fbfdccadb75a6c5"
+      },
       {
         "sourceUrl": "https://admission.universityofcalifornia.edu/campuses-majors/berkeley/first-year-admit-data.html",
         "sha256": "4afe061598b6c7f87896ba93b15eebaced6e0eb8e683e8aa023ca6103c047683"
@@ -54,11 +60,13 @@
       }
     ],
     "reportingYear": 2026,
-    "cohort": "Fall 2026 first-year admission snapshot",
-    "finality": "snapshot",
+    "cohort": "Fall 2026 preliminary first-year admission snapshot",
+    "finality": "provisional",
+    "revisionStatus": "provisional",
+    "sourceAsOf": "2026-06",
     "sourceField": "Applicants, admits, and overall admit rate",
-    "accessedOn": "2026-08-01",
-    "notes": "These campus snapshots publish applicants and admits, but not enrollees. Finalized enrollment and yield remain attached to the prior UC Accountability cohort."
+    "accessedOn": "2026-08-09",
+    "notes": "Fall 2026 figures are preliminary as of June 2026 and may change. These campus snapshots publish applicants and admits, but not enrollees. Campus-level applicants and admits are application-level counts, not unique people; they must not be summed to infer UCOP's unduplicated systemwide total. Finalized enrollment and yield remain attached to the prior UC Accountability cohort."
   },
   "campuses": [
     {

@@ -22,6 +22,7 @@ const expectedAsuFederalAlternates = {
   admitRate: { unit: "ratio", sourceField: "ADM_RATE" },
   undergraduateEnrollment: { unit: "count", sourceField: "UGDS" },
   graduationRate: { unit: "ratio", sourceField: "C150_4" },
+  medianEarnings: { unit: "usd", sourceField: "MD_EARN_WNE_P10" },
   tuitionInState: { unit: "usd", sourceField: "TUITIONFEE_IN" },
   tuitionOutOfState: { unit: "usd", sourceField: "TUITIONFEE_OUT" },
 };
@@ -158,6 +159,52 @@ test("server-renders the CollegeSearch product shell", async () => {
   assert.doesNotMatch(html, /react-loading-skeleton/);
 });
 
+test("global responses prevent framing and set conservative browser policies", async () => {
+  for (const pathname of ["/", "/explore"]) {
+    const response = await render(pathname);
+
+    assert.equal(
+      response.headers.get("content-security-policy"),
+      "frame-ancestors 'none'",
+      `${pathname} prevents framing with CSP`,
+    );
+    assert.equal(
+      response.headers.get("x-frame-options"),
+      "DENY",
+      `${pathname} prevents legacy framing`,
+    );
+    assert.equal(
+      response.headers.get("x-content-type-options"),
+      "nosniff",
+      `${pathname} disables content-type sniffing`,
+    );
+    assert.equal(
+      response.headers.get("referrer-policy"),
+      "strict-origin-when-cross-origin",
+      `${pathname} limits cross-origin referrer detail`,
+    );
+    assert.equal(
+      response.headers.get("permissions-policy"),
+      "camera=(), microphone=(), geolocation=()",
+      `${pathname} disables unused sensitive browser features`,
+    );
+  }
+});
+
+test("the unconfigured account fallback is student-facing", async () => {
+  const source = await readFile(
+    new URL("../app/components/auth/AuthDialog.tsx", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(source, /Accounts are not available in this preview yet\./);
+  assert.match(
+    source,
+    /You can still search, compare, and save colleges on this\s+device\./,
+  );
+  assert.doesNotMatch(source, /NEXT_PUBLIC_SUPABASE|config\.missing/);
+});
+
 test("canonical discovery, evidence, comparison, and source routes render HTML", async () => {
   const routeCases = [
     {
@@ -232,16 +279,29 @@ test("the published cohort has complete, source-registered observations", async 
   assert.equal(payload.colleges.length, 50);
   assert.equal(payload.release.publisher, "U.S. Department of Education");
   assert.equal(payload.release.sourceName, "College Scorecard");
-  assert.equal(payload.release.institutionMetricsYear, 2024);
-  assert.equal(payload.release.earningsCohortYear, 2020);
+  assert.equal(payload.release.institutionMetricsYear, undefined);
+  assert.equal(payload.release.earningsCohortYear, undefined);
+  assert.equal(payload.release.metricPeriods.admissions.reportingYear, 2024);
+  assert.equal(
+    payload.release.metricPeriods.admissions.revisionStatus,
+    "provisional",
+  );
+  assert.equal(
+    payload.release.metricPeriods.medianEarnings.sourceFields[0],
+    "MD_EARN_WNE_4YR",
+  );
+  assert.equal(
+    payload.release.metricPeriods.medianEarnings.periodLabel,
+    "2022-23 earnings",
+  );
   assert.match(payload.release.sourceUrl, /^https:\/\/collegescorecard\.ed\.gov\//);
   assert.match(
     payload.release.notes,
-    /UC headline admit rates use official Fall 2026 UC Admissions campus snapshots/i,
+    /UC headline admit rates use official preliminary Fall 2026 UC Admissions campus snapshots as of June 2026/i,
   );
   assert.match(
     payload.release.notes,
-    /Broad field filters require a 2024-2025 bachelor's-program indicator and pair it with the field's share of all awards; neither is a major-specific admit rate/i,
+    /Broad field filters pair a provisional 2024-2025 bachelor's-program indicator with the field's share of all awards; neither is a major-specific admit rate/i,
   );
 
   const sourcesById = new Map(
@@ -367,8 +427,17 @@ test("all nine UC headlines use Fall 2026 snapshots without mixing Fall 2025 yie
   assert.ok(headlineSource);
   assert.equal(headlineSource.publisher, "University of California");
   assert.equal(headlineSource.reportingYear, 2026);
-  assert.equal(headlineSource.cohort, "Fall 2026 first-year admission snapshot");
-  assert.equal(headlineSource.sourceUrls.length, 9);
+  assert.equal(
+    headlineSource.cohort,
+    "Fall 2026 preliminary first-year admission snapshot",
+  );
+  assert.equal(headlineSource.finality, "provisional");
+  assert.equal(headlineSource.revisionStatus, "provisional");
+  assert.equal(headlineSource.sourceAsOf, "2026-06");
+  assert.equal(headlineSource.sourceUrls.length, 10);
+  assert.equal(headlineSource.sourceHashes.length, 10);
+  assert.match(headlineSource.notes, /preliminary as of June 2026/i);
+  assert.match(headlineSource.notes, /must not be summed/i);
   assert.ok(finalizedSource);
   assert.equal(finalizedSource.reportingYear, 2025);
   assert.equal(finalizedSource.sourceSheet, "2.1.1");
@@ -556,6 +625,7 @@ test("ASU uses its latest official campus-immersion record and keeps the federal
   assert.equal(asu.alternateObservations.admitRate.value, 0.8989);
   assert.equal(asu.alternateObservations.undergraduateEnrollment.value, 64674);
   assert.equal(asu.alternateObservations.graduationRate.value, 0.6804);
+  assert.equal(asu.alternateObservations.medianEarnings.value, 62668);
   assert.equal(asu.alternateObservations.tuitionInState.value, 12223);
   assert.equal(asu.alternateObservations.tuitionOutOfState.value, 33139);
 });

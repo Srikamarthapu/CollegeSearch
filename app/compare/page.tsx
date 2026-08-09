@@ -168,7 +168,7 @@ export default async function ComparePage({
   return (
     <>
       <SiteHeader />
-      <main className="page-shell comparison-page">
+      <main id="main-content" className="page-shell comparison-page">
         <nav className="page-breadcrumbs" aria-label="Breadcrumb">
           <Link href="/explore">
             <ArrowLeft size={15} aria-hidden="true" />
@@ -220,10 +220,10 @@ export default async function ComparePage({
 
             {mixedRows.length > 0 ? (
               <ComparisonNotice>
-                These rows use different definitions or reporting periods: {" "}
-                {mixedRows.map((row) => row.label).join(", ")}. Treat them as
-                context, not direct rankings, and read the period and source
-                beneath each value.
+                {mixedRows.length}{" "}
+                {mixedRows.length === 1 ? "measure uses" : "measures use"}{" "}
+                different definitions or reporting periods. Read the period and
+                source beneath each value before comparing.
               </ComparisonNotice>
             ) : null}
 

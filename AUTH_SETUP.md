@@ -136,8 +136,8 @@ server-verified session observation, account display, and sign out.
 The root `proxy.ts` is already included. It refreshes cookie sessions and
 forwards Supabase’s required private/no-store response headers before pages
 render. The app remains usable when the two public environment variables are
-missing; the sign-in dialog clearly names the missing configuration instead of
-crashing the build.
+missing; the sign-in dialog shows a student-facing availability message instead
+of exposing implementation details or crashing the build.
 
 ## 7. Verify before launch
 

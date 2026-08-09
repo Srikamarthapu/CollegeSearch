@@ -53,7 +53,7 @@ export function UpdatePasswordForm() {
 
   if (status === "loading") {
     return (
-      <main className={styles.page}>
+      <main id="main-content" className={styles.page}>
         <section className={styles.card} aria-live="polite">
           <LoaderCircle className={styles.spinner} size={25} />
           <h1>Checking your reset link…</h1>
@@ -64,7 +64,7 @@ export function UpdatePasswordForm() {
 
   if (status !== "signed-in") {
     return (
-      <main className={styles.page}>
+      <main id="main-content" className={styles.page}>
         <section className={styles.card}>
           <span className={styles.icon} aria-hidden="true">
             <KeyRound size={24} />
@@ -84,7 +84,7 @@ export function UpdatePasswordForm() {
   }
 
   return (
-    <main className={styles.page}>
+    <main id="main-content" className={styles.page}>
       <section className={styles.card} aria-labelledby="update-password-title">
         <span className={styles.icon} aria-hidden="true">
           {success ? <Check size={24} /> : <KeyRound size={24} />}

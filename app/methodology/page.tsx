@@ -22,7 +22,7 @@ export default function MethodologyPage() {
   return (
     <>
       <SiteHeader />
-      <main className="page-shell methodology-page">
+      <main id="main-content" className="page-shell methodology-page">
         <nav className="page-breadcrumbs" aria-label="Breadcrumb">
           <Link href="/">
             <ArrowLeft size={15} aria-hidden="true" />
@@ -62,10 +62,10 @@ export default function MethodologyPage() {
               <div>
                 <h3>Use the most direct authoritative source available.</h3>
                 <p>
-                  UC headline counts come from official Fall 2026 campus
-                  snapshots; finalized Fall 2025 yield remains in the UC
-                  Accountability Report. Verified college records may replace
-                  older federal fields with their definitions kept visible.
+                  UC headline counts come from official preliminary Fall 2026
+                  campus snapshots as of June 2026; they may change and campus
+                  rows must not be summed into a systemwide total. Finalized
+                  Fall 2025 yield remains in the UC Accountability Report.
                 </p>
               </div>
             </li>
@@ -74,10 +74,10 @@ export default function MethodologyPage() {
               <div>
                 <h3>Do not force unlike years into one false snapshot.</h3>
                 <p>
-                  UC admissions report a Fall 2026 snapshot, ASU admissions
-                  report Fall 2025, tuition may describe 2026-2027, and federal
-                  outcomes retain older cohorts. The exact period stays beside
-                  every metric.
+                  UC admissions report a preliminary Fall 2026 snapshot, ASU
+                  admissions report Fall 2025, tuition may describe 2026-2027,
+                  and federal outcomes retain older cohorts. The exact period
+                  stays beside every metric.
                 </p>
               </div>
             </li>
@@ -174,9 +174,9 @@ export default function MethodologyPage() {
               <dt>Headline admit rate</dt>
               <dd>
                 Admitted applicants divided by applicants for the named
-                reporting cohort. UC rates use Fall 2026 campus snapshots;
-                verified college overlays may also supersede the 2024 federal
-                admissions field.
+                reporting cohort. UC rates use preliminary Fall 2026 campus
+                snapshots; verified college overlays may also supersede the
+                2024 federal admissions field.
               </dd>
             </div>
             <div>

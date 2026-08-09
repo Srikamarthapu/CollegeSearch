@@ -194,10 +194,10 @@ export function AuthDialog({
             <div className={styles.setupPanel} role="status">
               <LockKeyhole size={22} aria-hidden="true" />
               <div>
-                <strong>Account setup is ready for credentials.</strong>
+                <strong>Accounts are not available in this preview yet.</strong>
                 <p>
-                  Add {config.missing.join(" and ")} to your local environment,
-                  then restart the app.
+                  You can still search, compare, and save colleges on this
+                  device.
                 </p>
               </div>
             </div>

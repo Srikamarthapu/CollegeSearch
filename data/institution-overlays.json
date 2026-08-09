@@ -6,8 +6,12 @@
       "sourceName": "ASU Campus Immersion Common Data Set 2025-2026",
       "sourcePage": "https://uoia.asu.edu/common-data-set",
       "sourceUrl": "https://uoia.asu.edu/sites/g/files/litvpz1436/files/2026-06/CDS%202025-26%20-%20ASU%20Campus%20Immersion.pdf",
-      "accessedOn": "2026-08-01",
+      "artifactUrl": "https://uoia.asu.edu/sites/g/files/litvpz1436/files/2026-06/CDS%202025-26%20-%20ASU%20Campus%20Immersion.pdf",
+      "artifactSha256": "b54845c9772df11a02d19e8ef2f91bffd21c8b94c0d4abb34f0ff527fb77725d",
+      "accessedOn": "2026-08-09",
       "finality": "finalized",
+      "publicationStatus": "published",
+      "revisionStatus": "finalized",
       "cohort": "Fall 2025 admissions and enrollment; Fall 2019 graduation cohort; 2026-2027 tuition",
       "notes": "Newer ASU Campus Immersion observations are shown with their first-party definitions and exact periods. Replaced federal observations are retained as standardized alternates, and comparisons warn when periods or populations differ."
     }

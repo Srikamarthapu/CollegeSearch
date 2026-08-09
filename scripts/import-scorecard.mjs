@@ -112,6 +112,53 @@ const scorecardLandingUrl = "https://collegescorecard.ed.gov/data/";
 const scorecardDictionaryUrl =
   "https://collegescorecard.ed.gov/files/CollegeScorecardDataDictionary.xlsx";
 
+const federalMetricPeriods = {
+  admissions: {
+    reportingYear: 2024,
+    periodLabel: "Fall 2024",
+    revisionStatus: "provisional",
+    sourceFields: ["ADM_RATE"],
+  },
+  undergraduateEnrollment: {
+    reportingYear: 2024,
+    periodLabel: "Fall 2024",
+    revisionStatus: "provisional",
+    sourceFields: ["UGDS"],
+  },
+  averageNetPrice: {
+    reportingYear: 2024,
+    periodLabel: "2023-2024 aid cohort",
+    revisionStatus: "finalized",
+    sourceFields: ["NPT4_PUB", "NPT4_PRIV"],
+  },
+  graduationRate: {
+    reportingYear: 2024,
+    periodLabel: "Fall 2018 entering cohort",
+    revisionStatus: "finalized",
+    sourceFields: ["C150_4"],
+  },
+  medianEarnings: {
+    reportingYear: 2023,
+    periodLabel: "2022-23 earnings",
+    revisionStatus: "published",
+    sourceFields: ["MD_EARN_WNE_4YR"],
+  },
+  tuitionAndFees: {
+    reportingYear: 2024,
+    periodLabel: "2024-2025",
+    revisionStatus: "provisional",
+    sourceFields: ["TUITIONFEE_IN", "TUITIONFEE_OUT"],
+  },
+  fieldEvidence: {
+    reportingYear: 2025,
+    periodLabel: "2024-2025 programs and awards",
+    revisionStatus: "provisional",
+    sourceFields: Object.values(programFields).flatMap(
+      ({ shareField, bachelorField }) => [shareField, bachelorField],
+    ),
+  },
+};
+
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const localIsoDate = () => {
   const date = new Date();
@@ -282,6 +329,7 @@ async function loadScorecardRows() {
     "NPT4_PUB",
     "NPT4_PRIV",
     "C150_4",
+    "MD_EARN_WNE_4YR",
     "MD_EARN_WNE_P10",
     "TUITIONFEE_IN",
     "TUITIONFEE_OUT",
@@ -380,8 +428,9 @@ federalSource = {
   releaseDate: "2026-06-10",
   accessedOn,
   notes:
-    "This June 2026 release combines metrics with different reporting lags. Every observation retains its exact academic year, fall term, entry cohort, or measurement period from the official cohort map.",
-  finality: "finalized",
+    "This published June 2026 artifact combines metrics with different reporting lags and revision states. IPEDS 2024-2025 admissions, enrollment, tuition, and program fields remain provisional; every observation retains its exact period and revision state.",
+  publicationStatus: "published",
+  revisionStatus: "mixed",
 };
 
 const colleges = scorecardSnapshot.rows
@@ -396,9 +445,9 @@ const colleges = scorecardSnapshot.rows
     const federalAdmitObservation = observation({
       value: federalAdmitRate,
       unit: "ratio",
-      reportingYear: 2024,
-      periodLabel: "Fall 2024",
-      finality: "finalized",
+      reportingYear: federalMetricPeriods.admissions.reportingYear,
+      periodLabel: federalMetricPeriods.admissions.periodLabel,
+      finality: federalMetricPeriods.admissions.revisionStatus,
       comparabilityKey: "admissions.undergraduate.overall.rate",
       sourceField: "ADM_RATE",
       cohort: "IPEDS Fall 2024 admissions collection",
@@ -410,8 +459,8 @@ const colleges = scorecardSnapshot.rows
           value: ucAdmission.admitRate,
           unit: "ratio",
           reportingYear: ucAdmission.fall,
-          periodLabel: `Fall ${ucAdmission.fall} snapshot`,
-          finality: "snapshot",
+          periodLabel: `Fall ${ucAdmission.fall} preliminary`,
+          finality: ucHeadlineDataset.release.finality,
           comparabilityKey: "admissions.first-year.rate",
           sourceField: ucHeadlineDataset.release.sourceField,
           cohort: ucHeadlineDataset.release.cohort,
@@ -426,8 +475,9 @@ const colleges = scorecardSnapshot.rows
         name,
         share: numericField(row, shareField),
         evidence: "Broad federal bachelor's field",
-        reportingYear: 2025,
-        periodLabel: "2024-2025 programs and awards",
+        reportingYear: federalMetricPeriods.fieldEvidence.reportingYear,
+        periodLabel: federalMetricPeriods.fieldEvidence.periodLabel,
+        finality: federalMetricPeriods.fieldEvidence.revisionStatus,
         sourceId: federalSource.id,
         sourceField: `${shareField} + ${bachelorField}`,
         cohort:
@@ -470,8 +520,8 @@ const colleges = scorecardSnapshot.rows
               value: ucAdmission.applicants,
               unit: "count",
               reportingYear: ucAdmission.fall,
-              periodLabel: `Fall ${ucAdmission.fall} snapshot`,
-              finality: "snapshot",
+              periodLabel: `Fall ${ucAdmission.fall} preliminary`,
+              finality: ucHeadlineDataset.release.finality,
               comparabilityKey: "admissions.first-year.applicants",
               sourceField: "Fall Applicants",
               cohort: ucHeadlineDataset.release.cohort,
@@ -485,8 +535,8 @@ const colleges = scorecardSnapshot.rows
               value: ucAdmission.admits,
               unit: "count",
               reportingYear: ucAdmission.fall,
-              periodLabel: `Fall ${ucAdmission.fall} snapshot`,
-              finality: "snapshot",
+              periodLabel: `Fall ${ucAdmission.fall} preliminary`,
+              finality: ucHeadlineDataset.release.finality,
               comparabilityKey: "admissions.first-year.admits",
               sourceField: "Fall Admits",
               cohort: ucHeadlineDataset.release.cohort,
@@ -530,9 +580,12 @@ const colleges = scorecardSnapshot.rows
         undergraduateEnrollment: observation({
           value: numericField(row, "UGDS"),
           unit: "count",
-          reportingYear: 2024,
-          periodLabel: "Fall 2024",
-          finality: "finalized",
+          reportingYear:
+            federalMetricPeriods.undergraduateEnrollment.reportingYear,
+          periodLabel:
+            federalMetricPeriods.undergraduateEnrollment.periodLabel,
+          finality:
+            federalMetricPeriods.undergraduateEnrollment.revisionStatus,
           comparabilityKey:
             "undergraduate-enrollment.degree-certificate-seeking",
           sourceField: "UGDS",
@@ -545,9 +598,9 @@ const colleges = scorecardSnapshot.rows
           value:
             numericField(row, "NPT4_PUB") ?? numericField(row, "NPT4_PRIV"),
           unit: "usd",
-          reportingYear: 2024,
-          periodLabel: "2023-2024 aid cohort",
-          finality: "finalized",
+          reportingYear: federalMetricPeriods.averageNetPrice.reportingYear,
+          periodLabel: federalMetricPeriods.averageNetPrice.periodLabel,
+          finality: federalMetricPeriods.averageNetPrice.revisionStatus,
           comparabilityKey: "net-price.title-iv.overall",
           sourceField:
             numericField(row, "NPT4_PUB") !== null ? "NPT4_PUB" : "NPT4_PRIV",
@@ -561,9 +614,9 @@ const colleges = scorecardSnapshot.rows
         graduationRate: observation({
           value: numericField(row, "C150_4"),
           unit: "ratio",
-          reportingYear: 2024,
-          periodLabel: "Fall 2018 entering cohort",
-          finality: "finalized",
+          reportingYear: federalMetricPeriods.graduationRate.reportingYear,
+          periodLabel: federalMetricPeriods.graduationRate.periodLabel,
+          finality: federalMetricPeriods.graduationRate.revisionStatus,
           comparabilityKey: "completion.four-year-institution.150-percent",
           sourceField: "C150_4",
           cohort:
@@ -572,24 +625,24 @@ const colleges = scorecardSnapshot.rows
             "Share completing a degree or certificate at a four-year institution within 150% of normal time.",
         }),
         medianEarnings: observation({
-          value: numericField(row, "MD_EARN_WNE_P10"),
+          value: numericField(row, "MD_EARN_WNE_4YR"),
           unit: "usd",
-          reportingYear: 2020,
-          periodLabel: "Measured 2020-2021",
+          reportingYear: federalMetricPeriods.medianEarnings.reportingYear,
+          periodLabel: federalMetricPeriods.medianEarnings.periodLabel,
           finality: "finalized",
-          comparabilityKey: "earnings.median.10-years",
-          sourceField: "MD_EARN_WNE_P10",
+          comparabilityKey: "earnings.median.4-years-after-completion",
+          sourceField: "MD_EARN_WNE_4YR",
           cohort:
-            "2009-2010 and 2010-2011 entrants; earnings measured in 2020-2021",
+            "2017-18 and 2018-19 completers, measured four years after completion",
           definition:
-            "Median earnings 10 years after entry for the pooled federal cohort, expressed in 2022 dollars.",
+            "Median earnings four years after completion for the pooled federal completer cohort, measured in 2022-23.",
         }),
         tuitionInState: observation({
           value: numericField(row, "TUITIONFEE_IN"),
           unit: "usd",
-          reportingYear: 2024,
-          periodLabel: "2024-2025",
-          finality: "finalized",
+          reportingYear: federalMetricPeriods.tuitionAndFees.reportingYear,
+          periodLabel: federalMetricPeriods.tuitionAndFees.periodLabel,
+          finality: federalMetricPeriods.tuitionAndFees.revisionStatus,
           comparabilityKey: "tuition-fees.in-state",
           sourceField: "TUITIONFEE_IN",
           cohort: "Academic year 2024-2025 published institutional price",
@@ -598,20 +651,31 @@ const colleges = scorecardSnapshot.rows
         tuitionOutOfState: observation({
           value: numericField(row, "TUITIONFEE_OUT"),
           unit: "usd",
-          reportingYear: 2024,
-          periodLabel: "2024-2025",
-          finality: "finalized",
+          reportingYear: federalMetricPeriods.tuitionAndFees.reportingYear,
+          periodLabel: federalMetricPeriods.tuitionAndFees.periodLabel,
+          finality: federalMetricPeriods.tuitionAndFees.revisionStatus,
           comparabilityKey: "tuition-fees.out-of-state",
           sourceField: "TUITIONFEE_OUT",
           cohort: "Academic year 2024-2025 published institutional price",
           definition: "Published out-of-state tuition and required fees.",
         }),
       },
-      alternateObservations: ucAdmission
-        ? {
-            admitRate: federalAdmitObservation,
-          }
-        : {},
+      alternateObservations: {
+        ...(ucAdmission ? { admitRate: federalAdmitObservation } : {}),
+        medianEarnings: observation({
+          value: numericField(row, "MD_EARN_WNE_P10"),
+          unit: "usd",
+          reportingYear: 2020,
+          periodLabel: "Measured 2020-2021",
+          finality: "finalized",
+          comparabilityKey: "earnings.median.10-years-after-entry",
+          sourceField: "MD_EARN_WNE_P10",
+          cohort:
+            "2009-2010 and 2010-2011 entrants; earnings measured in 2020-2021",
+          definition:
+            "Median earnings 10 years after entry for the pooled federal cohort, expressed in 2022 dollars.",
+        }),
+      },
       majors,
     };
   })
@@ -659,9 +723,8 @@ const output = {
     institutionCount: colleges.length,
     accessedOn,
     federalReleaseDate: "2026-06-10",
-    institutionMetricsYear: 2024,
-    earningsCohortYear: 2020,
-    earningsPeriodLabel: "Measured 2020-2021",
+    metricPeriods: federalMetricPeriods,
+    earningsPeriodLabel: federalMetricPeriods.medianEarnings.periodLabel,
     publisher: "U.S. Department of Education",
     sourceName: "College Scorecard",
     sourceUrl: "https://collegescorecard.ed.gov/data/",
@@ -670,7 +733,7 @@ const output = {
     ucDisciplineSourceUrl:
       "https://www.universityofcalifornia.edu/about-us/information-center/freshman-admission-discipline",
     notes:
-      "UC headline admit rates use official Fall 2026 UC Admissions campus snapshots; Fall 2025 Accountability data remains the finalized source for enrollees and yield. The federal baseline comes from the official June 2026 College Scorecard release, whose underlying metrics carry different reporting lags. Verified institution observations retain replaced federal records as alternates. Broad field filters require a 2024-2025 bachelor's-program indicator and pair it with the field's share of all awards; neither is a major-specific admit rate.",
+      "UC headline admit rates use official preliminary Fall 2026 UC Admissions campus snapshots as of June 2026; they may change, and campus rows must not be summed to infer an unduplicated systemwide total. Fall 2025 Accountability data remains the finalized source for enrollees and yield. The federal baseline comes from the published June 2026 College Scorecard artifact; underlying 2024-2025 IPEDS admissions, enrollment, tuition, and program fields remain provisional. Every observation retains its exact reporting period. Verified institution observations retain replaced federal records as alternates. Broad field filters pair a provisional 2024-2025 bachelor's-program indicator with the field's share of all awards; neither is a major-specific admit rate.",
     sources: [
       federalSource,
       ucHeadlineDataset.release,

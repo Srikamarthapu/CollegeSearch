@@ -188,7 +188,7 @@ export default async function CollegeProfilePage({
   return (
     <>
       <SiteHeader />
-      <main className="page-shell profile-page">
+      <main id="main-content" className="page-shell profile-page">
         <nav className="page-breadcrumbs" aria-label="Breadcrumb">
           <Link href="/explore">
             <ArrowLeft size={15} aria-hidden="true" />

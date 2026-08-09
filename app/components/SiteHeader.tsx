@@ -37,6 +37,9 @@ export function SiteHeader({ savedCount = 0 }: { savedCount?: number }) {
 
   return (
     <header className="site-header">
+      <a className="skip-link" href="#main-content">
+        Skip to main content
+      </a>
       <Link className="brand" href="/" aria-label="CollegeSearch home">
         <span className="brand-mark" aria-hidden="true">
           <Compass size={19} strokeWidth={1.8} />

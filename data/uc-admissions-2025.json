@@ -10,7 +10,7 @@
     "cohort": "Fall 2025 freshman applicants",
     "finality": "finalized",
     "sourceField": "Derived admit rate: Fall Admits divided by Fall Applicants",
-    "accessedOn": "2026-08-01",
+    "accessedOn": "2026-08-09",
     "workbookSha256": "2397265364f6433a285d79074a12cd30b0e69e3889aad789f29b5a67f744b2f0",
     "notes": "Campus rows are application-level counts. Universitywide counts are unduplicated and should not be summed from campus rows."
   },

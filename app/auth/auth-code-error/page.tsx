@@ -4,7 +4,7 @@ import styles from "../update-password/auth-page.module.css";
 
 export default function AuthCodeErrorPage() {
   return (
-    <main className={styles.page}>
+    <main id="main-content" className={styles.page}>
       <section className={styles.card} aria-labelledby="auth-error-title">
         <span className={styles.icon} aria-hidden="true">
           <AlertTriangle size={24} />

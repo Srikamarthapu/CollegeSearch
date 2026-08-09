@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const SOURCE_ROOT =
   "https://admission.universityofcalifornia.edu/campuses-majors";
+const SOURCE_OVERVIEW_URL = `${SOURCE_ROOT}/first-year-admit-data.html`;
 
 const localIsoDate = () => {
   const date = new Date();
@@ -95,7 +96,40 @@ async function fetchCampus(identity) {
   };
 }
 
-const observations = (await Promise.all(campuses.map(fetchCampus))).sort(
+async function fetchReleaseContext() {
+  const response = await fetch(SOURCE_OVERVIEW_URL);
+  if (!response.ok) {
+    throw new Error(`UC admissions overview failed (${response.status}).`);
+  }
+
+  const html = await response.text();
+  const preliminaryDate = html.match(
+    /figures are preliminary, as of ([A-Za-z]+) (\d{4})/i,
+  );
+  if (!preliminaryDate) {
+    throw new Error(
+      "UC admissions overview no longer publishes the expected preliminary-data caveat.",
+    );
+  }
+
+  const month = new Date(`${preliminaryDate[1]} 1, ${preliminaryDate[2]}`);
+  if (Number.isNaN(month.getTime())) {
+    throw new Error("UC admissions overview has an invalid preliminary-data date.");
+  }
+
+  return {
+    sourceUrl: SOURCE_OVERVIEW_URL,
+    sourceAsOf: `${preliminaryDate[2]}-${String(month.getMonth() + 1).padStart(2, "0")}`,
+    sourceAsOfLabel: `${preliminaryDate[1]} ${preliminaryDate[2]}`,
+    sourceSha256: createHash("sha256").update(html).digest("hex"),
+  };
+}
+
+const [releaseContext, campusObservations] = await Promise.all([
+  fetchReleaseContext(),
+  Promise.all(campuses.map(fetchCampus)),
+]);
+const observations = campusObservations.sort(
   (left, right) => left.unitId - right.unitId,
 );
 const reportingYears = new Set(observations.map((campus) => campus.fall));
@@ -105,26 +139,44 @@ if (observations.length !== campuses.length || reportingYears.size !== 1) {
 }
 
 const reportingYear = observations[0].fall;
+if (!releaseContext.sourceAsOf.startsWith(`${reportingYear}-`)) {
+  throw new Error(
+    `UC Fall ${reportingYear} snapshots do not match the ${releaseContext.sourceAsOf} preliminary-data caveat.`,
+  );
+}
+
 const output = {
   release: {
     id: `uc-admissions-fall-${reportingYear}-snapshots`,
     publisher: "University of California",
-    sourceName: `UC Admissions Fall ${reportingYear} campus snapshots`,
+    sourceName: `UC Admissions Fall ${reportingYear} preliminary campus snapshots`,
+    sourcePage: releaseContext.sourceUrl,
     sourceUrl: `${SOURCE_ROOT}/`,
-    sourceUrls: observations.map((campus) => campus.sourceUrl),
-    sourceHashes: observations.map(({ sourceUrl, sourceSha256 }) => ({
-      sourceUrl,
-      sha256: sourceSha256,
-    })),
+    sourceUrls: [
+      releaseContext.sourceUrl,
+      ...observations.map((campus) => campus.sourceUrl),
+    ],
+    sourceHashes: [
+      {
+        sourceUrl: releaseContext.sourceUrl,
+        sha256: releaseContext.sourceSha256,
+      },
+      ...observations.map(({ sourceUrl, sourceSha256 }) => ({
+        sourceUrl,
+        sha256: sourceSha256,
+      })),
+    ],
     reportingYear,
-    cohort: `Fall ${reportingYear} first-year admission snapshot`,
-    finality: "snapshot",
+    cohort: `Fall ${reportingYear} preliminary first-year admission snapshot`,
+    finality: "provisional",
+    revisionStatus: "provisional",
+    sourceAsOf: releaseContext.sourceAsOf,
     sourceField: "Applicants, admits, and overall admit rate",
     accessedOn:
       process.env.SOURCE_ACCESSED_ON ||
       localIsoDate(),
     notes:
-      "These campus snapshots publish applicants and admits, but not enrollees. Finalized enrollment and yield remain attached to the prior UC Accountability cohort.",
+      `Fall ${reportingYear} figures are preliminary as of ${releaseContext.sourceAsOfLabel} and may change. These campus snapshots publish applicants and admits, but not enrollees. Campus-level applicants and admits are application-level counts, not unique people; they must not be summed to infer UCOP's unduplicated systemwide total. Finalized enrollment and yield remain attached to the prior UC Accountability cohort.`,
   },
   campuses: observations,
 };

@@ -35,6 +35,7 @@ export type MajorEvidence = {
   evidence: string;
   reportingYear: number;
   periodLabel: string;
+  finality: ObservationFinality;
   sourceId: string;
   sourceField: string;
   cohort: string;
@@ -87,6 +88,9 @@ export type SourceRelease = {
   sourceSheet?: string;
   reportingYear?: number;
   finality?: ObservationFinality;
+  publicationStatus?: "published";
+  revisionStatus?: string;
+  sourceAsOf?: string;
   accessedOn: string;
   cohort?: string;
   notes?: string;
@@ -102,8 +106,15 @@ export type CollegeDataset = {
     institutionCount: number;
     accessedOn: string;
     federalReleaseDate: string;
-    institutionMetricsYear: number;
-    earningsCohortYear: number;
+    metricPeriods: Record<
+      string,
+      {
+        reportingYear: number;
+        periodLabel: string;
+        revisionStatus: string;
+        sourceFields: string[];
+      }
+    >;
     earningsPeriodLabel: string;
     publisher: string;
     sourceName: string;
@@ -180,7 +191,9 @@ function validateDataset(value: unknown): CollegeDataset {
   if (
     !dataset.release ||
     !Array.isArray(dataset.colleges) ||
-    dataset.release.institutionCount !== dataset.colleges.length
+    dataset.release.institutionCount !== dataset.colleges.length ||
+    !dataset.release.metricPeriods ||
+    Object.keys(dataset.release.metricPeriods).length === 0
   ) {
     throw new Error("College dataset release metadata does not match its rows.");
   }
@@ -231,6 +244,7 @@ function validateDataset(value: unknown): CollegeDataset {
         (major) =>
           !Number.isInteger(major.reportingYear) ||
           !major.periodLabel ||
+          !major.finality ||
           !major.sourceId ||
           !major.sourceField ||
           !major.cohort ||

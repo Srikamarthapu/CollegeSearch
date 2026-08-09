@@ -561,11 +561,15 @@ function SearchBox({
   value,
   onChange,
   onMajor,
+  onSubmit,
+  resultCount,
   size = "large",
 }: {
   value: string;
   onChange: (value: string) => void;
   onMajor: (major: string) => void;
+  onSubmit?: () => void;
+  resultCount?: number;
   size?: "large" | "compact";
 }) {
   const router = useRouter();
@@ -612,6 +616,13 @@ function SearchBox({
       setFocused(true);
       setActiveIndex(0);
       event.preventDefault();
+      return;
+    }
+    if (event.key === "Enter" && normalized && (!open || activeIndex < 0)) {
+      event.preventDefault();
+      setFocused(false);
+      setActiveIndex(-1);
+      onSubmit?.();
       return;
     }
     if (!open) return;
@@ -720,6 +731,24 @@ function SearchBox({
           </motion.div>
         ) : null}
       </AnimatePresence>
+
+      {normalized && typeof resultCount === "number" ? (
+        <button
+          className="search-results-action"
+          type="button"
+          onClick={onSubmit}
+          aria-controls="results-list"
+        >
+          <span>
+            <strong>{resultCount}</strong>{" "}
+            {resultCount === 1 ? "college matches" : "colleges match"}
+          </span>
+          <span>
+            View results
+            <ArrowDown size={15} aria-hidden="true" />
+          </span>
+        </button>
+      ) : null}
     </div>
   );
 }
@@ -986,6 +1015,17 @@ export function CollegeSearchApp({
     scrollToExplore();
   }
 
+  function submitSearch() {
+    scrollToExplore();
+    window.setTimeout(
+      () =>
+        document
+          .getElementById("results-summary")
+          ?.focus({ preventScroll: true }),
+      lenis ? 1100 : 450,
+    );
+  }
+
   function scrollToExplore() {
     if (lenis) {
       lenis.scrollTo("#explore", { offset: -86, duration: 1.05 });
@@ -1066,10 +1106,14 @@ export function CollegeSearchApp({
   }`;
 
   return (
-    <main id="top" className={mode === "explore" ? "explore-page" : ""}>
+    <>
       <SiteHeader savedCount={saved.length} />
 
-      {mode === "home" ? (
+      <main
+        id="main-content"
+        className={mode === "explore" ? "explore-page" : ""}
+      >
+        {mode === "home" ? (
         <section className="hero">
           <div className="hero-copy">
             <span className="edition-label">
@@ -1080,9 +1124,9 @@ export function CollegeSearchApp({
               Find a college you can <em>understand.</em>
             </h1>
             <p>
-              Search and compare 50 reviewed colleges using current UC
-              admissions and source-transparent federal evidence—without
-              rankings, mystery scores, or fake predictions.
+              Search and compare 50 reviewed colleges using the latest
+              available UC admissions and source-transparent federal
+              evidence—without rankings, mystery scores, or fake predictions.
             </p>
             <SearchBox
               value={state.query}
@@ -1090,6 +1134,8 @@ export function CollegeSearchApp({
                 dispatch({ type: "set", key: "query", value })
               }
               onMajor={applyMajor}
+              onSubmit={submitSearch}
+              resultCount={results.length}
             />
             <div className="quick-starts" aria-label="Popular starting points">
               <span>Start with</span>
@@ -1131,7 +1177,7 @@ export function CollegeSearchApp({
                 <span className="ledger-index">01</span>
                 <span>
                   <strong>UC admissions</strong>
-                  <small>UC Fall 2026 + verified college updates</small>
+                  <small>Preliminary UC Fall 2026 + verified updates</small>
                 </span>
                 <span className="release-status">2026</span>
               </div>
@@ -1182,9 +1228,11 @@ export function CollegeSearchApp({
         <div>
           <ShieldCheck size={18} aria-hidden="true" />
           <span>
-            <strong>Every number shows its source and period.</strong> Newer
-            official college records replace older federal fields only after
-            verification.
+            <strong>Every number shows its source and period.</strong>
+            <span className="trust-detail">
+              {" "}Newer official college records replace older federal fields
+              only after verification.
+            </span>
           </span>
         </div>
         <Link href="/methodology">
@@ -1232,6 +1280,7 @@ export function CollegeSearchApp({
                   dispatch({ type: "set", key: "query", value })
                 }
                 onMajor={applyMajor}
+                onSubmit={submitSearch}
               />
             </div>
             <div className="results-toolbar">
@@ -1277,7 +1326,12 @@ export function CollegeSearchApp({
                   </Dialog.Portal>
                 </Dialog.Root>
 
-                <p className="results-count" aria-live="polite">
+                <p
+                  className="results-count"
+                  id="results-summary"
+                  tabIndex={-1}
+                  aria-live="polite"
+                >
                   <strong>{results.length}</strong>{" "}
                   {results.length === 1 ? "college" : "colleges"}
                 </p>
@@ -1342,16 +1396,21 @@ export function CollegeSearchApp({
                 <GraduationCap size={19} aria-hidden="true" />
                 <p>
                   <strong>
-                    This filter requires a federal bachelor&apos;s-program indicator.
+                    This filter shows colleges with recent federal evidence of
+                    a bachelor&apos;s program in this broad field.
                   </strong>{" "}
-                  It still represents a broad field—not an exact current major
-                  catalog. Acceptance rates are for the whole college.
+                  It is not a live major catalog, and acceptance rates are for
+                  the whole college—not this field.
                 </p>
                 <Link href="/methodology#major-data">About field data</Link>
               </div>
             ) : null}
 
-            <div className="results-list" aria-busy={state.query !== deferredQuery}>
+            <div
+              className="results-list"
+              id="results-list"
+              aria-busy={state.query !== deferredQuery}
+            >
               {results.slice(0, state.visibleCount).map((college) => (
                 <CollegeCard
                   key={college.unitId}
@@ -1423,6 +1482,8 @@ export function CollegeSearchApp({
         </section>
       ) : null}
 
+      </main>
+
       <SiteFooter />
 
       <AnimatePresence>
@@ -1478,6 +1539,6 @@ export function CollegeSearchApp({
           </motion.div>
         ) : null}
       </AnimatePresence>
-    </main>
+    </>
   );
 }
