@@ -12,6 +12,7 @@ import {
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import { CollegeLogo } from "@/app/components/CollegeLogo";
+import { LocalSaveButton } from "@/app/components/LocalSaveButton";
 import {
   collegeBySlug,
   colleges,
@@ -20,6 +21,7 @@ import {
   isUniversityOfCalifornia,
   observationSourceKind,
   percentFormatter,
+  release,
   selectivityLabel,
   type Observation,
 } from "@/app/lib/college-data";
@@ -167,6 +169,53 @@ export default async function CollegeProfilePage({
   const federalAlternate = college.alternateObservations.admitRate;
   const admissionSource = observationSourceKind(admissions);
   const hasOfficialAdmission = !admissionSource.isFederal;
+  const reviewedInstitutionObservations = Object.values(
+    college.observations,
+  ).filter(
+    (observation): observation is Observation =>
+      observation !== null &&
+      !observation.sourceId.startsWith("uc-") &&
+      !observationSourceKind(observation).isFederal,
+  );
+  const reviewedInstitutionSourceIds = new Set(
+    reviewedInstitutionObservations.map((observation) => observation.sourceId),
+  );
+  const reviewedInstitutionSources = release.sources.filter((source) =>
+    reviewedInstitutionSourceIds.has(source.id),
+  );
+  const reviewedObservationAreas = new Set<string>();
+  if (
+    !observationSourceKind(college.observations.undergraduateEnrollment)
+      .isFederal
+  ) {
+    reviewedObservationAreas.add("enrollment");
+  }
+  if (
+    !observationSourceKind(college.observations.graduationRate).isFederal ||
+    !observationSourceKind(college.observations.medianEarnings).isFederal
+  ) {
+    reviewedObservationAreas.add("outcomes");
+  }
+  if (
+    !observationSourceKind(college.observations.averageNetPrice).isFederal ||
+    !observationSourceKind(college.observations.tuitionInState).isFederal ||
+    !observationSourceKind(college.observations.tuitionOutOfState).isFederal
+  ) {
+    reviewedObservationAreas.add("cost");
+  }
+  const reviewedAreaLabel = new Intl.ListFormat("en-US", {
+    style: "long",
+    type: "conjunction",
+  }).format([...reviewedObservationAreas]);
+  const reviewedPublisherLabel = new Intl.ListFormat("en-US", {
+    style: "long",
+    type: "conjunction",
+  }).format(
+    [...new Set(reviewedInstitutionSources.map((source) => source.publisher))],
+  );
+  const hasReviewedInstitutionRecord = reviewedInstitutionSources.length > 0;
+  const mixedAdmissionProfile =
+    admissionSource.isFederal && hasReviewedInstitutionRecord;
   const undergraduateEnrollment = college.observations.undergraduateEnrollment;
   const averageNetPrice = college.observations.averageNetPrice;
   const graduationRate = college.observations.graduationRate;
@@ -174,6 +223,14 @@ export default async function CollegeProfilePage({
     observationSourceKind(undergraduateEnrollment).isFederal;
   const netPriceIsFederal = observationSourceKind(averageNetPrice).isFederal;
   const graduationIsFederal = observationSourceKind(graduationRate).isFederal;
+  const tuitionIsFederal =
+    observationSourceKind(college.observations.tuitionInState).isFederal &&
+    observationSourceKind(college.observations.tuitionOutOfState).isFederal;
+  const costFallbackSource = tuitionIsFederal
+    ? reviewedInstitutionSources.find((source) =>
+        /\b(cost|costs|tuition|fees?|charges?|g1)\b/i.test(source.notes ?? ""),
+      )
+    : undefined;
   const admissionMetrics: MetricDefinition[] = [
     { label: "Admit rate", observation: admissions },
     { label: "Applicants", observation: college.observations.applicants },
@@ -201,11 +258,11 @@ export default async function CollegeProfilePage({
       observation: college.observations.medianEarnings,
     },
     {
-      label: "In-state tuition",
+      label: "In-state tuition + required fees",
       observation: college.observations.tuitionInState,
     },
     {
-      label: "Out-of-state tuition",
+      label: "Out-of-state tuition + required fees",
       observation: college.observations.tuitionOutOfState,
     },
   ];
@@ -244,6 +301,11 @@ export default async function CollegeProfilePage({
           </div>
 
           <div className="profile-masthead-actions">
+            <LocalSaveButton
+              unitId={college.unitId}
+              collegeName={college.name}
+              className="page-secondary-action"
+            />
             <Link
               className="page-primary-action"
               href={`/compare?colleges=${college.unitId}`}
@@ -263,23 +325,35 @@ export default async function CollegeProfilePage({
           </div>
         </header>
 
-        <aside className="profile-source-banner" aria-label="Primary source">
+        <aside
+          className="profile-source-banner"
+          aria-label="Headline admissions source"
+        >
           <FileCheck2 size={20} aria-hidden="true" />
           <div>
             <strong>
               {isUc
-                ? "Official UC admissions record"
+                ? "Official UC admission headline"
                 : hasOfficialAdmission
-                  ? "Official college record"
-                  : "Historical federal record"}
+                  ? "Official college admission headline"
+                  : mixedAdmissionProfile
+                    ? `Federal admission baseline · reviewed college ${reviewedAreaLabel}`
+                    : "Historical federal admission record"}
             </strong>
             <p>
               Headline admit rate: {admissions.periodLabel}{" "}
               {admissions.publisher}. Accessed {admissions.accessedOn}.
             </p>
+            {mixedAdmissionProfile ? (
+              <p>
+                This admission value remains federal. Reviewed{" "}
+                {reviewedPublisherLabel} observations supply only the explicitly
+                labeled {reviewedAreaLabel} fields below.
+              </p>
+            ) : null}
           </div>
           <a href={admissions.sourceUrl} target="_blank" rel="noreferrer">
-            Inspect source
+            Inspect admission source
             <ExternalLink size={14} aria-hidden="true" />
           </a>
         </aside>
@@ -360,8 +434,8 @@ export default async function CollegeProfilePage({
             <p>
               Enrollment definitions vary: the federal baseline counts
               certificate/degree-seeking undergraduates, while official
-              overlays may report total undergraduates. Current tuition is not
-              the same measure as historical net price.
+              records may report total undergraduates. Current tuition and
+              required fees are not the same measure as historical net price.
             </p>
           </div>
           <dl className="profile-metric-grid profile-outcome-grid">
@@ -397,6 +471,45 @@ export default async function CollegeProfilePage({
               label="Median earnings"
             />
           </div>
+          {costFallbackSource ? (
+            <aside
+              className="profile-source-comparison"
+              aria-label="Tuition source boundary"
+            >
+              <div className="profile-source-comparison-intro">
+                <span className="page-evidence-label">
+                  Why current tuition is not shown
+                </span>
+                <h3>This profile keeps the dated federal tuition baseline.</h3>
+                <p>{costFallbackSource.notes}</p>
+              </div>
+              <dl>
+                <div>
+                  <dt>Displayed tuition source</dt>
+                  <dd>
+                    <strong>
+                      {college.observations.tuitionInState.publisher}
+                    </strong>
+                    <span>
+                      {college.observations.tuitionInState.periodLabel} · federal
+                      baseline
+                    </span>
+                  </dd>
+                </div>
+                <div>
+                  <dt>Reviewed institution record</dt>
+                  <dd>
+                    <strong>
+                      <Link href={`/data-sources#${costFallbackSource.id}`}>
+                        {costFallbackSource.publisher}
+                      </Link>
+                    </strong>
+                    <span>Current cost excluded after review</span>
+                  </dd>
+                </div>
+              </dl>
+            </aside>
+          ) : null}
         </section>
 
         <section className="profile-section" aria-labelledby="majors-heading">

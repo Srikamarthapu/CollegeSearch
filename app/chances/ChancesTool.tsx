@@ -14,6 +14,8 @@ import {
 import { useEffect, useMemo, useState } from "react";
 
 import { CollegeLogo } from "@/app/components/CollegeLogo";
+import { LocalSaveButton } from "@/app/components/LocalSaveButton";
+import { availableChancesCollegeOptions } from "./college-options";
 import { historicalAdmitBand } from "./context";
 import styles from "./chances.module.css";
 
@@ -21,6 +23,7 @@ export type ChancesCollege = {
   unitId: number;
   slug: string;
   name: string;
+  aliases: string[];
   city: string;
   state: string;
   ownership: string;
@@ -65,11 +68,11 @@ export function ChancesTool({ colleges, initialIds }: ChancesToolProps) {
     .map((unitId) => colleges.find((college) => college.unitId === unitId))
     .filter((college): college is ChancesCollege => Boolean(college));
 
-  const available = colleges.filter((college) => {
-    if (selectedIds.includes(college.unitId)) return false;
-    const query = searchTerm.trim().toLowerCase();
-    return !query || `${college.name} ${college.city} ${college.state}`.toLowerCase().includes(query);
-  });
+  const available = availableChancesCollegeOptions(
+    colleges,
+    selectedIds,
+    searchTerm,
+  );
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -147,9 +150,10 @@ export function ChancesTool({ colleges, initialIds }: ChancesToolProps) {
               <input
                 type="search"
                 value={searchTerm}
+                maxLength={120}
                 placeholder="Try UCLA, Stanford, or Arizona"
                 onChange={(event) => {
-                  setSearchTerm(event.target.value);
+                  setSearchTerm(event.target.value.slice(0, 120));
                   setPendingId("");
                 }}
               />
@@ -265,7 +269,14 @@ export function ChancesTool({ colleges, initialIds }: ChancesToolProps) {
                     </details>
 
                     <footer>
-                      <Link href={`/colleges/${college.slug}`}>Full evidence profile <ArrowRight size={14} aria-hidden="true" /></Link>
+                      <div className={styles.cardActions}>
+                        <LocalSaveButton
+                          unitId={college.unitId}
+                          collegeName={college.name}
+                          className={styles.localSave}
+                        />
+                        <Link href={`/colleges/${college.slug}`}>Full evidence profile <ArrowRight size={14} aria-hidden="true" /></Link>
+                      </div>
                       <button type="button" onClick={() => removeCollege(college.unitId)}>Remove</button>
                     </footer>
                   </article>

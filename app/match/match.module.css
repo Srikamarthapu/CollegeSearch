@@ -47,7 +47,7 @@
 .panelHeading > span {
   color: #e1c284;
   font-family: var(--font-geist-mono), monospace;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 720;
   letter-spacing: 0.11em;
   text-transform: uppercase;
@@ -141,9 +141,16 @@
   font-size: 12px;
 }
 
+.controlGrid select:disabled {
+  border-color: color-mix(in srgb, var(--line) 72%, transparent);
+  background: var(--paper-deep);
+  color: var(--ink-faint);
+  cursor: not-allowed;
+}
+
 .controlGrid small {
   color: var(--ink-faint);
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1.45;
 }
 
@@ -166,14 +173,14 @@
 .weights > p {
   margin: -5px 0 2px;
   color: var(--ink-faint);
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .weights label {
   display: grid;
   align-items: center;
   gap: 8px;
-  grid-template-columns: minmax(110px, 1fr) minmax(78px, 0.7fr) 35px;
+  grid-template-columns: minmax(110px, 1fr) minmax(78px, 0.7fr) 92px;
 }
 
 .weights input {
@@ -184,7 +191,8 @@
 .weights output {
   color: var(--ink-faint);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 9px;
+  font-size: 11px;
+  text-align: right;
   white-space: nowrap;
 }
 
@@ -248,7 +256,7 @@
   border-right: 1px solid var(--line);
   color: var(--oxblood);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 720;
 }
 
@@ -283,7 +291,7 @@
 
 .identity span {
   color: var(--ink-faint);
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .scoreBlock {
@@ -305,13 +313,13 @@
 .scoreBlock strong small {
   color: var(--ink-faint);
   font-family: var(--font-geist-sans), Arial, sans-serif;
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .scoreBlock span {
   margin-top: 5px;
   color: var(--forest);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 720;
 }
 
@@ -336,7 +344,7 @@
 .quickFacts dt {
   color: var(--ink-faint);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 720;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -400,7 +408,7 @@
 .quickFacts small {
   overflow: hidden;
   color: var(--ink-faint);
-  font-size: 9px;
+  font-size: 11px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -447,7 +455,7 @@
 .breakdownTable span,
 .breakdownTable small {
   color: var(--ink-faint);
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .breakdownTable strong {
@@ -457,7 +465,7 @@
 .breakdown > p {
   margin: 10px 18px 14px;
   color: var(--ink-faint);
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .cardFooter {
@@ -474,20 +482,32 @@
   min-width: 0;
   overflow: hidden;
   color: var(--ink-faint);
-  font-size: 9px;
+  font-size: 11px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.cardFooter a {
+.cardFooterActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.cardFooterActions .localSave,
+.cardFooterActions a {
   display: inline-flex;
-  min-height: 34px;
+  min-height: 44px;
   align-items: center;
   gap: 6px;
   color: var(--forest);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 740;
   white-space: nowrap;
+}
+
+.cardFooterActions .localSave {
+  padding: 0 9px;
 }
 
 .emptyState {
@@ -507,6 +527,125 @@
   margin: 0;
   color: var(--ink-soft);
   font-size: 12px;
+}
+
+.balanceSection {
+  width: min(var(--page-width), calc(100% - 48px));
+  margin: 54px auto 0;
+  padding-top: 34px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.balanceHeading {
+  display: grid;
+  align-items: end;
+  gap: 32px;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.58fr);
+}
+
+.balanceHeading span {
+  color: var(--oxblood);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  font-weight: 720;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.balanceHeading h2 {
+  margin: 7px 0 0;
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-size: clamp(34px, 4vw, 49px);
+  font-weight: 480;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.balanceHeading p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.balanceGrid {
+  display: grid;
+  margin-top: 22px;
+  gap: 14px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.balanceGrid > article {
+  display: grid;
+  min-width: 0;
+  padding: 18px;
+  align-content: start;
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--ochre);
+  border-radius: 3px;
+  background: rgba(251, 249, 243, 0.95);
+  box-shadow: var(--shadow-small);
+}
+
+.balanceGrid > article > span {
+  color: var(--forest);
+  font-size: 11px;
+  font-weight: 760;
+}
+
+.balanceGrid > article > small {
+  margin-top: 3px;
+  color: var(--ink-faint);
+  font-size: 11px;
+}
+
+.balanceIdentity {
+  display: flex;
+  min-width: 0;
+  margin-top: 17px;
+  align-items: center;
+  gap: 10px;
+}
+
+.balanceIdentity > div {
+  min-width: 0;
+}
+
+.balanceIdentity a {
+  display: block;
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-size: 18px;
+  font-weight: 570;
+  line-height: 1.08;
+}
+
+.balanceIdentity a:hover {
+  color: var(--forest);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.balanceIdentity p {
+  margin: 5px 0 0;
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.balanceGrid footer {
+  display: flex;
+  margin-top: 18px;
+  padding-top: 13px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.balanceGrid footer > span {
+  color: var(--ink-faint);
+  font-size: 11px;
+  line-height: 1.45;
 }
 
 .guardrail {
@@ -540,14 +679,14 @@
 
 .guardrail a {
   display: inline-flex;
-  min-height: 42px;
+  min-height: 44px;
   padding: 0 12px;
   align-items: center;
   gap: 6px;
   border: 1px solid #9f762f;
   border-radius: 2px;
   color: #5c421b;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 740;
   white-space: nowrap;
 }
@@ -575,6 +714,10 @@
   .controlGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .balanceGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 700px) {
@@ -584,6 +727,7 @@
 
   .masthead,
   .workspace,
+  .balanceSection,
   .guardrail {
     width: calc(100% - 32px);
   }
@@ -606,6 +750,11 @@
 
   .resultsHeading {
     gap: 10px;
+    grid-template-columns: 1fr;
+  }
+
+  .balanceHeading,
+  .balanceGrid {
     grid-template-columns: 1fr;
   }
 
@@ -671,6 +820,11 @@
     flex-direction: column;
   }
 
+  .cardFooterActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
   .cardFooter > span {
     overflow: visible;
     white-space: normal;
@@ -690,6 +844,7 @@
 @media (max-width: 360px) {
   .masthead,
   .workspace,
+  .balanceSection,
   .guardrail {
     width: calc(100% - 24px);
   }

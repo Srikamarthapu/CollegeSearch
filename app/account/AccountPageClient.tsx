@@ -50,12 +50,16 @@ export function AccountPageClient() {
               </div>
               <dl className={styles.details}>
                 <div>
-                  <dt>Account identifier</dt>
-                  <dd>{user.id}</dd>
+                  <dt>Authentication</dt>
+                  <dd>Verified Supabase session</dd>
                 </div>
                 <div>
                   <dt>Saved-list sync</dt>
                   <dd>Not active — saves remain on this device</dd>
+                </div>
+                <div>
+                  <dt>Academic profile</dt>
+                  <dd>Not collected or stored in this release</dd>
                 </div>
               </dl>
               <div className={styles.actions}>
@@ -96,8 +100,8 @@ export function AccountPageClient() {
         <aside className={styles.note}>
           <ShieldCheck size={19} aria-hidden="true" />
           <p>
-            Never send a service-role key to this page. Browser auth uses only
-            the deployment&apos;s public Supabase URL and publishable key.
+            College research, comparison, matching, and local saves work
+            without an account. Signing in currently manages identity only.
           </p>
           <Link href="/privacy">Read the privacy note</Link>
         </aside>

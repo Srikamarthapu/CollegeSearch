@@ -12,7 +12,20 @@ export const metadata: Metadata = {
   description: "Current source coverage, reporting periods, and known refresh work.",
 };
 
+const institutionList = new Intl.ListFormat("en-US", {
+  style: "long",
+  type: "conjunction",
+});
+
 export default function DataHealthPage() {
+  const reviewedInstitutionRecords = colleges.filter((college) =>
+    Object.values(college.observations).some(
+      (observation) =>
+        observation !== null &&
+        !observation.sourceId.startsWith("uc-") &&
+        !observationSourceKind(observation).isFederal,
+    ),
+  );
   const firstPartyAdmissions = colleges.filter(
     (college) => !observationSourceKind(college.observations.admitRate).isFederal,
   );
@@ -21,6 +34,12 @@ export default function DataHealthPage() {
   );
   const preliminaryUc = firstPartyAdmissions.filter((college) =>
     college.observations.admitRate.sourceId.startsWith("uc-"),
+  );
+  const reviewedCollegeAdmissions = reviewedInstitutionRecords.filter(
+    (college) => !observationSourceKind(college.observations.admitRate).isFederal,
+  );
+  const partialInstitutionRecords = reviewedInstitutionRecords.filter(
+    (college) => observationSourceKind(college.observations.admitRate).isFederal,
   );
 
   return (
@@ -40,36 +59,39 @@ export default function DataHealthPage() {
         <section className={styles.summary} aria-labelledby="coverage-heading">
           <div className={styles.sectionHeading}>
             <span>01</span>
-            <h2 id="coverage-heading">Admissions source coverage</h2>
+            <h2 id="coverage-heading">Official and federal coverage</h2>
           </div>
           <div className={styles.summaryGrid}>
             <article>
               <CheckCircle2 size={19} aria-hidden="true" />
-              <strong>{firstPartyAdmissions.length}</strong>
-              <span>college-first admission records</span>
+              <strong>{reviewedInstitutionRecords.length}</strong>
+              <span>reviewed institutional records</span>
               <p>
-                {preliminaryUc.length} UC campuses plus manually reviewed ASU,
-                Stanford, and MIT Common Data Set records pinned to source
-                artifacts.
+                {reviewedCollegeAdmissions.length} supply reviewed admission
+                headlines. {institutionList.format(
+                  partialInstitutionRecords.map((college) => college.name),
+                )} are partial records: their official enrollment
+                or outcome fields do not replace the federal admission baseline.
+              </p>
+            </article>
+            <article>
+              <AlertCircle size={19} aria-hidden="true" />
+              <strong>{firstPartyAdmissions.length}</strong>
+              <span>total first-party admission headlines</span>
+              <p>
+                {preliminaryUc.length} preliminary UC campus snapshots plus{" "}
+                {reviewedCollegeAdmissions.length} reviewed institution
+                admission records. Source period and finality remain attached.
               </p>
             </article>
             <article>
               <Database size={19} aria-hidden="true" />
               <strong>{federalAdmissions.length}</strong>
-              <span>standardized federal baselines</span>
+              <span>federal admission baselines</span>
               <p>
                 These use Fall 2024 admissions from the current Scorecard
-                artifact until a newer first-party record is independently
-                reviewed.
-              </p>
-            </article>
-            <article>
-              <AlertCircle size={19} aria-hidden="true" />
-              <strong>{preliminaryUc.length}</strong>
-              <span>preliminary UC records</span>
-              <p>
-                Fall 2026 UC campus snapshots are current and exact, but UC says
-                they may change. That caveat remains attached everywhere.
+                artifact until an unambiguous first-party admission record is
+                independently reviewed.
               </p>
             </article>
           </div>
@@ -115,9 +137,10 @@ export default function DataHealthPage() {
           <div>
             <strong>Known refresh work is visible, not hidden.</strong>
             <p>
-              The next data pass should add reviewed first-party overlays for
-              the remaining colleges and newer UC cost/outcome records while
-              retaining the federal observations as comparable alternates.
+              The next data pass should expand beyond the current{" "}
+              {reviewedInstitutionRecords.length} reviewed institutional records
+              and add newer UC cost/outcome records while retaining federal
+              observations as comparable alternates.
             </p>
           </div>
           <Link href="/data-sources">Read the source ledger</Link>

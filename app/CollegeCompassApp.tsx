@@ -57,6 +57,15 @@ import {
   matchingMajors,
   STATE_NAMES,
 } from "@/app/lib/college-search";
+import {
+  matchesAdvancedExplorerFilters,
+  type EnrollmentBand,
+} from "@/app/lib/explorer-filters";
+import {
+  readSavedCollegeIds,
+  subscribeToSavedCollegeChanges,
+  writeSavedCollegeIds,
+} from "@/app/lib/local-saves";
 
 type ExplorerState = {
   query: string;
@@ -65,6 +74,11 @@ type ExplorerState = {
   ownership: string;
   band: string;
   maxPrice: string;
+  maxTuition: string;
+  enrollmentBand: string;
+  minGraduation: string;
+  minEarnings: string;
+  setting: string;
   ucOnly: boolean;
   completeOnly: boolean;
   savedOnly: boolean;
@@ -79,6 +93,11 @@ type FilterKey =
   | "ownership"
   | "band"
   | "maxPrice"
+  | "maxTuition"
+  | "enrollmentBand"
+  | "minGraduation"
+  | "minEarnings"
+  | "setting"
   | "sort";
 
 type ExplorerAction =
@@ -98,6 +117,11 @@ const defaultExplorerState: ExplorerState = {
   ownership: "",
   band: "",
   maxPrice: "",
+  maxTuition: "",
+  enrollmentBand: "",
+  minGraduation: "",
+  minEarnings: "",
+  setting: "",
   ucOnly: false,
   completeOnly: false,
   savedOnly: false,
@@ -383,6 +407,17 @@ function FilterControls({
   idPrefix: string;
   stateOptions: string[];
 }) {
+  const advancedFilterCount = [
+    state.maxTuition,
+    state.enrollmentBand,
+    state.minGraduation,
+    state.minEarnings,
+    state.setting,
+  ].filter(Boolean).length;
+  const [advancedOpen, setAdvancedOpen] = useState(
+    advancedFilterCount > 0,
+  );
+
   return (
     <div className="filter-controls">
       <SelectField
@@ -473,6 +508,120 @@ function FilterControls({
         <option value="40000">$40,000 or less</option>
       </SelectField>
 
+      <details
+        className="advanced-filters"
+        open={advancedOpen}
+        onToggle={(event) => setAdvancedOpen(event.currentTarget.open)}
+      >
+        <summary>
+          <span>
+            More ways to narrow
+            {advancedFilterCount > 0 ? (
+              <small>{advancedFilterCount} active</small>
+            ) : null}
+          </span>
+          <ChevronDown size={16} aria-hidden="true" />
+        </summary>
+        <div className="advanced-filter-fields">
+          <SelectField
+            id={`${idPrefix}-setting-filter`}
+            label="Campus setting"
+            value={state.setting}
+            onChange={(event) =>
+              dispatch({
+                type: "set",
+                key: "setting",
+                value: event.target.value,
+              })
+            }
+          >
+            <option value="">Any setting</option>
+            <option value="City">City</option>
+            <option value="Suburb">Suburb</option>
+            <option value="Town">Town</option>
+          </SelectField>
+
+          <SelectField
+            id={`${idPrefix}-enrollment-filter`}
+            label="Undergraduate size"
+            value={state.enrollmentBand}
+            onChange={(event) =>
+              dispatch({
+                type: "set",
+                key: "enrollmentBand",
+                value: event.target.value,
+              })
+            }
+          >
+            <option value="">Any size</option>
+            <option value="small">Under 10,000 students</option>
+            <option value="medium">10,000–24,999 students</option>
+            <option value="large">25,000+ students</option>
+          </SelectField>
+
+          <SelectField
+            id={`${idPrefix}-graduation-filter`}
+            label="Minimum graduation rate"
+            value={state.minGraduation}
+            onChange={(event) =>
+              dispatch({
+                type: "set",
+                key: "minGraduation",
+                value: event.target.value,
+              })
+            }
+          >
+            <option value="">Any graduation rate</option>
+            <option value="0.6">60% or higher</option>
+            <option value="0.75">75% or higher</option>
+            <option value="0.9">90% or higher</option>
+          </SelectField>
+
+          <SelectField
+            id={`${idPrefix}-earnings-filter`}
+            label="Minimum median earnings"
+            value={state.minEarnings}
+            onChange={(event) =>
+              dispatch({
+                type: "set",
+                key: "minEarnings",
+                value: event.target.value,
+              })
+            }
+          >
+            <option value="">Any earnings level</option>
+            <option value="75000">$75,000 or higher</option>
+            <option value="100000">$100,000 or higher</option>
+            <option value="125000">$125,000 or higher</option>
+          </SelectField>
+
+          <SelectField
+            id={`${idPrefix}-tuition-filter`}
+            label="Maximum out-of-state/private tuition + required fees"
+            value={state.maxTuition}
+            onChange={(event) =>
+              dispatch({
+                type: "set",
+                key: "maxTuition",
+                value: event.target.value,
+              })
+            }
+          >
+            <option value="">Any published tuition</option>
+            <option value="30000">$30,000 or less</option>
+            <option value="50000">$50,000 or less</option>
+            <option value="70000">$70,000 or less</option>
+            <option value="90000">$90,000 or less</option>
+          </SelectField>
+
+          <p className="advanced-filter-note">
+            Tuition is the published sticker price—not your likely cost. Net
+            price accounts for grants and scholarships for the reported
+            federal cohort.
+          </p>
+        </div>
+      </details>
+
       <div className="filter-toggles">
         <button
           type="button"
@@ -503,7 +652,6 @@ function FilterControls({
           <span>{savedCount}</span>
         </button>
       </div>
-
     </div>
   );
 }
@@ -610,8 +758,9 @@ function SearchBox({
               : undefined
           }
           value={value}
+          maxLength={120}
           onChange={(event) => {
-            onChange(event.target.value);
+            onChange(event.target.value.slice(0, 120));
             setActiveIndex(-1);
           }}
           onFocus={() => setFocused(true)}
@@ -726,6 +875,28 @@ export function CollegeSearchApp({
     () => new Set(colleges.map((college) => college.unitId)),
     [colleges],
   );
+  const evidenceCounts = useMemo(() => {
+    const ucAdmissions = colleges.filter((college) =>
+      college.observations.admitRate.sourceId.startsWith("uc-"),
+    ).length;
+    const federalAdmissions = colleges.filter(
+      (college) =>
+        observationSourceKind(college.observations.admitRate).isFederal,
+    ).length;
+    const reviewedInstitutionRecords = colleges.filter((college) =>
+      Object.values(college.observations).some(
+        (observation) =>
+          !observation.sourceId.startsWith("uc-") &&
+          !observationSourceKind(observation).isFederal,
+      ),
+    ).length;
+    return {
+      firstPartyAdmissions: colleges.length - federalAdmissions,
+      reviewedCollegeAdmissions:
+        colleges.length - federalAdmissions - ucAdmissions,
+      reviewedInstitutionRecords,
+    };
+  }, [colleges]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -747,8 +918,19 @@ export function CollegeSearchApp({
       "earnings",
     ]);
     const allowedPrices = new Set(["", "15000", "20000", "30000", "40000"]);
+    const allowedTuition = new Set([
+      "",
+      "30000",
+      "50000",
+      "70000",
+      "90000",
+    ]);
+    const allowedEnrollmentBands = new Set(["", "small", "medium", "large"]);
+    const allowedGraduationRates = new Set(["", "0.6", "0.75", "0.9"]);
+    const allowedEarnings = new Set(["", "75000", "100000", "125000"]);
+    const allowedSettings = new Set(["", "City", "Suburb", "Town"]);
     const hydratedState: Partial<ExplorerState> = {
-      query: params.get("q") ?? "",
+      query: (params.get("q") ?? "").slice(0, 120),
       major: majorOptions.includes(params.get("major") ?? "")
         ? params.get("major") ?? ""
         : "",
@@ -766,6 +948,21 @@ export function CollegeSearchApp({
       maxPrice: allowedPrices.has(params.get("price") ?? "")
         ? params.get("price") ?? ""
         : "",
+      maxTuition: allowedTuition.has(params.get("tuition") ?? "")
+        ? params.get("tuition") ?? ""
+        : "",
+      enrollmentBand: allowedEnrollmentBands.has(params.get("size") ?? "")
+        ? params.get("size") ?? ""
+        : "",
+      minGraduation: allowedGraduationRates.has(params.get("grad") ?? "")
+        ? params.get("grad") ?? ""
+        : "",
+      minEarnings: allowedEarnings.has(params.get("earnings") ?? "")
+        ? params.get("earnings") ?? ""
+        : "",
+      setting: allowedSettings.has(params.get("setting") ?? "")
+        ? params.get("setting") ?? ""
+        : "",
       sort: allowedSorts.has(params.get("sort") ?? "")
         ? params.get("sort") ?? "name"
         : "name",
@@ -780,31 +977,7 @@ export function CollegeSearchApp({
       .filter((unitId) => collegeIds.has(unitId))
       .slice(0, 4);
     const hydratedComparison = Array.from(new Set(comparison));
-    let hydratedSaved: number[] = [];
-
-    try {
-      const parsed = JSON.parse(
-        window.localStorage.getItem("college-search-saved") ??
-          window.localStorage.getItem("college-compass-saved") ??
-          "[]",
-      );
-      if (Array.isArray(parsed)) {
-        hydratedSaved = Array.from(
-          new Set(
-            parsed
-              .filter(Number.isInteger)
-              .filter((unitId) => collegeIds.has(unitId)),
-          ),
-        );
-      }
-    } catch {
-      try {
-        window.localStorage.removeItem("college-search-saved");
-        window.localStorage.removeItem("college-compass-saved");
-      } catch {
-        // Storage can be unavailable in hardened/private browser contexts.
-      }
-    }
+    const hydratedSaved = readSavedCollegeIds(collegeIds).ids;
 
     let cancelled = false;
     queueMicrotask(() => {
@@ -829,6 +1002,11 @@ export function CollegeSearchApp({
     if (state.ownership) params.set("type", state.ownership);
     if (state.band) params.set("band", state.band);
     if (state.maxPrice) params.set("price", state.maxPrice);
+    if (state.maxTuition) params.set("tuition", state.maxTuition);
+    if (state.enrollmentBand) params.set("size", state.enrollmentBand);
+    if (state.minGraduation) params.set("grad", state.minGraduation);
+    if (state.minEarnings) params.set("earnings", state.minEarnings);
+    if (state.setting) params.set("setting", state.setting);
     if (state.sort !== "name") params.set("sort", state.sort);
     if (state.ucOnly) params.set("uc", "1");
     if (state.completeOnly) params.set("complete", "1");
@@ -841,6 +1019,15 @@ export function CollegeSearchApp({
       `${window.location.pathname}${query ? `?${query}` : ""}`,
     );
   }, [hydrated, selected, state]);
+
+  useEffect(
+    () =>
+      subscribeToSavedCollegeChanges(
+        (result) => setSaved(result.ids),
+        collegeIds,
+      ),
+    [collegeIds],
+  );
 
   useEffect(() => {
     if (!status) return;
@@ -855,22 +1042,32 @@ export function CollegeSearchApp({
       ),
     );
     const maxPrice = Number(state.maxPrice) || null;
+    const maxTuition = Number(state.maxTuition) || null;
+    const minGraduation = Number(state.minGraduation) || null;
+    const minEarnings = Number(state.minEarnings) || null;
 
     const filtered = colleges.filter((college) => {
-        const admitRate = college.observations.admitRate.value;
-        const netPrice = college.observations.averageNetPrice.value;
-        return (
+      const admitRate = college.observations.admitRate.value;
+      const netPrice = college.observations.averageNetPrice.value;
+      return (
           queryMatches.has(college.unitId) &&
           (!state.major || Boolean(majorEvidenceFor(college, state.major))) &&
           (!state.stateCode || college.state === state.stateCode) &&
           (!state.ownership || college.ownership === state.ownership) &&
           matchesBand(admitRate, state.band) &&
           (!maxPrice || (netPrice !== null && netPrice <= maxPrice)) &&
+          matchesAdvancedExplorerFilters(college, {
+            maxTuition,
+            enrollmentBand: state.enrollmentBand as EnrollmentBand,
+            minGraduation,
+            minEarnings,
+            setting: state.setting,
+          }) &&
           (!state.ucOnly || isUniversityOfCalifornia(college)) &&
           (!state.completeOnly || hasCompleteCoreData(college)) &&
           (!state.savedOnly || saved.includes(college.unitId))
-        );
-      });
+      );
+    });
 
     return filtered.sort((left, right) => {
       if (state.sort === "major" && state.major) {
@@ -926,10 +1123,15 @@ export function CollegeSearchApp({
     saved,
     state.band,
     state.completeOnly,
+    state.enrollmentBand,
     state.major,
+    state.maxTuition,
     state.maxPrice,
+    state.minEarnings,
+    state.minGraduation,
     state.ownership,
     state.savedOnly,
+    state.setting,
     state.sort,
     state.stateCode,
     state.ucOnly,
@@ -945,15 +1147,12 @@ export function CollegeSearchApp({
       const next = current.includes(college.unitId)
         ? current.filter((unitId) => unitId !== college.unitId)
         : [...current, college.unitId];
-      try {
-        window.localStorage.setItem(
-          "college-search-saved",
-          JSON.stringify(next),
-        );
-      } catch {
+      const result = writeSavedCollegeIds(next, collegeIds);
+      if (!result.persisted) {
         setStatus("This browser could not save that college.");
+        return current;
       }
-      return next;
+      return result.ids;
     });
   }
 
@@ -1041,6 +1240,52 @@ export function CollegeSearchApp({
             dispatch({ type: "set", key: "maxPrice", value: "" }),
         }
       : null,
+    state.maxTuition
+      ? {
+          label: `Published tuition ≤ $${Number(
+            state.maxTuition,
+          ).toLocaleString()}`,
+          clear: () =>
+            dispatch({ type: "set", key: "maxTuition", value: "" }),
+        }
+      : null,
+    state.enrollmentBand
+      ? {
+          label:
+            state.enrollmentBand === "small"
+              ? "Under 10,000 students"
+              : state.enrollmentBand === "medium"
+                ? "10,000–24,999 students"
+                : "25,000+ students",
+          clear: () =>
+            dispatch({ type: "set", key: "enrollmentBand", value: "" }),
+        }
+      : null,
+    state.minGraduation
+      ? {
+          label: `Graduation rate ≥ ${Math.round(
+            Number(state.minGraduation) * 100,
+          )}%`,
+          clear: () =>
+            dispatch({ type: "set", key: "minGraduation", value: "" }),
+        }
+      : null,
+    state.minEarnings
+      ? {
+          label: `Median earnings ≥ $${Number(
+            state.minEarnings,
+          ).toLocaleString()}`,
+          clear: () =>
+            dispatch({ type: "set", key: "minEarnings", value: "" }),
+        }
+      : null,
+    state.setting
+      ? {
+          label: `${state.setting} setting`,
+          clear: () =>
+            dispatch({ type: "set", key: "setting", value: "" }),
+        }
+      : null,
     state.ucOnly
       ? {
           label: "UC campuses",
@@ -1085,8 +1330,9 @@ export function CollegeSearchApp({
             </h1>
             <p>
               Search and compare 50 reviewed colleges using current UC and
-              selected manually reviewed college records alongside source-transparent federal
-              evidence—without rankings, mystery scores, or fake predictions.
+              selected manually reviewed college records alongside
+              source-transparent federal evidence—without rankings, mystery
+              scores, or fake predictions.
             </p>
             <SearchBox
               colleges={colleges}
@@ -1146,9 +1392,16 @@ export function CollegeSearchApp({
                 <span className="ledger-index">02</span>
                 <span>
                   <strong>College-reported updates</strong>
-                  <small>ASU, Stanford, and MIT · 2025-26 CDS</small>
+                  <small>
+                    {evidenceCounts.reviewedInstitutionRecords} reviewed
+                    institution records ·{" "}
+                    {evidenceCounts.reviewedCollegeAdmissions} admission
+                    headlines
+                  </small>
                 </span>
-                <span className="release-status neutral">3 CDS</span>
+                <span className="release-status neutral">
+                  {evidenceCounts.reviewedInstitutionRecords} reviewed
+                </span>
               </div>
               <div>
                 <span className="ledger-index">03</span>
@@ -1161,7 +1414,10 @@ export function CollegeSearchApp({
             </div>
             <div className="ledger-card-foot">
               <span>50 colleges</span>
-              <span>12 first-party admission records</span>
+              <span>
+                {evidenceCounts.firstPartyAdmissions} first-party admission
+                headlines
+              </span>
               <Link href="/data-sources">
                 View all sources
                 <ArrowRight size={14} aria-hidden="true" />

@@ -1,6 +1,14 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ExternalLink, Scale } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ChevronDown,
+  ExternalLink,
+  GraduationCap,
+  Info,
+  Scale,
+} from "lucide-react";
 
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
@@ -247,6 +255,81 @@ export default async function ComparePage({
                 source beneath each value before comparing.
               </ComparisonNotice>
             ) : null}
+
+            <section
+              className="comparison-field-lens"
+              aria-labelledby="comparison-field-heading"
+            >
+              <div className="comparison-field-intro">
+                <span className="page-evidence-label">
+                  <GraduationCap size={15} aria-hidden="true" />
+                  Optional field lens
+                </span>
+                <h2 id="comparison-field-heading">
+                  Add a broad field to the table.
+                </h2>
+                <p id="comparison-field-help">
+                  Choose one field to compare its bachelor&apos;s-level evidence
+                  across the colleges already selected.
+                </p>
+              </div>
+
+              <form
+                className="comparison-field-form"
+                action="/compare"
+                method="get"
+              >
+                <input
+                  type="hidden"
+                  name="colleges"
+                  value={selected.map((college) => college.unitId).join(",")}
+                />
+                <label className="filter-field" htmlFor="comparison-major">
+                  <span>Broad bachelor&apos;s field</span>
+                  <div className="select-wrap">
+                    <select
+                      id="comparison-major"
+                      name="major"
+                      defaultValue={selectedMajor ?? ""}
+                      aria-describedby="comparison-field-help comparison-field-boundary"
+                    >
+                      <option value="">No field selected</option>
+                      {MAJOR_OPTIONS.map((major) => (
+                        <option value={major} key={major}>
+                          {major}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown size={15} aria-hidden="true" />
+                  </div>
+                </label>
+                <div className="comparison-field-actions">
+                  <button className="page-primary-action" type="submit">
+                    Apply field
+                  </button>
+                  {selectedMajor ? (
+                    <Link
+                      className="page-secondary-action"
+                      href={comparisonHref(selected, undefined)}
+                    >
+                      Clear field
+                    </Link>
+                  ) : null}
+                </div>
+              </form>
+
+              <p
+                className="comparison-field-boundary"
+                id="comparison-field-boundary"
+              >
+                <Info size={16} aria-hidden="true" />
+                <span>
+                  This is broad bachelor&apos;s-award evidence—not a
+                  major-specific admit rate or an applicant&apos;s chance of
+                  admission.
+                </span>
+              </p>
+            </section>
 
             <section
               className="comparison-table-section"

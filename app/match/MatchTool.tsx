@@ -11,10 +11,13 @@ import {
 import { useMemo, useState } from "react";
 
 import { CollegeLogo } from "@/app/components/CollegeLogo";
+import { LocalSaveButton } from "@/app/components/LocalSaveButton";
 import {
+  balancedObservedShortlist,
   hasActiveMatchSignal,
   MATCH_CRITERIA,
   rankMatches,
+  weightsForActiveCriteria,
   type MatchCollege,
   type MatchCriterion,
   type MatchPreferences,
@@ -44,6 +47,7 @@ const criterionLabels: Record<MatchCriterion, string> = {
   location: "Location",
   price: "Average net price",
   size: "Campus size",
+  setting: "Campus setting",
   graduation: "Graduation outcome",
   earnings: "Earnings context",
 };
@@ -53,18 +57,47 @@ const initialWeights: MatchWeights = {
   location: 3,
   price: 4,
   size: 2,
+  setting: 2,
   graduation: 4,
   earnings: 3,
 };
 
 const initialPreferences: MatchPreferences = {
   major: "undecided",
+  majorMode: "prefer",
   region: "anywhere",
   ownership: "any",
-  maxNetPrice: 30_000,
+  maxNetPrice: null,
   size: "any",
+  setting: "any",
   weights: initialWeights,
 };
+
+type SelectPreferenceKey = Exclude<keyof MatchPreferences, "weights">;
+
+function selectedCriterion(
+  key: SelectPreferenceKey,
+  value: MatchPreferences[SelectPreferenceKey],
+): MatchCriterion | null {
+  if (key === "major" && value !== "undecided") return "major";
+  if (key === "region" && value !== "anywhere") return "location";
+  if (key === "maxNetPrice" && value !== null) return "price";
+  if (key === "size" && value !== "any") return "size";
+  if (key === "setting" && value !== "any") return "setting";
+  return null;
+}
+
+function criterionCanScore(
+  criterion: MatchCriterion,
+  preferences: MatchPreferences,
+) {
+  if (criterion === "major") return preferences.major !== "undecided";
+  if (criterion === "location") return preferences.region !== "anywhere";
+  if (criterion === "price") return preferences.maxNetPrice !== null;
+  if (criterion === "size") return preferences.size !== "any";
+  if (criterion === "setting") return preferences.setting !== "any";
+  return true;
+}
 
 function scoreTone(score: number) {
   if (score >= 80) return "Strong preference alignment";
@@ -106,19 +139,78 @@ export function MatchTool({
 }: MatchToolProps) {
   const [preferences, setPreferences] =
     useState<MatchPreferences>(initialPreferences);
-  const hasActiveSignal = hasActiveMatchSignal(preferences.weights);
+  const [hasStudentInput, setHasStudentInput] = useState(false);
+  const [activeCriteria, setActiveCriteria] = useState<MatchCriterion[]>([]);
+  const effectiveWeights = useMemo(
+    () => weightsForActiveCriteria(preferences.weights, activeCriteria),
+    [activeCriteria, preferences.weights],
+  );
+  const hasActiveSignal = hasActiveMatchSignal(effectiveWeights);
 
-  const results = useMemo(
-    () => hasActiveSignal ? rankMatches(colleges, preferences, 10) : [],
-    [colleges, hasActiveSignal, preferences],
+  const setCriterionActive = (criterion: MatchCriterion, active: boolean) => {
+    setActiveCriteria((current) => {
+      const isActive = current.includes(criterion);
+      if (isActive === active) return current;
+      return active
+        ? [...current, criterion]
+        : current.filter((item) => item !== criterion);
+    });
+  };
+
+  const allResults = useMemo(
+    () => hasActiveSignal
+      ? rankMatches(
+          colleges,
+          { ...preferences, weights: effectiveWeights },
+          colleges.length,
+        )
+      : [],
+    [colleges, effectiveWeights, hasActiveSignal, preferences],
+  );
+  const results = allResults.slice(0, 10);
+  const balancedShortlist = useMemo(
+    () => balancedObservedShortlist(allResults),
+    [allResults],
   );
 
-  const updatePreference = <Key extends keyof MatchPreferences>(
+  const updatePreference = <Key extends SelectPreferenceKey>(
     key: Key,
     value: MatchPreferences[Key],
-  ) => setPreferences((current) => ({ ...current, [key]: value }));
+  ) => {
+    setHasStudentInput(true);
+    const previousCriterion = key === "major"
+      ? "major"
+      : key === "region"
+        ? "location"
+        : key === "maxNetPrice"
+          ? "price"
+          : key === "size"
+            ? "size"
+            : key === "setting"
+              ? "setting"
+            : null;
+    const nextCriterion = selectedCriterion(key, value);
+
+    if (previousCriterion) {
+      setCriterionActive(
+        previousCriterion,
+        nextCriterion === previousCriterion &&
+          preferences.weights[previousCriterion] > 0,
+      );
+    }
+    setPreferences((current) =>
+      key === "major" && value === "undecided"
+        ? { ...current, major: "undecided", majorMode: "prefer" }
+        : { ...current, [key]: value },
+    );
+  };
 
   const updateWeight = (criterion: MatchCriterion, value: number) => {
+    setHasStudentInput(true);
+    setCriterionActive(
+      criterion,
+      value > 0 && criterionCanScore(criterion, preferences),
+    );
     setPreferences((current) => ({
       ...current,
       weights: { ...current.weights, [criterion]: value },
@@ -160,7 +252,7 @@ export function MatchTool({
             <span>01</span>
             <div>
               <h2 id="preferences-heading">Shape your shortlist</h2>
-              <p>Changes update the ten results immediately.</p>
+              <p>Choose a signal to begin; active changes update immediately.</p>
             </div>
           </div>
 
@@ -178,6 +270,29 @@ export function MatchTool({
               </select>
               <small>Broad bachelor&apos;s-field availability, not major admission.</small>
             </label>
+
+            {preferences.major !== "undecided" ? (
+              <label>
+                <span>Field requirement</span>
+                <select
+                  value={preferences.majorMode}
+                  onChange={(event) =>
+                    updatePreference(
+                      "majorMode",
+                      event.target.value as MatchPreferences["majorMode"],
+                    )
+                  }
+                >
+                  <option value="prefer">Prefer it, keep options open</option>
+                  <option value="require">Require broad-field evidence</option>
+                </select>
+                <small>
+                  “Require” removes colleges without the selected broad
+                  federal field indicator; it does not confirm a specific
+                  major or concentration.
+                </small>
+              </label>
+            ) : null}
 
             <label>
               <span>Location preference</span>
@@ -242,11 +357,33 @@ export function MatchTool({
                 <option value="large">Large · 25,000+</option>
               </select>
             </label>
+
+            <label>
+              <span>Campus setting</span>
+              <select
+                value={preferences.setting}
+                onChange={(event) =>
+                  updatePreference(
+                    "setting",
+                    event.target.value as MatchPreferences["setting"],
+                  )
+                }
+              >
+                <option value="any">Any setting</option>
+                <option value="City">City</option>
+                <option value="Suburb">Suburb</option>
+                <option value="Town">Town</option>
+              </select>
+            </label>
           </div>
 
           <fieldset className={styles.weights}>
-            <legend>How important is each signal?</legend>
-            <p id="weight-help">Zero removes a signal. Five gives it the most influence.</p>
+            <legend>Suggested importance</legend>
+            <p id="weight-help">
+              Preset weights are inactive. Choosing a field, location, price,
+              size, or campus setting activates that signal; tuning graduation
+              or earnings activates it. Zero always turns a signal off.
+            </p>
             {MATCH_CRITERIA.map((criterion) => (
               <label key={criterion}>
                 <span>{criterionLabels[criterion]}</span>
@@ -259,7 +396,9 @@ export function MatchTool({
                   aria-describedby="weight-help"
                   onChange={(event) => updateWeight(criterion, Number(event.target.value))}
                 />
-                <output>{preferences.weights[criterion]} / 5</output>
+                <output>
+                  {preferences.weights[criterion]} / 5 · {effectiveWeights[criterion] > 0 ? "active" : "inactive"}
+                </output>
               </label>
             ))}
           </fieldset>
@@ -271,25 +410,44 @@ export function MatchTool({
               <span>02 / live worksheet</span>
               <h2 id="match-results-heading">
                 {hasActiveSignal
-                  ? "Ten places to investigate"
-                  : "Choose what should shape your list"}
+                  ? results.length > 0
+                    ? `${results.length} ${results.length === 1 ? "place" : "places"} to investigate`
+                    : "No colleges match those constraints"
+                  : hasStudentInput
+                    ? "Choose what should shape your list"
+                    : "Start with one preference"}
               </h2>
             </div>
             <p>
               {hasActiveSignal
-                ? "Ordered only by the preferences above. Open each score to audit its evidence and effective weighting."
-                : "No colleges are ranked until at least one preference signal is active."}
+                ? results.length > 0
+                  ? "Ordered only by the preferences above. Open each score to audit its evidence and effective weighting."
+                  : "Required-field and college-type choices stay as hard constraints. Relax one constraint or activate a different preference."
+                : hasStudentInput
+                  ? "No colleges are ranked until at least one preference signal is active."
+                  : "No colleges are ranked until you change at least one preference or importance setting."}
             </p>
           </div>
 
-          {!hasActiveSignal ? (
+          {!hasStudentInput ? (
             <div className={styles.emptyState}>
               <CircleAlert size={24} aria-hidden="true" />
-              <h3>Turn on at least one signal.</h3>
+              <h3>Choose one place to begin.</h3>
               <p>
-                Move any importance slider above zero to see preference-aligned
-                colleges. Until then, there is no honest basis for an alignment
-                score or result order.
+                Select a field, location, price, size, or campus setting—or
+                adjust Graduation outcome or Earnings context. College type
+                can narrow results after a scoring signal is active.
+              </p>
+            </div>
+          ) : !hasActiveSignal ? (
+            <div className={styles.emptyState}>
+              <CircleAlert size={24} aria-hidden="true" />
+              <h3>Activate at least one scoring signal.</h3>
+              <p>
+                Choose a field, location, price, size, or campus setting, or
+                adjust Graduation outcome or Earnings context. College type
+                only narrows an active list, and a zero weight turns its signal
+                off.
               </p>
             </div>
           ) : results.length === 0 ? (
@@ -387,9 +545,16 @@ export function MatchTool({
                       <span>
                         Historical overall admit rate: {admitRate === null ? "not reported" : percent.format(admitRate)} · {result.college.admitRate.periodLabel}
                       </span>
-                      <Link href={`/colleges/${result.college.slug}`}>
-                        Inspect full record <ArrowRight size={15} aria-hidden="true" />
-                      </Link>
+                      <div className={styles.cardFooterActions}>
+                        <LocalSaveButton
+                          unitId={result.college.unitId}
+                          collegeName={result.college.name}
+                          className={styles.localSave}
+                        />
+                        <Link href={`/colleges/${result.college.slug}`}>
+                          Inspect full record <ArrowRight size={15} aria-hidden="true" />
+                        </Link>
+                      </div>
                     </div>
                   </li>
                 );
@@ -398,6 +563,60 @@ export function MatchTool({
           )}
         </section>
       </div>
+
+      {balancedShortlist.length > 0 ? (
+        <section
+          className={styles.balanceSection}
+          aria-labelledby="selectivity-mix-heading"
+        >
+          <div className={styles.balanceHeading}>
+            <div>
+              <span>03 / list check</span>
+              <h2 id="selectivity-mix-heading">Check the selectivity mix.</h2>
+            </div>
+            <p>
+              One leading preference match from each observed overall-rate
+              band. These are historical institution-wide bands—not personal
+              chances, targets, or safeties.
+            </p>
+          </div>
+          <div className={styles.balanceGrid}>
+            {balancedShortlist.map(({ band, result }) => (
+              <article key={band.key}>
+                <span>{band.label}</span>
+                <small>{band.rangeLabel}</small>
+                <div className={styles.balanceIdentity}>
+                  <CollegeLogo college={result.college} variant="suggestion" />
+                  <div>
+                    <Link href={`/colleges/${result.college.slug}`}>
+                      {result.college.name}
+                    </Link>
+                    <p>
+                      {result.score}/100 preference alignment ·{" "}
+                      {result.college.city}, {result.college.state}
+                    </p>
+                  </div>
+                </div>
+                <footer>
+                  <span>
+                    Overall rate:{" "}
+                    {result.college.admitRate.value === null
+                      ? "not reported"
+                      : percent.format(result.college.admitRate.value)}
+                    {" · "}
+                    {result.college.admitRate.periodLabel}
+                  </span>
+                  <LocalSaveButton
+                    unitId={result.college.unitId}
+                    collegeName={result.college.name}
+                    className={styles.localSave}
+                  />
+                </footer>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <aside className={styles.guardrail}>
         <CircleAlert size={21} aria-hidden="true" />

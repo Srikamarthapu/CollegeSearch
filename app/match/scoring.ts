@@ -3,6 +3,7 @@ export const MATCH_CRITERIA = [
   "location",
   "price",
   "size",
+  "setting",
   "graduation",
   "earnings",
 ] as const;
@@ -41,10 +42,12 @@ export type MatchWeights = Record<MatchCriterion, number>;
 
 export type MatchPreferences = {
   major: string;
+  majorMode: "prefer" | "require";
   region: string;
   ownership: string;
   maxNetPrice: number | null;
   size: string;
+  setting: "any" | "City" | "Suburb" | "Town";
   weights: MatchWeights;
 };
 
@@ -64,8 +67,81 @@ export type MatchResult = {
   usedWeight: number;
 };
 
+export const OBSERVED_SELECTIVITY_BANDS = [
+  {
+    key: "very-low",
+    label: "Very low observed overall rate",
+    rangeLabel: "10% or lower",
+  },
+  {
+    key: "low",
+    label: "Low observed overall rate",
+    rangeLabel: "Above 10% through 25%",
+  },
+  {
+    key: "moderate",
+    label: "Moderate observed overall rate",
+    rangeLabel: "Above 25% through 50%",
+  },
+  {
+    key: "broad",
+    label: "Broad observed overall rate",
+    rangeLabel: "Above 50%",
+  },
+  {
+    key: "unavailable",
+    label: "Overall rate not reported",
+    rangeLabel: "No comparable value in this release",
+  },
+] as const;
+
+export type ObservedSelectivityBand =
+  (typeof OBSERVED_SELECTIVITY_BANDS)[number]["key"];
+
+export function observedSelectivityBand(
+  rate: number | null,
+): ObservedSelectivityBand {
+  if (rate === null) return "unavailable";
+  if (rate <= 0.1) return "very-low";
+  if (rate <= 0.25) return "low";
+  if (rate <= 0.5) return "moderate";
+  return "broad";
+}
+
+/**
+ * Keeps the highest preference-alignment result in each descriptive overall
+ * admit-rate band. The band never changes the fit score or ranking.
+ */
+export function balancedObservedShortlist(results: MatchResult[]) {
+  const firstByBand = new Map<ObservedSelectivityBand, MatchResult>();
+
+  for (const result of results) {
+    if (result.score <= 0) continue;
+    const band = observedSelectivityBand(result.college.admitRate.value);
+    if (!firstByBand.has(band)) firstByBand.set(band, result);
+  }
+
+  return OBSERVED_SELECTIVITY_BANDS.flatMap((band) => {
+    const result = firstByBand.get(band.key);
+    return result ? [{ band, result }] : [];
+  });
+}
+
 export function hasActiveMatchSignal(weights: MatchWeights) {
   return MATCH_CRITERIA.some((criterion) => weights[criterion] > 0);
+}
+
+export function weightsForActiveCriteria(
+  weights: MatchWeights,
+  activeCriteria: Iterable<MatchCriterion>,
+): MatchWeights {
+  const active = new Set(activeCriteria);
+  return Object.fromEntries(
+    MATCH_CRITERIA.map((criterion) => [
+      criterion,
+      active.has(criterion) ? weights[criterion] : 0,
+    ]),
+  ) as MatchWeights;
 }
 
 const regionStates: Record<string, Set<string>> = {
@@ -229,6 +305,24 @@ export function scoreCollege(
     }
   }
 
+  if (
+    preferences.setting !== "any" &&
+    preferences.weights.setting > 0
+  ) {
+    const matches = college.setting === preferences.setting;
+    components.push(
+      activeComponent(
+        "setting",
+        "Campus setting",
+        preferences.weights.setting,
+        matches ? 1 : 0,
+        matches
+          ? `${college.name} is classified as a ${preferences.setting.toLowerCase()} campus.`
+          : `${college.name} is classified as ${college.setting.toLowerCase()}, not ${preferences.setting.toLowerCase()}.`,
+      ),
+    );
+  }
+
   if (preferences.weights.graduation > 0) {
     const graduationRate = college.graduationRate.value;
     components.push(
@@ -301,8 +395,11 @@ export function rankMatches(
   return colleges
     .filter(
       (college) =>
-        preferences.ownership === "any" ||
-        college.ownership === preferences.ownership,
+        (preferences.ownership === "any" ||
+          college.ownership === preferences.ownership) &&
+        (preferences.majorMode !== "require" ||
+          preferences.major === "undecided" ||
+          college.majors.some((major) => major.name === preferences.major)),
     )
     .map((college) => scoreCollege(college, preferences, bounds))
     .sort(

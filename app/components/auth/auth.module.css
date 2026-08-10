@@ -38,8 +38,8 @@
   top: 18px;
   right: 18px;
   display: grid;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   place-items: center;
   border: 1px solid var(--line);
   border-radius: 50%;
@@ -61,7 +61,7 @@
 .accountKicker {
   color: var(--forest-raised);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 690;
   letter-spacing: 0.13em;
   text-transform: uppercase;
@@ -185,8 +185,8 @@
 
 .revealButton {
   display: grid;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   place-items: center;
   border: 0;
   border-radius: 4px;
@@ -396,7 +396,7 @@
 
 .accountPopover button {
   display: inline-flex;
-  min-height: 42px;
+  min-height: 44px;
   align-items: center;
   justify-content: center;
   margin-top: 13px;

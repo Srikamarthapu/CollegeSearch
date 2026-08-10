@@ -66,7 +66,7 @@
 .statusLabel {
   color: var(--oxblood);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -240,7 +240,7 @@
   padding-top: 5px;
   color: var(--oxblood);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 720;
 }
 
@@ -265,7 +265,7 @@
 
 .fieldCardBody > span {
   color: var(--ink-faint);
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .emptyState {
@@ -470,7 +470,7 @@
 
 .collegeCard header > div > span {
   color: var(--oxblood);
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .collegeCard h3 {
@@ -552,7 +552,7 @@
   border-radius: 99px;
   background: var(--forest-pale);
   color: var(--forest);
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .cardEvidence > p {
@@ -576,7 +576,7 @@
 .cardEvidence dt {
   color: var(--ink-faint);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -591,7 +591,7 @@
 
 .cardEvidence code {
   font-family: var(--font-geist-mono), monospace;
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .cardEvidence a {
@@ -615,7 +615,7 @@
 
 .collegeCard > footer a {
   display: inline-flex;
-  min-height: 40px;
+  min-height: 44px;
   align-items: center;
   gap: 6px;
   color: var(--forest);
@@ -672,7 +672,7 @@
 .missingSection li > span {
   color: var(--oxblood);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   grid-row: 1 / 3;
   letter-spacing: 0.07em;

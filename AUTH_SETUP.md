@@ -37,6 +37,13 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_YOUR_KEY
 Add them to `.env.local` for local development and to the hosting provider's
 environment settings for production. Restart the app after adding them.
 
+`NEXT_PUBLIC_SUPABASE_URL` must be an origin-only HTTPS URL, such as the value
+shown above. A path, credentials, query string, fragment, or public HTTP URL
+causes the production build to fail closed. Plain HTTP is accepted only for
+`localhost`, `127.0.0.1`, or `[::1]` when using a local Supabase stack. The
+origin is the only Supabase value copied into the browser Content Security
+Policy; the publishable key is never placed in a response header.
+
 These are the only browser-side keys this auth system needs. Do **not** add a
 `service_role` key, a secret API key, or the Google client secret to a
 `NEXT_PUBLIC_*` variable. This login foundation does not require a service-role
@@ -135,9 +142,18 @@ server-verified session observation, account display, and sign out.
 
 The root `proxy.ts` is already included. It refreshes cookie sessions and
 forwards Supabase’s required private/no-store response headers before pages
-render. The app remains usable when the two public environment variables are
-missing; the sign-in dialog shows a student-facing availability message instead
-of exposing implementation details or crashing the build.
+render. The same proxy creates a fresh CSP nonce for each document request.
+Vinext applies that nonce to its inline hydration scripts and generated font
+styles, while `connect-src` permits only the CollegeSearch origin and the exact
+validated Supabase project origin. Compiled `/assets/` files and static images
+skip auth refresh work. The app remains usable when the two public environment
+variables are missing; the sign-in dialog shows a student-facing availability
+message instead of exposing implementation details or crashing the build.
+
+Nonce-backed documents are intentionally dynamic and must not be cached at a
+CDN. Supabase already supplies private/no-store response headers when it rotates
+a session; verify that the final hosting/CDN configuration honors them and does
+not cache any response containing `Set-Cookie`.
 
 ## 7. Verify before launch
 
@@ -151,6 +167,16 @@ Run this matrix on both local and production origins:
 5. Refresh and directly open a second page; the session should persist.
 6. Sign out and verify the authenticated UI disappears on refresh.
 7. Check the browser console and Supabase Auth logs for errors.
+8. Inspect two fresh document responses. Each must have a different nonce in
+   `Content-Security-Policy`, and every inline `script` and `style` must carry
+   the matching nonce. Confirm there are no CSP violations during sign-up,
+   Google sign-in, recovery, navigation, or Lenis/Motion interactions.
+
+CollegeSearch deliberately keeps `'self'` in `script-src` instead of enabling
+`'strict-dynamic'`. Vinext's trusted bootstrap receives the nonce, but React 19
+currently emits additional same-origin `modulepreload` hints without one.
+Allowing only same-origin module files preserves those performance hints while
+still blocking every unnonced inline script and every cross-origin script.
 
 Do not use `user_metadata` for permissions or database authorization. It is
 user-editable and is used here only to display the person’s name. Any future

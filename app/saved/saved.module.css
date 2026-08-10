@@ -127,7 +127,7 @@
 }
 
 .collectionHeader span {
-  color: var(--ochre);
+  color: var(--ochre-ink);
   font-family: var(--font-geist-mono), monospace;
   font-size: 11px;
 }
@@ -241,7 +241,7 @@
 
 .actions button {
   display: inline-flex;
-  min-height: 42px;
+  min-height: 44px;
   align-items: center;
   justify-content: center;
   border: 1px solid var(--line);

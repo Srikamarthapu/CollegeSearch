@@ -30,7 +30,7 @@
 .eyebrow {
   color: var(--forest-raised);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.13em;
   text-transform: uppercase;
@@ -91,8 +91,8 @@
 
 .passwordInput button {
   display: grid;
-  width: 39px;
-  height: 39px;
+  width: 44px;
+  height: 44px;
   margin-right: 5px;
   place-items: center;
   border: 0;

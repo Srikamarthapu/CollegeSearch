@@ -14,48 +14,95 @@ import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import {
+  readSavedCollegeIds,
+  subscribeToSavedCollegeChanges,
+} from "@/app/lib/local-saves";
 import { AuthAccountControl } from "./auth/AuthAccountControl";
 
 const navigation = [
   { href: "/explore", label: "Explore", icon: Search },
   { href: "/majors", label: "Fields", icon: GraduationCap },
   { href: "/match", label: "Match", icon: Sparkles },
-  { href: "/chances", label: "Chances", icon: Gauge },
+  { href: "/chances", label: "Admit-rate context", icon: Gauge },
   { href: "/saved", label: "Saved", icon: Bookmark },
 ];
 
-export function SiteHeader({ savedCount = 0 }: { savedCount?: number }) {
+export function SiteHeader({ savedCount }: { savedCount?: number }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [browserSavedCount, setBrowserSavedCount] = useState(0);
   const pathname = usePathname();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
-  const mobileNavigationRef = useRef<HTMLElement>(null);
+  const mobileNavigationRef = useRef<HTMLDivElement>(null);
+  const displayedSavedCount = savedCount ?? browserSavedCount;
+
+  const closeMenuAndRestoreFocus = () => {
+    setMenuOpen(false);
+    // The opener sits inside an inert header surface while the dialog is open.
+    // Restore focus on the next frame, after the effect cleanup removes inert.
+    window.requestAnimationFrame(() => menuButtonRef.current?.focus());
+  };
+
+  useEffect(() => {
+    if (savedCount !== undefined) return;
+
+    let cancelled = false;
+    const syncSavedCount = () => {
+      const result = readSavedCollegeIds();
+      if (!cancelled) setBrowserSavedCount(result.ids.length);
+    };
+
+    queueMicrotask(syncSavedCount);
+    const unsubscribe = subscribeToSavedCollegeChanges(syncSavedCount);
+
+    return () => {
+      cancelled = true;
+      unsubscribe();
+    };
+  }, [savedCount]);
 
   useEffect(() => {
     if (!menuOpen) return;
 
     const menuButton = menuButtonRef.current;
     const mobileNavigation = mobileNavigationRef.current;
+    const backgroundSurfaces = Array.from(
+      document.querySelectorAll<HTMLElement>(
+        ".site-header > .brand, .site-header > .header-actions, main, footer",
+      ),
+    );
+    const priorInertState = backgroundSurfaces.map(
+      (surface) => surface.inert,
+    );
+    const priorBodyOverflow = document.body.style.overflow;
+    backgroundSurfaces.forEach((surface) => {
+      surface.inert = true;
+    });
+    document.body.style.overflow = "hidden";
 
-    menuButton?.focus();
+    const focusableSelector =
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const focusFirstControl = window.requestAnimationFrame(() => {
+      mobileNavigation
+        ?.querySelector<HTMLElement>(focusableSelector)
+        ?.focus();
+    });
 
     const handleMenuKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
         setMenuOpen(false);
-        menuButton?.focus();
+        window.requestAnimationFrame(() => menuButton?.focus());
         return;
       }
 
       if (event.key !== "Tab") return;
 
       const navigationControls = Array.from(
-        mobileNavigation?.querySelectorAll<HTMLElement>(
-          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
-        ) ?? [],
+        mobileNavigation?.querySelectorAll<HTMLElement>(focusableSelector) ??
+          [],
       );
-      const focusableControls = menuButton
-        ? [menuButton, ...navigationControls]
-        : navigationControls;
+      const focusableControls = navigationControls;
 
       if (focusableControls.length === 0) return;
 
@@ -82,7 +129,14 @@ export function SiteHeader({ savedCount = 0 }: { savedCount?: number }) {
     };
 
     document.addEventListener("keydown", handleMenuKeyDown);
-    return () => document.removeEventListener("keydown", handleMenuKeyDown);
+    return () => {
+      window.cancelAnimationFrame(focusFirstControl);
+      document.removeEventListener("keydown", handleMenuKeyDown);
+      backgroundSurfaces.forEach((surface, index) => {
+        surface.inert = priorInertState[index];
+      });
+      document.body.style.overflow = priorBodyOverflow;
+    };
   }, [menuOpen]);
 
   return (
@@ -112,8 +166,8 @@ export function SiteHeader({ savedCount = 0 }: { savedCount?: number }) {
               >
                 <Icon size={15} aria-hidden="true" />
                 {label}
-                {label === "Saved" && savedCount > 0 ? (
-                  <span className="nav-count">{savedCount}</span>
+                {label === "Saved" && displayedSavedCount > 0 ? (
+                  <span className="nav-count">{displayedSavedCount}</span>
                 ) : null}
               </Link>
             );
@@ -142,44 +196,55 @@ export function SiteHeader({ savedCount = 0 }: { savedCount?: number }) {
               className="mobile-nav-scrim"
               type="button"
               tabIndex={-1}
-              aria-label="Close navigation"
+              aria-hidden="true"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => {
-                setMenuOpen(false);
-                menuButtonRef.current?.focus();
-              }}
+              onClick={closeMenuAndRestoreFocus}
             />
-            <motion.nav
+            <motion.div
               ref={mobileNavigationRef}
               id="mobile-navigation"
               className="mobile-nav"
-              aria-label="Mobile navigation"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Site navigation"
               initial={{ opacity: 0, y: -8, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -6, scale: 0.985 }}
             >
-              <span className="nav-kicker">Navigate</span>
-              {navigation.map(({ href, label, icon: Icon }) => (
-                <Link
-                  href={href}
-                  key={href}
-                  aria-current={
-                    href === pathname || pathname.startsWith(`${href}/`)
-                      ? "page"
-                      : undefined
-                  }
-                  onClick={() => setMenuOpen(false)}
+              <div className="mobile-nav-heading">
+                <span className="nav-kicker">Navigate</span>
+                <button
+                  className="mobile-nav-close"
+                  type="button"
+                  aria-label="Close navigation"
+                  onClick={closeMenuAndRestoreFocus}
                 >
-                  <Icon size={18} aria-hidden="true" />
-                  <span>{label}</span>
-                  {label === "Saved" ? (
-                    <small>{savedCount} on this device</small>
-                  ) : null}
-                </Link>
-              ))}
-            </motion.nav>
+                  <X size={19} aria-hidden="true" />
+                </button>
+              </div>
+              <nav aria-label="Mobile navigation">
+                {navigation.map(({ href, label, icon: Icon }) => (
+                  <Link
+                    href={href}
+                    key={href}
+                    aria-current={
+                      href === pathname || pathname.startsWith(`${href}/`)
+                        ? "page"
+                        : undefined
+                    }
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <Icon size={18} aria-hidden="true" />
+                    <span>{label}</span>
+                    {label === "Saved" ? (
+                      <small>{displayedSavedCount} saved on this device</small>
+                    ) : null}
+                  </Link>
+                ))}
+              </nav>
+            </motion.div>
           </>
         ) : null}
       </AnimatePresence>

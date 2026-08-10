@@ -16,7 +16,14 @@ export type ClientMajorEvidence = Pick<
 
 export type ClientCollege = Pick<
   College,
-  "unitId" | "slug" | "name" | "aliases" | "city" | "state" | "ownership"
+  | "unitId"
+  | "slug"
+  | "name"
+  | "aliases"
+  | "city"
+  | "state"
+  | "ownership"
+  | "setting"
 > & {
   observations: {
     admitRate: ClientObservation;
@@ -24,6 +31,7 @@ export type ClientCollege = Pick<
     graduationRate: ClientObservation;
     undergraduateEnrollment: ClientObservation;
     medianEarnings: ClientObservation;
+    tuitionOutOfState: ClientObservation;
   };
   majors: ClientMajorEvidence[];
 };
@@ -61,6 +69,7 @@ export function projectCollegeForClient(college: College): ClientCollege {
     city: college.city,
     state: college.state,
     ownership: college.ownership,
+    setting: college.setting,
     observations: {
       admitRate: projectObservation(college.observations.admitRate),
       averageNetPrice: projectObservation(
@@ -72,6 +81,9 @@ export function projectCollegeForClient(college: College): ClientCollege {
       ),
       medianEarnings: projectObservation(
         college.observations.medianEarnings,
+      ),
+      tuitionOutOfState: projectObservation(
+        college.observations.tuitionOutOfState,
       ),
     },
     majors: college.majors.map(({ name, share }) => ({ name, share })),

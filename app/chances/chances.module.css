@@ -46,7 +46,7 @@
 .nextStep > div:first-child > span {
   color: var(--oxblood);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 730;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -140,7 +140,7 @@
 .sectionHeading p {
   margin: 2px 0 0;
   color: #bed0c9;
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .addControls {
@@ -161,7 +161,7 @@
   align-items: center;
   gap: 6px;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 720;
 }
 
@@ -223,14 +223,14 @@
   border-radius: 99px;
   background: var(--forest-pale);
   color: var(--forest);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 690;
 }
 
 .selectedChips button {
   display: grid;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   place-items: center;
   border: 0;
   border-radius: 50%;
@@ -342,7 +342,7 @@
 
 .contextCard > header span {
   color: var(--ink-faint);
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .rateBlock {
@@ -362,7 +362,7 @@
 .evidenceGrid dt {
   color: var(--ink-faint);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 720;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -383,7 +383,7 @@
   border-radius: 2px;
   background: var(--forest-pale);
   color: var(--forest);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 730;
   text-align: center;
 }
@@ -430,7 +430,7 @@
 
 .evidenceGrid small {
   color: var(--ink-faint);
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .definition {
@@ -444,14 +444,14 @@
   align-items: center;
   color: var(--forest);
   cursor: pointer;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 720;
 }
 
 .definition p {
   margin: 0 17px 10px;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1.5;
 }
 
@@ -461,7 +461,7 @@
   align-items: center;
   gap: 6px;
   color: var(--forest);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 720;
 }
 
@@ -472,23 +472,45 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cardActions {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .contextCard > footer a,
 .contextCard > footer button {
   display: inline-flex;
-  min-height: 34px;
+  min-height: 44px;
   align-items: center;
   gap: 6px;
   border: 0;
   background: transparent;
   color: var(--forest);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 720;
 }
 
 .contextCard > footer button {
   color: var(--ink-faint);
+}
+
+.contextCard > footer .localSave {
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  color: var(--forest);
+}
+
+.contextCard > footer .localSave[aria-pressed="true"] {
+  border-color: #a06b70;
+  background: var(--oxblood-pale);
+  color: var(--oxblood);
 }
 
 .nextStep {

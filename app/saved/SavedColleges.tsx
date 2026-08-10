@@ -19,30 +19,12 @@ import {
   observationSourceKind,
   type ClientCollege,
 } from "@/app/lib/college-client-record";
+import {
+  readSavedCollegeIds,
+  subscribeToSavedCollegeChanges,
+  writeSavedCollegeIds,
+} from "@/app/lib/local-saves";
 import styles from "./saved.module.css";
-
-const storageKeys = ["college-search-saved", "college-compass-saved"];
-
-function readSavedIds(knownIds: Set<number>) {
-  for (const key of storageKeys) {
-    const value = window.localStorage.getItem(key);
-    if (!value) continue;
-    try {
-      const parsed: unknown = JSON.parse(value);
-      if (!Array.isArray(parsed)) continue;
-      return Array.from(
-        new Set(
-          parsed
-            .filter(Number.isInteger)
-            .filter((unitId): unitId is number => knownIds.has(unitId as number)),
-        ),
-      );
-    } catch {
-      window.localStorage.removeItem(key);
-    }
-  }
-  return [];
-}
 
 export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
   const [savedIds, setSavedIds] = useState<number[] | null>(null);
@@ -55,17 +37,22 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
 
   useEffect(() => {
     let cancelled = false;
-    queueMicrotask(() => {
+    const syncFromStorage = () => {
+      const result = readSavedCollegeIds(knownIds);
       if (cancelled) return;
-      try {
-        setSavedIds(readSavedIds(knownIds));
-      } catch {
-        setSavedIds([]);
-        setStorageUnavailable(true);
-      }
-    });
+      setSavedIds(result.ids);
+      setStorageUnavailable(!result.storageAvailable);
+    };
+
+    queueMicrotask(syncFromStorage);
+    const unsubscribe = subscribeToSavedCollegeChanges(
+      syncFromStorage,
+      knownIds,
+    );
+
     return () => {
       cancelled = true;
+      unsubscribe();
     };
   }, [knownIds]);
 
@@ -78,14 +65,14 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
   );
 
   function persist(next: number[]) {
-    setSavedIds(next);
-    setSelected((current) => current.filter((unitId) => next.includes(unitId)));
-    try {
-      window.localStorage.setItem("college-search-saved", JSON.stringify(next));
-      window.localStorage.removeItem("college-compass-saved");
-    } catch {
-      setStorageUnavailable(true);
-    }
+    const result = writeSavedCollegeIds(next, knownIds);
+    setStorageUnavailable(!result.storageAvailable);
+    if (!result.persisted) return;
+
+    setSavedIds(result.ids);
+    setSelected((current) =>
+      current.filter((unitId) => result.ids.includes(unitId)),
+    );
   }
 
   function toggleComparison(unitId: number) {

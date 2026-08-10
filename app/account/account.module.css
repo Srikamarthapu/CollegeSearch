@@ -13,7 +13,7 @@
 .eyebrow {
   color: var(--oxblood);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 720;
   letter-spacing: 0.13em;
   text-transform: uppercase;
@@ -103,7 +103,7 @@
 .identity small {
   color: var(--forest-raised);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -117,7 +117,7 @@
   margin: 0;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .details > div {
@@ -132,7 +132,7 @@
 
 .details dt {
   color: var(--ink-faint);
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .details dd {
@@ -140,7 +140,7 @@
   overflow-wrap: anywhere;
   color: var(--ink);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .actions {

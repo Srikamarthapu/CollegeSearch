@@ -39,7 +39,13 @@ const HASH_MODES = new Set([
   "raw",
   "html-without-volatile-assets-and-edge-challenge",
 ]);
-const ARTIFACT_KINDS = new Set(["html", "pdf"]);
+const ARTIFACT_KINDS = new Set(["html", "pdf", "xlsx"]);
+const DERIVED_CONTEXT_FIELDS = [
+  "reportingYear",
+  "periodLabel",
+  "cohort",
+  "finality",
+];
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -111,6 +117,121 @@ function assertObservation(metric, observation, unitId) {
 
 function almostEqual(left, right) {
   return Math.abs(left - right) <= 1e-12;
+}
+
+export function resolveInstitutionOverlayObservationSourceId(
+  college,
+  observation,
+) {
+  return observation.sourceId ?? college.sourceId;
+}
+
+function assertCollegeSourceDeclaration(college, sourcesById) {
+  assert(
+    isNonEmptyString(college.sourceId),
+    `UNITID ${college.unitId} needs a default sourceId.`,
+  );
+  assert(
+    sourcesById.has(college.sourceId),
+    `UNITID ${college.unitId} references unknown source ${college.sourceId}.`,
+  );
+
+  if (college.sourceIds === undefined) {
+    return {
+      declaredSourceIds: new Set([college.sourceId]),
+      requiresMetricSourceIds: false,
+    };
+  }
+
+  assert(
+    Array.isArray(college.sourceIds),
+    `UNITID ${college.unitId} sourceIds must be an array.`,
+  );
+  assert(
+    college.sourceIds.length >= 2,
+    `UNITID ${college.unitId} sourceIds must declare at least two sources; omit sourceIds for a single-source overlay.`,
+  );
+
+  const declaredSourceIds = new Set();
+  for (const sourceId of college.sourceIds) {
+    assert(
+      isNonEmptyString(sourceId),
+      `UNITID ${college.unitId} sourceIds contains an invalid source id.`,
+    );
+    assert(
+      !declaredSourceIds.has(sourceId),
+      `UNITID ${college.unitId} sourceIds contains duplicate source ${sourceId}.`,
+    );
+    assert(
+      sourcesById.has(sourceId),
+      `UNITID ${college.unitId} sourceIds references unknown source ${sourceId}.`,
+    );
+    declaredSourceIds.add(sourceId);
+  }
+  assert(
+    declaredSourceIds.has(college.sourceId),
+    `UNITID ${college.unitId} sourceIds must include default sourceId ${college.sourceId}.`,
+  );
+  for (const sourceId of declaredSourceIds) {
+    const source = sourcesById.get(sourceId);
+    assert(
+      isNonEmptyString(source.artifactUrl) && source.review?.status === "approved",
+      `UNITID ${college.unitId} multi-source overlay requires a refresh-verifiable, approved artifact for source ${sourceId}.`,
+    );
+  }
+
+  return { declaredSourceIds, requiresMetricSourceIds: true };
+}
+
+function assertObservationLineage({
+  college,
+  metric,
+  observation,
+  declaredSourceIds,
+  requiresMetricSourceIds,
+}) {
+  if (requiresMetricSourceIds) {
+    assert(
+      isNonEmptyString(observation.sourceId),
+      `UNITID ${college.unitId} ${metric} needs an explicit sourceId in a multi-source overlay.`,
+    );
+  }
+
+  const sourceId = resolveInstitutionOverlayObservationSourceId(
+    college,
+    observation,
+  );
+  assert(
+    declaredSourceIds.has(sourceId),
+    requiresMetricSourceIds
+      ? `UNITID ${college.unitId} ${metric} sourceId ${sourceId} is not declared in college sourceIds.`
+      : `UNITID ${college.unitId} ${metric} sourceId must match college sourceId ${college.sourceId}.`,
+  );
+  return sourceId;
+}
+
+function assertSharedDerivedContext(college, relationship, observations) {
+  const [referenceMetric, referenceObservation] = observations[0];
+  for (const field of DERIVED_CONTEXT_FIELDS) {
+    for (const [metric, observation] of observations.slice(1)) {
+      assert(
+        observation[field] === referenceObservation[field],
+        `UNITID ${college.unitId} ${relationship} must share ${field}; ${metric} does not match ${referenceMetric}.`,
+      );
+    }
+  }
+
+  const referenceSourceId = resolveInstitutionOverlayObservationSourceId(
+    college,
+    referenceObservation,
+  );
+  for (const [metric, observation] of observations.slice(1)) {
+    assert(
+      resolveInstitutionOverlayObservationSourceId(college, observation) ===
+        referenceSourceId,
+      `UNITID ${college.unitId} ${relationship} must share sourceId; ${metric} does not match ${referenceMetric}.`,
+    );
+  }
 }
 
 export function validateInstitutionOverlays(dataset) {
@@ -210,15 +331,16 @@ export function validateInstitutionOverlays(dataset) {
   }
 
   const unitIds = new Set();
+  const sourceIdsInUse = new Set();
   let observationCount = 0;
+  let multiSourceCollegeCount = 0;
   for (const college of dataset.colleges) {
     assert(Number.isInteger(college.unitId), "Every overlay college needs an integer unitId.");
     assert(!unitIds.has(college.unitId), `Duplicate overlay UNITID ${college.unitId}.`);
     unitIds.add(college.unitId);
-    assert(
-      sourcesById.has(college.sourceId),
-      `UNITID ${college.unitId} references unknown source ${college.sourceId}.`,
-    );
+    const { declaredSourceIds, requiresMetricSourceIds } =
+      assertCollegeSourceDeclaration(college, sourcesById);
+    if (requiresMetricSourceIds) multiSourceCollegeCount += 1;
     assert(
       college.observations && typeof college.observations === "object",
       `UNITID ${college.unitId} needs observations.`,
@@ -231,10 +353,43 @@ export function validateInstitutionOverlays(dataset) {
     for (const [metric, observation] of Object.entries(college.observations)) {
       assert(ALLOWED_METRICS.has(metric), `UNITID ${college.unitId} has unsupported metric ${metric}.`);
       assertObservation(metric, observation, college.unitId);
+      sourceIdsInUse.add(
+        assertObservationLineage({
+          college,
+          metric,
+          observation,
+          declaredSourceIds,
+          requiresMetricSourceIds,
+        }),
+      );
       observationCount += 1;
     }
 
+    for (const sourceId of declaredSourceIds) {
+      const usedByCollege = Object.values(college.observations).some(
+        (observation) =>
+          resolveInstitutionOverlayObservationSourceId(college, observation) ===
+          sourceId,
+      );
+      assert(
+        usedByCollege,
+        `UNITID ${college.unitId} declares unused source ${sourceId}.`,
+      );
+    }
+
     const { applicants, admits, enrollees, admitRate, yieldRate } = college.observations;
+    if (admitRate?.status === "derived") {
+      assert(
+        applicants && admits,
+        `UNITID ${college.unitId} derived admitRate requires applicants and admits.`,
+      );
+    }
+    if (yieldRate?.status === "derived") {
+      assert(
+        admits && enrollees,
+        `UNITID ${college.unitId} derived yieldRate requires admits and enrollees.`,
+      );
+    }
     if (applicants && admits) {
       assert(
         applicants.value >= admits.value,
@@ -254,6 +409,11 @@ export function validateInstitutionOverlays(dataset) {
       );
     }
     if (applicants && admits && admitRate) {
+      assertSharedDerivedContext(college, "admit-rate inputs", [
+        ["applicants", applicants],
+        ["admits", admits],
+        ["admitRate", admitRate],
+      ]);
       assert(
         almostEqual(admitRate.value, admits.value / applicants.value),
         `UNITID ${college.unitId} admitRate does not equal admits / applicants.`,
@@ -261,6 +421,11 @@ export function validateInstitutionOverlays(dataset) {
       assert(admitRate.status === "derived", `UNITID ${college.unitId} admitRate must be derived.`);
     }
     if (admits && enrollees && yieldRate) {
+      assertSharedDerivedContext(college, "yield-rate inputs", [
+        ["admits", admits],
+        ["enrollees", enrollees],
+        ["yieldRate", yieldRate],
+      ]);
       assert(
         almostEqual(yieldRate.value, enrollees.value / admits.value),
         `UNITID ${college.unitId} yieldRate does not equal enrollees / admits.`,
@@ -269,7 +434,6 @@ export function validateInstitutionOverlays(dataset) {
     }
   }
 
-  const sourceIdsInUse = new Set(dataset.colleges.map((college) => college.sourceId));
   for (const sourceId of sourcesById.keys()) {
     assert(sourceIdsInUse.has(sourceId), `Overlay source ${sourceId} is not used by any college.`);
   }
@@ -279,6 +443,7 @@ export function validateInstitutionOverlays(dataset) {
     collegeCount: dataset.colleges.length,
     observationCount,
     artifactCount: dataset.sources.filter((source) => source.artifactUrl).length,
+    multiSourceCollegeCount,
   };
 }
 

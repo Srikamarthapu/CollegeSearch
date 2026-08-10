@@ -49,7 +49,7 @@
 }
 
 .sectionHeading > span {
-  color: var(--ochre);
+  color: var(--ochre-ink);
   font-family: var(--font-geist-mono), monospace;
   font-size: 11px;
 }
@@ -159,7 +159,7 @@
 .releaseList a,
 .caveat a {
   display: inline-flex;
-  min-height: 42px;
+  min-height: 44px;
   align-items: center;
   justify-content: center;
   gap: 7px;
