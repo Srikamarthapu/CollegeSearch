@@ -273,6 +273,21 @@ a {
   font-size: 11px;
 }
 
+.nav-sync-state {
+  display: inline-grid;
+  width: 20px;
+  height: 20px;
+  place-items: center;
+}
+
+.nav-sync-state.is-pending {
+  color: var(--ochre-ink);
+}
+
+.nav-sync-state.is-error {
+  color: var(--oxblood);
+}
+
 .menu-button {
   display: none;
   width: 44px;

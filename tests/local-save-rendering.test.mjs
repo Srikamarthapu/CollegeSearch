@@ -51,14 +51,54 @@ test("match results offer local saves once preferences produce a shortlist", asy
   assert.match(source, /collegeName=\{result\.college\.name\}/);
 });
 
-test("the saved shelf keeps its rendered state when browser persistence fails", async () => {
+test("account saves are rendered immediately but never sent before the outbox persists", async () => {
   const source = await readFile(
-    new URL("../app/saved/SavedColleges.tsx", import.meta.url),
+    new URL("../app/components/saved/SavedCollegesProvider.tsx", import.meta.url),
     "utf8",
   );
 
   assert.match(
     source,
-    /const result = writeSavedCollegeIds\(next, knownIds\);[\s\S]*if \(!result\.persisted\) return;[\s\S]*setSavedIds\(result\.ids\)/,
+    /viewState\.scopeKind === "account"[\s\S]*!session \|\| !sessionIsCurrent\(session\)[\s\S]*return;[\s\S]*publishIds\(nextIds\);[\s\S]*const pendingWrite = persistMutations\(\s*session\.userId,\s*changed,\s*session\.storage,\s*\);[\s\S]*if \(!pendingWrite\.persisted\)[\s\S]*return;[\s\S]*void flushSession\(session\)/,
+  );
+});
+
+test("the provider delegates each locked account cycle to the tested sync primitive", async () => {
+  const source = await readFile(
+    new URL("../app/components/saved/SavedCollegesProvider.tsx", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(source, /await syncSavedCollegeAccountCycle\(\{/);
+  assert.match(source, /lockManager: session\.lockManager/);
+  assert.match(source, /storage: session\.storage/);
+  assert.match(source, /remote: guardedRemote/);
+  for (const operation of ["listOwned", "removeOwned", "upsertOwned"]) {
+    assert.match(
+      source,
+      new RegExp(
+        `async ${operation}\\([^)]*\\) \\{[\\s\\S]*?if \\(!sessionIsCurrent\\(session\\)\\) throw new Error\\("Stale account scope\\."\\);[\\s\\S]*?await session\\.remote\\.${operation}\\([^;]*\\);[\\s\\S]*?if \\(!sessionIsCurrent\\(session\\)\\) throw new Error\\("Stale account scope\\."\\);`,
+      ),
+    );
+  }
+  assert.doesNotMatch(source, /new SavedCollegeMutationQueue/);
+  assert.doesNotMatch(source, /withSavedCollegeAccountLock/);
+  assert.doesNotMatch(source, /clearSavedCollegeMutationIfSatisfied/);
+});
+
+test("guest save updates use the canonical writer that removes the legacy key", async () => {
+  const source = await readFile(
+    new URL("../app/components/saved/SavedCollegesProvider.tsx", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(source, /writeSavedCollegeIds\(\s*nextIds,\s*knownIds,/);
+  assert.match(
+    source,
+    /writeSavedCollegeIds\(\s*remainingGuestIds,\s*knownIds,\s*session\.storage,/,
+  );
+  assert.doesNotMatch(
+    source,
+    /writeSavedCollegeIdsAtKey\(\s*SAVED_COLLEGES_STORAGE_KEY/,
   );
 });

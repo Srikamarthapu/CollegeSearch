@@ -30,9 +30,9 @@ export default function PrivacyPage() {
             <h1>Your college list is yours.</h1>
           </div>
           <p>
-            CollegeSearch is currently a research prototype. It stores saved
-            colleges in your browser and does not yet sync lists or student
-            academic profiles to a CollegeSearch database.
+            CollegeSearch keeps browser-only saves separate from account data.
+            When account services are configured and you sign in, new account
+            saves can sync; existing browser saves require an explicit import.
           </p>
         </header>
 
@@ -47,11 +47,12 @@ export default function PrivacyPage() {
             <li>
               <span><HardDrive size={19} aria-hidden="true" /></span>
               <div>
-                <strong>Saved colleges stay on this device.</strong>
+                <strong>Browser-only saves stay separate.</strong>
                 <p>
                   College identifiers are stored in browser local storage under
                   <code> college-search-saved</code>. Remove individual saves on
                   the Saved page or clear this site&apos;s browser data to erase them.
+                  Signing in does not upload this guest list automatically.
                 </p>
               </div>
             </li>
@@ -62,8 +63,25 @@ export default function PrivacyPage() {
                 <p>
                   If a deployment enables Supabase and you sign up, Supabase
                   processes your email, password credential or Google identity,
-                  and authentication session. CollegeSearch never places a
-                  privileged Supabase service key in the browser.
+                  authentication session, and college identifiers you save to
+                  your account. Ownership rules restrict each account to its own
+                  rows. CollegeSearch never places a privileged Supabase service
+                  key in the browser.
+                </p>
+              </div>
+            </li>
+            <li>
+              <span><HardDrive size={19} aria-hidden="true" /></span>
+              <div>
+                <strong>Signed-in lists also keep a browser recovery copy.</strong>
+                <p>
+                  CollegeSearch stores each verified account&apos;s college
+                  identifiers and per-college pending save or remove actions in
+                  UUID-scoped local-storage keys. This supports offline retry and
+                  never stores email, tokens, or profile fields. Signing out
+                  hides but does not erase that recovery copy; clear this
+                  site&apos;s browser data to remove every local copy on a shared
+                  browser profile.
                 </p>
               </div>
             </li>
@@ -99,9 +117,10 @@ export default function PrivacyPage() {
               organization&apos;s website, where its privacy policy applies.
             </li>
             <li>
-              Self-service account deletion and server-synced saved lists are
-              not active yet. They must ship with ownership-based row security
-              and a tested deletion path before student data is stored.
+              Self-service account deletion is not active yet. Account-synced
+              college identifiers use ownership-based row security, but deleting
+              an account still requires the deployment operator until a tested
+              self-service path ships.
             </li>
             <li>
               This note describes the current repository build. A public launch

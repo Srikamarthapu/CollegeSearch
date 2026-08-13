@@ -8,6 +8,7 @@ The app now has a Supabase Auth foundation for:
 - Google OAuth
 - cookie-backed PKCE sessions and refresh-token rotation
 - signed-in account state and sign out
+- account-synced college saves with an explicit browser-list import
 
 It intentionally stays in a clear **unconfigured** state until a CollegeSearch
 Supabase project is connected. No remote project was created or changed while
@@ -49,6 +50,12 @@ These are the only browser-side keys this auth system needs. Do **not** add a
 `NEXT_PUBLIC_*` variable. This login foundation does not require a service-role
 key at all.
 
+Before testing account-synced saves, apply the committed
+`supabase/migrations/20260810042855_create_saved_colleges.sql` migration and
+follow the two-user RLS verification matrix in `SUPABASE_DATABASE_SETUP.md`.
+The repository's static SQL tests verify the intended contract, but they are
+not evidence that a hosted project's policies were applied correctly.
+
 ## 3. Configure Supabase URL settings
 
 Open **Authentication → URL Configuration**.
@@ -65,8 +72,11 @@ Open **Authentication → URL Configuration**.
   - `http://localhost:3000/auth/recovery-callback`
   - `http://localhost:3000/auth/callback\?sb_flow_id=*`
   - `http://localhost:3000/auth/recovery-callback\?sb_flow_id=*`
-- To test the verified Codex preview that is currently running on port 4173,
-  add the same scoped entries for that origin:
+- Add the same four exact/scoped entries with `127.0.0.1` when that is the
+  hostname used for local development. Supabase matches the full origin, so
+  `localhost` and `127.0.0.1` are not interchangeable.
+- If testing a local production preview on port 4173, add the same scoped
+  entries for that origin:
   - `http://localhost:4173/auth/callback`
   - `http://localhost:4173/auth/recovery-callback`
   - `http://localhost:4173/auth/callback\?sb_flow_id=*`
@@ -107,7 +117,9 @@ Supabase dashboard, not in the browser environment.
 2. Create an OAuth client with application type **Web application**.
 3. Under **Authorized JavaScript origins**, add:
    - `http://localhost:3000`
-   - `http://localhost:4173` while testing the current Codex preview
+   - `http://localhost:4173` while testing a local production preview
+   - `http://127.0.0.1:3000` when using the numeric loopback hostname
+   - `http://127.0.0.1:4173` for the CollegeSearch production preview
    - the final production origin
 4. In Supabase, open **Authentication → Providers → Google**. Copy the callback
    URL shown there. It is normally:
@@ -171,6 +183,17 @@ Run this matrix on both local and production origins:
    `Content-Security-Policy`, and every inline `script` and `style` must carry
    the matching nonce. Confirm there are no CSP violations during sign-up,
    Google sign-in, recovery, navigation, or Lenis/Motion interactions.
+9. While signed out, save colleges and confirm that signing in does not upload
+   them automatically. Use the explicit import action and confirm that only the
+   selected account receives those rows.
+10. Save and remove colleges while offline, reload, reconnect, and retry. The
+    intended state must remain visible and reach the account after retry without
+    resurrecting a deleted college.
+11. Repeat save/remove actions in two tabs, then switch between two test
+    accounts. No account may briefly display, import, or mutate the other
+    account's list.
+12. Run the live anonymous/two-user RLS matrix from
+    `SUPABASE_DATABASE_SETUP.md` against a non-production project.
 
 CollegeSearch deliberately keeps `'self'` in `script-src` instead of enabling
 `'strict-dynamic'`. Vinext's trusted bootstrap receives the nonce, but React 19

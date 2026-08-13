@@ -1,22 +1,68 @@
 "use client";
 
-import { ArrowRight, KeyRound, LogOut, ShieldCheck, UserRound } from "lucide-react";
+import {
+  ArrowRight,
+  KeyRound,
+  LogOut,
+  RefreshCw,
+  ShieldCheck,
+  UserRound,
+} from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import { AuthDialog } from "@/app/components/auth/AuthDialog";
+import { resolveAuthConsumerState } from "@/app/components/auth/auth-consumer-state";
 import { getAuthDisplayName, useAuth } from "@/app/components/auth/AuthProvider";
+import { useSavedColleges } from "@/app/components/saved/SavedCollegesProvider";
 import styles from "./account.module.css";
 
 export function AccountPageClient() {
-  const { refreshUser, signOut, status, user } = useAuth();
-  const [message, setMessage] = useState<string | null>(null);
+  const {
+    refreshUser,
+    signOut,
+    status,
+    user,
+    verification,
+    verificationError,
+  } = useAuth();
+  const {
+    accountCacheAvailable,
+    canImportGuestSaves,
+    guestImportCount,
+    importGuestSaves,
+    lastError,
+    pendingCount,
+    retrySync,
+    syncPhase,
+  } = useSavedColleges();
+  const [signOutError, setSignOutError] = useState<{
+    scope: string;
+    text: string;
+  } | null>(null);
+  const decision = resolveAuthConsumerState({
+    hasUser: Boolean(user),
+    status,
+    verification,
+  });
+  const currentScope = user?.id ?? status;
+  const visibleSignOutError =
+    signOutError?.scope === currentScope ? signOutError.text : null;
 
   async function handleSignOut() {
+    const requestedScope = currentScope;
+    setSignOutError(null);
     const result = await signOut();
-    setMessage(result.error ?? "You have been signed out.");
+    setSignOutError(
+      result.error ? { scope: requestedScope, text: result.error } : null,
+    );
+  }
+
+  function handleRetryVerification() {
+    setSignOutError(null);
+    void refreshUser();
   }
 
   return (
@@ -27,23 +73,59 @@ export function AccountPageClient() {
           <span className={styles.eyebrow}>Account and session</span>
           <h1>A clear boundary for your account.</h1>
           <p>
-            Authentication can identify you, but this release does not claim to
-            sync saved colleges or store an academic profile.
+            Authentication can sync a college list without attaching browser-only
+            saves to your account unless you explicitly import them.
           </p>
         </header>
 
         <section className={styles.card} aria-live="polite">
-          {status === "loading" ? (
+          {decision.state === "checking" ? (
             <div className={styles.state}>
               <KeyRound size={25} aria-hidden="true" />
               <h2>Checking your session…</h2>
             </div>
-          ) : status === "signed-in" && user ? (
+          ) : decision.state === "unavailable" ? (
+            <div className={styles.state}>
+              <ShieldCheck size={26} aria-hidden="true" />
+              <h2>We couldn’t verify this account session.</h2>
+              <p role="alert">
+                {verificationError ??
+                  "CollegeSearch is not showing account data until verification succeeds."}
+              </p>
+              <div className={styles.stateActions}>
+                <button
+                  type="button"
+                  className={styles.primaryAction}
+                  onClick={handleRetryVerification}
+                >
+                  <RefreshCw size={16} aria-hidden="true" />
+                  Retry verification
+                </button>
+                <button
+                  type="button"
+                  className={styles.secondaryAction}
+                  onClick={handleSignOut}
+                >
+                  <LogOut size={16} aria-hidden="true" />
+                  Clear this session
+                </button>
+              </div>
+              {visibleSignOutError ? (
+                <p className={styles.message} role="alert">
+                  {visibleSignOutError}
+                </p>
+              ) : null}
+            </div>
+          ) : decision.hasLastVerifiedIdentity && user ? (
             <>
               <div className={styles.identity}>
                 <span><UserRound size={22} aria-hidden="true" /></span>
                 <div>
-                  <small>Signed in</small>
+                  <small>
+                    {decision.canUseAccount
+                      ? "Signed in"
+                      : "Last verified account"}
+                  </small>
                   <h2>{getAuthDisplayName(user)}</h2>
                   {user.email ? <p>{user.email}</p> : null}
                 </div>
@@ -51,11 +133,33 @@ export function AccountPageClient() {
               <dl className={styles.details}>
                 <div>
                   <dt>Authentication</dt>
-                  <dd>Verified Supabase session</dd>
+                  <dd>
+                    {decision.canUseAccount
+                      ? "Verified Supabase session"
+                      : decision.state === "last-verified-unavailable"
+                        ? "Last verified identity — current check failed"
+                        : "Checking current session"}
+                  </dd>
                 </div>
                 <div>
                   <dt>Saved-list sync</dt>
-                  <dd>Not active — saves remain on this device</dd>
+                  <dd>
+                    {!decision.canUseAccount
+                      ? decision.state === "last-verified-unavailable"
+                        ? "Paused until account verification succeeds"
+                        : "Paused while the session is checked"
+                      : syncPhase === "synced"
+                      ? "Up to date"
+                      : syncPhase === "loading-account"
+                        ? "Checking account list"
+                        : syncPhase === "syncing"
+                          ? `Waiting to sync${pendingCount ? ` · ${pendingCount} pending` : ""}`
+                          : syncPhase === "error"
+                            ? accountCacheAvailable
+                              ? "Needs attention — last complete browser copy retained"
+                              : "Needs attention — complete list unavailable"
+                            : "Browser only"}
+                  </dd>
                 </div>
                 <div>
                   <dt>Academic profile</dt>
@@ -63,15 +167,39 @@ export function AccountPageClient() {
                 </div>
               </dl>
               <div className={styles.actions}>
+                {decision.canUseAccount && canImportGuestSaves ? (
+                  <button type="button" onClick={() => void importGuestSaves()}>
+                    Import {guestImportCount} browser {guestImportCount === 1 ? "save" : "saves"}
+                  </button>
+                ) : null}
+                {decision.canUseAccount && syncPhase === "error" ? (
+                  <button type="button" onClick={retrySync}>
+                    Retry sync
+                  </button>
+                ) : null}
+                {decision.state === "last-verified-unavailable" ? (
+                  <button type="button" onClick={handleRetryVerification}>
+                    <RefreshCw size={16} aria-hidden="true" />
+                    Retry verification
+                  </button>
+                ) : null}
                 <button type="button" onClick={handleSignOut}>
                   <LogOut size={16} aria-hidden="true" />
                   Sign out
                 </button>
-                <Link href="/auth/update-password">
-                  Update password
-                  <ArrowRight size={15} aria-hidden="true" />
-                </Link>
+                {decision.canUseAccount ? (
+                  <Link href="/auth/update-password">
+                    Update password
+                    <ArrowRight size={15} aria-hidden="true" />
+                  </Link>
+                ) : null}
               </div>
+              {decision.state === "last-verified-unavailable" ? (
+                <p className={styles.message} role="alert">
+                  {verificationError ??
+                    "Account verification needs another try. Account actions are paused."}
+                </p>
+              ) : null}
             </>
           ) : (
             <div className={styles.state}>
@@ -84,7 +212,7 @@ export function AccountPageClient() {
               <p>
                 {status === "unconfigured"
                   ? "The interface is ready, but this deployment still needs its Supabase project and Google provider configuration."
-                  : "Sign in with email or Google when the provider is available. Your local saved list remains usable either way."}
+                  : "Sign in with email or Google when the provider is available. Browser-only saves remain separate until you choose to import them."}
               </p>
               <AuthDialog onSignedIn={refreshUser}>
                 <button type="button" className={styles.primaryAction}>
@@ -94,14 +222,19 @@ export function AccountPageClient() {
               </AuthDialog>
             </div>
           )}
-          {message ? <p className={styles.message} role="status">{message}</p> : null}
+          {decision.canUseAccount && lastError ? (
+            <p className={styles.message} role="alert">{lastError}</p>
+          ) : null}
+          {visibleSignOutError && decision.state !== "unavailable" ? (
+            <p className={styles.message} role="alert">{visibleSignOutError}</p>
+          ) : null}
         </section>
 
         <aside className={styles.note}>
           <ShieldCheck size={19} aria-hidden="true" />
           <p>
-            College research, comparison, matching, and local saves work
-            without an account. Signing in currently manages identity only.
+            College research, comparison, matching, and browser saves work
+            without an account. On shared devices, sign out when you finish.
           </p>
           <Link href="/privacy">Read the privacy note</Link>
         </aside>

@@ -40,6 +40,7 @@ import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import { SourceSpotlight } from "@/app/components/SourceSpotlight";
 import { CollegeLogo } from "@/app/components/CollegeLogo";
+import { useSavedColleges } from "@/app/components/saved/SavedCollegesProvider";
 import {
   compactName,
   formatObservation,
@@ -61,11 +62,6 @@ import {
   matchesAdvancedExplorerFilters,
   type EnrollmentBand,
 } from "@/app/lib/explorer-filters";
-import {
-  readSavedCollegeIds,
-  subscribeToSavedCollegeChanges,
-  writeSavedCollegeIds,
-} from "@/app/lib/local-saves";
 
 type ExplorerState = {
   query: string;
@@ -233,6 +229,7 @@ const CollegeCard = memo(function CollegeCard({
   selectedMajor,
   isSelected,
   isSaved,
+  saveDisabled,
   onCompare,
   onSave,
 }: {
@@ -240,6 +237,7 @@ const CollegeCard = memo(function CollegeCard({
   selectedMajor: string;
   isSelected: boolean;
   isSaved: boolean;
+  saveDisabled: boolean;
   onCompare: (college: ClientCollege) => void;
   onSave: (college: ClientCollege) => void;
 }) {
@@ -281,6 +279,15 @@ const CollegeCard = memo(function CollegeCard({
             className={`save-button ${isSaved ? "is-active" : ""}`}
             type="button"
             aria-pressed={isSaved}
+            aria-label={
+              isSaved
+                ? `Remove ${college.name} from saved colleges`
+                : `Save ${college.name}`
+            }
+            disabled={saveDisabled}
+            title={
+              saveDisabled ? "Checking which saved list is active." : undefined
+            }
             onClick={() => onSave(college)}
           >
             {isSaved ? (
@@ -295,7 +302,9 @@ const CollegeCard = memo(function CollegeCard({
             type="button"
             aria-pressed={isSelected}
             aria-label={
-              isSelected ? `Remove ${college.name} from comparison` : undefined
+              isSelected
+                ? `Remove ${college.name} from comparison`
+                : `Add ${college.name} to comparison`
             }
             onClick={() => onCompare(college)}
           >
@@ -860,7 +869,14 @@ export function CollegeSearchApp({
   mode?: "home" | "explore";
 }) {
   const [state, dispatch] = useReducer(explorerReducer, defaultExplorerState);
-  const [saved, setSaved] = useState<number[]>([]);
+  const {
+    canMutate: canMutateSavedColleges,
+    hydrated: savedListHydrated,
+    ids: saved,
+    retrySync: retrySavedList,
+    syncPhase: savedSyncPhase,
+    toggleSaved: toggleSavedId,
+  } = useSavedColleges();
   const [selected, setSelected] = useState<number[]>([]);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [status, setStatus] = useState("");
@@ -977,14 +993,11 @@ export function CollegeSearchApp({
       .filter((unitId) => collegeIds.has(unitId))
       .slice(0, 4);
     const hydratedComparison = Array.from(new Set(comparison));
-    const hydratedSaved = readSavedCollegeIds(collegeIds).ids;
-
     let cancelled = false;
     queueMicrotask(() => {
       if (cancelled) return;
       dispatch({ type: "hydrate", value: hydratedState });
       setSelected(hydratedComparison);
-      setSaved(hydratedSaved);
       setHydrated(true);
     });
 
@@ -1019,15 +1032,6 @@ export function CollegeSearchApp({
       `${window.location.pathname}${query ? `?${query}` : ""}`,
     );
   }, [hydrated, selected, state]);
-
-  useEffect(
-    () =>
-      subscribeToSavedCollegeChanges(
-        (result) => setSaved(result.ids),
-        collegeIds,
-      ),
-    [collegeIds],
-  );
 
   useEffect(() => {
     if (!status) return;
@@ -1143,17 +1147,7 @@ export function CollegeSearchApp({
     .filter(Boolean) as ClientCollege[];
 
   function toggleSaved(college: ClientCollege) {
-    setSaved((current) => {
-      const next = current.includes(college.unitId)
-        ? current.filter((unitId) => unitId !== college.unitId)
-        : [...current, college.unitId];
-      const result = writeSavedCollegeIds(next, collegeIds);
-      if (!result.persisted) {
-        setStatus("This browser could not save that college.");
-        return current;
-      }
-      return result.ids;
-    });
+    toggleSavedId(college.unitId);
   }
 
   function toggleCompare(college: ClientCollege) {
@@ -1309,6 +1303,9 @@ export function CollegeSearchApp({
   const compareHref = `/compare?colleges=${selected.join(",")}${
     state.major ? `&major=${encodeURIComponent(state.major)}` : ""
   }`;
+  const savedListUnavailable = state.savedOnly && !savedListHydrated;
+  const savedListFailed =
+    savedListUnavailable && savedSyncPhase === "error";
 
   return (
     <>
@@ -1342,7 +1339,7 @@ export function CollegeSearchApp({
               }
               onMajor={applyMajor}
               onSubmit={submitSearch}
-              resultCount={results.length}
+              resultCount={savedListUnavailable ? undefined : results.length}
             />
             <div className="quick-starts" aria-label="Popular starting points">
               <span>Start with</span>
@@ -1539,7 +1536,11 @@ export function CollegeSearchApp({
                       />
                       <Dialog.Close asChild>
                         <button className="apply-filters-button" type="button">
-                          Show {results.length} colleges
+                          {savedListUnavailable
+                            ? savedListFailed
+                              ? "Saved list unavailable"
+                              : "Checking saved list"
+                            : `Show ${results.length} colleges`}
                         </button>
                       </Dialog.Close>
                     </Dialog.Content>
@@ -1552,8 +1553,18 @@ export function CollegeSearchApp({
                   tabIndex={-1}
                   aria-live="polite"
                 >
-                  <strong>{results.length}</strong>{" "}
-                  {results.length === 1 ? "college" : "colleges"}
+                  {savedListUnavailable ? (
+                    savedListFailed ? (
+                      "Saved list unavailable"
+                    ) : (
+                      "Checking saved list…"
+                    )
+                  ) : (
+                    <>
+                      <strong>{results.length}</strong>{" "}
+                      {results.length === 1 ? "college" : "colleges"}
+                    </>
+                  )}
                 </p>
               </div>
 
@@ -1629,22 +1640,44 @@ export function CollegeSearchApp({
             <div
               className="results-list"
               id="results-list"
-              aria-busy={state.query !== deferredQuery}
+              aria-busy={state.query !== deferredQuery || savedListUnavailable}
             >
-              {results.slice(0, state.visibleCount).map((college) => (
+              {!savedListUnavailable
+                ? results.slice(0, state.visibleCount).map((college) => (
                 <CollegeCard
                   key={college.unitId}
                   college={college}
                   selectedMajor={state.major}
                   isSelected={selected.includes(college.unitId)}
                   isSaved={saved.includes(college.unitId)}
+                  saveDisabled={!canMutateSavedColleges}
                   onCompare={toggleCompare}
                   onSave={toggleSaved}
                 />
-              ))}
+                  ))
+                : null}
             </div>
 
-            {!results.length ? (
+            {savedListUnavailable ? (
+              <div className="empty-state" role={savedListFailed ? "alert" : "status"}>
+                <Database size={29} aria-hidden="true" />
+                <h3>
+                  {savedListFailed
+                    ? "Your saved list is unavailable."
+                    : "Checking your saved list…"}
+                </h3>
+                <p>
+                  {savedListFailed
+                    ? "CollegeSearch will not represent an unavailable account list as empty. Retry the account list or remove the Saved filter."
+                    : "Your account scope is being verified before saved colleges appear here."}
+                </p>
+                {savedListFailed ? (
+                  <button type="button" onClick={retrySavedList}>
+                    Retry saved list
+                  </button>
+                ) : null}
+              </div>
+            ) : !results.length ? (
               <div className="empty-state">
                 <CircleAlert size={29} aria-hidden="true" />
                 <h3>No college meets every active filter.</h3>

@@ -447,7 +447,7 @@ test("Caltech and Pomona add only verifier-safe current fields and keep coherent
       "caltech-registrar-enrollment-2025",
       {
         artifactSha256:
-          "8a371614b798cd1abc6c9b1dc7751c82b8ab03b2090064059c901b50126ed0ee",
+          "b0e833e73f343cf92ce3ccefd837b39f87bf04212a89424d5054dbe3f4e33564",
         artifactUrl:
           "https://registrar.caltech.edu/records/enrollment-statistics",
       },
@@ -456,7 +456,7 @@ test("Caltech and Pomona add only verifier-safe current fields and keep coherent
       "caltech-financial-aid-costs-2026-27",
       {
         artifactSha256:
-          "41f8de84d9d6f18706b8de372fdaa4289a858fccb48782c23e90ae3d10cd20b2",
+          "034972cb9ebec71a6d45779a137091125cc4aa3c6e08cd3065fae4cbdeae7abe",
         artifactUrl: "https://www.finaid.caltech.edu/Costs",
       },
     ],
@@ -464,7 +464,7 @@ test("Caltech and Pomona add only verifier-safe current fields and keep coherent
       "pomona-tuition-costs-2026-27",
       {
         artifactSha256:
-          "dbe1fe090fc32c2cc4a240c1afc23473cfd25f419820f26210c2514d39777a0c",
+          "43d02e1a3677813f4ac7bc2a718f540411f8ee15fe2db88310a41af4c9b1f674",
         artifactUrl:
           "https://www.pomona.edu/administration/finance-office/student-accounts/tuition-and-costs",
       },

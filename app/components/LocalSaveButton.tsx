@@ -1,13 +1,7 @@
 "use client";
 
 import { Bookmark, BookmarkCheck } from "lucide-react";
-import { useEffect, useState } from "react";
-
-import {
-  readSavedCollegeIds,
-  subscribeToSavedCollegeChanges,
-  writeSavedCollegeIds,
-} from "@/app/lib/local-saves";
+import { useSavedColleges } from "@/app/components/saved/SavedCollegesProvider";
 
 type LocalSaveButtonProps = {
   unitId: number;
@@ -20,52 +14,23 @@ export function LocalSaveButton({
   collegeName,
   className,
 }: LocalSaveButtonProps) {
-  const [isSaved, setIsSaved] = useState(false);
-  const [storageAvailable, setStorageAvailable] = useState<boolean | null>(
-    null,
-  );
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const syncFromStorage = () => {
-      const result = readSavedCollegeIds();
-      if (cancelled) return;
-      setIsSaved(result.ids.includes(unitId));
-      setStorageAvailable(result.storageAvailable);
-    };
-
-    queueMicrotask(syncFromStorage);
-    const unsubscribe = subscribeToSavedCollegeChanges(syncFromStorage);
-
-    return () => {
-      cancelled = true;
-      unsubscribe();
-    };
-  }, [unitId]);
-
-  const toggleSaved = () => {
-    const current = readSavedCollegeIds();
-    if (!current.storageAvailable) {
-      setStorageAvailable(false);
-      return;
-    }
-
-    const next = current.ids.includes(unitId)
-      ? current.ids.filter((id) => id !== unitId)
-      : [...current.ids, unitId];
-    const result = writeSavedCollegeIds(next);
-
-    setStorageAvailable(result.storageAvailable);
-    if (result.persisted) setIsSaved(result.ids.includes(unitId));
-  };
-
-  const unavailable = storageAvailable === false;
-  const label = unavailable
-    ? "Save unavailable"
-    : isSaved
-      ? "Saved locally"
+  const {
+    canMutate,
+    ids,
+    storageAvailable,
+    syncPhase,
+    toggleSaved,
+  } = useSavedColleges();
+  const isSaved = ids.includes(unitId);
+  const accountSyncActive = syncPhase !== "local-only";
+  const label = isSaved
+    ? "Saved"
+    : accountSyncActive
+      ? "Save"
       : "Save locally";
+  const locationLabel = accountSyncActive
+    ? "this browser and your account when sync completes"
+    : "this browser";
 
   return (
     <button
@@ -74,16 +39,26 @@ export function LocalSaveButton({
         .filter(Boolean)
         .join(" ")}
       aria-label={
-        unavailable
-          ? `Browser-local saves are unavailable for ${collegeName}`
-          : isSaved
-            ? `Remove ${collegeName} from colleges saved on this device`
-            : `Save ${collegeName} on this device`
+        isSaved
+          ? `Remove ${collegeName} from colleges saved in ${locationLabel}`
+          : `Save ${collegeName} in ${locationLabel}`
       }
       aria-pressed={isSaved}
-      disabled={unavailable}
-      title="Saved colleges stay in this browser; account sync is not active."
-      onClick={toggleSaved}
+      disabled={!canMutate}
+      title={
+        !canMutate
+          ? accountSyncActive
+            ? "Checking which account saved list is active."
+            : "Saved colleges stay in this browser; account sync is not active."
+          : accountSyncActive
+          ? syncPhase === "error"
+            ? "Saved on this browser. Account sync needs attention."
+            : "Saved on this browser and synchronized when your account is connected."
+          : storageAvailable
+            ? "Saved colleges stay in this browser until you explicitly import them after signing in."
+            : "Browser storage is unavailable; this save lasts for this tab."
+      }
+      onClick={() => toggleSaved(unitId)}
     >
       {isSaved ? (
         <BookmarkCheck size={15} aria-hidden="true" />

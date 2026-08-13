@@ -18,7 +18,8 @@ in `college_compass_prd.md` into a usable, responsive experience with a verified
   observed overall-admit-rate band without treating the bands as personal odds
 - Compare up to four historical overall admit-rate records with alias- and
   typo-tolerant college selection
-- Save colleges locally without creating an account
+- Save colleges in the browser without an account, or sync a separate account
+  list after Supabase is configured
 - Identify every college with a source-recorded institutional mark instead of
   generated initials
 - Use smooth, reduced-motion-aware Lenis scrolling with a restrained moving
@@ -143,7 +144,7 @@ These sources describe different cohorts and are intentionally kept distinct:
   signature, required OOXML entries, and exact hash, so Purdue is not registered
   until a stable first-party artifact passes those checks. Its period-labeled
   federal admission, enrollment, graduation, and tuition records remain intact.
-- Caltech uses two stable, byte-pinned first-party pages for its Fall 2025
+- Caltech uses two reviewed, byte-pinned first-party pages for its Fall 2025
   undergraduate total of 971 and 2026-2027 tuition plus mandatory annual fees
   of $71,229. Pomona's byte-pinned 2026-2027 tuition page supplies $72,080 in
   tuition plus generally applicable fees. Caltech's Class of 2030 announcement
@@ -201,6 +202,10 @@ Google's OAuth Client ID and Client Secret are configured inside the Supabase
 dashboard, never in a `NEXT_PUBLIC_*` variable. The full email, Google, redirect,
 SMTP, and verification checklist is in `AUTH_SETUP.md`. No service-role key is
 needed for this auth foundation.
+
+Account-synced saves also require the committed `saved_colleges` migration.
+Apply it and complete the live anonymous/two-user RLS matrix documented in
+`SUPABASE_DATABASE_SETUP.md` before enabling sync on a public deployment.
 
 The production shell enforces a per-request nonce Content Security Policy.
 Hydration and generated font blocks receive the matching nonce, scripts cannot
@@ -263,7 +268,12 @@ the selected fit signals, keep missing evidence out of the denominator, and
 never use overall admit rate as a fit signal or admission prediction. Its
 selectivity-mix check groups the leading fit in each descriptive historical
 rate band without changing the score or calling any college a target or safety. Local
-saves remain deliberately device-local; syncing them into user-owned,
-RLS-protected Supabase rows comes next. AI agents and any future personalized
-admissions-model work remain later phases and must preserve the app's current
-evidence limits.
+saves remain browser-only while signed out. In a configured deployment, a
+currently verified account can maintain a separate list in user-owned,
+RLS-protected Supabase rows. Browser-only saves are never uploaded at sign-in;
+the student must explicitly import them. UUID-scoped caches, per-college retry
+records, and browser account locks keep offline and multi-tab changes separated
+by account. Hosted Auth/provider configuration and the live two-user RLS matrix
+remain manual launch gates. AI agents and any future personalized admissions-
+model work remain later phases and must preserve the app's current evidence
+limits.

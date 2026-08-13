@@ -359,13 +359,13 @@ test("a derived rate cannot omit its source observations", () => {
 
 test("HTML artifact hashing ignores volatile asset versions and edge challenges", () => {
   const first = new TextEncoder().encode(
-    '<link href="app.css?ver=123"><main>stable evidence</main><script>(function(){function c(){var b=a.contentDocument;token="one"}</script></body>',
+    '<!-- This site is optimized with the Yoast SEO plugin v27.6 - https://yoast.com/product/yoast-seo-wordpress/ --><link href="app.css?ver=123"><main>stable evidence</main><script>(function(){function c(){var b=a.contentDocument;token="one"}</script></body>',
   );
   const second = new TextEncoder().encode(
-    '<link href="app.css?ver=456.7"><main>stable evidence</main><script>(function(){function c(){var b=a.contentDocument;token="two"}</script></body>',
+    '<!-- This site is optimized with the Yoast SEO plugin v28.2 - https://yoast.com/product/yoast-seo-wordpress/ --><link href="app.css?ver=456.7"><main>stable evidence</main><script>(function(){function c(){var b=a.contentDocument;token="two"}</script></body>',
   );
   const changed = new TextEncoder().encode(
-    '<link href="app.css?ver=456.7"><main>changed evidence</main><script>(function(){function c(){var b=a.contentDocument;token="two"}</script></body>',
+    '<!-- This site is optimized with the Yoast SEO plugin v28.2 - https://yoast.com/product/yoast-seo-wordpress/ --><link href="app.css?ver=456.7"><main>changed evidence</main><script>(function(){function c(){var b=a.contentDocument;token="two"}</script></body>',
   );
   const contentAfterChallenge = new TextEncoder().encode(
     '<link href="app.css?ver=456.7"><main>stable evidence</main><script>(function(){function c(){var b=a.contentDocument;token="two"}</script><footer>new evidence</footer></body>',

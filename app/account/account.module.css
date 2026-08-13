@@ -67,6 +67,7 @@
 }
 
 .primaryAction,
+.secondaryAction,
 .actions button,
 .actions a {
   display: inline-flex;
@@ -80,6 +81,18 @@
   font-size: 12px;
   font-weight: 720;
   gap: 8px;
+}
+
+.stateActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.secondaryAction {
+  border-color: var(--line-strong);
+  background: transparent;
+  color: var(--forest);
 }
 
 .identity {
@@ -214,6 +227,11 @@
   }
 
   .actions {
+    flex-direction: column;
+  }
+
+  .stateActions {
+    width: 100%;
     flex-direction: column;
   }
 

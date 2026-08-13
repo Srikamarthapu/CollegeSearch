@@ -340,13 +340,15 @@ test("account copy is student-facing and keeps the local-save boundary explicit"
   assert.match(source, /Accounts are not available in this preview yet\./);
   assert.match(
     source,
-    /You can still search, compare, and save colleges on this\s+device\./,
+    /You can still search, compare, and save colleges on this\s+browser profile\./,
   );
-  assert.equal(
-    source.match(
-      /Saved colleges stay in this browser and are not synced\./g,
-    )?.length,
-    2,
+  assert.match(
+    source,
+    /Existing browser-only saves remain separate until you explicitly import them\./,
+  );
+  assert.match(
+    source,
+    /Existing browser-only saves are never imported automatically\./,
   );
   assert.doesNotMatch(
     source,
@@ -454,14 +456,14 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
     },
     {
       path: "/saved",
-      markers: [/Saved colleges \| CollegeSearch/, /Saved on this device\./],
+      markers: [/Saved colleges \| CollegeSearch/, /Saved in this browser/],
     },
     {
       path: "/account",
       markers: [
         /Account \| CollegeSearch/,
         /A clear boundary for your account\./,
-        /does not claim to[\s\S]*sync saved colleges/,
+        /Authentication can sync a college list without attaching browser-only[\s\S]*unless you explicitly import them/,
       ],
     },
     {
@@ -470,6 +472,7 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
         /Privacy \| CollegeSearch/,
         /Your college list is yours\./,
         /No academic profile is collected in this release\./,
+        /Signing out[\s\S]*does not erase that recovery copy/,
       ],
     },
     {

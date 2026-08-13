@@ -71,6 +71,86 @@
   font-size: 12px;
 }
 
+.syncLedger,
+.importPrompt {
+  display: flex;
+  width: min(var(--page-width), calc(100% - 48px));
+  margin: 18px auto 0;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border: 1px solid var(--line-strong);
+  background: rgba(251, 249, 243, 0.92);
+  gap: 20px;
+}
+
+.syncLedger > div,
+.importPrompt > div {
+  display: grid;
+  gap: 4px;
+}
+
+.syncLedger span {
+  color: var(--ink-faint);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.syncLedger strong,
+.importPrompt strong {
+  color: var(--forest);
+  font-size: 13px;
+}
+
+.syncPending {
+  border-color: var(--ochre);
+  background: var(--ochre-pale);
+}
+
+.syncError {
+  border-color: var(--oxblood);
+  background: var(--oxblood-pale);
+}
+
+.syncError strong,
+.syncError small {
+  color: var(--oxblood);
+}
+
+.syncLedger small {
+  color: var(--oxblood);
+  font-size: 11px;
+}
+
+.syncLedger button,
+.importPrompt button {
+  display: inline-flex;
+  min-height: 44px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 0 15px;
+  border: 1px solid var(--forest);
+  background: var(--forest);
+  color: white;
+  font-size: 12px;
+  font-weight: 720;
+}
+
+.importPrompt {
+  border-color: #c9ad72;
+  background: var(--ochre-pale);
+}
+
+.importPrompt p {
+  max-width: 680px;
+  margin: 0;
+  color: #654a1d;
+  font-size: 12px;
+}
+
 .empty,
 .collection {
   width: min(var(--page-width), calc(100% - 48px));
@@ -100,6 +180,7 @@
 }
 
 .empty a,
+.empty button,
 .compareTray a {
   display: inline-flex;
   min-height: 44px;
@@ -110,6 +191,10 @@
   color: white;
   font-size: 12px;
   font-weight: 720;
+}
+
+.empty button {
+  border: 0;
 }
 
 .collectionHeader {
@@ -322,7 +407,9 @@
   .masthead,
   .empty,
   .collection,
-  .warning {
+  .warning,
+  .syncLedger,
+  .importPrompt {
     width: calc(100% - 32px);
   }
 
@@ -360,6 +447,12 @@
 
   .actions {
     grid-template-columns: 1fr;
+  }
+
+  .syncLedger,
+  .importPrompt {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .compareTray {

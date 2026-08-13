@@ -9,78 +9,110 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { CollegeLogo } from "@/app/components/CollegeLogo";
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
+import { useSavedColleges } from "@/app/components/saved/SavedCollegesProvider";
 import {
   formatObservation,
   observationSourceKind,
   type ClientCollege,
 } from "@/app/lib/college-client-record";
 import {
-  readSavedCollegeIds,
-  subscribeToSavedCollegeChanges,
-  writeSavedCollegeIds,
-} from "@/app/lib/local-saves";
+  type SavedComparisonSelection,
+  visibleSavedComparisonIds,
+} from "@/app/lib/saved-comparison-selection";
 import styles from "./saved.module.css";
 
 export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
-  const [savedIds, setSavedIds] = useState<number[] | null>(null);
-  const [selected, setSelected] = useState<number[]>([]);
-  const [storageUnavailable, setStorageUnavailable] = useState(false);
-  const knownIds = useMemo(
-    () => new Set(colleges.map((college) => college.unitId)),
-    [colleges],
-  );
-
-  useEffect(() => {
-    let cancelled = false;
-    const syncFromStorage = () => {
-      const result = readSavedCollegeIds(knownIds);
-      if (cancelled) return;
-      setSavedIds(result.ids);
-      setStorageUnavailable(!result.storageAvailable);
-    };
-
-    queueMicrotask(syncFromStorage);
-    const unsubscribe = subscribeToSavedCollegeChanges(
-      syncFromStorage,
-      knownIds,
-    );
-
-    return () => {
-      cancelled = true;
-      unsubscribe();
-    };
-  }, [knownIds]);
+  const [comparisonSelection, setComparisonSelection] =
+    useState<SavedComparisonSelection>({ ids: [], scopeKey: "loading" });
+  const {
+    accountCacheAvailable,
+    canImportGuestSaves,
+    canMutate,
+    guestImportCount,
+    hydrated,
+    ids: savedIds,
+    importGuestSaves,
+    lastError,
+    pendingCount,
+    replaceSavedIds,
+    retrySync,
+    scopeKey,
+    storageAvailable,
+    syncPhase,
+  } = useSavedColleges();
 
   const saved = useMemo(
     () =>
-      (savedIds ?? [])
+      savedIds
         .map((unitId) => colleges.find((college) => college.unitId === unitId))
         .filter((college): college is ClientCollege => Boolean(college)),
     [colleges, savedIds],
   );
+  const selected = useMemo(
+    () => visibleSavedComparisonIds(comparisonSelection, scopeKey, savedIds),
+    [comparisonSelection, savedIds, scopeKey],
+  );
 
   function persist(next: number[]) {
-    const result = writeSavedCollegeIds(next, knownIds);
-    setStorageUnavailable(!result.storageAvailable);
-    if (!result.persisted) return;
-
-    setSavedIds(result.ids);
-    setSelected((current) =>
-      current.filter((unitId) => result.ids.includes(unitId)),
-    );
+    replaceSavedIds(next);
+    setComparisonSelection((current) => ({
+      ids: visibleSavedComparisonIds(current, scopeKey, next),
+      scopeKey,
+    }));
   }
 
+  const syncMessage =
+    syncPhase === "local-only"
+      ? {
+          title: "Saved in this browser",
+          body: "Anyone using this browser profile may see this list. Signing in never imports it without your approval.",
+        }
+      : syncPhase === "loading-account"
+        ? {
+            title: "Checking your account saves",
+            body: "Your account list is being verified before anything is labeled synced.",
+          }
+        : syncPhase === "syncing"
+          ? {
+              title: "Saved on this browser · waiting to sync",
+              body: "Keep this tab open while CollegeSearch updates your account list.",
+            }
+          : syncPhase === "synced"
+            ? {
+                title: "Account list is up to date",
+                body: "These saves were confirmed against your signed-in account.",
+              }
+            : {
+                title: "Sync needs attention",
+                body:
+                  lastError ??
+                  (accountCacheAvailable
+                    ? "Your last complete browser copy is intact. Retry when your connection returns."
+                    : "CollegeSearch could not load a complete account list, so it is not showing an empty shelf."),
+              };
+
   function toggleComparison(unitId: number) {
-    setSelected((current) => {
-      if (current.includes(unitId)) {
-        return current.filter((item) => item !== unitId);
+    setComparisonSelection((current) => {
+      const currentIds = visibleSavedComparisonIds(
+        current,
+        scopeKey,
+        savedIds,
+      );
+      if (currentIds.includes(unitId)) {
+        return {
+          ids: currentIds.filter((item) => item !== unitId),
+          scopeKey,
+        };
       }
-      return current.length < 4 ? [...current, unitId] : current;
+      return {
+        ids: currentIds.length < 4 ? [...currentIds, unitId] : currentIds,
+        scopeKey,
+      };
     });
   }
 
@@ -93,7 +125,7 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
         <header className={styles.masthead}>
           <span className={styles.eyebrow}>Your research shelf</span>
           <div>
-            <h1>Saved on this device.</h1>
+            <h1>Your saved colleges.</h1>
             <p>
               Keep a short list, inspect the evidence, then choose up to four
               colleges to compare side by side.
@@ -102,19 +134,81 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
           <aside className={styles.localNote}>
             <ShieldCheck size={18} aria-hidden="true" />
             <span>
-              <strong>Private by default</strong>
-              These saves stay in this browser. Account sync is not active yet.
+              <strong>{syncMessage.title}</strong>
+              {syncMessage.body}
             </span>
           </aside>
         </header>
 
-        {storageUnavailable ? (
+        <section
+          className={`${styles.syncLedger} ${
+            syncPhase === "error"
+              ? styles.syncError
+              : syncPhase === "syncing"
+                ? styles.syncPending
+                : ""
+          }`}
+          role={syncPhase === "error" ? "alert" : "status"}
+          aria-atomic="true"
+          aria-busy={
+            syncPhase === "loading-account" || syncPhase === "syncing"
+          }
+          aria-live={syncPhase === "error" ? "assertive" : "polite"}
+        >
+          <div>
+            <span>Saved-list status</span>
+            <strong>{syncMessage.title}</strong>
+            {pendingCount > 0 ? (
+              <small>
+                {pendingCount} {pendingCount === 1 ? "change" : "changes"} pending
+              </small>
+            ) : null}
+          </div>
+          {syncPhase === "error" ? (
+            <button type="button" onClick={retrySync}>Retry sync</button>
+          ) : null}
+        </section>
+
+        {canImportGuestSaves ? (
+          <section
+            className={styles.importPrompt}
+            aria-labelledby="guest-import-title"
+          >
+            <div>
+              <strong id="guest-import-title">
+                {guestImportCount} browser-only {guestImportCount === 1 ? "save" : "saves"}
+              </strong>
+              <p>
+                These remain separate from your account unless you choose to import them.
+              </p>
+            </div>
+            <button type="button" onClick={() => void importGuestSaves()}>
+              Import {guestImportCount} {guestImportCount === 1 ? "save" : "saves"} from this browser
+            </button>
+          </section>
+        ) : null}
+
+        {!storageAvailable ? (
           <p className={styles.warning} role="status">
-            This browser is blocking local storage, so changes may not persist.
+            This browser is blocking local storage. Saves remain visible in this
+            tab, but account changes wait until CollegeSearch can preserve a safe
+            retry record. The browser copy may not survive a reload.
           </p>
         ) : null}
 
-        {savedIds === null ? (
+        {!hydrated && syncPhase === "error" ? (
+          <section className={styles.empty} role="alert">
+            <Database size={27} aria-hidden="true" />
+            <h2>We couldn’t load your account list.</h2>
+            <p>
+              Nothing is being represented as an empty list. Retry after your
+              connection or account session is available.
+            </p>
+            <button type="button" onClick={retrySync}>
+              Retry account list
+            </button>
+          </section>
+        ) : !hydrated ? (
           <section className={styles.empty} aria-live="polite">
             <Database size={27} aria-hidden="true" />
             <h2>Loading your saved list…</h2>
@@ -124,8 +218,9 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
             <BookmarkX size={31} aria-hidden="true" />
             <h2>Your shelf is empty.</h2>
             <p>
-              Save a college from the explorer. It will appear here without
-              creating an account.
+              {syncPhase === "local-only"
+                ? "No colleges are saved in this browser yet. You can start without creating an account."
+                : "No colleges are saved to this account yet."}
             </p>
             <Link href="/explore">
               Explore colleges
@@ -210,6 +305,11 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
                         type="button"
                         className={isSelected ? styles.selected : undefined}
                         aria-pressed={isSelected}
+                        aria-label={
+                          isSelected
+                            ? `Remove ${college.name} from comparison`
+                            : `Add ${college.name} to comparison`
+                        }
                         onClick={() => toggleComparison(college.unitId)}
                         disabled={!isSelected && selected.length >= 4}
                       >
@@ -218,9 +318,11 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
                       </button>
                       <button
                         type="button"
+                        disabled={!canMutate}
+                        aria-label={`Remove ${college.name} from saved colleges`}
                         onClick={() =>
                           persist(
-                            (savedIds ?? []).filter(
+                            savedIds.filter(
                               (unitId) => unitId !== college.unitId,
                             ),
                           )

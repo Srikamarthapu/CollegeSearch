@@ -277,7 +277,13 @@ export function ChancesTool({ colleges, initialIds }: ChancesToolProps) {
                         />
                         <Link href={`/colleges/${college.slug}`}>Full evidence profile <ArrowRight size={14} aria-hidden="true" /></Link>
                       </div>
-                      <button type="button" onClick={() => removeCollege(college.unitId)}>Remove</button>
+                      <button
+                        type="button"
+                        aria-label={`Remove ${college.name} from admit-rate context`}
+                        onClick={() => removeCollege(college.unitId)}
+                      >
+                        Remove
+                      </button>
                     </footer>
                   </article>
                 );

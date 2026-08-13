@@ -455,6 +455,10 @@ export function artifactBytesForHash(bytes, mode = "raw") {
   const normalized = html
     .replace(/\?ver=[0-9.]+/g, "?ver=VERSION")
     .replace(
+      /(<!-- This site is optimized with the Yoast SEO plugin )v[0-9.]+( - https:\/\/yoast\.com\/product\/yoast-seo-wordpress\/ -->)/g,
+      "$1vVERSION$2",
+    )
+    .replace(
       /<script>\(function\(\)\{function c\(\)\{var b=a\.contentDocument[\s\S]*?<\/script>\s*(?=<\/body>)/,
       "",
     );

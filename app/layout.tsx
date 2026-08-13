@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import { headers } from "next/headers";
+import { colleges } from "./lib/college-data";
 import { Providers } from "./providers";
 import "lenis/dist/lenis.css";
 import "./globals.css";
@@ -81,7 +82,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable}`}
       >
-        <Providers>{children}</Providers>
+        <Providers knownCollegeIds={colleges.map((college) => college.unitId)}>
+          {children}
+        </Providers>
       </body>
     </html>
   );

@@ -2,10 +2,12 @@
 
 import {
   Bookmark,
+  CircleAlert,
   Compass,
   Gauge,
   GraduationCap,
   Menu,
+  RefreshCw,
   Search,
   Sparkles,
   X,
@@ -14,10 +16,7 @@ import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import {
-  readSavedCollegeIds,
-  subscribeToSavedCollegeChanges,
-} from "@/app/lib/local-saves";
+import { useSavedColleges } from "./saved/SavedCollegesProvider";
 import { AuthAccountControl } from "./auth/AuthAccountControl";
 
 const navigation = [
@@ -30,11 +29,21 @@ const navigation = [
 
 export function SiteHeader({ savedCount }: { savedCount?: number }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [browserSavedCount, setBrowserSavedCount] = useState(0);
+  const { ids: savedIds, syncPhase } = useSavedColleges();
   const pathname = usePathname();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const mobileNavigationRef = useRef<HTMLDivElement>(null);
-  const displayedSavedCount = savedCount ?? browserSavedCount;
+  const displayedSavedCount = savedCount ?? savedIds.length;
+  const savedStatusLabel =
+    syncPhase === "error"
+      ? "Sync needs attention"
+      : syncPhase === "syncing"
+        ? "Waiting to sync"
+        : syncPhase === "loading-account"
+          ? "Checking account saves"
+          : syncPhase === "synced"
+            ? "Account list is up to date"
+            : "Saved in this browser";
 
   const closeMenuAndRestoreFocus = () => {
     setMenuOpen(false);
@@ -42,24 +51,6 @@ export function SiteHeader({ savedCount }: { savedCount?: number }) {
     // Restore focus on the next frame, after the effect cleanup removes inert.
     window.requestAnimationFrame(() => menuButtonRef.current?.focus());
   };
-
-  useEffect(() => {
-    if (savedCount !== undefined) return;
-
-    let cancelled = false;
-    const syncSavedCount = () => {
-      const result = readSavedCollegeIds();
-      if (!cancelled) setBrowserSavedCount(result.ids.length);
-    };
-
-    queueMicrotask(syncSavedCount);
-    const unsubscribe = subscribeToSavedCollegeChanges(syncSavedCount);
-
-    return () => {
-      cancelled = true;
-      unsubscribe();
-    };
-  }, [savedCount]);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -169,6 +160,19 @@ export function SiteHeader({ savedCount }: { savedCount?: number }) {
                 {label === "Saved" && displayedSavedCount > 0 ? (
                   <span className="nav-count">{displayedSavedCount}</span>
                 ) : null}
+                {label === "Saved" && syncPhase === "error" ? (
+                  <span className="nav-sync-state is-error">
+                    <CircleAlert size={15} aria-hidden="true" />
+                    <span className="sr-only">{savedStatusLabel}</span>
+                  </span>
+                ) : label === "Saved" &&
+                  (syncPhase === "syncing" ||
+                    syncPhase === "loading-account") ? (
+                  <span className="nav-sync-state is-pending">
+                    <RefreshCw size={14} aria-hidden="true" />
+                    <span className="sr-only">{savedStatusLabel}</span>
+                  </span>
+                ) : null}
               </Link>
             );
           })}
@@ -239,7 +243,9 @@ export function SiteHeader({ savedCount }: { savedCount?: number }) {
                     <Icon size={18} aria-hidden="true" />
                     <span>{label}</span>
                     {label === "Saved" ? (
-                      <small>{displayedSavedCount} saved on this device</small>
+                      <small>
+                        {displayedSavedCount} saved · {savedStatusLabel.toLowerCase()}
+                      </small>
                     ) : null}
                   </Link>
                 ))}

@@ -60,7 +60,7 @@
       "sourcePage": "https://ir.mit.edu/projects/2025-26-common-data-set/",
       "sourceUrl": "https://ir.mit.edu/projects/2025-26-common-data-set/",
       "artifactUrl": "https://ir.mit.edu/projects/2025-26-common-data-set/",
-      "artifactSha256": "3859ffa5fa224f928e7659e81c205af4d2ecc5d90de96556a4fb2ffae60b54b4",
+      "artifactSha256": "2c0ef61f2005c8b942aea45e8d007ef8d45cd39aa8c86749723d09a5230a1e7d",
       "artifactHashMode": "html-without-volatile-assets-and-edge-challenge",
       "artifactKind": "html",
       "allowedArtifactHosts": [
@@ -74,12 +74,12 @@
       ],
       "review": {
         "status": "approved",
-        "reviewedOn": "2026-08-09",
-        "approvedSha256": "3859ffa5fa224f928e7659e81c205af4d2ecc5d90de96556a4fb2ffae60b54b4",
+        "reviewedOn": "2026-08-12",
+        "approvedSha256": "2c0ef61f2005c8b942aea45e8d007ef8d45cd39aa8c86749723d09a5230a1e7d",
         "method": "manual",
-        "notes": "Checked the admissions, enrollment, graduation, and tuition tables against the registered observations."
+        "notes": "Rechecked every registered admissions, enrollment, graduation, and tuition value after the page's Yoast generator changed from 27.6 to 28.2; the reviewed MIT tables and values remain unchanged."
       },
-      "accessedOn": "2026-08-09",
+      "accessedOn": "2026-08-12",
       "finality": "snapshot",
       "publicationStatus": "published",
       "revisionStatus": "published snapshot",
@@ -615,7 +615,7 @@
       "sourcePage": "https://registrar.caltech.edu/records/enrollment-statistics",
       "sourceUrl": "https://registrar.caltech.edu/records/enrollment-statistics",
       "artifactUrl": "https://registrar.caltech.edu/records/enrollment-statistics",
-      "artifactSha256": "8a371614b798cd1abc6c9b1dc7751c82b8ab03b2090064059c901b50126ed0ee",
+      "artifactSha256": "b0e833e73f343cf92ce3ccefd837b39f87bf04212a89424d5054dbe3f4e33564",
       "artifactKind": "html",
       "allowedArtifactHosts": [
         "registrar.caltech.edu"
@@ -627,12 +627,12 @@
       ],
       "review": {
         "status": "approved",
-        "reviewedOn": "2026-08-09",
-        "approvedSha256": "8a371614b798cd1abc6c9b1dc7751c82b8ab03b2090064059c901b50126ed0ee",
+        "reviewedOn": "2026-08-12",
+        "approvedSha256": "b0e833e73f343cf92ce3ccefd837b39f87bf04212a89424d5054dbe3f4e33564",
         "method": "manual",
-        "notes": "Checked the official Registrar page heading, the Undergraduate Total row, and the October 24, 2025 update date. Only the institution-wide undergraduate total is registered."
+        "notes": "Rechecked the official Registrar page after its raw HTML changed. The Fall Enrollment 2025-26 heading, Undergraduate Total of 971, and October 24, 2025 page date remain unchanged; Caltech's July 17, 2026 At a Glance page independently corroborates 971 undergraduates. Only the institution-wide undergraduate total is registered."
       },
-      "accessedOn": "2026-08-09",
+      "accessedOn": "2026-08-12",
       "finality": "snapshot",
       "publicationStatus": "published",
       "revisionStatus": "official Registrar page updated October 24, 2025",
@@ -646,7 +646,7 @@
       "sourcePage": "https://www.finaid.caltech.edu/Costs",
       "sourceUrl": "https://www.finaid.caltech.edu/Costs",
       "artifactUrl": "https://www.finaid.caltech.edu/Costs",
-      "artifactSha256": "41f8de84d9d6f18706b8de372fdaa4289a858fccb48782c23e90ae3d10cd20b2",
+      "artifactSha256": "034972cb9ebec71a6d45779a137091125cc4aa3c6e08cd3065fae4cbdeae7abe",
       "artifactKind": "html",
       "allowedArtifactHosts": [
         "www.finaid.caltech.edu"
@@ -659,12 +659,12 @@
       ],
       "review": {
         "status": "approved",
-        "reviewedOn": "2026-08-09",
-        "approvedSha256": "41f8de84d9d6f18706b8de372fdaa4289a858fccb48782c23e90ae3d10cd20b2",
+        "reviewedOn": "2026-08-12",
+        "approvedSha256": "034972cb9ebec71a6d45779a137091125cc4aa3c6e08cd3065fae4cbdeae7abe",
         "method": "manual",
-        "notes": "Checked the official 2026-27 undergraduate on-campus cost table and footnotes. Registered $68,574 tuition plus $2,655 mandatory fees; excluded housing, food, books, travel, optional health insurance, and the one-time $600 entering-student orientation fee."
+        "notes": "Rechecked the official page after its raw HTML changed. The 2026-27 undergraduate table still reports $68,574 tuition plus $2,655 mandatory fees, independently corroborated by Caltech's Bursar schedule; housing, food, books, travel, optional health insurance, and the one-time $600 entering-student orientation fee remain excluded."
       },
-      "accessedOn": "2026-08-09",
+      "accessedOn": "2026-08-12",
       "finality": "snapshot",
       "publicationStatus": "published",
       "revisionStatus": "official published 2026-27 undergraduate cost table",
@@ -678,7 +678,7 @@
       "sourcePage": "https://www.pomona.edu/administration/finance-office/student-accounts/tuition-and-costs",
       "sourceUrl": "https://www.pomona.edu/administration/finance-office/student-accounts/tuition-and-costs",
       "artifactUrl": "https://www.pomona.edu/administration/finance-office/student-accounts/tuition-and-costs",
-      "artifactSha256": "dbe1fe090fc32c2cc4a240c1afc23473cfd25f419820f26210c2514d39777a0c",
+      "artifactSha256": "43d02e1a3677813f4ac7bc2a718f540411f8ee15fe2db88310a41af4c9b1f674",
       "artifactKind": "html",
       "allowedArtifactHosts": [
         "www.pomona.edu"
@@ -692,12 +692,12 @@
       ],
       "review": {
         "status": "approved",
-        "reviewedOn": "2026-08-09",
-        "approvedSha256": "dbe1fe090fc32c2cc4a240c1afc23473cfd25f419820f26210c2514d39777a0c",
+        "reviewedOn": "2026-08-12",
+        "approvedSha256": "43d02e1a3677813f4ac7bc2a718f540411f8ee15fe2db88310a41af4c9b1f674",
         "method": "manual",
-        "notes": "Checked both the semester charges and annual 2026-27 cost-of-attendance table. Registered $71,660 annual tuition plus $420 annual fees; excluded the one-time deposit, housing and food, medical insurance, departmental charges, and other conditional fees."
+        "notes": "Rechecked the official page after its raw HTML changed while its April 30, 2026 modification timestamp remained unchanged. The semester and annual 2026-27 tables still report $71,660 annual tuition plus $420 annual fees; the one-time deposit, housing and food, medical insurance, departmental charges, and other conditional fees remain excluded."
       },
-      "accessedOn": "2026-08-09",
+      "accessedOn": "2026-08-12",
       "finality": "snapshot",
       "publicationStatus": "published",
       "revisionStatus": "official published 2026-27 tuition and costs page",
