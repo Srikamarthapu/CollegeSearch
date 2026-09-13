@@ -8,5 +8,20 @@
   "initialUI": "Account verified; Saved-list sync Up to date; three synthetic saved colleges",
   "naturalExpiryBoundary": "2026-09-13T22:04:57Z",
   "status": "in_progress",
-  "scope": "Normal sign-in and real elapsed time; no browser token/storage reads, clock injection or provider lifetime changes. Backend observations are restricted to the disposable account."
+  "scope": "Normal sign-in and real elapsed time; no browser token/storage reads, clock injection or provider lifetime changes. Backend observations are restricted to the disposable account.",
+  "observations": [
+    {
+      "checkedAt": "2026-09-13T21:34:20Z",
+      "browserSessionId": "5bdf6731-df7d-414f-ba27-af529ac3250a",
+      "browserSessionRefreshedAt": null,
+      "browserSessionRefreshTokenCounter": null,
+      "ui": "Routine account re-verification completed: Account verified; Up to date; three saved colleges",
+      "status": "waiting_for_real_expiry"
+    }
+  ],
+  "liveObserver": {
+    "execSessionId": 62944,
+    "target": "2026-09-13T22:04:59Z",
+    "purpose": "Wait for real expiry, then ask the provider to reject the original non-refreshing control token. Browser refresh/mutation and exact cleanup follow separately."
+  }
 }

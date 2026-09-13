@@ -32,3 +32,9 @@ gh api repos/Srikamarthapu/CollegeSearch/git/trees/4519fc12f2eb0e13c68bb56d0fd9d
 gh api 'repos/Srikamarthapu/CollegeSearch/contents/.github/workflows/live-data-verification.yml?ref=codex%2Fproduction-foundation'
 gh api 'repos/Srikamarthapu/CollegeSearch/actions/runs?per_page=5'
 ```
+
+## Applied CI protection follow-up
+
+At 21:38 UTC, the root applied minimal CI protection. A fresh GET confirmed main is protected; the required check is **Verify application and committed evidence**, pinned to GitHub Actions app 15368, with strict/up-to-date checking and administrator enforcement. No reviewer is required, and force pushes/branch deletion are disabled. `gh pr checks 1 --required` resolved the existing check as SUCCESS. The default branch SHA is unchanged; the PR remains draft. See main-protection-{before,request,verified,check}.json. The earlier unprotected observation remains historical. The first request included both legacy contexts and modern checks and was rejected with422; removing legacy contexts produced the accepted request. [GitHub protection API](https://docs.github.com/en/rest/branches/branch-protection#update-branch-protection)
+
+Scheduled verification and real alert receipt remain unverified because the workflow has not yet reached the default branch. No workflow or notification was dispatched.

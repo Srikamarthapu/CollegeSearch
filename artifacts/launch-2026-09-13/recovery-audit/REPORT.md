@@ -16,7 +16,7 @@ September 13, 2026. This follow-up keeps the full school-launch acceptance goal 
 
 The isolated local database restore passed: three synthetic users, three sessions, four saved rows, matching app schema/grants/policies/migrations, and six ownership/anonymous/revocation/deletion-reconciliation cases. The checkpoint reproduced post-backup account resurrection, and exact deletion reconciliation removed only the sentinel account and dependent rows. Temporary resources were removed; existing Docker resources were unchanged. See database-restore/REPORT.md for limits, commands and cleanup evidence. This is not a hosted/off-site backup or an Auth HTTP restore.
 
-Read-only GitHub inspection confirmed main was unprotected with no effective rulesets. Weekly source verification exists only on the review branch; it is absent from the default branch and no retained scheduled run was found. Passing PR CI does not establish enforcement, scheduler execution or notification receipt. See github-release-controls.md.
+Initial GitHub inspection confirmed main was unprotected with no effective rulesets. The follow-up applied and verified strict CI protection, including administrators, with the existing GitHub Actions check; force pushes/deletion are disabled and no reviewer is required. Weekly source verification exists only on the review branch; it is absent from the default branch and no retained scheduled run was found. Passing PR CI does not establish enforcement, scheduler execution or notification receipt. See github-release-controls.md.
 
 ## In progress and remaining gates
 
