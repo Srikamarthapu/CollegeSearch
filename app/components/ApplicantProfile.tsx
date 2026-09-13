@@ -56,6 +56,7 @@ function ScopedApplicantProfile({ scope }: { scope: string }) {
   const [confirmClear, setConfirmClear] = useState(false);
   const clearProfileButtonRef = useRef<HTMLButtonElement>(null);
   const keepProfileButtonRef = useRef<HTMLButtonElement>(null);
+  const saveStatusRef = useRef<HTMLParagraphElement>(null);
   const [clearing, setClearing] = useState(false);
   const [actionStatus, setActionStatus] = useState("");
   const [previewDate] = useState(() => new Date());
@@ -94,6 +95,21 @@ function ScopedApplicantProfile({ scope }: { scope: string }) {
     window.requestAnimationFrame(() => {
       const control = open ? keepProfileButtonRef.current : clearProfileButtonRef.current;
       control?.focus();
+    });
+  }
+
+  async function recoverDraft(action: "replace" | "reload" | "retry", trigger: HTMLButtonElement) {
+    const focusOrigin = document.activeElement;
+    if (action === "reload") setEditor(sessions.useSaved(scope));
+    else await sessions.saveDraft(scope, action === "replace");
+    window.requestAnimationFrame(() => {
+      // Only repair focus when the recovery action no longer exists.
+      if (trigger.isConnected) return;
+      const active = document.activeElement;
+      const removedOrigin = focusOrigin && !focusOrigin.isConnected && active === document.body;
+      if (active !== focusOrigin && !removedOrigin) return;
+      const control = saveStatusRef.current;
+      if (control && !control.closest("details:not([open]), [hidden], [inert]") && control.getClientRects().length) control.focus();
     });
   }
 
@@ -143,7 +159,7 @@ function ScopedApplicantProfile({ scope }: { scope: string }) {
           </aside>
         </div>
 
-        <p className={styles.saveStatus} role="status">
+        <p ref={saveStatusRef} className={styles.saveStatus} role="status" tabIndex={-1}>
           {editor.status === "ready" ? <Check size={16} aria-hidden="true" /> : <HardDrive size={16} aria-hidden="true" />}
           <span>{editor.status === "ready"
             ? editor.persisted ? "Saved in this browser. Each change saves automatically." : "All fields are optional. Entries save in this browser as you type."
@@ -155,11 +171,11 @@ function ScopedApplicantProfile({ scope }: { scope: string }) {
         </p>
         {needsRecovery ? (
           <div className={styles.recovery}>
-            <button type="button" onClick={() => { void sessions.saveDraft(scope, true); }}>Replace browser copy with my draft</button>
-            <button type="button" onClick={() => setEditor(sessions.useSaved(scope))}>Discard my draft and reload browser copy</button>
+            <button type="button" onClick={(event) => { void recoverDraft("replace", event.currentTarget); }}>Replace browser copy with my draft</button>
+            <button type="button" onClick={(event) => { void recoverDraft("reload", event.currentTarget); }}>Discard my draft and reload browser copy</button>
           </div>
         ) : (editor.status === "unavailable" || editor.status === "unsupported") ? (
-          <div className={styles.recovery}><button type="button" onClick={() => { void sessions.saveDraft(scope); }}>Retry saving this draft</button></div>
+          <div className={styles.recovery}><button type="button" onClick={(event) => { void recoverDraft("retry", event.currentTarget); }}>Retry saving this draft</button></div>
         ) : null}
 
         <fieldset className={styles.section} disabled={clearing}>
@@ -232,7 +248,7 @@ function ScopedApplicantProfile({ scope }: { scope: string }) {
           <p>Signing out hides this account’s profile without erasing it. Anyone using the same browser profile can access guest notes. Clear your profile before leaving a shared device.</p>
           {confirmClear ? <div className={styles.clearConfirm}>
             <p id={`${id}-clear-question`}>Clear this {scope === "guest" ? "guest" : "account"} profile and its current draft from this browser?</p>
-            <button type="button" disabled={clearing} aria-describedby={`${id}-clear-question`} onClick={async () => { const trigger = document.activeElement; setClearing(true); const result = await sessions.clear(scope); setEditor(result); setClearing(false); setClearConfirmation(false, document.activeElement === trigger || document.activeElement === document.body); setActionStatus(result.status === "ready" ? "Profile cleared from this browser." : result.status === "conflict" ? "Another tab changed this profile before it could be cleared. Review the current copies first." : "The browser could not fully clear the profile. Your draft is still available; clear this site’s browser data to remove all stored copies."); }}>{clearing ? "Clearing profile…" : "Yes, clear this profile"}</button>
+            <button type="button" disabled={clearing} aria-describedby={`${id}-clear-question`} onClick={async () => { const trigger = document.activeElement; setClearing(true); const result = await sessions.clear(scope); setEditor(result); setClearing(false); setClearConfirmation(false, document.activeElement === trigger || document.activeElement === document.body); setActionStatus(result.cleared ? "Profile cleared from this browser." : result.status === "conflict" ? "Another tab changed this profile before it could be cleared. Review the current copies first." : result.status === "ready" || result.status === "saving" ? "Profile was not cleared because it changed while clearing was pending. Review the current profile before trying again." : result.status === "blocked" ? "Profile clearing stopped because account or browser verification changed. No clear was completed." : "The browser could not fully clear the profile. Your draft is still available; clear this site’s browser data to remove all stored copies."); }}>{clearing ? "Clearing profile…" : "Yes, clear this profile"}</button>
             <button ref={keepProfileButtonRef} type="button" disabled={clearing} aria-describedby={`${id}-clear-question`} onClick={() => setClearConfirmation(false)}>Keep profile</button>
           </div> : <button ref={clearProfileButtonRef} type="button" onClick={() => setClearConfirmation(true)}><Trash2 size={16} aria-hidden="true" />Clear profile</button>}
         </div>

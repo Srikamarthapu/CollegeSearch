@@ -75,6 +75,22 @@ function ScopedDeadlinePlanner({ scope, colleges, store }: { scope: string; coll
     if (document.activeElement !== target && fallback && plannerRef.current.contains(fallback)) fallback.focus();
   });
   function focusAfterUpdate(target: string) { pendingFocus.current = `${id}-${target}`; }
+  function focusAfterAsync(target: "storage" | "restore-heading", origin: Element | null, removedTrigger?: HTMLButtonElement) {
+    window.requestAnimationFrame(() => {
+      if (!plannerRef.current || removedTrigger?.isConnected) return;
+      const active = document.activeElement;
+      const removedOrigin = origin && !origin.isConnected && active === document.body;
+      if (active !== origin && !removedOrigin) return;
+      const control = document.getElementById(`${id}-${target}`);
+      if (control && plannerRef.current.contains(control) && !control.matches(":disabled") && !control.closest("details:not([open]), [hidden], [inert]") && control.getClientRects().length) control.focus();
+    });
+  }
+  async function recoverList(action: "replace" | "reload" | "retry", trigger: HTMLButtonElement) {
+    const focusOrigin = document.activeElement;
+    if (action === "reload") setSnapshot(store.useSaved(scope));
+    else await store.flush(scope, action === "replace");
+    focusAfterAsync("storage", focusOrigin, trigger);
+  }
 
   useEffect(() => {
     const unsubscribe = store.subscribe(() => { setSnapshot(store.get(scope)); setForm(store.getEditor(scope)); });
@@ -150,10 +166,11 @@ function ScopedDeadlinePlanner({ scope, colleges, store }: { scope: string; coll
   async function readBackup(file?: File) {
     if (!file) return;
     if (file.size > DEADLINE_BACKUP_MAX_BYTES) { setMessage("That file is too large. Use a CollegeSearch deadline backup under 1 MB."); return; }
+    const focusOrigin = document.activeElement;
     try {
       const restored = parseDeadlineBackup(await file.text(), knownIds);
       if (!restored) { setMessage("This backup could not be restored. It must contain at most 100 valid tasks for colleges in this directory, with valid dates and source links."); return; }
-      focusAfterUpdate("restore-heading"); setRestore(restored); setMessage("");
+      setRestore(restored); setMessage(""); focusAfterAsync("restore-heading", focusOrigin);
     } catch { setMessage("The file could not be read. Your current tracker is unchanged."); }
   }
   const status = snapshot.status === "ready"
@@ -196,8 +213,8 @@ function ScopedDeadlinePlanner({ scope, colleges, store }: { scope: string; coll
       <div><span className={styles.eyebrow}><CalendarDays size={16} aria-hidden="true" />Your next steps</span><h2 id={`${id}-heading`} tabIndex={-1}>Dates you want to keep in view.</h2><p>Add dates from the college’s official pages or your own plan. CollegeSearch does not supply or verify deadlines, cycles, cut-off times, or time zones.</p></div>
       <button id={`${id}-add`} className={styles.primary} type="button" disabled={Boolean(form.editor) || snapshot.draft.entries.length >= DEADLINE_LIMIT || busy} onClick={() => openForm(emptyDeadlineEditor())}><Plus size={17} aria-hidden="true" />Add a task</button>
     </header>
-    <p className={styles.storage} role="status">{status}</p>
-    {needsChoice ? <div className={styles.actions}><button type="button" onClick={() => { void store.flush(scope, true); }}>Replace browser copy with this list</button><button type="button" onClick={() => setSnapshot(store.useSaved(scope))}>Discard list draft and reload browser copy</button></div> : ["unavailable", "unsupported"].includes(snapshot.status) ? <div className={styles.actions}><button type="button" onClick={() => { void store.flush(scope); }}>Retry saving list</button></div> : null}
+    <p id={`${id}-storage`} className={styles.storage} role="status" tabIndex={-1}>{status}</p>
+    {needsChoice ? <div className={styles.actions}><button type="button" onClick={(event) => { void recoverList("replace", event.currentTarget); }}>Replace browser copy with this list</button><button type="button" onClick={(event) => { void recoverList("reload", event.currentTarget); }}>Discard list draft and reload browser copy</button></div> : ["unavailable", "unsupported"].includes(snapshot.status) ? <div className={styles.actions}><button type="button" onClick={(event) => { void recoverList("retry", event.currentTarget); }}>Retry saving list</button></div> : null}
     <p className={styles.scope}>{scope === "guest" ? "Guest tracker" : "Tracker for this verified account"} · Separate from other users · No account sync or reminder notifications</p>
 
     {form.editor ? <form ref={formRef} className={styles.form} onSubmit={submitForm} noValidate aria-label={form.editor.editingId ? "Edit a tracked date" : "Add a tracked date"}>

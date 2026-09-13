@@ -227,8 +227,12 @@ export function createDeadlinePlanStore(
     },
     useSaved(scope: string) {
       if (!isCurrent(scope)) return get(scope);
-      if (!removeJournal(scope)) return publish(scope, { ...get(scope), status: "unavailable" });
-      return publish(scope, readDeadlinePlan(scope, knownIds, storageProvider()));
+      const current = get(scope);
+      const stored = readDeadlinePlan(scope, knownIds, storageProvider());
+      // Keep the editable draft and journal until a valid browser copy is available.
+      if (stored.status !== "ready") return publish(scope, { ...current, status: stored.status, persisted: false });
+      if (!removeJournal(scope)) return publish(scope, { ...current, status: "unavailable", persisted: false });
+      return publish(scope, stored);
     },
     saveDraft: flush,
     async clear(scope: string): Promise<DeadlinePlanSnapshot> {

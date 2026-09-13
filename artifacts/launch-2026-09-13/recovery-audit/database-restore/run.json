@@ -1,0 +1,15 @@
+{
+  "root": "/tmp/collegesearch-restore-gsg4rkw2",
+  "projectId": "CSRestoregsg4rkw2",
+  "databaseContainer": "supabase_db_CSRestoregsg4rkw2",
+  "migrations": [
+    {
+      "file": "20260810042855_create_saved_colleges.sql",
+      "sha256": "e8dcd3e5c446d8b0b64d7fe2cdfac026594abfb88d69c1df81df4181aa1b9765"
+    },
+    {
+      "file": "20260913184505_account_session_validation.sql",
+      "sha256": "272d6bb5fcec226a19160b9ed26559083a52edb951b999ac42e8262663766d60"
+    }
+  ]
+}

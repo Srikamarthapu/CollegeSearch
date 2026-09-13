@@ -1,0 +1,9 @@
+select jsonb_build_object(
+ 'columns',(select jsonb_agg(jsonb_build_object('name',column_name,'type',data_type,'nullable',is_nullable,'default',column_default) order by ordinal_position) from information_schema.columns where table_schema='public' and table_name='saved_colleges'),
+ 'constraints',(select jsonb_agg(pg_get_constraintdef(oid) order by conname) from pg_constraint where conrelid='public.saved_colleges'::regclass),
+ 'rowSecurity',(select relrowsecurity from pg_class where oid='public.saved_colleges'::regclass),
+ 'policies',(select jsonb_agg(jsonb_build_object('name',policyname,'permissive',permissive,'roles',roles,'command',cmd,'using',qual,'check',with_check) order by policyname) from pg_policies where schemaname='public' and tablename='saved_colleges'),
+ 'sessionFunctions',(select jsonb_agg(jsonb_build_object('schema',n.nspname,'owner',pg_get_userbyid(p.proowner),'securityDefiner',p.prosecdef,'config',p.proconfig,'definition',pg_get_functiondef(p.oid)) order by n.nspname) from pg_proc p join pg_namespace n on n.oid=p.pronamespace where p.proname='account_session_active' and n.nspname in ('public','private')),
+ 'grants',jsonb_build_object('anonSelect',has_table_privilege('anon','public.saved_colleges','SELECT'),'authSelect',has_table_privilege('authenticated','public.saved_colleges','SELECT'),'authInsert',has_table_privilege('authenticated','public.saved_colleges','INSERT'),'authDelete',has_table_privilege('authenticated','public.saved_colleges','DELETE'),'authUpdate',has_table_privilege('authenticated','public.saved_colleges','UPDATE'),'anonRpc',has_function_privilege('anon','public.account_session_active()','EXECUTE'),'authRpc',has_function_privilege('authenticated','public.account_session_active()','EXECUTE')),
+ 'migrations',(select jsonb_agg(version order by version) from supabase_migrations.schema_migrations)
+);

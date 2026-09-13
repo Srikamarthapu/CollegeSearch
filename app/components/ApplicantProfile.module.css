@@ -24,7 +24,7 @@
 .localNote { display: flex; align-items: start; gap: 12px; padding: 16px; background: #f3f6fd; border-radius: 8px; }
 .localNote svg { flex: 0 0 auto; margin-top: 3px; color: #385de0; }
 .localNote p { font-size: 12px; }
-.saveStatus { display: flex; gap: 9px; align-items: start; margin: 24px 0; color: #354f75; font-size: 13px; line-height: 1.6; }
+.saveStatus { scroll-margin-block: 100px 24px; display: flex; gap: 9px; align-items: start; margin: 24px 0; color: #354f75; font-size: 13px; line-height: 1.6; }
 .saveStatus svg { flex: 0 0 auto; margin-top: 3px; }
 .recovery { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
 .section { min-width: 0; margin: 28px 0 0; padding: 22px 0 0; border: 0; border-top: 1px solid #d7dfec; }
@@ -51,7 +51,7 @@
 .profile button:hover { background: #eaf0fc; }
 .profile button.download { border-color: #263f87; background: #263f87; color: #fff; }
 .profile button.download:hover { background: #1d3069; }
-.profile :is(button, input, select, textarea, summary, pre):focus-visible { outline: 3px solid #385de0; outline-offset: 3px; }
+.profile :is(button, input, select, textarea, summary, pre, [tabindex]):focus-visible { outline: 3px solid #385de0; outline-offset: 3px; }
 .preview, .briefArea > .help { grid-column: 1 / -1; min-width: 0; }
 .preview summary { min-height: 44px; padding: 12px 0; color: #263f87; font-size: 13px; font-weight: 650; cursor: pointer; }
 .preview pre { max-height: 500px; margin: 6px 0 0; padding: 18px; overflow: auto; border: 1px solid #c9d5e7; border-radius: 7px; background: #fff; color: #243f67; white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--font-geist-mono), monospace; font-size: 12px; line-height: 1.7; }

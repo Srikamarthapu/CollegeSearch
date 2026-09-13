@@ -1,0 +1,12 @@
+{
+  "applicationOrigin": "https://college-compass-students.kamarthapusri.chatgpt.site",
+  "initialSourceCommit": "07672e6603fe43980fbb5923d9c05fe348a746c1",
+  "providerIssuedTokenLifetimeSeconds": 3600,
+  "browserSessionCreatedAt": "2026-09-13T21:04:56.890981Z",
+  "initialBrowserSessionRefreshedAt": null,
+  "initialBrowserSessionRefreshTokenCounter": null,
+  "initialUI": "Account verified; Saved-list sync Up to date; three synthetic saved colleges",
+  "naturalExpiryBoundary": "2026-09-13T22:04:57Z",
+  "status": "in_progress",
+  "scope": "Normal sign-in and real elapsed time; no browser token/storage reads, clock injection or provider lifetime changes. Backend observations are restricted to the disposable account."
+}

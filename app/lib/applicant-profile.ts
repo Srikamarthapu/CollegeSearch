@@ -42,6 +42,7 @@ export type ApplicantProfileSnapshot = {
   draftPersisted?: boolean;
   persisted: boolean;
 };
+export type ApplicantProfileClearResult = ApplicantProfileSnapshot & { cleared: boolean };
 
 export function emptyApplicantProfile(): ApplicantProfile {
   return {
@@ -275,33 +276,38 @@ export function createApplicantProfileSessionStore(
     },
     useSaved(scope: string) {
       if (!isCurrent(scope)) return get(scope);
-      if (!removeJournal(scope)) return publish(scope, { ...get(scope), status: "unavailable" });
-      return publish(scope, readApplicantProfile(scope, storageProvider()));
+      const current = get(scope);
+      const stored = readApplicantProfile(scope, storageProvider());
+      // Keep the editable draft and journal until a valid browser copy is available.
+      if (stored.status !== "ready") return publish(scope, { ...current, status: stored.status, persisted: false });
+      if (!removeJournal(scope)) return publish(scope, { ...current, status: "unavailable", persisted: false });
+      return publish(scope, stored);
     },
     saveDraft: flush,
-    async clear(scope: string): Promise<ApplicantProfileSnapshot> {
+    async clear(scope: string): Promise<ApplicantProfileClearResult> {
+      const outcome = (snapshot: ApplicantProfileSnapshot, cleared = false): ApplicantProfileClearResult => ({ ...snapshot, cleared });
       const key = applicantProfileKey(scope);
       // Finish an outstanding autosave before taking the same lock for clear.
       const pending = key ? running.get(key) : null;
       if (pending) await pending;
       const current = get(scope);
-      if (!key || !isCurrent(scope)) return { ...current, status: "blocked" };
+      if (!key || !isCurrent(scope)) return outcome({ ...current, status: "blocked" });
       const epoch = epochs.get(key) ?? 0;
       const storage = storageProvider();
       const locks = locksProvider();
-      if (!storage || !locks) return publish(scope, { ...current, status: !storage ? "unavailable" : "unsupported" });
+      if (!storage || !locks) return outcome(publish(scope, { ...current, status: !storage ? "unavailable" : "unsupported" }));
       try {
         return await locks.request(`college-search:applicant-profile:${key}`, { mode: "exclusive" }, () => {
-          if (!isCurrent(scope) || (epochs.get(key) ?? 0) !== epoch) return { ...current, status: "blocked" as const };
+          if (!isCurrent(scope) || (epochs.get(key) ?? 0) !== epoch) return outcome({ ...current, status: "blocked" });
           // A new edit made while clear waited is not part of the confirmed clear.
           const latest = get(scope);
-          if (JSON.stringify(latest.draft) !== JSON.stringify(current.draft) || latest.revision !== current.revision) return latest;
-          if (storage.getItem(key) !== current.revision) return publish(scope, { ...current, status: "conflict", persisted: false });
+          if (JSON.stringify(latest.draft) !== JSON.stringify(current.draft) || latest.revision !== current.revision) return outcome(latest);
+          if (storage.getItem(key) !== current.revision) return outcome(publish(scope, { ...current, status: "conflict", persisted: false }));
           storage.removeItem(key);
-          if (!removeJournal(scope)) return publish(scope, { ...current, revision: null, status: "unavailable", persisted: false });
-          return publish(scope, { draft: emptyApplicantProfile(), revision: null, status: "ready", persisted: false });
+          if (!removeJournal(scope)) return outcome(publish(scope, { ...current, revision: null, status: "unavailable", persisted: false }));
+          return outcome(publish(scope, { draft: emptyApplicantProfile(), revision: null, status: "ready", persisted: false }), true);
         });
-      } catch { return publish(scope, { ...current, status: "unavailable", persisted: false }); }
+      } catch { return outcome(publish(scope, { ...current, status: "unavailable", persisted: false })); }
     },
   };
 }
