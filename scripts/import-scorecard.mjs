@@ -4,17 +4,12 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { unzipSync } from "fflate";
 import { atomicWriteFile } from "./lib/atomic-write.mjs";
-import { validateInstitutionOverlays } from "./lib/institution-overlays.mjs";
+import { cohortUnitIdSet, cohortUnitIds } from "./lib/college-cohort.mjs";
+import {
+  resolveInstitutionOverlayObservationSourceId,
+  validateInstitutionOverlays,
+} from "./lib/institution-overlays.mjs";
 import { fetchWithTimeout, readResponseBytes } from "./lib/limited-response.mjs";
-
-const cohortUnitIds = [
-  110635, 110644, 110653, 110662, 445188, 110671, 110680, 110705, 110714,
-  122755, 122409, 110422, 110583, 110565, 110608, 110617, 110592, 110556,
-  110529, 243744, 123961, 110404, 122931, 117946, 111948, 122612, 121345,
-  170976, 236948, 228778, 139755, 199120, 145637, 243780, 240444, 234076,
-  204796, 104151, 104179, 209542, 236939, 166629, 166027, 166683, 130794,
-  186131, 190150, 193900, 198419, 147767,
-];
 
 const aliases = {
   104151: ["ASU", "Arizona State"],
@@ -164,6 +159,13 @@ const federalMetricPeriods = {
 };
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
+const defaultDataDirectory = resolve(scriptDirectory, "../data");
+const dataInputDirectory = process.env.DATA_INPUT_DIR
+  ? resolve(process.env.DATA_INPUT_DIR)
+  : defaultDataDirectory;
+const dataOutputDirectory = process.env.DATA_OUTPUT_DIR
+  ? resolve(process.env.DATA_OUTPUT_DIR)
+  : defaultDataDirectory;
 const localIsoDate = () => {
   const date = new Date();
   return [
@@ -175,25 +177,27 @@ const localIsoDate = () => {
 const accessedOn = process.env.SOURCE_ACCESSED_ON || localIsoDate();
 const ucFinalizedDataset = JSON.parse(
   await readFile(
-    resolve(scriptDirectory, "../data/uc-admissions-2025.json"),
+    resolve(dataInputDirectory, "uc-admissions-2025.json"),
     "utf8",
   ),
 );
 const ucHeadlineDataset = JSON.parse(
   await readFile(
-    resolve(scriptDirectory, "../data/uc-admissions-latest.json"),
+    resolve(dataInputDirectory, "uc-admissions-latest.json"),
     "utf8",
   ),
 );
 const institutionOverlays = JSON.parse(
   await readFile(
-    resolve(scriptDirectory, "../data/institution-overlays.json"),
+    process.env.INSTITUTION_OVERLAYS_PATH
+      ? resolve(process.env.INSTITUTION_OVERLAYS_PATH)
+      : resolve(defaultDataDirectory, "institution-overlays.json"),
     "utf8",
   ),
 );
 validateInstitutionOverlays(institutionOverlays);
 for (const overlay of institutionOverlays.colleges) {
-  if (!cohortUnitIds.includes(overlay.unitId)) {
+  if (!cohortUnitIdSet.has(overlay.unitId)) {
     throw new Error(
       `Institution overlay UNITID ${overlay.unitId} is outside the published cohort.`,
     );
@@ -732,14 +736,17 @@ const colleges = scorecardSnapshot.rows
     const overlay = overlaysByUnitId.get(college.unitId);
     if (!overlay) return college;
 
-    const source = overlaySourcesById.get(overlay.sourceId);
-    if (!source) {
-      throw new Error(
-        `Missing registered source ${overlay.sourceId} for UNITID ${college.unitId}.`,
-      );
-    }
-
     for (const [metric, value] of Object.entries(overlay.observations)) {
+      const sourceId = resolveInstitutionOverlayObservationSourceId(
+        overlay,
+        value,
+      );
+      const source = overlaySourcesById.get(sourceId);
+      if (!source) {
+        throw new Error(
+          `Missing registered source ${sourceId} for UNITID ${college.unitId} ${metric}.`,
+        );
+      }
       if (college.observations[metric]) {
         college.alternateObservations[metric] = college.observations[metric];
       }
@@ -793,7 +800,7 @@ const output = {
   colleges,
 };
 
-const outputPath = resolve(scriptDirectory, "../data/colleges.json");
+const outputPath = resolve(dataOutputDirectory, "colleges.json");
 await mkdir(dirname(outputPath), { recursive: true });
 await atomicWriteFile(outputPath, `${JSON.stringify(output, null, 2)}\n`);
 

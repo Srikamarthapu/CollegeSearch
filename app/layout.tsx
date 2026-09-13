@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import { headers } from "next/headers";
+import { colleges } from "./lib/college-data";
 import { Providers } from "./providers";
 import "lenis/dist/lenis.css";
 import "./globals.css";
+import "./redesign.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "CollegeSearch",
     description:
-      "Search and compare 50 reviewed U.S. colleges with the latest available UC admissions and source-transparent federal data.",
+      "Your college field guide. Explore 50 U.S. colleges, compare dated official records, and build a shortlist with your own research.",
     applicationName: "CollegeSearch",
     keywords: [
       "college search",
@@ -45,13 +47,13 @@ export async function generateMetadata(): Promise<Metadata> {
       "College Scorecard",
     ],
     icons: {
-      icon: "/favicon.svg",
+      icon: { url: "/favicon.svg", type: "image/svg+xml" },
       shortcut: "/favicon.svg",
     },
     openGraph: {
       title: "CollegeSearch — Build a college list you can explain",
       description:
-        "Latest available UC admissions and source-transparent federal college data.",
+        "Explore colleges with dated official records and a place for your own research.",
       type: "website",
       images: [
         {
@@ -71,17 +73,21 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
     <html lang="en">
+      <head><meta property="csp-nonce" nonce={nonce} /></head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable}`}
       >
-        <Providers>{children}</Providers>
+        <Providers knownCollegeIds={colleges.map((college) => college.unitId)}>
+          {children}
+        </Providers>
       </body>
     </html>
   );

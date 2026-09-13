@@ -192,11 +192,14 @@ const output = {
 };
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
+const dataOutputDirectory = process.env.DATA_OUTPUT_DIR
+  ? resolve(process.env.DATA_OUTPUT_DIR)
+  : resolve(scriptDirectory, "../data");
 const archivePath = resolve(
-  scriptDirectory,
-  `../data/uc-admissions-${reportingYear}.json`,
+  dataOutputDirectory,
+  `uc-admissions-${reportingYear}.json`,
 );
-const latestPath = resolve(scriptDirectory, "../data/uc-admissions-latest.json");
+const latestPath = resolve(dataOutputDirectory, "uc-admissions-latest.json");
 await mkdir(dirname(archivePath), { recursive: true });
 const serialized = `${JSON.stringify(output, null, 2)}\n`;
 await Promise.all([

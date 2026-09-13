@@ -1,0 +1,21 @@
+Pushing config to project: CollegeSearch (ptdbmseeooboqbpyvcgw)
+Comparison scope: api, auth, database, pooler, realtime, storage
+Remote API config is up to date.
+Remote DB config is up to date.
+Updating Auth service with config:
+auth.additional_redirect_urls [update]
+  local:  ["http://127.0.0.1:3000/auth/callback","http://127.0.0.1:3000/auth/recovery-callback","http://127.0.0.1:3000/auth/callback\\?sb_flow_id=*","http://127.0.0.1:3000/auth/recovery-callback\\?sb_flow_id=*","http://127.0.0.1:4173/auth/callback","http://127.0.0.1:4173/auth/recovery-callback","http://127.0.0.1:4173/auth/callback\\?sb_flow_id=*","http://127.0.0.1:4173/auth/recovery-callback\\?sb_flow_id=*","http://localhost:3000/auth/callback","http://localhost:3000/auth/recovery-callback","http://localhost:3000/auth/callback\\?sb_flow_id=*","http://localhost:3000/auth/recovery-callback\\?sb_flow_id=*","http://localhost:4173/auth/callback","http://localhost:4173/auth/recovery-callback","http://localhost:4173/auth/callback\\?sb_flow_id=*","http://localhost:4173/auth/recovery-callback\\?sb_flow_id=*","https://college-compass-students.kamarthapusri.chatgpt.site/auth/callback","https://college-compass-students.kamarthapusri.chatgpt.site/auth/recovery-callback","https://college-compass-students.kamarthapusri.chatgpt.site/auth/callback\\?sb_flow_id=*","https://college-compass-students.kamarthapusri.chatgpt.site/auth/recovery-callback\\?sb_flow_id=*"]
+  remote: []
+
+auth.minimum_password_length [update]
+  local:  8
+  remote: 6
+
+auth.site_url [update]
+  local:  "https://college-compass-students.kamarthapusri.chatgpt.site"
+  remote: "http://localhost:3000"
+
+Do you want to push auth config to remote? [Y/n] y
+Remote Storage config is up to date.
+Note: 10 remote properties are not declared in supabase/config.toml and were left unchanged (config push no longer resets undeclared properties to their defaults; run `supabase config diff` to inspect).
+{"schema_version":1,"project_ref":"ptdbmseeooboqbpyvcgw","services":[{"service":"api","status":"up_to_date","changes":[]},{"service":"db.settings","status":"up_to_date","changes":[]},{"service":"db.network_restrictions","status":"disabled","changes":[]},{"service":"db.ssl_enforcement","status":"disabled","changes":[]},{"service":"auth","status":"updated","changes":[["auth","additional_redirect_urls"],["auth","minimum_password_length"],["auth","site_url"]]},{"service":"storage","status":"up_to_date","changes":[]},{"service":"experimental.webhooks","status":"disabled","changes":[]}],"unsupported":[],"unencodable":[],"forced":[],"unmanaged":[],"secrets":{"sent":[],"unchanged":[],"not_set":[],"gated":[],"unencodable":[],"skipped":[]},"declined_addons":[],"remote_only":10,"scope":{"present":["api","auth","database","pooler","realtime","storage"],"missing":[]},"is_branch":false,"message":"3 properties pushed to ptdbmseeooboqbpyvcgw."}

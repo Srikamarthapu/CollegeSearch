@@ -6,7 +6,6 @@ import {
   ArrowDown,
   ArrowRight,
   ArrowUpRight,
-  BarChart3,
   Bookmark,
   BookmarkCheck,
   Check,
@@ -19,7 +18,11 @@ import {
   Search,
   ShieldCheck,
   SlidersHorizontal,
-  Sparkles,
+  Copy,
+  LayoutGrid,
+  List,
+  Plus,
+  BookOpen,
   X,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -38,8 +41,9 @@ import {
 } from "react";
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
-import { SourceSpotlight } from "@/app/components/SourceSpotlight";
 import { CollegeLogo } from "@/app/components/CollegeLogo";
+import { CampusCarousel } from "@/app/components/CampusCarousel";
+import { useSavedColleges } from "@/app/components/saved/SavedCollegesProvider";
 import {
   compactName,
   formatObservation,
@@ -57,6 +61,10 @@ import {
   matchingMajors,
   STATE_NAMES,
 } from "@/app/lib/college-search";
+import {
+  matchesAdvancedExplorerFilters,
+  type EnrollmentBand,
+} from "@/app/lib/explorer-filters";
 
 type ExplorerState = {
   query: string;
@@ -65,6 +73,11 @@ type ExplorerState = {
   ownership: string;
   band: string;
   maxPrice: string;
+  maxTuition: string;
+  enrollmentBand: string;
+  minGraduation: string;
+  minEarnings: string;
+  setting: string;
   ucOnly: boolean;
   completeOnly: boolean;
   savedOnly: boolean;
@@ -79,6 +92,11 @@ type FilterKey =
   | "ownership"
   | "band"
   | "maxPrice"
+  | "maxTuition"
+  | "enrollmentBand"
+  | "minGraduation"
+  | "minEarnings"
+  | "setting"
   | "sort";
 
 type ExplorerAction =
@@ -98,6 +116,11 @@ const defaultExplorerState: ExplorerState = {
   ownership: "",
   band: "",
   maxPrice: "",
+  maxTuition: "",
+  enrollmentBand: "",
+  minGraduation: "",
+  minEarnings: "",
+  setting: "",
   ucOnly: false,
   completeOnly: false,
   savedOnly: false,
@@ -112,7 +135,7 @@ function explorerReducer(
   action: ExplorerAction,
 ): ExplorerState {
   if (action.type === "set") {
-    return { ...state, [action.key]: action.value, visibleCount: 12 };
+    return { ...state, [action.key]: action.value, ...(action.key === "major" && !action.value && state.sort === "major" ? { sort: "name" } : {}), visibleCount: 12 };
   }
   if (action.type === "toggle") {
     return {
@@ -172,176 +195,62 @@ function SourceBadge({ observation }: { observation: ClientObservation }) {
   );
 }
 
-function MetricStamp({
-  label,
-  observation,
-  note,
-  emphasis = false,
-}: {
-  label: string;
-  observation: ClientObservation;
-  note?: string;
-  emphasis?: boolean;
-}) {
-  return (
-    <div className={`metric-stamp ${emphasis ? "metric-primary" : ""}`}>
-      <div className="metric-stamp-head">
-        <span>{label}</span>
-        <small>{observation.periodLabel}</small>
-      </div>
-      <strong>{formatObservation(observation)}</strong>
-      {note ? <span className="metric-stamp-note">{note}</span> : null}
-      <a
-        className="metric-stamp-source"
-        href={observation.sourceUrl}
-        target="_blank"
-        rel="noreferrer"
-      >
-        {observation.publisher}
-        <ArrowUpRight size={12} aria-hidden="true" />
-      </a>
-    </div>
-  );
+function MetricStamp({ label, observation, emphasis = false }: { label: string; observation: ClientObservation; emphasis?: boolean }) {
+  return <div className={`metric-stamp ${emphasis ? "metric-primary" : ""}`}>
+    <span className="metric-label">{label}</span>
+    <strong>{formatObservation(observation)}</strong>
+    <small>{observation.periodLabel}</small>
+  </div>;
 }
 
-const CollegeCard = memo(function CollegeCard({
-  college,
-  selectedMajor,
-  isSelected,
-  isSaved,
-  onCompare,
-  onSave,
-}: {
-  college: ClientCollege;
-  selectedMajor: string;
-  isSelected: boolean;
-  isSaved: boolean;
-  onCompare: (college: ClientCollege) => void;
-  onSave: (college: ClientCollege) => void;
+const CollegeCard = memo(function CollegeCard({ college, selectedMajor, isSelected, isSaved, saveDisabled, onCompare, onSave }: {
+  college: ClientCollege; selectedMajor: string; isSelected: boolean; isSaved: boolean; saveDisabled: boolean;
+  onCompare: (college: ClientCollege) => void; onSave: (college: ClientCollege) => void;
 }) {
   const admitRate = college.observations.admitRate;
-  const graduationSource = observationSourceKind(
-    college.observations.graduationRate,
-  );
-  const majorEvidence = selectedMajor
-    ? majorEvidenceFor(college, selectedMajor)
-    : null;
-
-  return (
-    <article
-      className="college-card"
-      data-testid={`college-${college.unitId}`}
-    >
-      <div className="college-card-main">
-        <div className="college-card-heading">
-          <Link
-            className="college-identity"
-            href={`/colleges/${college.slug}`}
-          >
-            <CollegeLogo college={college} />
-            <span>
-              <span className="college-name">{college.name}</span>
-              <span className="college-meta">
-                <MapPin size={14} aria-hidden="true" />
-                {college.city}, {college.state}
-                <span aria-hidden="true">/</span>
-                {college.ownership}
-              </span>
-            </span>
-          </Link>
-          <SourceBadge observation={admitRate} />
-        </div>
-
-        <div className="card-actions">
-          <button
-            className={`save-button ${isSaved ? "is-active" : ""}`}
-            type="button"
-            aria-pressed={isSaved}
-            onClick={() => onSave(college)}
-          >
-            {isSaved ? (
-              <BookmarkCheck size={17} aria-hidden="true" />
-            ) : (
-              <Bookmark size={17} aria-hidden="true" />
-            )}
-            {isSaved ? "Saved" : "Save"}
-          </button>
-          <button
-            className={`compare-button ${isSelected ? "is-active" : ""}`}
-            type="button"
-            aria-pressed={isSelected}
-            aria-label={
-              isSelected ? `Remove ${college.name} from comparison` : undefined
-            }
-            onClick={() => onCompare(college)}
-          >
-            {isSelected ? (
-              <Check size={17} aria-hidden="true" />
-            ) : (
-              <BarChart3 size={17} aria-hidden="true" />
-            )}
-            {isSelected ? "Remove" : "Compare"}
-          </button>
-        </div>
-      </div>
-
-      <div className="metric-ledger">
-        <MetricStamp
-          label="Overall acceptance rate"
-          observation={admitRate}
-          note={selectivityLabel(admitRate.value)}
-          emphasis
-        />
-        <MetricStamp
-          label="Average annual cost after grants"
-          observation={college.observations.averageNetPrice}
-          note="Historical federal aid cohort"
-        />
-        <MetricStamp
-          label="Graduate within 6 years"
-          observation={college.observations.graduationRate}
-          note={
-            graduationSource.isFederal
-              ? "Historical federal cohort"
-              : "Official completion cohort"
-          }
-        />
-      </div>
-
-      <div className="college-card-footer">
-        <div className="major-evidence">
-          <GraduationCap size={16} aria-hidden="true" />
-          {selectedMajor ? (
-            majorEvidence ? (
-              <span>
-                <strong>{selectedMajor}</strong> bachelor&apos;s field reported ·{" "}
-                {percentFormatter.format(majorEvidence.share)} of all awards
-              </span>
-            ) : (
-              <span>No recent {selectedMajor} completion evidence found.</span>
-            )
-          ) : (
-            <span>
-              Bachelor&apos;s-field evidence available for {college.majors.length}{" "}
-              broad fields
-            </span>
-          )}
-        </div>
-        <Link className="evidence-link" href={`/colleges/${college.slug}`}>
-          View college details
-          <ArrowUpRight size={15} aria-hidden="true" />
-        </Link>
-      </div>
-
-      {selectedMajor ? (
-        <div className="rate-clarifier">
-          <Info size={14} aria-hidden="true" />
-          {formatObservation(admitRate)} is the college-wide acceptance
-          rate—not a {selectedMajor} acceptance rate.
-        </div>
-      ) : null}
-    </article>
-  );
+  const majorEvidence = selectedMajor ? majorEvidenceFor(college, selectedMajor) : null;
+  const records = [
+    { label: "Average annual cost after grants", observation: college.observations.averageNetPrice },
+    { label: "Overall acceptance rate", observation: admitRate },
+    { label: observationSourceKind(college.observations.graduationRate).isFederal ? "150% completion rate" : "Graduate within 6 years", observation: college.observations.graduationRate },
+    { label: "Undergraduate enrollment", observation: college.observations.undergraduateEnrollment },
+  ];
+  return <article className={`college-card research-card ${isSelected ? "is-selected" : ""}`} data-testid={`college-${college.unitId}`}>
+    <div className="college-card-main">
+      <Link className="college-identity" href={`/colleges/${college.slug}`} title={college.name}>
+        <CollegeLogo college={college} />
+        <span><span className="college-name">{compactName(college)}</span><span className="college-meta"><MapPin size={13} aria-hidden="true" />{college.city}, {college.state}</span></span>
+      </Link>
+      <button className={`save-button ${isSaved ? "is-active" : ""}`} type="button" aria-pressed={isSaved}
+        aria-label={isSaved ? `Remove ${college.name} from saved colleges` : `Save ${college.name}`} disabled={saveDisabled}
+        title={saveDisabled ? "Checking which saved list is active." : isSaved ? "Saved to your shortlist" : "Save to your shortlist"} onClick={() => onSave(college)}>
+        {isSaved ? <BookmarkCheck size={20} aria-hidden="true" /> : <Bookmark size={20} aria-hidden="true" />}
+      </button>
+    </div>
+    <div className="college-character"><span>{college.ownership === "Private nonprofit" ? "Private nonprofit" : "Public university"}</span><span>{college.setting} campus</span><span title={`${college.observations.undergraduateEnrollment.periodLabel} · ${college.observations.undergraduateEnrollment.publisher}`}>{formatObservation(college.observations.undergraduateEnrollment)} undergrads</span></div>
+    <div className="metric-ledger">
+      <MetricStamp label="Net price / year" observation={college.observations.averageNetPrice} emphasis />
+      <MetricStamp label="Overall admit rate" observation={admitRate} />
+      <MetricStamp label={observationSourceKind(college.observations.graduationRate).isFederal ? "Completion rate" : "6-year graduation"} observation={college.observations.graduationRate} />
+    </div>
+    <div className="card-field-line"><GraduationCap size={16} aria-hidden="true" />
+      {selectedMajor && majorEvidence ? <span><strong>{selectedMajor}</strong> · {percentFormatter.format(majorEvidence.share)} of all awards</span> : <span>{college.majors.length} broad fields reported <span className="field-dot">·</span> <Link href={`/colleges/${college.slug}#majors-heading`}>Explore fields</Link></span>}
+    </div>
+    {selectedMajor ? <p className="rate-clarifier"><Info size={14} aria-hidden="true" />{formatObservation(admitRate)} is college-wide, not a {selectedMajor} admission rate.</p> : null}
+    <details className="card-source-details">
+      <summary><BookOpen size={14} aria-hidden="true" /> Sources & what these numbers mean <ChevronDown size={14} aria-hidden="true" /></summary>
+      <div><SourceBadge observation={admitRate} /><p>Net price is a historical average after grants for federal aid recipients, not your personal quote. Rates describe past cohorts. Federal completion measures finishing within 150% of normal program time; official six-year graduation uses each college’s stated cohort.</p>
+      {records.map(({label,observation}) => <div className="card-source-row" key={label}><strong>{label}</strong><span>{observation.periodLabel}</span><a href={observation.sourceUrl} target="_blank" rel="noreferrer">{observation.publisher}<ArrowUpRight size={12} aria-hidden="true" /></a></div>)}
+      <span>{selectivityLabel(admitRate.value)}</span></div>
+    </details>
+    <div className="college-card-footer">
+      <button className={`compare-button ${isSelected ? "is-active" : ""}`} type="button" aria-pressed={isSelected}
+        aria-label={isSelected ? `Remove ${college.name} from comparison` : `Add ${college.name} to comparison`} onClick={() => onCompare(college)}>
+        {isSelected ? <Check size={16} aria-hidden="true" /> : <Plus size={16} aria-hidden="true" />}{isSelected ? "Selected" : "Compare"}
+      </button>
+      <Link className="evidence-link" href={`/colleges/${college.slug}`}>View college <ArrowUpRight size={17} aria-hidden="true" /></Link>
+    </div>
+  </article>;
 });
 
 function SelectField({
@@ -383,6 +292,17 @@ function FilterControls({
   idPrefix: string;
   stateOptions: string[];
 }) {
+  const advancedFilterCount = [
+    state.maxTuition,
+    state.enrollmentBand,
+    state.minGraduation,
+    state.minEarnings,
+    state.setting,
+  ].filter(Boolean).length;
+  const [advancedOpen, setAdvancedOpen] = useState(
+    advancedFilterCount > 0,
+  );
+
   return (
     <div className="filter-controls">
       <SelectField
@@ -473,6 +393,120 @@ function FilterControls({
         <option value="40000">$40,000 or less</option>
       </SelectField>
 
+      <details
+        className="advanced-filters"
+        open={advancedOpen}
+        onToggle={(event) => setAdvancedOpen(event.currentTarget.open)}
+      >
+        <summary>
+          <span>
+            More ways to narrow
+            {advancedFilterCount > 0 ? (
+              <small>{advancedFilterCount} active</small>
+            ) : null}
+          </span>
+          <ChevronDown size={16} aria-hidden="true" />
+        </summary>
+        <div className="advanced-filter-fields">
+          <SelectField
+            id={`${idPrefix}-setting-filter`}
+            label="Campus setting"
+            value={state.setting}
+            onChange={(event) =>
+              dispatch({
+                type: "set",
+                key: "setting",
+                value: event.target.value,
+              })
+            }
+          >
+            <option value="">Any setting</option>
+            <option value="City">City</option>
+            <option value="Suburb">Suburb</option>
+            <option value="Town">Town</option>
+          </SelectField>
+
+          <SelectField
+            id={`${idPrefix}-enrollment-filter`}
+            label="Undergraduate size"
+            value={state.enrollmentBand}
+            onChange={(event) =>
+              dispatch({
+                type: "set",
+                key: "enrollmentBand",
+                value: event.target.value,
+              })
+            }
+          >
+            <option value="">Any size</option>
+            <option value="small">Under 10,000 students</option>
+            <option value="medium">10,000–24,999 students</option>
+            <option value="large">25,000+ students</option>
+          </SelectField>
+
+          <SelectField
+            id={`${idPrefix}-graduation-filter`}
+            label="Minimum graduation rate"
+            value={state.minGraduation}
+            onChange={(event) =>
+              dispatch({
+                type: "set",
+                key: "minGraduation",
+                value: event.target.value,
+              })
+            }
+          >
+            <option value="">Any graduation rate</option>
+            <option value="0.6">60% or higher</option>
+            <option value="0.75">75% or higher</option>
+            <option value="0.9">90% or higher</option>
+          </SelectField>
+
+          <SelectField
+            id={`${idPrefix}-earnings-filter`}
+            label="Minimum median earnings"
+            value={state.minEarnings}
+            onChange={(event) =>
+              dispatch({
+                type: "set",
+                key: "minEarnings",
+                value: event.target.value,
+              })
+            }
+          >
+            <option value="">Any earnings level</option>
+            <option value="75000">$75,000 or higher</option>
+            <option value="100000">$100,000 or higher</option>
+            <option value="125000">$125,000 or higher</option>
+          </SelectField>
+
+          <SelectField
+            id={`${idPrefix}-tuition-filter`}
+            label="Maximum out-of-state/private tuition + required fees"
+            value={state.maxTuition}
+            onChange={(event) =>
+              dispatch({
+                type: "set",
+                key: "maxTuition",
+                value: event.target.value,
+              })
+            }
+          >
+            <option value="">Any published tuition</option>
+            <option value="30000">$30,000 or less</option>
+            <option value="50000">$50,000 or less</option>
+            <option value="70000">$70,000 or less</option>
+            <option value="90000">$90,000 or less</option>
+          </SelectField>
+
+          <p className="advanced-filter-note">
+            Tuition is the published sticker price—not your likely cost. Net
+            price accounts for grants and scholarships for the reported
+            federal cohort.
+          </p>
+        </div>
+      </details>
+
       <div className="filter-toggles">
         <button
           type="button"
@@ -503,7 +537,6 @@ function FilterControls({
           <span>{savedCount}</span>
         </button>
       </div>
-
     </div>
   );
 }
@@ -605,13 +638,14 @@ function SearchBox({
           aria-expanded={open}
           aria-controls={`search-suggestions-${size}`}
           aria-activedescendant={
-            activeIndex >= 0
+            open && activeIndex >= 0 && activeIndex < items.length
               ? `search-suggestion-${size}-${activeIndex}`
               : undefined
           }
           value={value}
+          maxLength={120}
           onChange={(event) => {
-            onChange(event.target.value);
+            onChange(event.target.value.slice(0, 120));
             setActiveIndex(-1);
           }}
           onFocus={() => setFocused(true)}
@@ -711,9 +745,18 @@ export function CollegeSearchApp({
   mode?: "home" | "explore";
 }) {
   const [state, dispatch] = useReducer(explorerReducer, defaultExplorerState);
-  const [saved, setSaved] = useState<number[]>([]);
+  const {
+    canMutate: canMutateSavedColleges,
+    hydrated: savedListHydrated,
+    ids: saved,
+    retrySync: retrySavedList,
+    syncPhase: savedSyncPhase,
+    toggleSaved: toggleSavedId,
+  } = useSavedColleges();
   const [selected, setSelected] = useState<number[]>([]);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [view, setView] = useState<"grid" | "list">("grid");
+  const [shareUrl, setShareUrl] = useState("");
   const [status, setStatus] = useState("");
   const [hydrated, setHydrated] = useState(false);
   const deferredQuery = useDeferredValue(state.query);
@@ -726,8 +769,33 @@ export function CollegeSearchApp({
     () => new Set(colleges.map((college) => college.unitId)),
     [colleges],
   );
+  const evidenceCounts = useMemo(() => {
+    const ucAdmissions = colleges.filter((college) =>
+      college.observations.admitRate.sourceId.startsWith("uc-"),
+    ).length;
+    const federalAdmissions = colleges.filter(
+      (college) =>
+        observationSourceKind(college.observations.admitRate).isFederal,
+    ).length;
+    const reviewedInstitutionRecords = colleges.filter((college) =>
+      Object.values(college.observations).some(
+        (observation) =>
+          !observation.sourceId.startsWith("uc-") &&
+          !observationSourceKind(observation).isFederal,
+      ),
+    ).length;
+    return {
+      firstPartyAdmissions: colleges.length - federalAdmissions,
+      reviewedCollegeAdmissions:
+        colleges.length - federalAdmissions - ucAdmissions,
+      reviewedInstitutionRecords,
+    };
+  }, [colleges]);
 
   useEffect(() => {
+    let cancelled = false;
+    const restore = () => {
+    if (!["/", "/explore"].includes(window.location.pathname)) return;
     const params = new URLSearchParams(window.location.search);
     const allowedBands = new Set([
       "",
@@ -747,8 +815,19 @@ export function CollegeSearchApp({
       "earnings",
     ]);
     const allowedPrices = new Set(["", "15000", "20000", "30000", "40000"]);
+    const allowedTuition = new Set([
+      "",
+      "30000",
+      "50000",
+      "70000",
+      "90000",
+    ]);
+    const allowedEnrollmentBands = new Set(["", "small", "medium", "large"]);
+    const allowedGraduationRates = new Set(["", "0.6", "0.75", "0.9"]);
+    const allowedEarnings = new Set(["", "75000", "100000", "125000"]);
+    const allowedSettings = new Set(["", "City", "Suburb", "Town"]);
     const hydratedState: Partial<ExplorerState> = {
-      query: params.get("q") ?? "",
+      query: (params.get("q") ?? "").slice(0, 120),
       major: majorOptions.includes(params.get("major") ?? "")
         ? params.get("major") ?? ""
         : "",
@@ -766,6 +845,21 @@ export function CollegeSearchApp({
       maxPrice: allowedPrices.has(params.get("price") ?? "")
         ? params.get("price") ?? ""
         : "",
+      maxTuition: allowedTuition.has(params.get("tuition") ?? "")
+        ? params.get("tuition") ?? ""
+        : "",
+      enrollmentBand: allowedEnrollmentBands.has(params.get("size") ?? "")
+        ? params.get("size") ?? ""
+        : "",
+      minGraduation: allowedGraduationRates.has(params.get("grad") ?? "")
+        ? params.get("grad") ?? ""
+        : "",
+      minEarnings: allowedEarnings.has(params.get("earnings") ?? "")
+        ? params.get("earnings") ?? ""
+        : "",
+      setting: allowedSettings.has(params.get("setting") ?? "")
+        ? params.get("setting") ?? ""
+        : "",
       sort: allowedSorts.has(params.get("sort") ?? "")
         ? params.get("sort") ?? "name"
         : "name",
@@ -780,48 +874,24 @@ export function CollegeSearchApp({
       .filter((unitId) => collegeIds.has(unitId))
       .slice(0, 4);
     const hydratedComparison = Array.from(new Set(comparison));
-    let hydratedSaved: number[] = [];
-
-    try {
-      const parsed = JSON.parse(
-        window.localStorage.getItem("college-search-saved") ??
-          window.localStorage.getItem("college-compass-saved") ??
-          "[]",
-      );
-      if (Array.isArray(parsed)) {
-        hydratedSaved = Array.from(
-          new Set(
-            parsed
-              .filter(Number.isInteger)
-              .filter((unitId) => collegeIds.has(unitId)),
-          ),
-        );
-      }
-    } catch {
-      try {
-        window.localStorage.removeItem("college-search-saved");
-        window.localStorage.removeItem("college-compass-saved");
-      } catch {
-        // Storage can be unavailable in hardened/private browser contexts.
-      }
-    }
-
-    let cancelled = false;
+    if (hydratedState.sort === "major" && !hydratedState.major) hydratedState.sort = "name";
     queueMicrotask(() => {
-      if (cancelled) return;
+      if (cancelled || !["/", "/explore"].includes(window.location.pathname)) return;
       dispatch({ type: "hydrate", value: hydratedState });
       setSelected(hydratedComparison);
-      setSaved(hydratedSaved);
       setHydrated(true);
     });
-
+    };
+    restore();
+    window.addEventListener("popstate", restore);
     return () => {
       cancelled = true;
+      window.removeEventListener("popstate", restore);
     };
   }, [collegeIds, stateOptions]);
 
   useEffect(() => {
-    if (!hydrated) return;
+    if (!hydrated || !["/", "/explore"].includes(window.location.pathname)) return;
     const params = new URLSearchParams();
     if (state.query) params.set("q", state.query);
     if (state.major) params.set("major", state.major);
@@ -829,6 +899,11 @@ export function CollegeSearchApp({
     if (state.ownership) params.set("type", state.ownership);
     if (state.band) params.set("band", state.band);
     if (state.maxPrice) params.set("price", state.maxPrice);
+    if (state.maxTuition) params.set("tuition", state.maxTuition);
+    if (state.enrollmentBand) params.set("size", state.enrollmentBand);
+    if (state.minGraduation) params.set("grad", state.minGraduation);
+    if (state.minEarnings) params.set("earnings", state.minEarnings);
+    if (state.setting) params.set("setting", state.setting);
     if (state.sort !== "name") params.set("sort", state.sort);
     if (state.ucOnly) params.set("uc", "1");
     if (state.completeOnly) params.set("complete", "1");
@@ -836,9 +911,9 @@ export function CollegeSearchApp({
     if (selected.length) params.set("compare", selected.join(","));
     const query = params.toString();
     window.history.replaceState(
-      null,
+      window.history.state,
       "",
-      `${window.location.pathname}${query ? `?${query}` : ""}`,
+      `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`,
     );
   }, [hydrated, selected, state]);
 
@@ -855,22 +930,32 @@ export function CollegeSearchApp({
       ),
     );
     const maxPrice = Number(state.maxPrice) || null;
+    const maxTuition = Number(state.maxTuition) || null;
+    const minGraduation = Number(state.minGraduation) || null;
+    const minEarnings = Number(state.minEarnings) || null;
 
     const filtered = colleges.filter((college) => {
-        const admitRate = college.observations.admitRate.value;
-        const netPrice = college.observations.averageNetPrice.value;
-        return (
+      const admitRate = college.observations.admitRate.value;
+      const netPrice = college.observations.averageNetPrice.value;
+      return (
           queryMatches.has(college.unitId) &&
           (!state.major || Boolean(majorEvidenceFor(college, state.major))) &&
           (!state.stateCode || college.state === state.stateCode) &&
           (!state.ownership || college.ownership === state.ownership) &&
           matchesBand(admitRate, state.band) &&
           (!maxPrice || (netPrice !== null && netPrice <= maxPrice)) &&
+          matchesAdvancedExplorerFilters(college, {
+            maxTuition,
+            enrollmentBand: state.enrollmentBand as EnrollmentBand,
+            minGraduation,
+            minEarnings,
+            setting: state.setting,
+          }) &&
           (!state.ucOnly || isUniversityOfCalifornia(college)) &&
           (!state.completeOnly || hasCompleteCoreData(college)) &&
           (!state.savedOnly || saved.includes(college.unitId))
-        );
-      });
+      );
+    });
 
     return filtered.sort((left, right) => {
       if (state.sort === "major" && state.major) {
@@ -926,10 +1011,15 @@ export function CollegeSearchApp({
     saved,
     state.band,
     state.completeOnly,
+    state.enrollmentBand,
     state.major,
+    state.maxTuition,
     state.maxPrice,
+    state.minEarnings,
+    state.minGraduation,
     state.ownership,
     state.savedOnly,
+    state.setting,
     state.sort,
     state.stateCode,
     state.ucOnly,
@@ -941,20 +1031,18 @@ export function CollegeSearchApp({
     .filter(Boolean) as ClientCollege[];
 
   function toggleSaved(college: ClientCollege) {
-    setSaved((current) => {
-      const next = current.includes(college.unitId)
-        ? current.filter((unitId) => unitId !== college.unitId)
-        : [...current, college.unitId];
-      try {
-        window.localStorage.setItem(
-          "college-search-saved",
-          JSON.stringify(next),
-        );
-      } catch {
-        setStatus("This browser could not save that college.");
-      }
-      return next;
-    });
+    toggleSavedId(college.unitId);
+    setStatus(saved.includes(college.unitId) ? `${compactName(college)} removed from your list.` : `${compactName(college)} added to your list.`);
+  }
+
+  async function shareSearch() {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setStatus("Search link copied. Your filters and comparison travel with it.");
+      setShareUrl("");
+    } catch {
+      setShareUrl(window.location.href);
+    }
   }
 
   function toggleCompare(college: ClientCollege) {
@@ -1041,6 +1129,52 @@ export function CollegeSearchApp({
             dispatch({ type: "set", key: "maxPrice", value: "" }),
         }
       : null,
+    state.maxTuition
+      ? {
+          label: `Published tuition ≤ $${Number(
+            state.maxTuition,
+          ).toLocaleString()}`,
+          clear: () =>
+            dispatch({ type: "set", key: "maxTuition", value: "" }),
+        }
+      : null,
+    state.enrollmentBand
+      ? {
+          label:
+            state.enrollmentBand === "small"
+              ? "Under 10,000 students"
+              : state.enrollmentBand === "medium"
+                ? "10,000–24,999 students"
+                : "25,000+ students",
+          clear: () =>
+            dispatch({ type: "set", key: "enrollmentBand", value: "" }),
+        }
+      : null,
+    state.minGraduation
+      ? {
+          label: `Graduation rate ≥ ${Math.round(
+            Number(state.minGraduation) * 100,
+          )}%`,
+          clear: () =>
+            dispatch({ type: "set", key: "minGraduation", value: "" }),
+        }
+      : null,
+    state.minEarnings
+      ? {
+          label: `Median earnings ≥ $${Number(
+            state.minEarnings,
+          ).toLocaleString()}`,
+          clear: () =>
+            dispatch({ type: "set", key: "minEarnings", value: "" }),
+        }
+      : null,
+    state.setting
+      ? {
+          label: `${state.setting} setting`,
+          clear: () =>
+            dispatch({ type: "set", key: "setting", value: "" }),
+        }
+      : null,
     state.ucOnly
       ? {
           label: "UC campuses",
@@ -1064,6 +1198,9 @@ export function CollegeSearchApp({
   const compareHref = `/compare?colleges=${selected.join(",")}${
     state.major ? `&major=${encodeURIComponent(state.major)}` : ""
   }`;
+  const savedListUnavailable = state.savedOnly && !savedListHydrated;
+  const savedListFailed =
+    savedListUnavailable && savedSyncPhase === "error";
 
   return (
     <>
@@ -1072,149 +1209,22 @@ export function CollegeSearchApp({
       <main
         id="main-content"
         className={mode === "explore" ? "explore-page" : ""}
+        data-discovery-mode={mode}
       >
-        {mode === "home" ? (
-        <section className="hero">
-          <div className="hero-copy">
-            <span className="edition-label">
-              <span>Edition 01</span>
-              College discovery, clearly sourced
-            </span>
-            <h1>
-              Find a college you can <em>understand.</em>
-            </h1>
-            <p>
-              Search and compare 50 reviewed colleges using current UC and
-              selected manually reviewed college records alongside source-transparent federal
-              evidence—without rankings, mystery scores, or fake predictions.
-            </p>
-            <SearchBox
-              colleges={colleges}
-              value={state.query}
-              onChange={(value) =>
-                dispatch({ type: "set", key: "query", value })
-              }
-              onMajor={applyMajor}
-              onSubmit={submitSearch}
-              resultCount={results.length}
-            />
-            <div className="quick-starts" aria-label="Popular starting points">
-              <span>Start with</span>
-              {[
-                { label: "Computing", value: "Computing & Information Sciences" },
-                { label: "Business", value: "Business & Marketing" },
-                { label: "Biology", value: "Biological & Biomedical Sciences" },
-              ].map((field) => (
-                <button
-                  type="button"
-                  key={field.value}
-                  onClick={() => applyMajor(field.value)}
-                >
-                  {field.label}
-                </button>
-              ))}
-              <button
-                type="button"
-                onClick={() => {
-                  dispatch({ type: "set", key: "stateCode", value: "CA" });
-                  scrollToExplore();
-                }}
-              >
-                California
-              </button>
-            </div>
+        <section className="discovery-masthead" aria-labelledby="discovery-title">
+          <div className="discovery-intro">
+            <span className="discovery-eyebrow"><span /> Your college search, all together</span>
+            <h1 id="discovery-title"><span>Big possibilities.</span><br /><em>Find your starting point.</em></h1>
+            <p>Explore {colleges.length} U.S. colleges. Get clear on costs, find your field, and build a list that makes sense for you.</p>
           </div>
-
-          <SourceSpotlight className="evidence-ledger-card">
-            <div className="ledger-card-head">
-              <div>
-                <span>Data at a glance</span>
-                <strong>Newest reviewed records first</strong>
-              </div>
-              <ShieldCheck size={23} aria-hidden="true" />
-            </div>
-            <div className="ledger-release-list">
-              <div>
-                <span className="ledger-index">01</span>
-                <span>
-                  <strong>UC admissions</strong>
-                  <small>Preliminary UC Fall 2026 + reviewed updates</small>
-                </span>
-                <span className="release-status">2026</span>
-              </div>
-              <div>
-                <span className="ledger-index">02</span>
-                <span>
-                  <strong>College-reported updates</strong>
-                  <small>ASU, Stanford, and MIT · 2025-26 CDS</small>
-                </span>
-                <span className="release-status neutral">3 CDS</span>
-              </div>
-              <div>
-                <span className="ledger-index">03</span>
-                <span>
-                  <strong>Federal baseline + fields</strong>
-                  <small>College Scorecard · reporting periods vary</small>
-                </span>
-                <span className="release-status neutral">DATED</span>
-              </div>
-            </div>
-            <div className="ledger-card-foot">
-              <span>50 colleges</span>
-              <span>12 first-party admission records</span>
-              <Link href="/data-sources">
-                View all sources
-                <ArrowRight size={14} aria-hidden="true" />
-              </Link>
-            </div>
-          </SourceSpotlight>
+          <CampusCarousel />
         </section>
-      ) : (
-        <section className="explore-masthead">
-          <span className="edition-label">
-            <span>Evidence explorer</span>
-            50 reviewed colleges
-          </span>
-          <div>
-            <h1>Search the evidence, not a ranking.</h1>
+
+        <section className="explore-section research-explorer" id="explore" aria-label="Explore colleges">
+          <div className="research-section-heading">
+            <div><h2>Explore colleges</h2><span>{colleges.length} in this collection</span></div>
+            <div className="research-heading-links"><Link href="/match"><SlidersHorizontal size={17} aria-hidden="true" /> Find my fit</Link><Link href="/saved"><Bookmark size={17} aria-hidden="true" /> My shortlist{saved.length ? ` (${saved.length})` : ""}</Link></div>
           </div>
-          <p>
-            Filter by field, location, cost, and selectivity. Every headline
-            metric keeps its source and reporting period attached.
-          </p>
-        </section>
-      )}
-
-      <section className="trust-strip" aria-label="Data trust statement">
-        <div>
-          <ShieldCheck size={18} aria-hidden="true" />
-          <span>
-            <strong>Every number shows its source and period.</strong>
-            <span className="trust-detail">
-              {" "}Newer official college records replace older federal fields
-              only after verification.
-            </span>
-          </span>
-        </div>
-        <Link href="/methodology">
-          How the data works
-          <ArrowRight size={15} aria-hidden="true" />
-        </Link>
-      </section>
-
-      <section className="explore-section" id="explore">
-        <div className="section-intro">
-          <div>
-            <span className="section-number">01 / Explore</span>
-            <h2>Find colleges that match what matters to you.</h2>
-          </div>
-          <p>
-            Search by college or field of study, then narrow by location, cost,
-            and acceptance rate. Field filters use 2024-2025 federal program
-            and award data.
-          </p>
-        </div>
-
         <div className="explorer-shell">
           <aside className="filter-panel" aria-label="College filters">
             <div className="filter-panel-head">
@@ -1224,6 +1234,7 @@ export function CollegeSearchApp({
                 <span>{activeFilters.length} active</span>
               ) : null}
             </div>
+            {activeFilters.length ? <button className="sidebar-reset" type="button" onClick={() => dispatch({ type: "clear" })}>Reset filters</button> : null}
             <FilterControls
               state={state}
               dispatch={dispatch}
@@ -1231,6 +1242,7 @@ export function CollegeSearchApp({
               idPrefix="sidebar"
               stateOptions={stateOptions}
             />
+            <div className="filter-help"><Info size={17} aria-hidden="true" /><p>Our collection covers 50 colleges, with a focus on California. <Link href="/data-sources">See coverage & sources</Link></p></div>
           </aside>
 
           <div className="results-panel">
@@ -1245,6 +1257,12 @@ export function CollegeSearchApp({
                 onMajor={applyMajor}
                 onSubmit={submitSearch}
               />
+            </div>
+            <div className="discovery-shortcuts" aria-label="Starting points">
+              <button type="button" aria-pressed={state.maxPrice === "20000"} onClick={() => dispatch({type: "set", key: "maxPrice", value: state.maxPrice === "20000" ? "" : "20000"})}>Net price under $20k</button>
+              <button type="button" aria-pressed={state.ucOnly} onClick={() => dispatch({type: "toggle", key: "ucOnly"})}>UC campuses</button>
+              <button type="button" aria-pressed={state.major === "Engineering"} onClick={() => dispatch({type: "set", key: "major", value: state.major === "Engineering" ? "" : "Engineering"})}>Engineering</button>
+              <button type="button" aria-pressed={state.enrollmentBand === "small"} onClick={() => dispatch({type: "set", key: "enrollmentBand", value: state.enrollmentBand === "small" ? "" : "small"})}>Smaller campuses</button>
             </div>
             <div className="results-toolbar">
               <div>
@@ -1283,7 +1301,11 @@ export function CollegeSearchApp({
                       />
                       <Dialog.Close asChild>
                         <button className="apply-filters-button" type="button">
-                          Show {results.length} colleges
+                          {savedListUnavailable
+                            ? savedListFailed
+                              ? "Saved list unavailable"
+                              : "Checking saved list"
+                            : `Show ${results.length} colleges`}
                         </button>
                       </Dialog.Close>
                     </Dialog.Content>
@@ -1296,12 +1318,22 @@ export function CollegeSearchApp({
                   tabIndex={-1}
                   aria-live="polite"
                 >
-                  <strong>{results.length}</strong>{" "}
-                  {results.length === 1 ? "college" : "colleges"}
+                  {savedListUnavailable ? (
+                    savedListFailed ? (
+                      "Saved list unavailable"
+                    ) : (
+                      "Checking saved list…"
+                    )
+                  ) : (
+                    <>
+                      <strong>{results.length}</strong>{" "}
+                      {results.length === 1 ? "college" : "colleges"}
+                    </>
+                  )}
                 </p>
               </div>
 
-              <SelectField
+              <div className="results-tools"><SelectField
                 id="sort-results"
                 label="Sort by"
                 value={state.sort}
@@ -1330,7 +1362,14 @@ export function CollegeSearchApp({
                 <option value="enrollment">Enrollment: largest first</option>
                 <option value="earnings">Median earnings: highest first</option>
               </SelectField>
+                <div className="view-switch" aria-label="Result layout">
+                  <button type="button" aria-label="Grid view" aria-pressed={view === "grid"} onClick={() => setView("grid")}><LayoutGrid size={17} aria-hidden="true" /></button>
+                  <button type="button" aria-label="List view" aria-pressed={view === "list"} onClick={() => setView("list")}><List size={19} aria-hidden="true" /></button>
+                </div>
+                <button className="share-search" type="button" aria-label="Copy search link" onClick={() => void shareSearch()}><Copy size={17} aria-hidden="true" /></button>
+              </div>
             </div>
+            {shareUrl ? <label className="share-fallback">Copy this search link<input readOnly value={shareUrl} onFocus={(event) => event.target.select()} /></label> : null}
 
             {activeFilters.length ? (
               <div className="filter-chips" aria-label="Applied filters">
@@ -1371,24 +1410,46 @@ export function CollegeSearchApp({
             ) : null}
 
             <div
-              className="results-list"
+              className={`results-list research-results is-${view}`}
               id="results-list"
-              aria-busy={state.query !== deferredQuery}
+              aria-busy={state.query !== deferredQuery || savedListUnavailable}
             >
-              {results.slice(0, state.visibleCount).map((college) => (
+              {!savedListUnavailable
+                ? results.slice(0, state.visibleCount).map((college) => (
                 <CollegeCard
                   key={college.unitId}
                   college={college}
                   selectedMajor={state.major}
                   isSelected={selected.includes(college.unitId)}
                   isSaved={saved.includes(college.unitId)}
+                  saveDisabled={!canMutateSavedColleges}
                   onCompare={toggleCompare}
                   onSave={toggleSaved}
                 />
-              ))}
+                  ))
+                : null}
             </div>
 
-            {!results.length ? (
+            {savedListUnavailable ? (
+              <div className="empty-state" role={savedListFailed ? "alert" : "status"}>
+                <Database size={29} aria-hidden="true" />
+                <h3>
+                  {savedListFailed
+                    ? "Your saved list is unavailable."
+                    : "Checking your saved list…"}
+                </h3>
+                <p>
+                  {savedListFailed
+                    ? "CollegeSearch will not represent an unavailable account list as empty. Retry the account list or remove the Saved filter."
+                    : "Your account scope is being verified before saved colleges appear here."}
+                </p>
+                {savedListFailed ? (
+                  <button type="button" onClick={retrySavedList}>
+                    Retry saved list
+                  </button>
+                ) : null}
+              </div>
+            ) : !results.length ? (
               <div className="empty-state">
                 <CircleAlert size={29} aria-hidden="true" />
                 <h3>No college meets every active filter.</h3>
@@ -1408,7 +1469,7 @@ export function CollegeSearchApp({
                 type="button"
                 onClick={() => dispatch({ type: "showMore" })}
               >
-                Show 12 more colleges
+                Show {Math.min(12, results.length - state.visibleCount)} more colleges
                 <ArrowDown size={16} aria-hidden="true" />
               </button>
             ) : null}
@@ -1416,35 +1477,12 @@ export function CollegeSearchApp({
         </div>
       </section>
 
-      {mode === "home" ? (
-        <section className="foundation-section">
-          <div>
-            <span className="section-number">02 / Trust</span>
-            <h2>A field guide, not a leaderboard.</h2>
-            <p>
-              CollegeSearch keeps source, year, cohort, and definition close to
-              the number. When evidence is missing, the app says so.
-            </p>
-          </div>
-          <div className="foundation-ledger">
-            <article>
-              <span>Source before score</span>
-              <strong>Every metric has a record.</strong>
-              <p>Open the college profile to inspect the exact field and cohort.</p>
-            </article>
-            <article>
-              <span>Context before prediction</span>
-              <strong>No invented admission odds.</strong>
-              <p>Overall rates describe past cohorts, never one student’s future.</p>
-            </article>
-            <article>
-              <span>Missing means missing</span>
-              <strong>Never silently converted to zero.</strong>
-              <p>Unavailable and suppressed observations keep distinct states.</p>
-            </article>
-          </div>
-        </section>
-      ) : null}
+      <section className="research-data-note" aria-label="Data trust statement">
+        <ShieldCheck size={21} aria-hidden="true" />
+        <div><strong>Good decisions start with clear information.</strong><p>College Scorecard and official college records. Every metric keeps its source and reporting period. UC admissions include preliminary Fall 2026 records.</p>
+        <details><summary>What’s in this collection?</summary><p>{evidenceCounts.reviewedInstitutionRecords} reviewed institution records · {evidenceCounts.reviewedCollegeAdmissions} college admission headlines · {evidenceCounts.firstPartyAdmissions} first-party admission headlines. Field filters use 2024-2025 federal program and award data. Federal baseline metrics use their own dated cohorts.</p></details></div>
+        <Link href="/data-sources">See our sources <ArrowUpRight size={16} aria-hidden="true" /></Link>
+      </section>
 
       </main>
 
@@ -1498,7 +1536,7 @@ export function CollegeSearchApp({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 6 }}
           >
-            <Sparkles size={15} aria-hidden="true" />
+            <Check size={15} aria-hidden="true" />
             {status}
           </motion.div>
         ) : null}

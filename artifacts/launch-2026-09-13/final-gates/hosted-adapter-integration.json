@@ -1,0 +1,33 @@
+{
+  "checkedAt": "2026-09-13T20:48:58.107Z",
+  "origin": "https://ptdbmseeooboqbpyvcgw.supabase.co",
+  "applicationOrigin": null,
+  "status": "passed",
+  "checks": [
+    {
+      "name": "authenticated current session is active",
+      "status": "passed"
+    },
+    {
+      "name": "owner can save and read a college",
+      "status": "passed"
+    },
+    {
+      "name": "second user cannot read or write the first user's list",
+      "status": "passed"
+    },
+    {
+      "name": "anonymous access cannot read saved lists or call the session check",
+      "status": "passed"
+    },
+    {
+      "name": "global revocation immediately blocks the old JWT through RLS",
+      "status": "passed"
+    },
+    {
+      "name": "account deletion revokes sessions and cascades only the verified owner's list",
+      "status": "passed"
+    }
+  ],
+  "cleanup": "passed"
+}

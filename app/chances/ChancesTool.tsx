@@ -14,6 +14,8 @@ import {
 import { useEffect, useMemo, useState } from "react";
 
 import { CollegeLogo } from "@/app/components/CollegeLogo";
+import { LocalSaveButton } from "@/app/components/LocalSaveButton";
+import { availableChancesCollegeOptions } from "./college-options";
 import { historicalAdmitBand } from "./context";
 import styles from "./chances.module.css";
 
@@ -21,6 +23,7 @@ export type ChancesCollege = {
   unitId: number;
   slug: string;
   name: string;
+  aliases: string[];
   city: string;
   state: string;
   ownership: string;
@@ -65,11 +68,11 @@ export function ChancesTool({ colleges, initialIds }: ChancesToolProps) {
     .map((unitId) => colleges.find((college) => college.unitId === unitId))
     .filter((college): college is ChancesCollege => Boolean(college));
 
-  const available = colleges.filter((college) => {
-    if (selectedIds.includes(college.unitId)) return false;
-    const query = searchTerm.trim().toLowerCase();
-    return !query || `${college.name} ${college.city} ${college.state}`.toLowerCase().includes(query);
-  });
+  const available = availableChancesCollegeOptions(
+    colleges,
+    selectedIds,
+    searchTerm,
+  );
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -99,9 +102,9 @@ export function ChancesTool({ colleges, initialIds }: ChancesToolProps) {
         <div>
           <span className="page-eyebrow">
             <ShieldCheck size={15} aria-hidden="true" />
-            Historical context, no false precision
+            Understand admissions
           </span>
-          <h1>Read the rate. Keep its limits in view.</h1>
+          <h1>Put admission rates in perspective.</h1>
           <p>
             Compare up to four colleges using their reported overall first-year
             admit rates. We describe the observed cohort; we do not turn it
@@ -121,12 +124,11 @@ export function ChancesTool({ colleges, initialIds }: ChancesToolProps) {
       <section className={styles.deferredNotice} aria-labelledby="model-boundary-heading">
         <FileWarning size={22} aria-hidden="true" />
         <div>
-          <h2 id="model-boundary-heading">Applicant-range modeling is intentionally deferred.</h2>
+          <h2 id="model-boundary-heading">What an admit rate can tell you.</h2>
           <p>
-            This dataset does not yet contain verified, consistently defined
-            GPA and test-score ranges for these colleges. We will not ask for
-            sensitive academic inputs until those source ranges and their
-            cohorts can be shown beside every result.
+            It shows the share of applicants admitted in a past cycle. It cannot
+            predict your result. This collection does not include verified,
+            comparable GPA and test-score ranges.
           </p>
         </div>
       </section>
@@ -147,9 +149,10 @@ export function ChancesTool({ colleges, initialIds }: ChancesToolProps) {
               <input
                 type="search"
                 value={searchTerm}
+                maxLength={120}
                 placeholder="Try UCLA, Stanford, or Arizona"
                 onChange={(event) => {
-                  setSearchTerm(event.target.value);
+                  setSearchTerm(event.target.value.slice(0, 120));
                   setPendingId("");
                 }}
               />
@@ -265,8 +268,21 @@ export function ChancesTool({ colleges, initialIds }: ChancesToolProps) {
                     </details>
 
                     <footer>
-                      <Link href={`/colleges/${college.slug}`}>Full evidence profile <ArrowRight size={14} aria-hidden="true" /></Link>
-                      <button type="button" onClick={() => removeCollege(college.unitId)}>Remove</button>
+                      <div className={styles.cardActions}>
+                        <LocalSaveButton
+                          unitId={college.unitId}
+                          collegeName={college.name}
+                          className={styles.localSave}
+                        />
+                        <Link href={`/colleges/${college.slug}`}>Full evidence profile <ArrowRight size={14} aria-hidden="true" /></Link>
+                      </div>
+                      <button
+                        type="button"
+                        aria-label={`Remove ${college.name} from admit-rate context`}
+                        onClick={() => removeCollege(college.unitId)}
+                      >
+                        Remove
+                      </button>
                     </footer>
                   </article>
                 );

@@ -1,0 +1,142 @@
+TAP version 13
+# Subtest: preference scoring never uses overall admit rate
+ok 1 - preference scoring never uses overall admit rate
+  ---
+  duration_ms: 0.575667
+  type: 'test'
+  ...
+# Subtest: missing evidence is excluded instead of treated as zero
+ok 2 - missing evidence is excluded instead of treated as zero
+  ---
+  duration_ms: 0.069292
+  type: 'test'
+  ...
+# Subtest: ownership remains an explicit hard filter
+ok 3 - ownership remains an explicit hard filter
+  ---
+  duration_ms: 0.25925
+  type: 'test'
+  ...
+# Subtest: a required broad field removes colleges without that evidence
+ok 4 - a required broad field removes colleges without that evidence
+  ---
+  duration_ms: 0.057
+  type: 'test'
+  ...
+# Subtest: campus setting is an explicit auditable preference signal
+ok 5 - campus setting is an explicit auditable preference signal
+  ---
+  duration_ms: 0.114875
+  type: 'test'
+  ...
+# Subtest: zero weights leave the match worksheet unranked
+ok 6 - zero weights leave the match worksheet unranked
+  ---
+  duration_ms: 0.040792
+  type: 'test'
+  ...
+# Subtest: untouched suggested weights keep the match worksheet neutral
+ok 7 - untouched suggested weights keep the match worksheet neutral
+  ---
+  duration_ms: 0.073166
+  type: 'test'
+  ...
+# Subtest: choosing one preference activates only its mapped criterion
+ok 8 - choosing one preference activates only its mapped criterion
+  ---
+  duration_ms: 0.133333
+  type: 'test'
+  ...
+# Subtest: a hard ownership filter cannot create an unscored ranking
+ok 9 - a hard ownership filter cannot create an unscored ranking
+  ---
+  duration_ms: 0.159667
+  type: 'test'
+  ...
+# Subtest: the sticky preference rail keeps every control reachable
+ok 10 - the sticky preference rail keeps every control reachable
+  ---
+  duration_ms: 24.239458
+  type: 'test'
+  ...
+# Subtest: historical admit bands are descriptive and deterministic
+ok 11 - historical admit bands are descriptive and deterministic
+  ---
+  duration_ms: 0.118417
+  type: 'test'
+  ...
+# Subtest: balanced shortlist keeps the leading fit in each observed rate band
+ok 12 - balanced shortlist keeps the leading fit in each observed rate band
+  ---
+  duration_ms: 4.242167
+  type: 'test'
+  ...
+# Subtest: matching uses one exact federal graduation and enrollment population
+ok 13 - matching uses one exact federal graduation and enrollment population
+  ---
+  duration_ms: 0.309834
+  type: 'test'
+  ...
+# Subtest: a public in-state average cannot contribute price points for unknown or nonresident students
+ok 14 - a public in-state average cannot contribute price points for unknown or nonresident students
+  ---
+  duration_ms: 0.357875
+  type: 'test'
+  ...
+# Subtest: mismatched future graduation cohorts and earnings horizons are excluded consistently
+ok 15 - mismatched future graduation cohorts and earnings horizons are excluded consistently
+  ---
+  duration_ms: 0.059417
+  type: 'test'
+  ...
+# Subtest: residency survives shared preferences and rejects unknown states
+ok 16 - residency survives shared preferences and rejects unknown states
+  ---
+  duration_ms: 0.3685
+  type: 'test'
+  ...
+# Subtest: a shared worksheet restores exact preferences, weights, and active criteria
+ok 17 - a shared worksheet restores exact preferences, weights, and active criteria
+  ---
+  duration_ms: 0.834625
+  type: 'test'
+  ...
+# Subtest: restoring one preference does not turn on untouched weights
+ok 18 - restoring one preference does not turn on untouched weights
+  ---
+  duration_ms: 0.10725
+  type: 'test'
+  ...
+# Subtest: invalid URL values return neutral defaults instead of changing the formula
+ok 19 - invalid URL values return neutral defaults instead of changing the formula
+  ---
+  duration_ms: 0.066834
+  type: 'test'
+  ...
+# Subtest: zero weights and unset criteria cannot be reactivated by a URL
+ok 20 - zero weights and unset criteria cannot be reactivated by a URL
+  ---
+  duration_ms: 0.177125
+  type: 'test'
+  ...
+# Subtest: reset removes worksheet parameters and preserves unrelated URL context
+ok 21 - reset removes worksheet parameters and preserves unrelated URL context
+  ---
+  duration_ms: 0.096167
+  type: 'test'
+  ...
+# Subtest: initial worksheets do not share mutable weights
+ok 22 - initial worksheets do not share mutable weights
+  ---
+  duration_ms: 0.030292
+  type: 'test'
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 150.268917

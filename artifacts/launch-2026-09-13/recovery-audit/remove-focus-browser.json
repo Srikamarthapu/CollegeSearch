@@ -1,0 +1,82 @@
+{
+  "date": "2026-09-13",
+  "sourceCommit": "f34b2e525fc422297e4cc88efdbc788452f8e56d",
+  "origin": "https://college-compass-students.kamarthapusri.chatgpt.site",
+  "browser": "Codex in-app browser",
+  "status": "passed",
+  "before": {
+    "source": "private version 6",
+    "action": "Keyboard Enter removed Davis while Irvine remained",
+    "activeElement": "BODY",
+    "screenshot": "09-remove-keyboard-before.png"
+  },
+  "fixture": {
+    "scope": "guest shortlist",
+    "originalSavedCount": 0,
+    "initialDisplayOrder": [110653, 110635, 110644, 110662],
+    "comparisonSelectionBeforeFirstRemoval": [110653, 110635],
+    "notesEntered": false
+  },
+  "viewport": { "width": 320, "height": 740, "documentScrollWidth": 305 },
+  "cases": [
+    {
+      "position": "first",
+      "removed": "University of California-Irvine",
+      "key": "Enter",
+      "remainingCount": 3,
+      "focusedLabel": "Remove University of California-Berkeley from saved colleges",
+      "focusRectTop": 348.046875,
+      "focusRectBottom": 392.046875,
+      "nextTabTarget": "University of California-Davis profile link",
+      "screenshot": "10-remove-first-mobile-after.png"
+    },
+    {
+      "position": "middle",
+      "removed": "University of California-Davis",
+      "key": "Space",
+      "remainingCount": 2,
+      "focusedLabel": "Remove University of California-Los Angeles from saved colleges",
+      "focusRectTop": 348.234375,
+      "focusRectBottom": 392.234375,
+      "screenshot": "11-remove-middle-mobile-after.png"
+    },
+    {
+      "position": "last",
+      "removed": "University of California-Los Angeles",
+      "key": "Enter",
+      "remainingCount": 1,
+      "focusedLabel": "Remove University of California-Berkeley from saved colleges",
+      "focusRectTop": 348.046875,
+      "focusRectBottom": 392.046875,
+      "screenshot": "12-remove-last-mobile-after.png"
+    },
+    {
+      "position": "only",
+      "removed": "University of California-Berkeley",
+      "key": "Space",
+      "remainingCount": 0,
+      "focusedText": "Explore colleges",
+      "focusedHref": "/explore",
+      "focusRectTop": 347.859375,
+      "focusRectBottom": 391.859375,
+      "screenshot": "13-remove-only-mobile-after.png"
+    }
+  ],
+  "visualInspection": "All five before/after screenshots were opened and inspected. Post-removal focus rings remained visible and clear of the fixed header and comparison tray; no horizontal overflow was observed.",
+  "emptyActionNavigation": {
+    "key": "Enter",
+    "verifiedUrl": "https://college-compass-students.kamarthapusri.chatgpt.site/explore",
+    "verifiedHeading": "Explore colleges",
+    "note": "The first immediate navigation observation was too early and was interrupted by home navigation. A subsequent normal visit to the empty shelf and Enter activation waited for and verified the target URL and heading."
+  },
+  "capturedConsoleWarningsAndErrors": [],
+  "cleanup": {
+    "guestShortlistRestoredEmpty": true,
+    "comparisonTrayAbsent": true,
+    "emptyShelfConfirmedOnSubsequentNavigation": true,
+    "viewportOverrideReset": true,
+    "previewReturnedHome": true,
+    "syntheticHostedExpiryAccountPreviouslyDeleted": true
+  },
+  "limitations": "Actual keyboard and visual checks in one in-app browser. This is not screen-reader speech, OS reduced-motion, actual browser zoom, school-device coverage, a new account integration test or a new full-release smoke run."
+}

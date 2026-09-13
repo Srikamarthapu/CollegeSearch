@@ -1,0 +1,3 @@
+{"experiment":"Injected read/write interleaving (not live browser scheduling)","a":"saved","b":"saved","retained":"Tab A saved note","lost":"Tab B saved note"}
+{"experiment":"Follow privacy instructions: clear notes/checklist and save","retained":{"version":1,"notes":"","listRole":"reach","checked":[]}}
+{"experiment":"Mirror SavedColleges export with an open dirty editor","visible":"Latest unsaved changes","exported":"Previously saved research","allNotebookReadsReady":true,"profileCell":"/colleges/university-of-california-berkeley","includesGraduationDefinition":false}

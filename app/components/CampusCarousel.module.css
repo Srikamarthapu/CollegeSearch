@@ -1,0 +1,48 @@
+.carousel { min-width: 0; margin: 0; }
+.heading { display: flex; justify-content: space-between; gap: 16px; margin: 0 0 10px; color: var(--ink-soft); font-size: 12px; font-weight: 560; }
+.heading > span:last-child { font-variant-numeric: tabular-nums; color: var(--ink-faint); }
+.window { overflow: hidden; position: relative; isolation: isolate; border-radius: 13px; background: #dfe7ed; }
+.track { display: flex; transition: transform 650ms cubic-bezier(.22,.68,0,1); }
+.track[data-active="0"] { transform: translateX(0); }
+.track[data-active="1"] { transform: translateX(-100%); }
+.track[data-active="2"] { transform: translateX(-200%); }
+.track[data-active="3"] { transform: translateX(-300%); }
+.track[data-active="4"] { transform: translateX(-400%); }
+.slide { flex: 0 0 100%; min-width: 0; }
+.slide > a { position: relative; display: block; height: 230px; color: #fff; }
+.slide img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.slide[data-campus="stanford-university"] img { object-position: 50% 56%; }
+.slide[data-campus="university-of-california-los-angeles"] img { object-position: 50% 10%; }
+.slide[data-campus="university-of-washington-seattle-campus"] img { object-position: 50% 55%; }
+.slide[data-campus="columbia-university-in-the-city-of-new-york"] img { object-position: 50% 72%; }
+.slide[data-campus="university-of-california-berkeley"] img { object-position: 50% 40%; }
+.caption { display: grid; position: absolute; left: 14px; bottom: 14px; gap: 4px; max-width: calc(100% - 126px); padding: 10px 13px; background: rgb(19 36 59 / 94%); border-radius: 7px; }
+.caption > span { font-size: 12px; color: #d6e1ee; }
+.caption strong { display: flex; align-items: center; gap: 20px; font-size: 18px; font-weight: 600; letter-spacing: -.025em; line-height: 1.1; }
+.caption strong svg { flex-shrink: 0; }
+.controls { position: absolute; right: 12px; bottom: 14px; display: flex; gap: 5px; }
+.controls button { display: grid; place-items: center; min-width: 36px; min-height: 40px; padding: 0; border: 1px solid rgb(255 255 255 / 38%); border-radius: 7px; color: white; background: rgb(19 36 59 / 90%); }
+.controls button:hover { background: #3156da; }
+.bottom { display: flex; align-items: center; justify-content: space-between; height: 33px; }
+.dots { display: flex; align-items: center; gap: 1px; }
+.dots button { display: grid; place-items: center; width: 26px; height: 30px; border: 0; padding: 0; background: transparent; }
+.dots span { width: 6px; height: 6px; border-radius: 50%; background: #a4b2c8; }
+.dots button[aria-pressed="true"] span { width: 18px; border-radius: 5px; background: #3156da; }
+.rotation { display: flex; align-items: center; gap: 5px; min-height: 30px; padding: 0 2px 0 10px; color: var(--ink-soft); font-size: 12px; background: transparent; border: 0; }
+.motionNote { color: var(--ink-faint); font-size: 12px; }
+.credit { margin: 0; min-height: 28px; color: var(--ink-faint); font-size: 12px; line-height: 1.5; }
+.credit a { text-decoration: underline; text-underline-offset: 2px; }
+.carousel button:focus-visible, .carousel a:focus-visible { outline: 3px solid #3156da; outline-offset: 3px; }
+.slide > a:focus-visible { outline-offset: -4px; }
+@media (max-width: 1120px) { .slide > a { height: 210px; } .caption strong { font-size: 16px; gap: 9px; } }
+@media (max-width: 620px) {
+  .carousel { margin-top: 2px; }
+  .heading { margin-bottom: 8px; font-size: 12px; }
+  .slide > a { height: 180px; }
+  .caption { left: 10px; bottom: 10px; padding: 8px 11px; }
+  .caption strong { font-size: 18px; }
+  .controls { right: 10px; bottom: 10px; }
+  .controls button { min-width: 40px; min-height: 44px; }
+  .credit { font-size: 12px; min-height: 15px; }
+}
+@media (prefers-reduced-motion: reduce) { .track { transition: none; } }

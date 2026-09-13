@@ -30,7 +30,7 @@
 .eyebrow {
   color: var(--forest-raised);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.13em;
   text-transform: uppercase;
@@ -91,8 +91,8 @@
 
 .passwordInput button {
   display: grid;
-  width: 39px;
-  height: 39px;
+  width: 44px;
+  height: 44px;
   margin-right: 5px;
   place-items: center;
   border: 0;
@@ -102,18 +102,23 @@
 }
 
 .submit,
-.primaryLink {
+.primaryLink,
+.secondaryLink {
   display: inline-flex;
   min-height: 47px;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--forest);
   border-radius: 5px;
-  background: var(--forest);
-  color: var(--white);
   font-size: 13px;
   font-weight: 700;
   gap: 8px;
+}
+
+.submit,
+.primaryLink {
+  border: 1px solid var(--forest);
+  background: var(--forest);
+  color: var(--white);
 }
 
 .submit {
@@ -124,6 +129,24 @@
   justify-self: start;
   margin-top: 28px;
   padding: 0 17px;
+}
+
+.stateActions {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 28px;
+  gap: 10px;
+}
+
+.stateActions .primaryLink {
+  margin-top: 0;
+}
+
+.secondaryLink {
+  padding: 0 17px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--forest);
 }
 
 .submit:disabled {

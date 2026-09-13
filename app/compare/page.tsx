@@ -1,6 +1,14 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ExternalLink, Scale } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ChevronDown,
+  ExternalLink,
+  GraduationCap,
+  Info,
+  Scale,
+} from "lucide-react";
 
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
@@ -30,46 +38,16 @@ type ComparisonRow = {
 };
 
 const comparisonRows: ComparisonRow[] = [
-  {
-    label: "Headline admit rate",
-    observation: (college) => college.observations.admitRate,
-  },
-  {
-    label: "Applicants",
-    observation: (college) => college.observations.applicants,
-  },
-  {
-    label: "Admitted",
-    observation: (college) => college.observations.admits,
-  },
-  {
-    label: "Enrolled",
-    observation: (college) => college.observations.enrollees,
-  },
-  {
-    label: "Undergraduate enrollment",
-    observation: (college) => college.observations.undergraduateEnrollment,
-  },
-  {
-    label: "Average net price",
-    observation: (college) => college.observations.averageNetPrice,
-  },
-  {
-    label: "Graduation rate",
-    observation: (college) => college.observations.graduationRate,
-  },
-  {
-    label: "Median earnings",
-    observation: (college) => college.observations.medianEarnings,
-  },
-  {
-    label: "In-state tuition",
-    observation: (college) => college.observations.tuitionInState,
-  },
-  {
-    label: "Out-of-state tuition",
-    observation: (college) => college.observations.tuitionOutOfState,
-  },
+  { label: "Average net price", observation: (college) => college.observations.averageNetPrice },
+  { label: "In-state tuition", observation: (college) => college.observations.tuitionInState },
+  { label: "Out-of-state tuition", observation: (college) => college.observations.tuitionOutOfState },
+  { label: "Headline admit rate", observation: (college) => college.observations.admitRate },
+  { label: "Graduation rate", observation: (college) => college.observations.graduationRate },
+  { label: "Median earnings", observation: (college) => college.observations.medianEarnings },
+  { label: "Undergraduate enrollment", observation: (college) => college.observations.undergraduateEnrollment },
+  { label: "Applicants", observation: (college) => college.observations.applicants },
+  { label: "Admitted", observation: (college) => college.observations.admits },
+  { label: "Enrolled", observation: (college) => college.observations.enrollees },
 ];
 
 function first(value: string | string[] | undefined) {
@@ -200,12 +178,12 @@ export default async function ComparePage({
           <div>
             <span className="page-eyebrow">
               <Scale size={15} aria-hidden="true" />
-              Evidence table
+              Your comparison
             </span>
-            <h1>Compare the record, not a ranking.</h1>
+            <h1>Your options, side by side.</h1>
             <p>
-              Place up to four colleges side by side. Every cell carries its
-              own reporting period and publisher so unlike cohorts stay visible.
+              Compare costs, admissions, and outcomes for up to four colleges.
+              Check the reporting years as you go; they can differ between schools.
             </p>
           </div>
           <Link
@@ -247,6 +225,84 @@ export default async function ComparePage({
                 source beneath each value before comparing.
               </ComparisonNotice>
             ) : null}
+
+            <details className="comparison-field-disclosure" open={Boolean(selectedMajor)}>
+              <summary><GraduationCap size={18} aria-hidden="true" />{selectedMajor ? `Field: ${selectedMajor}` : "Add a field of study to your comparison"}<ChevronDown size={17} aria-hidden="true" /></summary>
+            <section
+              className="comparison-field-lens"
+              aria-labelledby="comparison-field-heading"
+            >
+              <div className="comparison-field-intro">
+                <span className="page-evidence-label">
+                  <GraduationCap size={15} aria-hidden="true" />
+                  Optional field lens
+                </span>
+                <h2 id="comparison-field-heading">
+                  Add a broad field to the table.
+                </h2>
+                <p id="comparison-field-help">
+                  Choose one field to compare its bachelor&apos;s-level evidence
+                  across the colleges already selected.
+                </p>
+              </div>
+
+              <form
+                className="comparison-field-form"
+                action="/compare"
+                method="get"
+              >
+                <input
+                  type="hidden"
+                  name="colleges"
+                  value={selected.map((college) => college.unitId).join(",")}
+                />
+                <label className="filter-field" htmlFor="comparison-major">
+                  <span>Broad bachelor&apos;s field</span>
+                  <div className="select-wrap">
+                    <select
+                      id="comparison-major"
+                      name="major"
+                      defaultValue={selectedMajor ?? ""}
+                      aria-describedby="comparison-field-help comparison-field-boundary"
+                    >
+                      <option value="">No field selected</option>
+                      {MAJOR_OPTIONS.map((major) => (
+                        <option value={major} key={major}>
+                          {major}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown size={15} aria-hidden="true" />
+                  </div>
+                </label>
+                <div className="comparison-field-actions">
+                  <button className="page-primary-action" type="submit">
+                    Apply field
+                  </button>
+                  {selectedMajor ? (
+                    <Link
+                      className="page-secondary-action"
+                      href={comparisonHref(selected, undefined)}
+                    >
+                      Clear field
+                    </Link>
+                  ) : null}
+                </div>
+              </form>
+
+              <p
+                className="comparison-field-boundary"
+                id="comparison-field-boundary"
+              >
+                <Info size={16} aria-hidden="true" />
+                <span>
+                  This is broad bachelor&apos;s-award evidence—not a
+                  major-specific admit rate or an applicant&apos;s chance of
+                  admission.
+                </span>
+              </p>
+            </section>
+            </details>
 
             <section
               className="comparison-table-section"

@@ -1,0 +1,43 @@
+{
+  "checkedAt": "2026-09-13T21:22:01Z",
+  "repository": "Srikamarthapu/CollegeSearch",
+  "readOnly": true,
+  "defaultBranch": "main",
+  "defaultBranchSha": "4519fc12f2eb0e13c68bb56d0fd9d199a5f13559",
+  "adminVisibility": true,
+  "protected": false,
+  "legacyProtection": {
+    "status": 404,
+    "message": "Branch not protected"
+  },
+  "visibleRulesetsIncludingParents": [],
+  "effectiveMainRules": [],
+  "mainRootContainsGithubDirectory": false,
+  "defaultBranchWorkflowsLookupStatus": 404,
+  "verificationWorkflowLookupStatus": 404,
+  "visibleWorkflows": [
+    {
+      "id": 330828762,
+      "name": "CI",
+      "path": ".github/workflows/ci.yml",
+      "state": "active"
+    }
+  ],
+  "verificationWorkflowBranchFile": {
+    "branch": "codex/production-foundation",
+    "path": ".github/workflows/live-data-verification.yml",
+    "blobSha": "5d6880ec373298058a0464b1ab8483ae71bac7c6"
+  },
+  "retainedScheduledRuns": 0,
+  "latestObservedCiRun": {
+    "id": 34782488696,
+    "event": "pull_request",
+    "branch": "codex/production-foundation",
+    "sha": "d056e10606db527713499bbb9a890fd15c98b592",
+    "status": "completed",
+    "conclusion": "success",
+    "createdAt": "2026-09-13T21:00:32Z",
+    "updatedAt": "2026-09-13T21:01:47Z",
+    "url": "https://github.com/Srikamarthapu/CollegeSearch/actions/runs/34782488696"
+  }
+}

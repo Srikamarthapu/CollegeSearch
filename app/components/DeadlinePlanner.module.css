@@ -1,0 +1,82 @@
+.planner { min-width: 0; margin: 32px 0; padding: 26px; border: 1px solid #d7dfec; border-radius: 14px; background: #fff; color: #172b4d; }
+.pending { margin: 24px 0; color: #52617a; font-size: 13px; line-height: 1.6; }
+.header { display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+.header > div { min-width: 0; max-width: 740px; }
+.eyebrow { display: flex; align-items: center; gap: 8px; color: #385de0; font-size: 11px; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; }
+.header h2 { margin: 10px 0; font-family: var(--font-newsreader), Georgia, serif; font-size: clamp(29px, 3vw, 39px); font-weight: 520; line-height: 1.1; letter-spacing: -.035em; }
+.header p, .footer p, .restore p { margin: 0; color: #52617a; font-size: 13px; line-height: 1.7; }
+.planner button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; max-width: 100%; padding: 10px 13px; border: 1px solid #bac9df; border-radius: 7px; background: #fff; color: #243f67; font: inherit; font-size: 12px; font-weight: 650; line-height: 1.5; cursor: pointer; }
+.planner button svg { flex: 0 0 auto; }
+.planner button:hover { background: #edf2fc; }
+.planner button:disabled { opacity: .56; cursor: not-allowed; }
+.planner button.primary { background: #263f87; border-color: #263f87; color: #fff; }
+.planner button.primary:hover { background: #1d3069; }
+.header > button { flex: 0 0 auto; }
+.storage { margin: 20px 0 4px; color: #354f75; font-size: 13px; line-height: 1.6; }
+.scope, .help, .formStatus { display: block; margin: 0; color: #52617a; font-size: 12px; font-weight: 400; line-height: 1.65; }
+.scope { margin-bottom: 20px; }
+.actions { display: flex; flex-wrap: wrap; gap: 9px; margin: 12px 0 0; }
+.form { margin: 22px 0; padding: 22px; border: 1px solid #c9d5e7; border-radius: 10px; background: #f5f7fc; }
+.form h3, .restore h3 { margin: 0 0 9px; font-family: var(--font-newsreader), Georgia, serif; font-size: 27px; font-weight: 520; letter-spacing: -.025em; }
+.formFields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; min-width: 0; margin: 20px 0 0; padding: 0; border: 0; }
+.formFields > label { display: flex; flex-direction: column; gap: 8px; min-width: 0; color: #243f67; font-size: 13px; font-weight: 650; }
+.formFields :is(input:not([type="checkbox"]), select, textarea) { width: 100%; min-width: 0; max-width: 100%; min-height: 44px; padding: 10px; border: 1px solid #b8c6dc; border-radius: 7px; background: #fff; color: #172b4d; font: inherit; font-size: 16px; font-weight: 400; line-height: 1.5; }
+.formFields input[type="date"] { appearance: none; }
+.sourceLinks { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; color: #52617a; font-size: 12px; }
+.sourceLinks > span, .sourceLinks > p { width: 100%; }
+.sourceLinks a { display: inline-flex; align-items: center; min-height: 44px; color: #2b4eb5; text-decoration: underline; text-underline-offset: 3px; }
+.formFields textarea { resize: vertical; }
+.wide { grid-column: 1 / -1; }
+.formFields > label.check { flex-direction: row; align-items: start; gap: 10px; min-height: 44px; font-weight: 500; line-height: 1.65; cursor: pointer; }
+.planner input[type="checkbox"] { width: 18px; height: 18px; margin: 2px 0 0; flex: 0 0 auto; accent-color: #385de0; }
+.errors { margin-top: 15px; padding: 12px 15px; border-left: 3px solid #a54b39; border-radius: 4px; background: #fff5ef; color: #753f30; font-size: 13px; line-height: 1.6; }
+.errors p { margin: 0; font-weight: 650; }
+.errors ul { margin: 6px 0 0; padding-left: 20px; }
+.empty { margin-top: 24px; padding: 24px; border: 1px dashed #c4d1e6; border-radius: 9px; background: #f7f9fd; color: #52617a; font-size: 14px; line-height: 1.7; }
+.groups { display: grid; gap: 25px; margin-top: 24px; }
+.groups h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 7px; font-size: 16px; font-weight: 650; }
+.groups h3 > span { color: #64748b; font-size: 12px; }
+.cards { display: grid; gap: 12px; padding: 0; margin: 12px 0 0; list-style: none; }
+.card { display: flex; justify-content: space-between; align-items: start; gap: 24px; min-width: 0; padding: 18px; border: 1px solid #d7dfec; border-radius: 9px; }
+.cardMain { min-width: 0; overflow-wrap: anywhere; }
+.college { color: #52617a; font-size: 12px; font-weight: 550; line-height: 1.5; }
+.card h4 { margin: 5px 0 8px; font-size: 16px; font-weight: 650; }
+.date { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 6px; color: #243f67; font-size: 14px; font-weight: 650; }
+.date > span { padding: 2px 6px; border-radius: 4px; background: #edf2fc; color: #385de0; font-size: 11px; font-weight: 600; }
+.verification { margin: 0 0 8px; color: #52617a; font-size: 12px; line-height: 1.6; }
+.card a { display: inline-block; min-height: 24px; color: #2b4eb5; font-size: 12px; text-decoration: underline; text-underline-offset: 3px; }
+.notes { margin: 8px 0 0; color: #52617a; white-space: pre-wrap; font-size: 13px; line-height: 1.6; }
+.cardActions { display: flex; flex-wrap: wrap; align-items: center; justify-content: end; gap: 8px; max-width: 300px; }
+.cardActions > label { display: flex; align-items: center; gap: 8px; min-height: 44px; color: #354f75; font-size: 12px; cursor: pointer; }
+.cardActions input { margin: 0; }
+.removeConfirm { display: flex; flex-wrap: wrap; gap: 6px; justify-content: end; }
+.removeConfirm > span { width: 100%; color: #6b3344; font-size: 12px; text-align: right; }
+.completed > summary { min-height: 44px; padding: 11px 0; color: #354f75; font-size: 14px; font-weight: 650; cursor: pointer; }
+.footer { display: flex; justify-content: space-between; align-items: start; gap: 24px; margin-top: 28px; padding-top: 20px; border-top: 1px solid #d7dfec; }
+.footer p { max-width: 550px; font-size: 12px; }
+.footer .actions { margin: 0; }
+.fileInput { display: none; }
+.restore { margin-top: 22px; padding: 20px; border: 1px solid #c0cde2; border-radius: 9px; background: #f5f7fc; }
+.restoreList { max-height: 280px; overflow: auto; overscroll-behavior: contain; }
+.restore ul { padding-left: 20px; color: #354f75; font-size: 12px; line-height: 1.9; overflow-wrap: anywhere; }
+.message { margin: 13px 0 0; color: #354f75; font-size: 12px; line-height: 1.7; }
+.planner :is(button, input, select, textarea, summary, a, [tabindex]) { scroll-margin-block: 100px 24px; }
+.planner :is(button, input, select, textarea, summary, a, [tabindex]):focus-visible { outline: 3px solid #385de0; outline-offset: 3px; }
+.srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+@media (max-width: 760px) {
+  .header, .footer, .card { flex-direction: column; align-items: stretch; gap: 16px; }
+  .header > button { align-self: start; }
+  .cardActions { justify-content: start; max-width: none; }
+  .removeConfirm { justify-content: start; }
+  .removeConfirm > span { text-align: left; }
+  .formFields { grid-template-columns: minmax(0, 1fr); }
+  .wide { grid-column: auto; }
+  .planner { padding: 22px; }
+}
+@media (max-width: 420px) {
+  .planner { padding: 18px 13px; }
+  .form, .empty, .restore { padding: 16px 12px; }
+  .card { padding: 15px 12px; }
+  .planner button { font-size: 11px; }
+  .header h2 { font-size: 29px; }
+}

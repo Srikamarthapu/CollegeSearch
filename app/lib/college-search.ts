@@ -1,5 +1,10 @@
 import type { ClientCollege } from "@/app/lib/college-client-record";
 
+export type CollegeSearchIdentity = Pick<
+  ClientCollege,
+  "unitId" | "name" | "aliases" | "city" | "state"
+>;
+
 export const STATE_NAMES: Record<string, string> = {
   AZ: "Arizona",
   CA: "California",
@@ -109,6 +114,7 @@ function tokenMatches(queryToken: string, candidateToken: string) {
   if (queryToken === candidateToken) return true;
   if (
     queryToken.length >= 4 &&
+    candidateToken.length >= 4 &&
     (candidateToken.startsWith(queryToken) || queryToken.startsWith(candidateToken))
   ) {
     return true;
@@ -127,10 +133,53 @@ function phraseMatchesQuery(queryTokens: string[], phrase: string) {
   );
 }
 
-function exactIdentityMatch(college: ClientCollege, normalizedQuery: string) {
+function exactIdentityMatch(
+  college: CollegeSearchIdentity,
+  normalizedQuery: string,
+) {
   return [college.name, ...college.aliases].some(
     (name) => normalizeSearchText(name) === normalizedQuery,
   );
+}
+
+/**
+ * Filters college-shaped records by institution identity and location only.
+ * This is intentionally separate from `filterCollegesByQuery`, whose query
+ * language also interprets major names. Selectors should not silently turn a
+ * college name into an academic-field filter.
+ */
+export function filterCollegeIdentitiesByQuery<
+  T extends CollegeSearchIdentity,
+>(allColleges: T[], query: string) {
+  const normalized = normalizeSearchText(query);
+  if (!normalized) return allColleges;
+
+  const exactMatches = allColleges.filter((college) =>
+    exactIdentityMatch(college, normalized),
+  );
+  if (exactMatches.length > 0) return exactMatches;
+
+  const queryTokens = words(normalized).filter(
+    (token) => !ignoredTokens.has(token),
+  );
+  if (queryTokens.length === 0) return allColleges;
+
+  return allColleges.filter((college) => {
+    const candidateTokens = words(
+      [
+        college.name,
+        ...college.aliases,
+        college.city,
+        college.state,
+        STATE_NAMES[college.state] ?? "",
+      ].join(" "),
+    );
+    return queryTokens.every((queryToken) =>
+      candidateTokens.some((candidateToken) =>
+        tokenMatches(queryToken, candidateToken),
+      ),
+    );
+  });
 }
 
 function detectedMajor(queryTokens: string[]) {

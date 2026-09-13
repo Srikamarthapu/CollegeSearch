@@ -1,0 +1,26 @@
+# Version 7 rollback candidate: private version 6
+
+**Version 6 is technically compatible with version 7's tracked database, browser-storage and hosting contracts.** This is a static compatibility finding with existing version 6 test evidence, not a new rollback execution or approval for school/public use. No provider calls, deployments, builds or checkout edits were made.
+
+| Record | Current version 7 | Candidate version 6 |
+| --- | --- | --- |
+| Source | `f34b2e525fc422297e4cc88efdbc788452f8e56d` | `27011e313c69b9380dbe68ecbfadcbdf3347778d` |
+| Version ID | `appgprj_6a64f648520081919bb6328932d2ff1c~appgver_a5dec80d9e60819193646a4a1570ffbc` | `appgprj_6a64f648520081919bb6328932d2ff1c~appgver_c1eee4bb05748191ba94a9c7c8db67b6` |
+| Environment revision | 1 | 1 |
+| Recorded audience/origin | owner-private / college-compass-students.kamarthapusri.chatgpt.site | same |
+
+The tracked diff contains 23 paths; only **two are application code**: `app/saved/SavedColleges.tsx` and `app/saved/saved.module.css`. Version 7 adds a transient React focus request, guarded post-render focus selection, DOM markers/ref and scroll margin. The remove operation still calls the same persistence path with the same filtered saved IDs. Other differences are documentation/test evidence.
+
+Compatibility findings:
+
+- **Database:** the entire `supabase/` tree is byte-identical (Git tree `80ccef33bd0a5311746dbe262dacddffddddff94`). Both include the same `20260810042855_create_saved_colleges.sql` and `20260913184505_account_session_validation.sql`: owner-only saved rows, anonymous denial, session-active RPC and restrictive session policy. No reverse migration or data conversion is indicated. Application rollback must leave the existing database intact.
+- **Browser data/recovery:** the entire `app/lib/` tree (`6d20da3fc08c8a5fe77de8db16047025978a3337`) and `app/components/` tree (`78fa0d78f1d7ffed5222fb2de7a7deebe11f8440`) are identical. Guest arrays, user-scoped caches/outbox version 2, applicant/notebook/deadline version 1, draft journals, Web Locks, backup parsing, erasure fences and the pre/post session validation all retain the same readers/writers. Version 7 introduces no persisted focus record. Version 6 contains the recent draft-preservation/profile-clear/planner recovery fixes. No schema barrier to reading version 7-created records or coexisting tabs was found; mixed-version runtime behavior was not newly exercised.
+- **Dependencies/configuration:** `package.json`, `package-lock.json`, `next.config.ts`, `vite.config.ts`, `proxy.ts`, `.openai/`, `worker/` and `build/` have identical Git blobs/trees. The lockfile SHA-256 in both is `17fbb667c097597e78e6c6d9482fbfb82a588eaa4a34874fd85ba418861f87bc`. Data and public-asset source trees also match. Both deployment records report environment revision 1. This source/config match does not prove the provider still retains the target assets or that current live secrets/bindings remain correct.
+
+**Known regression retained:** version 6's actual keyboard check removed Davis while Irvine remained and focus fell to `BODY` (`recovery-audit/remove-focus-browser.json`, screenshot `09-remove-keyboard-before.png`). Rolling back restores this accessibility defect. Version 6 is therefore an emergency compatibility candidate with a documented defect, not a clean accessibility baseline. The release owner must weigh that regression against the incident and plan return to a corrected version.
+
+Existing candidate evidence: `recovery-audit/deployment.json` binds version 6/source to successful deployment `appgdep_6aa7156786e88191acc265358fba9545`, archive hash `sha256:88799a3b273bbf19196656fab4b075910ac0c52733dba61d0e249ffdacf48b5e`, and CI run 34783878132. The source passed build/types/lint, 335 tests and 16 local HTTP requests. Targeted hosted backup-review focus/Tab/cancel checks passed; recorded unauthenticated access was denied. One real session renewed across versions 5 and 6, and version 6's post-expiry save/reload matched backend rows. Earlier comprehensive hosted checks remain attached to their earlier releases; none are relabeled as a full version 6 acceptance run.
+
+Before relying on this candidate for a school session, the named operator must confirm the exact retained version/control, matching Worker **and** generated assets, intended origin/private audience and environment revision, then satisfy the existing runbook's final runtime/rollback check (host version identity and smoke; guest save/notebook recovery; one disposable account's save/reload/isolation). Preserve current-source roll-forward availability. The historical version 2→3 drill does not establish version 7→6 execution. This review identifies the candidate and the remaining check; it does not perform a new drill or close the launch gate.
+
+Read-only method: `git diff --name-status` and full two-file runtime diff for the exact SHAs; `git ls-tree` comparison for migrations, libraries, components, data/assets, lockfile and hosting inputs; current local `recovery-audit/deployment.json`, `remove-focus-deployment.json`, `REPORT.md`, `remove-focus-browser.json` and `expiry-observations.json`. The deployment records are historical local evidence, not a fresh provider inventory.

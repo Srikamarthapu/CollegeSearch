@@ -8,7 +8,7 @@ const clientColleges = projectCollegesForClient(colleges);
 
 export const metadata: Metadata = {
   title: "Saved colleges | CollegeSearch",
-  description: "Review and compare the colleges saved on this device.",
+  description: "Review, sync, and compare your saved colleges.",
 };
 
 export default function SavedPage() {

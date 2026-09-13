@@ -3,6 +3,7 @@ export const MATCH_CRITERIA = [
   "location",
   "price",
   "size",
+  "setting",
   "graduation",
   "earnings",
 ] as const;
@@ -13,6 +14,9 @@ export type MatchMetric = {
   value: number | null;
   periodLabel: string;
   publisher: string;
+  cohort: string;
+  definition: string;
+  comparabilityKey: string;
 };
 
 export type MatchMajor = {
@@ -22,6 +26,7 @@ export type MatchMajor = {
 };
 
 export type MatchCollege = {
+  netPriceCalculator?: { url: string; note?: string; checkedOn: string };
   unitId: number;
   slug: string;
   name: string;
@@ -41,10 +46,13 @@ export type MatchWeights = Record<MatchCriterion, number>;
 
 export type MatchPreferences = {
   major: string;
+  majorMode: "prefer" | "require";
   region: string;
   ownership: string;
   maxNetPrice: number | null;
+  residencyState: string;
   size: string;
+  setting: "any" | "City" | "Suburb" | "Town";
   weights: MatchWeights;
 };
 
@@ -64,8 +72,81 @@ export type MatchResult = {
   usedWeight: number;
 };
 
+export const OBSERVED_SELECTIVITY_BANDS = [
+  {
+    key: "very-low",
+    label: "Very low observed overall rate",
+    rangeLabel: "10% or lower",
+  },
+  {
+    key: "low",
+    label: "Low observed overall rate",
+    rangeLabel: "Above 10% through 25%",
+  },
+  {
+    key: "moderate",
+    label: "Moderate observed overall rate",
+    rangeLabel: "Above 25% through 50%",
+  },
+  {
+    key: "broad",
+    label: "Broad observed overall rate",
+    rangeLabel: "Above 50%",
+  },
+  {
+    key: "unavailable",
+    label: "Overall rate not reported",
+    rangeLabel: "No comparable value in this release",
+  },
+] as const;
+
+export type ObservedSelectivityBand =
+  (typeof OBSERVED_SELECTIVITY_BANDS)[number]["key"];
+
+export function observedSelectivityBand(
+  rate: number | null,
+): ObservedSelectivityBand {
+  if (rate === null) return "unavailable";
+  if (rate <= 0.1) return "very-low";
+  if (rate <= 0.25) return "low";
+  if (rate <= 0.5) return "moderate";
+  return "broad";
+}
+
+/**
+ * Keeps the highest preference-alignment result in each descriptive overall
+ * admit-rate band. The band never changes the fit score or ranking.
+ */
+export function balancedObservedShortlist(results: MatchResult[]) {
+  const firstByBand = new Map<ObservedSelectivityBand, MatchResult>();
+
+  for (const result of results) {
+    if (result.score <= 0) continue;
+    const band = observedSelectivityBand(result.college.admitRate.value);
+    if (!firstByBand.has(band)) firstByBand.set(band, result);
+  }
+
+  return OBSERVED_SELECTIVITY_BANDS.flatMap((band) => {
+    const result = firstByBand.get(band.key);
+    return result ? [{ band, result }] : [];
+  });
+}
+
 export function hasActiveMatchSignal(weights: MatchWeights) {
   return MATCH_CRITERIA.some((criterion) => weights[criterion] > 0);
+}
+
+export function weightsForActiveCriteria(
+  weights: MatchWeights,
+  activeCriteria: Iterable<MatchCriterion>,
+): MatchWeights {
+  const active = new Set(activeCriteria);
+  return Object.fromEntries(
+    MATCH_CRITERIA.map((criterion) => [
+      criterion,
+      active.has(criterion) ? weights[criterion] : 0,
+    ]),
+  ) as MatchWeights;
 }
 
 const regionStates: Record<string, Set<string>> = {
@@ -74,6 +155,12 @@ const regionStates: Record<string, Set<string>> = {
   northeast: new Set(["CT", "MA", "ME", "NH", "NJ", "NY", "PA", "RI", "VT"]),
   south: new Set(["AL", "AR", "DC", "DE", "FL", "GA", "KY", "LA", "MD", "MS", "NC", "OK", "SC", "TN", "TX", "VA", "WV"]),
 };
+
+export const RESIDENCY_STATES = [...new Set(Object.values(regionStates).flatMap((states) => [...states]))].sort();
+
+function metricContext(metric: MatchMetric) {
+  return `${metric.periodLabel}. ${metric.cohort || "Population not supplied"}. ${metric.definition || "Review the source definition"}`;
+}
 
 function clamp(value: number, minimum = 0, maximum = 1) {
   return Math.min(maximum, Math.max(minimum, value));
@@ -102,6 +189,8 @@ export function matchBounds(colleges: MatchCollege[]) {
   return {
     minimumEarnings: earnings.length > 0 ? Math.min(...earnings) : 0,
     maximumEarnings: earnings.length > 0 ? Math.max(...earnings) : 1,
+    graduationComparable: new Set(colleges.filter((college) => college.graduationRate.value !== null).map((college) => `${college.graduationRate.comparabilityKey}|${college.graduationRate.cohort}`)).size <= 1,
+    earningsComparable: new Set(colleges.filter((college) => college.medianEarnings.value !== null).map((college) => `${college.medianEarnings.comparabilityKey}|${college.medianEarnings.cohort}|${college.medianEarnings.periodLabel}`)).size <= 1,
   };
 }
 
@@ -174,7 +263,13 @@ export function scoreCollege(
 
   if (preferences.maxNetPrice !== null && preferences.weights.price > 0) {
     const netPrice = college.netPrice.value;
-    if (netPrice === null) {
+    const publicPopulationMismatch = college.ownership === "Public" && preferences.residencyState !== college.state;
+    if (publicPopulationMismatch || preferences.residencyState === "international") {
+      components.push(missingComponent(
+        "price", "Average net price", preferences.weights.price,
+        `${college.ownership === "Public" ? "This public college reports net price for in-state students receiving Title IV aid" : "This measure describes students receiving Title IV aid"}. ${preferences.residencyState === "unknown" || !preferences.residencyState ? "Choose your tuition-residency state to assess this historical comparison" : "It does not establish a comparable cost for your residency choice"}; excluded from the score. Confirm residency and use the college's official net-price calculator.`,
+      ));
+    } else if (netPrice === null) {
       components.push(
         missingComponent(
           "price",
@@ -195,9 +290,7 @@ export function scoreCollege(
           "Average net price",
           preferences.weights.price,
           priceScore,
-          netPrice <= preferredMaximum
-            ? "Reported average net price is within your preferred maximum."
-            : "Reported average net price is above your preferred maximum.",
+          `Historical average net price is ${netPrice <= preferredMaximum ? "within" : "above"} your preferred maximum. ${metricContext(college.netPrice)}. This is a past cohort average, not your aid offer; use the official net-price calculator.`,
         ),
       );
     }
@@ -222,29 +315,47 @@ export function scoreCollege(
           preferences.weights.size,
           band === preferences.size ? 1 : 0,
           band === preferences.size
-            ? `Reported undergraduate enrollment falls in your ${preferences.size} range.`
-            : `Reported undergraduate enrollment falls in the ${band} range.`,
+            ? `Reported undergraduate enrollment falls in your ${preferences.size} range. ${metricContext(college.enrollment)}.`
+            : `Reported undergraduate enrollment falls in the ${band} range. ${metricContext(college.enrollment)}.`,
         ),
       );
     }
   }
 
+  if (
+    preferences.setting !== "any" &&
+    preferences.weights.setting > 0
+  ) {
+    const matches = college.setting === preferences.setting;
+    components.push(
+      activeComponent(
+        "setting",
+        "Campus setting",
+        preferences.weights.setting,
+        matches ? 1 : 0,
+        matches
+          ? `${college.name} is classified as a ${preferences.setting.toLowerCase()} campus.`
+          : `${college.name} is classified as ${college.setting.toLowerCase()}, not ${preferences.setting.toLowerCase()}.`,
+      ),
+    );
+  }
+
   if (preferences.weights.graduation > 0) {
     const graduationRate = college.graduationRate.value;
     components.push(
-      graduationRate === null
+      graduationRate === null || !bounds.graduationComparable
         ? missingComponent(
             "graduation",
             "Graduation outcome",
             preferences.weights.graduation,
-            "Graduation evidence is not reported; it is excluded from this score.",
+            graduationRate === null ? "Graduation evidence is not reported; it is excluded from this score." : "The available graduation populations or cohorts differ across colleges; graduation is excluded from every score until comparable evidence is available.",
           )
         : activeComponent(
             "graduation",
             "Graduation outcome",
             preferences.weights.graduation,
             graduationRate,
-            `Uses the reported ${college.graduationRate.periodLabel} completion measure.`,
+            `Uses a consistent federal completion measure across colleges: ${metricContext(college.graduationRate)}.`,
           ),
     );
   }
@@ -252,19 +363,19 @@ export function scoreCollege(
   if (preferences.weights.earnings > 0) {
     const earnings = college.medianEarnings.value;
     components.push(
-      earnings === null
+      earnings === null || !bounds.earningsComparable
         ? missingComponent(
             "earnings",
             "Earnings context",
             preferences.weights.earnings,
-            "Earnings evidence is not reported; it is excluded from this score.",
+            earnings === null ? "Earnings evidence is not reported; it is excluded from this score." : "The available earnings populations, horizons or dollar years differ; earnings is excluded from every score until comparable evidence is available.",
           )
         : activeComponent(
             "earnings",
             "Earnings context",
             preferences.weights.earnings,
             scoreEarnings(earnings, bounds),
-            `Compares ${college.medianEarnings.periodLabel} median earnings with the other colleges in this release.`,
+            `Compares the same reported population and outcome period: ${metricContext(college.medianEarnings)}. Program mix still differs; this is not a salary prediction.`,
           ),
     );
   }
@@ -301,8 +412,11 @@ export function rankMatches(
   return colleges
     .filter(
       (college) =>
-        preferences.ownership === "any" ||
-        college.ownership === preferences.ownership,
+        (preferences.ownership === "any" ||
+          college.ownership === preferences.ownership) &&
+        (preferences.majorMode !== "require" ||
+          preferences.major === "undecided" ||
+          college.majors.some((major) => major.name === preferences.major)),
     )
     .map((college) => scoreCollege(college, preferences, bounds))
     .sort(

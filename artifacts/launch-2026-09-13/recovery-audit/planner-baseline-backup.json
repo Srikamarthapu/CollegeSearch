@@ -1,0 +1,19 @@
+{
+  "format": "collegesearch-deadlines",
+  "version": 1,
+  "exportedOn": "2026-09-13",
+  "entries": [
+    {
+      "id": "cd5149c3-f737-4503-babb-a3b883fc8985",
+      "collegeId": 104151,
+      "task": "custom",
+      "title": "QA: review engineering options",
+      "date": "2026-09-30",
+      "sourceUrl": "",
+      "sourceChecked": false,
+      "checkedOn": "",
+      "notes": "Synthetic QA planning date, not a college deadline.",
+      "completed": true
+    }
+  ]
+}

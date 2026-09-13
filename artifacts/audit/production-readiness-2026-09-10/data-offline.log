@@ -1,0 +1,183 @@
+
+> college-search@0.1.0 data:verify-offline
+> node scripts/verify-institution-overlays.mjs --offline && node --test tests/institution-overlays.test.mjs tests/institution-overlay-regressions.test.mjs tests/data-refresh-validation.test.mjs
+
+Verified 24 institution overlays, 163 observations, and 26 registered artifacts (offline schema check).
+TAP version 13
+# Subtest: accepts a distinct UC archive and the exact reviewed cohort
+ok 1 - accepts a distinct UC archive and the exact reviewed cohort
+  ---
+  duration_ms: 0.543875
+  type: 'test'
+  ...
+# Subtest: rejects a finalized/latest UC filename collision
+ok 2 - rejects a finalized/latest UC filename collision
+  ---
+  duration_ms: 0.137792
+  type: 'test'
+  ...
+# Subtest: rejects missing, duplicate, or unexpected cohort UNITIDs
+ok 3 - rejects missing, duplicate, or unexpected cohort UNITIDs
+  ---
+  duration_ms: 0.068834
+  type: 'test'
+  ...
+# Subtest: detects a manifest edit between verification and publication
+ok 4 - detects a manifest edit between verification and publication
+  ---
+  duration_ms: 0.224083
+  type: 'test'
+  ...
+# Subtest: the reviewed institution cohort has 26 artifacts and 19 admission headlines
+ok 5 - the reviewed institution cohort has 26 artifacts and 19 admission headlines
+  ---
+  duration_ms: 33.465834
+  type: 'test'
+  ...
+# Subtest: Purdue stays on the federal baseline while its first-party workbook blocks automated verification
+ok 6 - Purdue stays on the federal baseline while its first-party workbook blocks automated verification
+  ---
+  duration_ms: 3.417292
+  type: 'test'
+  ...
+# Subtest: Northwestern uses two pinned Data Book PDFs without changing admission or cost
+ok 7 - Northwestern uses two pinned Data Book PDFs without changing admission or cost
+  ---
+  duration_ms: 3.103167
+  type: 'test'
+  ...
+# Subtest: Caltech and Pomona add only verifier-safe current fields and keep coherent federal admissions
+ok 8 - Caltech and Pomona add only verifier-safe current fields and keep coherent federal admissions
+  ---
+  duration_ms: 2.605042
+  type: 'test'
+  ...
+# Subtest: new reviewed admissions exactly match their approved PDF and XLSX records
+ok 9 - new reviewed admissions exactly match their approved PDF and XLSX records
+  ---
+  duration_ms: 3.332209
+  type: 'test'
+  ...
+# Subtest: unsupported Duke and Yale admissions and deliberately excluded costs stay federal
+ok 10 - unsupported Duke and Yale admissions and deliberately excluded costs stay federal
+  ---
+  duration_ms: 2.58
+  type: 'test'
+  ...
+# Subtest: institution overlays satisfy lineage and arithmetic invariants
+ok 11 - institution overlays satisfy lineage and arithmetic invariants
+  ---
+  duration_ms: 4.912167
+  type: 'test'
+  ...
+# Subtest: the generated release exactly reflects every reviewed overlay
+ok 12 - the generated release exactly reflects every reviewed overlay
+  ---
+  duration_ms: 13.155
+  type: 'test'
+  ...
+# Subtest: a complete derived-admissions fixture passes validation
+ok 13 - a complete derived-admissions fixture passes validation
+  ---
+  duration_ms: 0.311125
+  type: 'test'
+  ...
+# Subtest: a college can bind different metrics to explicitly declared reviewed sources
+ok 14 - a college can bind different metrics to explicitly declared reviewed sources
+  ---
+  duration_ms: 0.314416
+  type: 'test'
+  ...
+# Subtest: multi-source overlays require explicit, declared, and used metric lineage
+ok 15 - multi-source overlays require explicit, declared, and used metric lineage
+  ---
+  duration_ms: 0.337084
+  type: 'test'
+  ...
+# Subtest: derived metrics cannot combine operands from different artifacts
+ok 16 - derived metrics cannot combine operands from different artifacts
+  ---
+  duration_ms: 0.093292
+  type: 'test'
+  ...
+# Subtest: multi-source declarations reject ambiguous or unregistered source sets
+ok 17 - multi-source declarations reject ambiguous or unregistered source sets
+  ---
+  duration_ms: 0.243084
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a reportingYear mismatch
+ok 18 - admit-rate inputs reject a reportingYear mismatch
+  ---
+  duration_ms: 0.119667
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a reportingYear mismatch
+ok 19 - yield-rate inputs reject a reportingYear mismatch
+  ---
+  duration_ms: 0.204959
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a periodLabel mismatch
+ok 20 - admit-rate inputs reject a periodLabel mismatch
+  ---
+  duration_ms: 0.225916
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a periodLabel mismatch
+ok 21 - yield-rate inputs reject a periodLabel mismatch
+  ---
+  duration_ms: 0.103375
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a cohort mismatch
+ok 22 - admit-rate inputs reject a cohort mismatch
+  ---
+  duration_ms: 0.054542
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a cohort mismatch
+ok 23 - yield-rate inputs reject a cohort mismatch
+  ---
+  duration_ms: 0.05125
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a finality mismatch
+ok 24 - admit-rate inputs reject a finality mismatch
+  ---
+  duration_ms: 0.052
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a finality mismatch
+ok 25 - yield-rate inputs reject a finality mismatch
+  ---
+  duration_ms: 0.053125
+  type: 'test'
+  ...
+# Subtest: an observation cannot override its college source lineage
+ok 26 - an observation cannot override its college source lineage
+  ---
+  duration_ms: 0.049708
+  type: 'test'
+  ...
+# Subtest: a derived rate cannot omit its source observations
+ok 27 - a derived rate cannot omit its source observations
+  ---
+  duration_ms: 0.097875
+  type: 'test'
+  ...
+# Subtest: HTML artifact hashing ignores volatile asset versions and edge challenges
+ok 28 - HTML artifact hashing ignores volatile asset versions and edge challenges
+  ---
+  duration_ms: 0.420459
+  type: 'test'
+  ...
+1..28
+# tests 28
+# suites 0
+# pass 28
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 87.887417

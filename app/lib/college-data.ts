@@ -99,7 +99,7 @@ export type SourceRelease = {
   artifactUrl?: string;
   artifactSha256?: string;
   artifactHashMode?: "raw" | "html-without-volatile-assets-and-edge-challenge";
-  artifactKind?: "html" | "pdf";
+  artifactKind?: "html" | "pdf" | "xlsx";
   review?: {
     status: "approved";
     reviewedOn: string;

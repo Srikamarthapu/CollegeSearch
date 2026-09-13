@@ -1,0 +1,29 @@
+{
+  "reviewedOn": "2026-09-13",
+  "sources": [
+    {
+      "sourceId": "gatech-cds-2025-26",
+      "notes": "On 2026-09-13 followed the official IRP 2025-26 link to its moved PDF; bytes retain the previously approved fingerprint. Rechecked rendered B1 p.3 (21,028 total undergraduates), B4-B21 p.5 (Fall 2019 adjusted cohort 3,054; 2,860 graduates; published rounded 94%), C1 p.8 (66,881 applicants, 8,921 admits, 4,071 enrollees and matching gender totals), and G1 p.20 (2026-27 in-state tuition 10,618, out-of-state 34,604, required fees 1,516). Derived admission and yield ratios agree. Residency admit/enrollee subtotals do not exactly sum to published totals and are excluded; no subgroup observations are registered."
+    },
+    {
+      "sourceId": "illinois-cds-2025-26",
+      "notes": "On 2026-09-13 followed the official DAIR 2025-26 link to its Box static XLSX; bytes retain the previously approved fingerprint. Verified exact redirects uofi.box.com to uofi.app.box.com to public.boxcloud.com. Independently re-read all seven registered observations and their definitions: CDS-C!B3 Fall 2025 cohort; I37:I39 = 83,045 applicants, 30,384 admits, 9,207 enrollees, reconciled to residency rows and E11:E23 gender totals; CDS-B!B4 Fall 2025 reporting date and C51 = 38,572 total undergraduates; Fall 2019 heading B102, F107 = 7,655 adjusted entrants, F108:F110 = 5,689 + 760 + 157, F111 = 6,606 graduates, F112 = 0.8629653821032005. Recalculated admission and yield ratios. Misaligned C1 enrollment-status subtable remains excluded. G1 still explicitly names 2025-26 and marks costs unavailable; costs remain excluded."
+    },
+    {
+      "sourceId": "ut-austin-cds-2025-26",
+      "notes": "On 2026-09-13 rechecked every registered observation in the changed official PDF with text extraction and rendered pages. B1 p.5: 44,314 total undergraduates at Fall 2025 reporting date; six gender/status totals sum to 44,314. B4-B21 pp.8-9: Fall 2019 adjusted cohort 8,007; 5,962 + 998 + 182 = 7,142 six-year graduates; reported 89.20% retained. C1 p.13 gender counts independently sum to 90,690 applicants, 20,154 admits and 9,900 enrollees; p.14 residency totals agree. Recomputed admission and yield ratios. G1 p.29 required fees remain blank, so tuition remains excluded. Corrected all moved page references; no registered numerical values changed."
+    },
+    {
+      "sourceId": "caltech-registrar-enrollment-2025",
+      "notes": "On 2026-09-13 re-read the current official Registrar table and all registered enrollment evidence: Fall Enrollment 2025-26 heading, Undergraduate Total 971, female 445 plus male 526 = 971, and October 24, 2025 page date. Graduate total 1,398 is a separate population. Only the all-undergraduate total is registered. Reviewed the new raw HTML fingerprint; numerical value and cohort are unchanged."
+    },
+    {
+      "sourceId": "caltech-financial-aid-costs-2026-27",
+      "notes": "On 2026-09-13 re-read the official cost table, full-time undergraduate 2026-27 cohort, and fee footnotes. Tuition 68,574 plus mandatory fees 2,655 = 71,229 for each private-tuition observation. Housing, food, books, personal expenses, travel, optional health insurance and the additional one-time 600 entering-student orientation fee remain excluded. Reviewed the new raw HTML fingerprint; registered annual amounts and population are unchanged."
+    },
+    {
+      "sourceId": "pomona-tuition-costs-2026-27",
+      "notes": "On 2026-09-13 re-read the current official 2026-27 semester and annual tables and exclusions. Two semesters of tuition 35,830 and student-body fees 210 give annual tuition 71,660 plus fees 420 = 72,080 for each private-tuition observation. Annual table agrees across housing arrangements. One-time 500 deposit, housing/food, medical insurance, department charges and conditional fees remain excluded. Reviewed the new raw HTML fingerprint; annual amounts and full-time undergraduate cohort are unchanged."
+    }
+  ]
+}

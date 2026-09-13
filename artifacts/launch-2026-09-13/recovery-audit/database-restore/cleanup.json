@@ -1,0 +1,37 @@
+{
+  "checkedAt": "2026-09-13T21:14:27.764499+00:00",
+  "status": "passed",
+  "projectId": "CSRestoregsg4rkw2",
+  "exactStopUsed": true,
+  "stopAllUsed": false,
+  "noBackupRemovedOnlyDisposableData": true,
+  "remainingRunResources": {
+    "containers": [],
+    "volumes": [],
+    "networks": []
+  },
+  "originalResourcesPreserved": {
+    "containers": true,
+    "volumes": true,
+    "networks": true
+  },
+  "baselineCounts": {
+    "containers": 26,
+    "volumes": 15,
+    "networks": 7
+  },
+  "afterCounts": {
+    "containers": 26,
+    "volumes": 15,
+    "networks": 7
+  },
+  "sensitiveTemporaryFilesRemoved": [
+    "local-status.json",
+    "checkpoint.dump",
+    "start.log",
+    "start-final.log",
+    "reconfigure-stop.log",
+    "status.log",
+    "final-stop.log"
+  ]
+}

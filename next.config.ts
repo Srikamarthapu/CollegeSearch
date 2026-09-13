@@ -1,24 +1,23 @@
 import type { NextConfig } from "next";
+import {
+  getSupabaseConnectOrigin,
+  NON_CSP_SECURITY_HEADERS,
+} from "./security-policy";
 
 const securityHeaders = [
   {
     key: "Content-Security-Policy",
     value: "frame-ancestors 'none'",
   },
-  { key: "X-Frame-Options", value: "DENY" },
-  { key: "X-Content-Type-Options", value: "nosniff" },
-  {
-    key: "Referrer-Policy",
-    value: "strict-origin-when-cross-origin",
-  },
-  {
-    key: "Permissions-Policy",
-    value: "camera=(), microphone=(), geolocation=()",
-  },
+  ...NON_CSP_SECURITY_HEADERS,
 ];
 
 const nextConfig: NextConfig = {
   async headers() {
+    // Reject a malformed browser auth origin during build/startup instead of
+    // interpolating an untrusted value into the per-request CSP.
+    getSupabaseConnectOrigin();
+
     return [
       {
         // Vinext currently needs an explicit root rule in addition to /:path*.

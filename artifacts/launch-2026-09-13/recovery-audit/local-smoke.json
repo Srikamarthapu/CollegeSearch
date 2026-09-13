@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "startedAt": "2026-09-13T21:25:06.375Z",
+  "checkedAt": "2026-09-13T21:25:08.023Z",
+  "origin": "http://127.0.0.1:4173",
+  "profile": "smoke",
+  "status": "passed",
+  "checks": [
+    {
+      "path": "/",
+      "ms": 1198.5,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/",
+      "ms": 39.4,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 39.2,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 74,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 27.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 19.7,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/match",
+      "ms": 32.2,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/plan",
+      "ms": 20.5,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/account",
+      "ms": 31.5,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/privacy",
+      "ms": 38.8,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/data-health",
+      "ms": 30,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/auth/callback",
+      "ms": 52.5,
+      "httpStatus": 307,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/auth/recovery-callback",
+      "ms": 5.5,
+      "httpStatus": 307,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/favicon.svg",
+      "ms": 1.2,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/_vinext/image?url=%2Fberkeley-campus.jpg&w=640&q=75",
+      "ms": 32,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/_next/static/chunks/rolldown-runtime-B0Z9INg1.js",
+      "ms": 0.6,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    }
+  ],
+  "sourceSnapshot": {
+    "state": "within_window",
+    "checkedAt": "2026-09-13T18:44:26.956Z",
+    "ageHours": 2.68,
+    "passed": 26,
+    "total": 26,
+    "maxAgeHours": 192
+  },
+  "freshnessStatus": "passed",
+  "scope": "Read-only HTTP probe. No OAuth, emails, database writes, browser interaction, alert delivery, or rollback was performed."
+}

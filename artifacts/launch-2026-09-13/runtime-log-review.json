@@ -1,0 +1,21 @@
+{
+  "reviewedAt": "2026-09-13T19:55:47.602Z",
+  "afterDeployment": 1789329260000,
+  "events": [
+    {
+      "timestamp": 1789329283545,
+      "level": "info",
+      "path": "/_vinext/image",
+      "outcome": "ok",
+      "error": null
+    },
+    {
+      "timestamp": 1789329283064,
+      "level": "info",
+      "path": "/_vinext/image",
+      "outcome": "ok",
+      "error": null
+    }
+  ],
+  "errorEvents": 0
+}

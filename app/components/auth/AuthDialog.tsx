@@ -1,5 +1,7 @@
 "use client";
 
+import { newPasswordError } from "@/app/lib/password-validation";
+
 import * as Dialog from "@radix-ui/react-dialog";
 import {
   ArrowLeft,
@@ -23,6 +25,9 @@ type Notice = {
   kind: "error" | "success";
   text: string;
 } | null;
+
+const UNEXPECTED_AUTH_ERROR =
+  "CollegeSearch could not complete that account request. Please try again.";
 
 export function AuthDialog({
   children,
@@ -55,6 +60,7 @@ export function AuthDialog({
   }
 
   async function handleGoogleSignIn() {
+    if (process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED !== "true") return;
     const supabase = getSupabaseBrowserClient();
     if (!supabase) {
       setNotice({ kind: "error", text: "Supabase setup is not complete yet." });
@@ -63,16 +69,18 @@ export function AuthDialog({
 
     setBusy(true);
     setNotice(null);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-
-    if (error) {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) setNotice({ kind: "error", text: error.message });
+    } catch {
+      setNotice({ kind: "error", text: UNEXPECTED_AUTH_ERROR });
+    } finally {
       setBusy(false);
-      setNotice({ kind: "error", text: error.message });
     }
   }
 
@@ -92,70 +100,74 @@ export function AuthDialog({
     setBusy(true);
     setNotice(null);
 
-    if (mode === "forgot") {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/recovery-callback`,
-      });
-      setBusy(false);
-      if (error) {
-        setNotice({ kind: "error", text: error.message });
-      } else {
-        setNotice({
-          kind: "success",
-          text: "If that address has an account, a reset link is on its way.",
-        });
-      }
-      return;
-    }
+    try {
 
-    if (mode === "sign-up") {
-      if (password.length < 8) {
-        setBusy(false);
+      if (mode === "forgot") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/auth/recovery-callback`,
+        });
+        if (error) {
+          setNotice({ kind: "error", text: error.message });
+        } else {
+          setNotice({
+            kind: "success",
+            text: "If that address has an account, a reset link is on its way.",
+          });
+        }
+        return;
+      }
+
+      if (mode === "sign-up") {
+        const passwordError = newPasswordError(password);
+        if (passwordError) {
+          setNotice({
+            kind: "error",
+            text: passwordError,
+          });
+          return;
+        }
+
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: fullName ? { full_name: fullName } : undefined,
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+          },
+        });
+        if (error) {
+          setNotice({ kind: "error", text: error.message });
+        } else if (data.session) {
+          onSignedIn?.();
+          setOpen(false);
+        } else {
+          setNotice({
+            kind: "success",
+            text: "Check your inbox to confirm your email and finish creating your account.",
+          });
+        }
+        return;
+      }
+
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) {
         setNotice({
           kind: "error",
-          text: "Use at least 8 characters for your password.",
+          text: "That email and password combination did not work.",
         });
         return;
       }
 
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: fullName ? { full_name: fullName } : undefined,
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
+      onSignedIn?.();
+      setOpen(false);
+    } catch {
+      setNotice({ kind: "error", text: UNEXPECTED_AUTH_ERROR });
+    } finally {
       setBusy(false);
-      if (error) {
-        setNotice({ kind: "error", text: error.message });
-      } else if (data.session) {
-        onSignedIn?.();
-        setOpen(false);
-      } else {
-        setNotice({
-          kind: "success",
-          text: "Check your inbox to confirm your email and finish creating your account.",
-        });
-      }
-      return;
     }
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    setBusy(false);
-    if (error) {
-      setNotice({
-        kind: "error",
-        text: "That email and password combination did not work.",
-      });
-      return;
-    }
-
-    onSignedIn?.();
-    setOpen(false);
   }
 
   const title =
@@ -166,10 +178,10 @@ export function AuthDialog({
         : "Welcome back";
   const description =
     mode === "sign-up"
-      ? "Create an account for sign-in. Saved colleges stay in this browser and are not synced."
+      ? "Create an account to sync your college list. Existing browser-only saves remain separate until you explicitly import them."
       : mode === "forgot"
         ? "We’ll email you a secure link to choose a new password."
-        : "Sign in to your account. Saved colleges stay in this browser and are not synced.";
+        : "Sign in to load your account list. Existing browser-only saves are never imported automatically.";
 
   return (
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
@@ -197,13 +209,13 @@ export function AuthDialog({
                 <strong>Accounts are not available in this preview yet.</strong>
                 <p>
                   You can still search, compare, and save colleges on this
-                  device.
+                  browser profile.
                 </p>
               </div>
             </div>
           ) : (
             <>
-              {mode !== "forgot" ? (
+              {mode !== "forgot" && process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED === "true" ? (
                 <>
                   <button
                     className={styles.googleButton}

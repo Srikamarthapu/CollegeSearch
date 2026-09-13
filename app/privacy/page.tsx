@@ -30,9 +30,9 @@ export default function PrivacyPage() {
             <h1>Your college list is yours.</h1>
           </div>
           <p>
-            CollegeSearch is currently a research prototype. It stores saved
-            colleges in your browser and does not yet sync lists or student
-            academic profiles to a CollegeSearch database.
+            CollegeSearch keeps browser-only saves separate from account data.
+            When account services are configured and you sign in, new account
+            saves can sync; existing browser saves require an explicit import.
           </p>
         </header>
 
@@ -47,11 +47,15 @@ export default function PrivacyPage() {
             <li>
               <span><HardDrive size={19} aria-hidden="true" /></span>
               <div>
-                <strong>Saved colleges stay on this device.</strong>
+                <strong>Browser-only saves stay separate.</strong>
                 <p>
                   College identifiers are stored in browser local storage under
                   <code> college-search-saved</code>. Remove individual saves on
                   the Saved page or clear this site&apos;s browser data to erase them.
+                  Signing in does not upload this guest list automatically.
+                  An explicit successful import moves the selected college saves
+                  into your account and removes them from the guest shortlist.
+                  Guest research notes, profiles, and deadlines are not imported.
                 </p>
               </div>
             </li>
@@ -62,20 +66,73 @@ export default function PrivacyPage() {
                 <p>
                   If a deployment enables Supabase and you sign up, Supabase
                   processes your email, password credential or Google identity,
-                  and authentication session. CollegeSearch never places a
-                  privileged Supabase service key in the browser.
+                  authentication session, and college identifiers you save to
+                  your account. Ownership rules restrict each account to its own
+                  rows. CollegeSearch never places a privileged Supabase service
+                  key in the browser.
                 </p>
+              </div>
+            </li>
+            <li>
+              <span><HardDrive size={19} aria-hidden="true" /></span>
+              <div>
+                <strong>Signed-in lists also keep a browser recovery copy.</strong>
+                <p>
+                  CollegeSearch stores each verified account&apos;s college
+                  identifiers and per-college pending save or remove actions in
+                  UUID-scoped local-storage keys. This supports offline retry and
+                  never stores email, tokens, or profile fields. Signing out
+                  hides but does not erase that recovery copy; clear this
+                  site&apos;s browser data to remove every local copy on a shared
+                  browser profile.
+                </p>
+              </div>
+            </li>
+            <li>
+              <span><HardDrive size={19} aria-hidden="true" /></span>
+              <div>
+                <strong>Research notes and checklists stay in this browser.</strong>
+                <p>
+                  Each college notebook is stored locally, separately for guests
+                  and verified accounts. Notes do not sync or upload when you
+                  sign in. Removing a college from your shortlist keeps its
+                  notebook; use Clear all research to erase its notes, checklist,
+                  and list category, or clear this site&apos;s browser data to remove all
+                  local notebooks. Export research downloads a CSV containing
+                  your current notes (including this tab&apos;s drafts), checklist, student-assigned list categories,
+                  college metrics, and source links. Reach, target, and likely
+                  labels are your own planning notes, not generated predictions.
+                </p>
+                <p>Edits have a recovery copy in this tab&apos;s session storage so they survive navigation and reload. Save research commits a copy in browser local storage. Save or download drafts before closing the tab. Complete notebook backups also include research for removed colleges; restoring a backup adds missing notebooks and leaves existing copies intact.</p>
               </div>
             </li>
             <li>
               <span><Database size={19} aria-hidden="true" /></span>
               <div>
-                <strong>No academic profile is collected in this release.</strong>
+                <strong>Your optional application profile stays local.</strong>
                 <p>
-                  The current matching tools use choices in memory to render
-                  results. They do not ask for transcripts, essays, test scores,
-                  financial-aid records, or demographic profiles.
+                  Find my fit can keep the GPA, grading context, course notes,
+                  activities, and priorities you choose to enter in this browser.
+                  This optional profile is separate for guests and verified
+                  accounts. It does not sync, enter shared links, or go to an AI
+                  provider. Use Clear profile to remove it. A review brief is
+                  downloaded only when you request it.
                 </p>
+                <p>Profile changes autosave to local storage, with a separate per-tab recovery draft in session storage. If storage, coordination between tabs, or account verification fails, the interface shows what still needs saving. Download your brief before leaving when a saved copy is unavailable.</p>
+                <p>
+                  Search and matching preferences are included in the page URL
+                  so you can return to or share the same choices. Anyone with
+                  that link can see those preferences. The application profile
+                  does not change preference scores. The app does not request
+                  transcripts, financial-aid records, or demographic profiles.
+                </p>
+              </div>
+            </li>
+            <li>
+              <span><HardDrive size={19} aria-hidden="true" /></span>
+              <div>
+                <strong>Your deadline tracker stays local.</strong>
+                <p>Dates, source links, tasks, and notes you enter are stored in this browser, separately for guests and verified accounts. Added tasks autosave; an unfinished form has a recovery copy in this tab. Dates are your own entries and checks, not a feed of college deadlines. The tracker does not send email or push reminders. Remove tasks individually or clear this site&apos;s browser data. Download a deadline backup to move the list; a restore preview asks before replacing the current list.</p>
               </div>
             </li>
           </ul>
@@ -99,9 +156,14 @@ export default function PrivacyPage() {
               organization&apos;s website, where its privacy policy applies.
             </li>
             <li>
-              Self-service account deletion and server-synced saved lists are
-              not active yet. They must ship with ownership-based row security
-              and a tested deletion path before student data is stored.
+              Account settings includes a confirmed deletion control. When the server
+              is configured, it removes your login and synced shortlist and revokes
+              all account sessions. Your notes, profile and deadline records for that
+              account are cleared from accessible browser storage; other open tabs
+              clear their local drafts when they resume. Guest data and other
+              accounts are kept. Downloads and copies on other devices must be
+              removed separately. A receipt containing only the deleted account
+              identifier is retained locally to prevent old tabs restoring its data.
             </li>
             <li>
               This note describes the current repository build. A public launch
