@@ -23,3 +23,14 @@ September 13, 2026. The preceding turn made concrete progress; this follow-up fo
 ## Remaining boundaries
 
 Post-publication checks and the disposable session-account cleanup will be recorded below and in `deployment.json`. The private review release does not establish public readiness. Actual SMTP confirmation/recovery delivery, natural token expiry, operator/privacy details, real alert receipt, private database backup/restore, school network/device testing, enlarged-text/reduced-motion and additional browser/device coverage remain open. No live admissions model, comprehensive national coverage, or school-wide capacity is claimed.
+
+
+## Published follow-up
+
+Private version 5 succeeded at 20:54:46 UTC, source `07672e6603fe43980fbb5923d9c05fe348a746c1`, environment revision 1. Matching [GitHub CI](https://github.com/Srikamarthapu/CollegeSearch/actions/runs/34782168718) passed build, 316 tests, types, lint, committed evidence verification and production dependency audit. See `deployment.json`.
+
+The actual deployed browser repeated the three-college revoked-session scenario. Removing Berkeley retained Davis and Irvine with “Sync needs attention” and “1 change pending”; the exact-user admin query still had all three rows. Retry moved both open tabs to signed-out without reloading the second tab. Signing back in replayed the retained removal and produced a confirmed two-college list matching the database. Normal sign-out restored the original empty guest list. The unique disposable account was globally revoked, deleted, then verified absent with zero saved rows; its private credential manifest was removed. See `session-api.json`, screenshots 13–14.
+
+Hosted notebook preview moved focus to its heading; Tab + PageDown scrolled the named list 220px and Cancel returned focus to Restore notebook backup. No fixture notebooks were imported. Hosted Activities scrolling moved its scrollTop from 0 to 480px with field top fixed at 319.53125px; the initially empty field was restored and verified empty. The current published recency notice and its factual-review caveat rendered on the private site. Screenshots 15–17 were opened and inspected. Anonymous HTTP returned 401 without application content (`private-access.json`). No new full hosted HTTP smoke is claimed; the current 16-request smoke is local and previous hosted 15-request evidence remains dated to its prior source.
+
+This turn made substantial progress and did not reach an external-only impasse. Remaining independent acceptance work includes profile/planner cross-tab conflict flows, natural token expiry/refresh, broader browser/accessibility checks and a local rehearsal of database restore mechanics. Owner inputs already requested remain pending; no unanswered preference was treated as approval.
