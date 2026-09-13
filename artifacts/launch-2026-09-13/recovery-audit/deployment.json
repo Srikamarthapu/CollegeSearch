@@ -1,0 +1,28 @@
+{
+  "sourceCommit": "27011e313c69b9380dbe68ecbfadcbdf3347778d",
+  "projectId": "appgprj_6a64f648520081919bb6328932d2ff1c",
+  "versionNumber": 6,
+  "versionId": "appgprj_6a64f648520081919bb6328932d2ff1c~appgver_c1eee4bb05748191ba94a9c7c8db67b6",
+  "deploymentId": "appgdep_6aa7156786e88191acc265358fba9545",
+  "status": "succeeded",
+  "updatedAt": "2026-09-13T21:28:21.978301+00:00",
+  "environmentRevision": 1,
+  "url": "https://college-compass-students.kamarthapusri.chatgpt.site",
+  "audience": "owner-private",
+  "archiveHash": "sha256:88799a3b273bbf19196656fab4b075910ac0c52733dba61d0e249ffdacf48b5e",
+  "ci": {
+    "runId": 34783878132,
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/Srikamarthapu/CollegeSearch/actions/runs/34783878132"
+  },
+  "targetedHostedChecks": {
+    "backupHeadingFocus": true,
+    "tabEntersReviewRegion": true,
+    "cancelReturnsToRestore": true,
+    "trackerUnchanged": true,
+    "capturedConsoleWarningsAndErrors": 0
+  },
+  "naturalSessionExpiry": "in_progress; see expiry-observations.json",
+  "limitations": "Targeted hosted checks for this source; earlier comprehensive hosted tests retain their earlier source boundaries."
+}

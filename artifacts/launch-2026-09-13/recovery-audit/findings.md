@@ -9,4 +9,4 @@ September 13, 2026. Baseline source: `07672e6603fe43980fbb5923d9c05fe348a746c1` 
 
 Positive browser evidence: a stale deadline edit was rejected after another tab saved the same task. Error focus moved to the explanation; the original form survived reload and could be kept as a new task. This does not prove collection-level conflict or storage failure behavior by itself.
 
-Fix and final verification details will be recorded after the patches and checks complete. The full school launch goal remains open.
+Fixes, regression results and the matching private deployment are recorded in REPORT.md and deployment.json. The full school launch goal remains open.
