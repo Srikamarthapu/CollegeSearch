@@ -6,7 +6,7 @@ interface Env {
   ASSETS: {
     fetch(request: Request): Promise<Response>;
   };
-  IMAGES: {
+  IMAGES?: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
         output(options: { format: string; quality: number }): Promise<{ response(): Response }>;
@@ -32,12 +32,14 @@ const worker = {
 
     if (url.pathname === "/_vinext/image") {
       const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
+      const imageBinding = env.IMAGES;
       return handleImageOptimization(request, {
         fetchAsset: (path) => env.ASSETS.fetch(new Request(new URL(path, request.url))),
-        transformImage: async (body, { width, format, quality }) => {
-          const result = await env.IMAGES.input(body).transform(width > 0 ? { width } : {}).output({ format, quality });
+        // Hosts without Images use vinext's validated original-asset fallback.
+        transformImage: imageBinding ? async (body, { width, format, quality }) => {
+          const result = await imageBinding.input(body).transform(width > 0 ? { width } : {}).output({ format, quality });
           return result.response();
-        },
+        } : undefined,
       }, allowedWidths);
     }
 

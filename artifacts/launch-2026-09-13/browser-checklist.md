@@ -29,3 +29,9 @@ Target: local production build at http://127.0.0.1:4173, CollegeSearch identity 
 - Do not claim WCAG conformance or large-scale readiness from these observations.
 
 Screenshots in `browser/` are supporting captures. `planner-desktop.png` predates its width fix and is retained as historical evidence, not the final layout.
+
+## Private hosted verification
+
+On https://college-compass-students.kamarthapusri.chatgpt.site, version 2: CollegeSearch identity, existing synthetic account sign-in, account shortlist reload and sign-out passed. The freshly opened hosted tab reported no browser console warnings/errors across these flows. The exact hosted HTTP deletion/isolation matrix passed 6/6 and cleaned its test accounts. The synthetic browser QA account was removed separately after sign-out. The private access check returned 401 without app content.
+
+Desktop home at a measured 1265px content width had equal document and scroll width. Carousel controls selected UCLA with matching photo/credit and autoplay subsequently advanced to another campus. `home-desktop.png` records the current layout.
