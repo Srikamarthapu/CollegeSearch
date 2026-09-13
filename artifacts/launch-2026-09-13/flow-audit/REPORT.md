@@ -51,3 +51,7 @@ The download event helper timed out, but the actual JSON appeared in Downloads a
 - Reduced-motion behavior was inspected in the code (media query, disabled autoplay, suppressed transitions), but no new OS-preference run was performed.
 - Final irreversible clear/remove actions and lock-delayed focus paths were reviewed in code; their full browser matrix remains.
 - This work does not establish SMTP delivery, support/operator identity, operational alerts, database restoration or school-wide capacity.
+
+## Private publication check
+
+The final source `450f4b2df8ba4d0f9029fea007c6cde009e5be3c` is deployed as private version 4. Matching GitHub CI passed. An anonymous request returned 401. In the actual hosted browser, the 568 × 320 menu ended at y=308, scrolled to 250px, and opened My deadlines. Add → Discard returned focus to Add a task. No warning/error console entries were captured. `11-hosted-mobile-menu.png` was opened and inspected. See `deployment.json` for exact provenance. The temporary local test tab was closed and the private browser viewport was reset.
