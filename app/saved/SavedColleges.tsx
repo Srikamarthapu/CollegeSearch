@@ -10,7 +10,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { ResearchBackupControls } from "@/app/components/ResearchBackupControls";
 import { readResearchForExport } from "@/app/lib/research-drafts";
@@ -37,6 +37,13 @@ import styles from "./saved.module.css";
 
 export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
   const [exportStatus, setExportStatus] = useState("");
+  const pageRef = useRef<HTMLElement>(null);
+  const pendingRemovalFocus = useRef<{
+    scopeKey: string;
+    index: number;
+    trigger: HTMLButtonElement;
+    origin: Element | null;
+  } | null>(null);
   const [comparisonSelection, setComparisonSelection] =
     useState<SavedComparisonSelection>({ ids: [], scopeKey: "loading" });
   const {
@@ -77,6 +84,31 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
     () => visibleSavedComparisonIds(comparisonSelection, scopeKey, savedIds),
     [comparisonSelection, savedIds, scopeKey],
   );
+
+  useLayoutEffect(() => {
+    const request = pendingRemovalFocus.current;
+    pendingRemovalFocus.current = null;
+    const root = pageRef.current;
+    if (!request || !root || request.scopeKey !== scopeKey || !collectionInteractive || request.trigger.isConnected) return;
+    const active = document.activeElement;
+    const removedOrigin = request.origin && !request.origin.isConnected && active === document.body;
+    if (active !== request.origin && !removedOrigin) return;
+    const available = (element: HTMLElement) => !element.matches(":disabled") && !element.closest("[hidden], [inert]") && element.getClientRects().length > 0;
+    const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-saved-remove]")).filter(available);
+    const target = buttons[Math.min(request.index, buttons.length - 1)] ?? root.querySelector<HTMLAnchorElement>("[data-saved-empty-explore]");
+    if (target && available(target)) target.focus();
+  });
+
+  function removeCollege(unitId: number, trigger: HTMLButtonElement) {
+    if (!collectionInteractive) return;
+    pendingRemovalFocus.current = {
+      scopeKey,
+      index: Math.max(0, collection.items.findIndex((college) => college.unitId === unitId)),
+      trigger,
+      origin: document.activeElement,
+    };
+    persist(savedIds.filter((id) => id !== unitId));
+  }
 
   function persist(next: number[]) {
     if (!collectionInteractive) return;
@@ -167,7 +199,7 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
   return (
     <>
       <SiteHeader savedCount={saved.length} />
-      <main id="main-content" className={styles.page}>
+      <main ref={pageRef} id="main-content" className={styles.page}>
         <header className={styles.masthead}>
           <span className={styles.eyebrow}>Your college shortlist</span>
           <div>
@@ -272,7 +304,7 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
                 ? "No colleges are saved in this browser yet. You can start without creating an account."
                 : "No colleges are saved to this account yet."}
             </p>
-            <Link href="/explore">
+            <Link href="/explore" data-saved-empty-explore>
               Explore colleges
               <ArrowRight size={16} aria-hidden="true" />
             </Link>
@@ -380,13 +412,8 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
                         type="button"
                         disabled={!collectionInteractive}
                         aria-label={`Remove ${college.name} from saved colleges`}
-                        onClick={() =>
-                          persist(
-                            savedIds.filter(
-                              (unitId) => unitId !== college.unitId,
-                            ),
-                          )
-                        }
+                        data-saved-remove
+                        onClick={(event) => removeCollege(college.unitId, event.currentTarget)}
                       >
                         <BookmarkX size={16} aria-hidden="true" />
                         Remove

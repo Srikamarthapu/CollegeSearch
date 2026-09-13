@@ -2,6 +2,10 @@
   min-height: 72vh;
 }
 
+.page :is([data-saved-remove], [data-saved-empty-explore]) {
+  scroll-margin-block: 100px;
+}
+
 .masthead {
   display: grid;
   width: min(var(--page-width), calc(100% - 48px));

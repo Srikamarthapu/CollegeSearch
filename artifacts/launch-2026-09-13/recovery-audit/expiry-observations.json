@@ -7,7 +7,7 @@
   "initialBrowserSessionRefreshTokenCounter": null,
   "initialUI": "Account verified; Saved-list sync Up to date; three synthetic saved colleges",
   "naturalExpiryBoundary": "2026-09-13T22:04:57Z",
-  "status": "in_progress",
+  "status": "passed",
   "scope": "Normal sign-in and real elapsed time; no browser token/storage reads, clock injection or provider lifetime changes. Backend observations are restricted to the disposable account.",
   "observations": [
     {
@@ -17,11 +17,49 @@
       "browserSessionRefreshTokenCounter": null,
       "ui": "Routine account re-verification completed: Account verified; Up to date; three saved colleges",
       "status": "waiting_for_real_expiry"
+    },
+    {
+      "checkedAt": "2026-09-13T22:02:35Z",
+      "browserSessionRefreshedAt": null,
+      "browserSessionRefreshTokenCounter": null,
+      "browserInteraction": false
+    },
+    {
+      "checkedAt": "2026-09-13T22:05:04Z",
+      "browserSessionRefreshedAt": "2026-09-13T22:03:19.226378Z",
+      "browserSessionRefreshTokenCounter": null,
+      "browserInteraction": false,
+      "interpretation": "The same browser session refreshed automatically before original expiry, before any new browser interaction."
     }
   ],
   "liveObserver": {
     "execSessionId": 62944,
     "target": "2026-09-13T22:04:59Z",
-    "purpose": "Wait for real expiry, then ask the provider to reject the original non-refreshing control token. Browser refresh/mutation and exact cleanup follow separately."
-  }
+    "purpose": "Wait for real expiry, then ask the provider to reject the original non-refreshing control token. Browser refresh/mutation and exact cleanup follow separately.",
+    "exitCode": 0
+  },
+  "providerConfirmedControlExpiry": true,
+  "postExpiryUI": {
+    "accountVerified": true,
+    "initialSavedCount": 3,
+    "removedCollegeId": 110635,
+    "remainingCollegeIds": [
+      110644,
+      110653
+    ],
+    "confirmedUpToDate": true,
+    "reloadPreservedList": true,
+    "normalSignOutPassed": true,
+    "capturedWarningsAndErrors": 0
+  },
+  "cleanup": {
+    "passed": true,
+    "checkedAt": "2026-09-13T22:07:00Z",
+    "exactUserAbsent": true,
+    "sessions": 0,
+    "savedRows": 0,
+    "privateCredentialManifestRemoved": true
+  },
+  "finalApplicationSource": "27011e313c69b9380dbe68ecbfadcbdf3347778d",
+  "limitations": "One real one-hour session across private releases5 and6 in the Codex in-app browser. This does not prove email confirmation/recovery, all browsers, overnight inactivity or every network condition."
 }

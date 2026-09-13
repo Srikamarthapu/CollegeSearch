@@ -23,6 +23,6 @@
     "trackerUnchanged": true,
     "capturedConsoleWarningsAndErrors": 0
   },
-  "naturalSessionExpiry": "in_progress; see expiry-observations.json",
+  "naturalSessionExpiry": "passed; see expiry-observations.json",
   "limitations": "Targeted hosted checks for this source; earlier comprehensive hosted tests retain their earlier source boundaries."
 }
