@@ -49,6 +49,7 @@ const preferences = {
   region: "state:CA",
   ownership: "any",
   maxNetPrice: 25_000,
+  residencyState: "CA",
   size: "medium",
   setting: "City",
   weights: {

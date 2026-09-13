@@ -18,6 +18,7 @@ import { resolveAuthConsumerState } from "@/app/components/auth/auth-consumer-st
 import { getAuthDisplayName, useAuth } from "@/app/components/auth/AuthProvider";
 import { useSavedColleges } from "@/app/components/saved/SavedCollegesProvider";
 import styles from "./account.module.css";
+import { DeleteAccountControl } from "./DeleteAccountControl";
 
 export function AccountPageClient() {
   const {
@@ -71,10 +72,10 @@ export function AccountPageClient() {
       <main id="main-content" className={styles.page}>
         <header className={styles.masthead}>
           <span className={styles.eyebrow}>Account and session</span>
-          <h1>A clear boundary for your account.</h1>
+          <h1>Your shortlist, wherever you go.</h1>
           <p>
-            Authentication can sync a college list without attaching browser-only
-            saves to your account unless you explicitly import them.
+            Keep your shortlist across devices. Research notes, your applicant
+            profile, and deadlines stay in this browser.
           </p>
         </header>
 
@@ -132,10 +133,10 @@ export function AccountPageClient() {
               </div>
               <dl className={styles.details}>
                 <div>
-                  <dt>Authentication</dt>
+                  <dt>Sign-in status</dt>
                   <dd>
                     {decision.canUseAccount
-                      ? "Verified Supabase session"
+                      ? "Account verified"
                       : decision.state === "last-verified-unavailable"
                         ? "Last verified identity — current check failed"
                         : "Checking current session"}
@@ -163,9 +164,10 @@ export function AccountPageClient() {
                 </div>
                 <div>
                   <dt>Academic profile</dt>
-                  <dd>Not collected or stored in this release</dd>
+                  <dd>Optional and stored only in this browser; not synced to your account</dd>
                 </div>
               </dl>
+              {decision.canUseAccount && canImportGuestSaves ? <p className={styles.message}>Import moves these college saves into your account after sync succeeds, then removes them from the guest shortlist. Guest notes, your profile, and deadlines stay in this browser and are not imported.</p> : null}
               <div className={styles.actions}>
                 {decision.canUseAccount && canImportGuestSaves ? (
                   <button type="button" onClick={() => void importGuestSaves()}>
@@ -211,8 +213,8 @@ export function AccountPageClient() {
               </h2>
               <p>
                 {status === "unconfigured"
-                  ? "The interface is ready, but this deployment still needs its Supabase project and Google provider configuration."
-                  : "Sign in with email or Google when the provider is available. Browser-only saves remain separate until you choose to import them."}
+                  ? "Accounts are not available here yet. You can still research colleges and keep a shortlist in this browser."
+                  : "Sign in to sync your shortlist. Browser-only saves stay separate until you choose to import them."}
               </p>
               <AuthDialog onSignedIn={refreshUser}>
                 <button type="button" className={styles.primaryAction}>
@@ -230,6 +232,7 @@ export function AccountPageClient() {
           ) : null}
         </section>
 
+        <DeleteAccountControl />
         <aside className={styles.note}>
           <ShieldCheck size={19} aria-hidden="true" />
           <p>

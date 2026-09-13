@@ -2,6 +2,7 @@
 
 import { LogIn, LogOut, RefreshCw, ShieldAlert, UserRound } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 import { resolveAuthConsumerState } from "./auth-consumer-state";
 import { AuthDialog } from "./AuthDialog";
 import { getAuthDisplayName, useAuth } from "./AuthProvider";
@@ -62,6 +63,7 @@ export function AuthAccountControl() {
         <div className={styles.accountPopover}>
           <span className={styles.accountKicker}>Account verification</span>
           <strong>We couldn’t verify this session.</strong>
+          <Link href="/account">Account settings</Link>
           <p role="alert">
             {verificationError ??
               "CollegeSearch is not showing account data until verification succeeds."}
@@ -109,7 +111,7 @@ export function AuthAccountControl() {
 
   return (
     <details className={styles.accountMenu}>
-      <summary className={styles.accountSummary}>
+      <summary className={styles.accountSummary} aria-label={`Account menu for ${displayName}`}>
         <span className={styles.avatar} aria-hidden="true">
           {initial || <UserRound size={16} />}
         </span>
@@ -122,6 +124,7 @@ export function AuthAccountControl() {
             : "Last verified account"}
         </span>
         <strong>{displayName}</strong>
+        <Link href="/account">Account settings</Link>
         {user.email ? <small>{user.email}</small> : null}
         {!isVerified ? (
           <>

@@ -20,10 +20,14 @@ in `college_compass_prd.md` into a usable, responsive experience with a verified
   typo-tolerant college selection
 - Save colleges in the browser without an account, or sync a separate account
   list after Supabase is configured
+- Keep per-college research notes and a next-step checklist in this browser;
+  export the shortlist, dated metrics, source links, and saved research to CSV
+- Share search filters and matching preferences through the URL, with reset and
+  browser-history support
 - Identify every college with a source-recorded institutional mark instead of
   generated initials
-- Use smooth, reduced-motion-aware Lenis scrolling with a restrained moving
-  campus-atlas background
+- Use reduced-motion-aware Lenis scrolling and a responsive research layout
+  with a credited campus photograph and readable college identities
 - Sign up, confirm an email, sign in, recover a password, sign out, or continue
   with Google after a Supabase project is connected
 - Use the full experience on mobile, tablet, or desktop
@@ -32,6 +36,19 @@ The app intentionally distinguishes dated federal program-and-award evidence
 from a verified current program. It also labels every displayed admission rate as
 institution-wide unless an official source publishes a comparable program-level
 rate.
+
+Research notebooks remain browser-only even when college saves sync to an
+account. Guest and verified-account notebooks are separate. Notes use explicit
+Save research, retain drafts during same-account session verification, and
+report unavailable storage or a newer saved copy instead of silently claiming
+success. Removing a college from a shortlist does not erase its research;
+clear the notebook and save, or clear this site's browser data, to erase it.
+
+The September 2026 redesign research and browser verification are recorded in
+`artifacts/redesign-2026-09/`. The campus photograph is by
+[4300streetcar](https://commons.wikimedia.org/wiki/File:UC_Berkeley_campus_and_surroundings_from_Berkeley_Hills_January_2026.jpg),
+licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), and
+cropped in the interface. It is a real Berkeley photograph, not generated art.
 
 ## Data
 

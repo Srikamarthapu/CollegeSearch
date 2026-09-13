@@ -1,5 +1,7 @@
 "use client";
 
+import { newPasswordError } from "@/app/lib/password-validation";
+
 import * as Dialog from "@radix-ui/react-dialog";
 import {
   ArrowLeft,
@@ -58,6 +60,7 @@ export function AuthDialog({
   }
 
   async function handleGoogleSignIn() {
+    if (process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED !== "true") return;
     const supabase = getSupabaseBrowserClient();
     if (!supabase) {
       setNotice({ kind: "error", text: "Supabase setup is not complete yet." });
@@ -115,10 +118,11 @@ export function AuthDialog({
       }
 
       if (mode === "sign-up") {
-        if (password.length < 8) {
+        const passwordError = newPasswordError(password);
+        if (passwordError) {
           setNotice({
             kind: "error",
-            text: "Use at least 8 characters for your password.",
+            text: passwordError,
           });
           return;
         }
@@ -211,7 +215,7 @@ export function AuthDialog({
             </div>
           ) : (
             <>
-              {mode !== "forgot" ? (
+              {mode !== "forgot" && process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED === "true" ? (
                 <>
                   <button
                     className={styles.googleButton}

@@ -10,9 +10,12 @@ The app now has a Supabase Auth foundation for:
 - signed-in account state and sign out
 - account-synced college saves with an explicit browser-list import
 
-It intentionally stays in a clear **unconfigured** state until a CollegeSearch
-Supabase project is connected. No remote project was created or changed while
-building this foundation.
+On September 13, 2026, a dedicated CollegeSearch project was created in the
+Bluee12132 organization. Ooru was paused with the owner’s approval to free a
+free-plan project slot. Local and hosted two-user isolation, session revocation,
+and cascade-deletion integration checks passed. Local `.env.local` targets
+CollegeSearch. Hosting environment values and actual student email delivery
+must be verified separately before launch.
 
 ## 1. Install the pinned client packages
 
@@ -47,11 +50,13 @@ Policy; the publishable key is never placed in a response header.
 
 These are the only browser-side keys this auth system needs. Do **not** add a
 `service_role` key, a secret API key, or the Google client secret to a
-`NEXT_PUBLIC_*` variable. This login foundation does not require a service-role
-key at all.
+`NEXT_PUBLIC_*` variable. The account deletion endpoint requires `SUPABASE_SECRET_KEY` on the server.
+It verifies the caller and active session, revokes sessions, and deletes only
+that verified account. Keep it ignored locally and marked secret in hosting.
 
 Before testing account-synced saves, apply the committed
-`supabase/migrations/20260810042855_create_saved_colleges.sql` migration and
+`supabase/migrations/20260810042855_create_saved_colleges.sql` and
+`supabase/migrations/20260913184505_account_session_validation.sql` migrations and
 follow the two-user RLS verification matrix in `SUPABASE_DATABASE_SETUP.md`.
 The repository's static SQL tests verify the intended contract, but they are
 not evidence that a hosted project's policies were applied correctly.
@@ -175,14 +180,15 @@ Run this matrix on both local and production origins:
 2. Sign out and sign back in.
 3. Request a password reset, open the newest email in the same browser, and set
    a new password.
-4. Sign in with Google and confirm the app returns through `/auth/callback`.
+4. If Google sign-in is enabled, confirm it returns through `/auth/callback`.
+   Otherwise verify that the unconfigured provider is not offered.
 5. Refresh and directly open a second page; the session should persist.
 6. Sign out and verify the authenticated UI disappears on refresh.
 7. Check the browser console and Supabase Auth logs for errors.
 8. Inspect two fresh document responses. Each must have a different nonce in
    `Content-Security-Policy`, and every inline `script` and `style` must carry
    the matching nonce. Confirm there are no CSP violations during sign-up,
-   Google sign-in, recovery, navigation, or Lenis/Motion interactions.
+   any enabled Google sign-in, recovery, navigation, or Lenis/Motion interactions.
 9. While signed out, save colleges and confirm that signing in does not upload
    them automatically. Use the explicit import action and confirm that only the
    selected account receives those rows.
@@ -213,3 +219,13 @@ user-owned tables must enable RLS and authorize rows with `auth.uid()`.
 - [Password authentication](https://supabase.com/docs/guides/auth/passwords)
 - [Google login](https://supabase.com/docs/guides/auth/social-login/auth-google)
 - [Redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls)
+
+## September 2026 release verification
+
+Use Supabase CLI 2.117.0 or newer with the committed local configuration.
+The local stack uses API 55321 and database 55322 to avoid other projects.
+Run `node scripts/verify-account-integration.mjs <ignored-json> <report-json>` with API_URL, PUBLISHABLE_KEY and SECRET_KEY in the protected JSON file. The script creates and removes synthetic users; never point test cleanup at existing student accounts. Reports contain no credentials.
+
+Supabase default email reaches only organization members and is limited to two messages per hour. Configure a verified sending domain and custom SMTP before inviting students. Test confirmation and recovery from the exact deployed origin. Google is hidden unless `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED=true`; enable it only after provider configuration and callback verification. Read [Supabase SMTP guidance](https://supabase.com/docs/guides/auth/auth-smtp).
+
+Account deletion uses a durable per-account browser receipt to prevent resumed tabs from recreating deleted notes. It retains guest/other-account data. It cannot erase downloads or inaccessible copies on other devices. The browser does not unconditionally sign out after an asynchronous deletion response because another account may have signed in; server session revocation and restrictive RLS remain authoritative.

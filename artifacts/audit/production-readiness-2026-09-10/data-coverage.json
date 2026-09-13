@@ -1,0 +1,212 @@
+{
+  "institutions": 50,
+  "releaseAccessedOn": "2026-08-12",
+  "states": {
+    "AZ": 2,
+    "CA": 27,
+    "NY": 2,
+    "NC": 2,
+    "GA": 1,
+    "MA": 3,
+    "IL": 2,
+    "OH": 1,
+    "OR": 1,
+    "NJ": 1,
+    "IN": 1,
+    "TX": 1,
+    "MI": 1,
+    "VA": 1,
+    "WA": 2,
+    "WI": 1,
+    "CT": 1
+  },
+  "ownership": {
+    "Public": 34,
+    "Private nonprofit": 16
+  },
+  "broadFields": [
+    "Biological & Biomedical Sciences",
+    "Business & Marketing",
+    "Computing & Information Sciences",
+    "Education",
+    "Engineering",
+    "English Language & Literature",
+    "Health Professions",
+    "Mathematics & Statistics",
+    "Physical Sciences",
+    "Psychology",
+    "Social Sciences",
+    "Visual & Performing Arts"
+  ],
+  "overlayCollegeCount": 24,
+  "overlaySourceCount": 26,
+  "metrics": {
+    "admitRate": {
+      "observations": 50,
+      "missingValues": 0,
+      "periods": {
+        "Fall 2025": 19,
+        "Fall 2024": 22,
+        "Fall 2026 preliminary": 9
+      },
+      "federal": 22,
+      "firstParty": 28
+    },
+    "applicants": {
+      "observations": 28,
+      "missingValues": 0,
+      "periods": {
+        "Fall 2025": 19,
+        "Fall 2026 preliminary": 9
+      },
+      "federal": 0,
+      "firstParty": 28
+    },
+    "admits": {
+      "observations": 28,
+      "missingValues": 0,
+      "periods": {
+        "Fall 2025": 19,
+        "Fall 2026 preliminary": 9
+      },
+      "federal": 0,
+      "firstParty": 28
+    },
+    "enrollees": {
+      "observations": 29,
+      "missingValues": 0,
+      "periods": {
+        "Fall 2025": 20,
+        "Fall 2025 finalized": 9
+      },
+      "federal": 0,
+      "firstParty": 29
+    },
+    "yieldRate": {
+      "observations": 28,
+      "missingValues": 0,
+      "periods": {
+        "Fall 2025": 19,
+        "Fall 2025 finalized": 9
+      },
+      "federal": 0,
+      "firstParty": 28
+    },
+    "undergraduateEnrollment": {
+      "observations": 50,
+      "missingValues": 0,
+      "periods": {
+        "Fall 2025": 23,
+        "Fall 2024": 27
+      },
+      "federal": 27,
+      "firstParty": 23
+    },
+    "averageNetPrice": {
+      "observations": 50,
+      "missingValues": 0,
+      "periods": {
+        "2023-2024 aid cohort": 50
+      },
+      "federal": 50,
+      "firstParty": 0
+    },
+    "graduationRate": {
+      "observations": 50,
+      "missingValues": 0,
+      "periods": {
+        "Fall 2019 entering cohort": 21,
+        "Fall 2018 entering cohort": 29
+      },
+      "federal": 28,
+      "firstParty": 22
+    },
+    "medianEarnings": {
+      "observations": 50,
+      "missingValues": 0,
+      "periods": {
+        "2022-23 earnings": 50
+      },
+      "federal": 50,
+      "firstParty": 0
+    },
+    "tuitionInState": {
+      "observations": 50,
+      "missingValues": 0,
+      "periods": {
+        "2026-2027": 11,
+        "2024-2025": 39
+      },
+      "federal": 39,
+      "firstParty": 11
+    },
+    "tuitionOutOfState": {
+      "observations": 50,
+      "missingValues": 0,
+      "periods": {
+        "2026-2027": 11,
+        "2024-2025": 39
+      },
+      "federal": 39,
+      "firstParty": 11
+    }
+  },
+  "admissionsBySource": {
+    "uc": [
+      "University of California-Berkeley",
+      "University of California-Davis",
+      "University of California-Irvine",
+      "University of California-Los Angeles",
+      "University of California-Merced",
+      "University of California-Riverside",
+      "University of California-San Diego",
+      "University of California-Santa Barbara",
+      "University of California-Santa Cruz"
+    ],
+    "federal": [
+      "California Institute of Technology",
+      "California State Polytechnic University-Pomona",
+      "California State University-Fresno",
+      "California State University-Fullerton",
+      "California State University-Long Beach",
+      "California State University-Los Angeles",
+      "California State University-Northridge",
+      "California State University-Sacramento",
+      "Columbia University in the City of New York",
+      "Duke University",
+      "Northwestern University",
+      "Ohio State University-Main Campus",
+      "Oregon State University",
+      "Pomona College",
+      "Purdue University-Main Campus",
+      "San Jose State University",
+      "University of Arizona",
+      "University of San Francisco",
+      "University of Virginia-Main Campus",
+      "University of Wisconsin-Madison",
+      "Washington State University",
+      "Yale University"
+    ],
+    "institution": [
+      "Arizona State University Campus Immersion",
+      "California Polytechnic State University-San Luis Obispo",
+      "Chapman University",
+      "Georgia Institute of Technology-Main Campus",
+      "Harvard University",
+      "Loyola Marymount University",
+      "Massachusetts Institute of Technology",
+      "New York University",
+      "Princeton University",
+      "San Diego State University",
+      "Santa Clara University",
+      "Stanford University",
+      "The University of Texas at Austin",
+      "University of Illinois Urbana-Champaign",
+      "University of Massachusetts-Amherst",
+      "University of Michigan-Ann Arbor",
+      "University of North Carolina at Chapel Hill",
+      "University of Southern California",
+      "University of Washington-Seattle Campus"
+    ]
+  }
+}

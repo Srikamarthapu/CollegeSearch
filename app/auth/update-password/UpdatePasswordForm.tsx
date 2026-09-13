@@ -1,5 +1,7 @@
 "use client";
 
+import { newPasswordError } from "@/app/lib/password-validation";
+
 import {
   Check,
   Eye,
@@ -62,8 +64,9 @@ export function UpdatePasswordForm() {
     const password = String(formData.get("password") ?? "");
     const confirmation = String(formData.get("confirmation") ?? "");
 
-    if (password.length < 8) {
-      setMessage("Use at least 8 characters for your new password.");
+    const passwordError = newPasswordError(password);
+    if (passwordError) {
+      setMessage(passwordError);
       return;
     }
     if (password !== confirmation) {

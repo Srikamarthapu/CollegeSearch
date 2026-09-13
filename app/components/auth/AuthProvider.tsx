@@ -12,6 +12,7 @@ import {
   useState,
 } from "react";
 import { getSupabaseBrowserClient } from "@/app/lib/supabase/browser";
+import { isAccountScopeErased, normalizeAccountErasureId } from "@/app/lib/account-browser-erasure";
 import { getSupabasePublicConfig } from "@/app/lib/supabase/config";
 import {
   createAuthStateCoordinator,
@@ -26,6 +27,7 @@ export type { AuthStatus, AuthVerification } from "./auth-state-coordinator";
 
 type AuthContextValue = {
   refreshUser(): Promise<void>;
+  invalidateDeletedAccount(scope: string): boolean;
   signOut(): Promise<{ error: string | null }>;
   status: AuthStatus;
   user: User | null;
@@ -63,6 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const coordinator = createAuthStateCoordinator<User>({
       auth: supabase.auth,
       onChange: setSnapshot,
+      isUserErased: isAccountScopeErased,
       schedule(callback) {
         window.setTimeout(callback, 0);
       },
@@ -94,9 +97,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return coordinator.signOut();
   }, [configured]);
 
+  const invalidateDeletedAccount = useCallback((scope: string) => {
+    const userId = normalizeAccountErasureId(scope);
+    return userId ? coordinatorRef.current?.invalidateDeletedAccount(userId) ?? false : false;
+  }, []);
+
   const value = useMemo(
-    () => ({ refreshUser, signOut, ...snapshot }),
-    [refreshUser, signOut, snapshot],
+    () => ({ refreshUser, signOut, invalidateDeletedAccount, ...snapshot }),
+    [refreshUser, signOut, invalidateDeletedAccount, snapshot],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

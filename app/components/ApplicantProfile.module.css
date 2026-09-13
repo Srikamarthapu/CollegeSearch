@@ -1,0 +1,85 @@
+.profile, .pending {
+  width: min(var(--page-width), calc(100% - 48px));
+  margin: 28px auto 0;
+  border: 1px solid #d7dfec;
+  border-radius: 14px;
+  background: #fff;
+  color: #172b4d;
+}
+.pending { padding: 18px; font-size: 13px; }
+.summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 22px 26px; cursor: pointer; list-style: none; }
+.summary::-webkit-details-marker { display: none; }
+.summaryTitle { display: flex; align-items: center; gap: 15px; min-width: 0; }
+.summaryTitle > svg { flex: 0 0 auto; color: #385de0; }
+.eyebrow { display: block; color: #49607e; font-size: 11px; font-weight: 650; letter-spacing: .09em; text-transform: uppercase; }
+.title { display: block; margin-top: 6px; font-family: var(--font-newsreader), Georgia, serif; font-size: 29px; line-height: 1.1; letter-spacing: -.035em; }
+.summaryEnd { display: flex; align-items: center; gap: 14px; color: #52617a; font-size: 12px; }
+.chevron { flex: 0 0 auto; }
+.profile[open] > .summary { border-bottom: 1px solid #d7dfec; }
+.profile[open] .chevron { transform: rotate(180deg); }
+.body { padding: 28px; }
+.intro { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 30px; align-items: start; }
+.intro h2, .briefArea h3 { margin: 0 0 9px; font-family: var(--font-newsreader), Georgia, serif; font-size: 29px; font-weight: 520; line-height: 1.14; letter-spacing: -.03em; }
+.intro p, .briefArea p { margin: 0; color: #52617a; font-size: 14px; line-height: 1.65; }
+.localNote { display: flex; align-items: start; gap: 12px; padding: 16px; background: #f3f6fd; border-radius: 8px; }
+.localNote svg { flex: 0 0 auto; margin-top: 3px; color: #385de0; }
+.localNote p { font-size: 12px; }
+.saveStatus { display: flex; gap: 9px; align-items: start; margin: 24px 0; color: #354f75; font-size: 13px; line-height: 1.6; }
+.saveStatus svg { flex: 0 0 auto; margin-top: 3px; }
+.recovery { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+.section { min-width: 0; margin: 28px 0 0; padding: 22px 0 0; border: 0; border-top: 1px solid #d7dfec; }
+.section legend { padding-right: 14px; color: #385de0; font-size: 12px; font-weight: 650; }
+.section legend span { padding-left: 10px; color: #172b4d; font-size: 16px; }
+.sectionHelp, .help { display: block; margin: 0; color: #52617a; font-size: 12px; font-weight: 400; line-height: 1.6; }
+.sectionHelp { margin-bottom: 18px; }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-top: 18px; }
+.gpaGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-bottom: 10px; }
+.fields > label, .gpaGrid > label { display: flex; flex-direction: column; gap: 9px; min-width: 0; font-size: 14px; font-weight: 650; }
+.fullWidth { grid-column: 1 / -1; }
+.profile textarea, .profile input[type="text"], .profile select { width: 100%; min-width: 0; max-width: 100%; min-height: 44px; padding: 11px; border: 1px solid #bdc9dc; border-radius: 7px; background: #fff; color: #172b4d; font: inherit; font-size: 16px; font-weight: 400; line-height: 1.5; }
+.profile textarea { resize: vertical; }
+.profile input::placeholder { color: #65758b; }
+.counter { display: block; margin-top: 3px; color: #64748b; font-variant-numeric: tabular-nums; }
+.reviewNotes { padding-left: 22px; color: #685222; font-size: 12px; line-height: 1.65; }
+.checklist { display: grid; align-content: start; gap: 9px; }
+.checklist label { display: flex; align-items: start; gap: 10px; min-height: 44px; padding: 9px 0; color: #354f75; font-size: 13px; font-weight: 450; line-height: 1.6; cursor: pointer; }
+.checklist input { width: 18px; height: 18px; margin: 2px 0 0; flex: 0 0 auto; accent-color: #385de0; }
+.briefArea { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 18px; margin-top: 28px; padding: 22px; border-radius: 9px; background: #f3f6fd; }
+.briefArea h3 { font-size: 25px; }
+.profile button { display: inline-flex; justify-content: center; align-items: center; gap: 8px; min-height: 44px; max-width: 100%; padding: 11px 15px; border: 1px solid #b8c6de; border-radius: 7px; background: #fff; color: #243f67; font: inherit; font-size: 12px; font-weight: 650; line-height: 1.5; cursor: pointer; }
+.profile button svg { flex: 0 0 auto; }
+.profile button:hover { background: #eaf0fc; }
+.profile button.download { border-color: #263f87; background: #263f87; color: #fff; }
+.profile button.download:hover { background: #1d3069; }
+.profile :is(button, input, select, textarea, summary, pre):focus-visible { outline: 3px solid #385de0; outline-offset: 3px; }
+.preview, .briefArea > .help { grid-column: 1 / -1; min-width: 0; }
+.preview summary { min-height: 44px; padding: 12px 0; color: #263f87; font-size: 13px; font-weight: 650; cursor: pointer; }
+.preview pre { max-height: 500px; margin: 6px 0 0; padding: 18px; overflow: auto; border: 1px solid #c9d5e7; border-radius: 7px; background: #fff; color: #243f67; white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--font-geist-mono), monospace; font-size: 12px; line-height: 1.7; }
+.clearArea { display: flex; align-items: start; justify-content: space-between; gap: 24px; margin-top: 24px; }
+.clearArea > p { max-width: 680px; margin: 0; color: #52617a; font-size: 12px; line-height: 1.6; }
+.clearArea > button { flex-shrink: 0; }
+.clearConfirm { display: flex; flex-wrap: wrap; gap: 8px; max-width: 440px; }
+.clearConfirm p { width: 100%; margin: 0 0 6px; color: #6b3344; font-size: 13px; line-height: 1.6; }
+@media (max-width: 760px) {
+  .intro, .fields { grid-template-columns: minmax(0, 1fr); }
+  .summaryEnd { font-size: 0; gap: 0; }
+  .gpaGrid { grid-template-columns: minmax(0, 1fr); }
+  .body { padding: 22px; }
+  .briefArea { grid-template-columns: minmax(0, 1fr); padding: 18px; }
+  .briefArea button { justify-self: start; }
+  .clearArea { flex-direction: column; gap: 16px; }
+  .fullWidth { grid-column: auto; }
+}
+@media (max-width: 420px) {
+  .profile, .pending { width: calc(100% - 32px); }
+  .summary { gap: 12px; padding: 19px 16px; }
+  .summaryTitle { gap: 10px; }
+  .title { font-size: 25px; }
+  .eyebrow { font-size: 9px; letter-spacing: .05em; }
+  .body { padding: 18px 14px; }
+  .intro { gap: 20px; }
+  .intro h2 { font-size: 27px; }
+  .localNote { padding: 13px; }
+  .section legend span { padding-left: 6px; font-size: 14px; }
+  .briefArea { padding: 14px; }
+}

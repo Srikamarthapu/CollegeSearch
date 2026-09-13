@@ -2,14 +2,15 @@
 
 import {
   Bookmark,
+  CalendarDays,
   CircleAlert,
-  Compass,
   Gauge,
   GraduationCap,
   Menu,
   RefreshCw,
   Search,
-  Sparkles,
+  SlidersHorizontal,
+  Scale,
   X,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -18,13 +19,16 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useSavedColleges } from "./saved/SavedCollegesProvider";
 import { AuthAccountControl } from "./auth/AuthAccountControl";
+import { BrandMark } from "./BrandMark";
 
 const navigation = [
-  { href: "/explore", label: "Explore", icon: Search },
-  { href: "/majors", label: "Fields", icon: GraduationCap },
-  { href: "/match", label: "Match", icon: Sparkles },
-  { href: "/chances", label: "Admit-rate context", icon: Gauge },
-  { href: "/saved", label: "Saved", icon: Bookmark },
+  { href: "/explore", label: "Colleges", icon: Search },
+  { href: "/majors", label: "Fields of study", icon: GraduationCap },
+  { href: "/match", label: "Find my fit", icon: SlidersHorizontal },
+  { href: "/chances", label: "Admissions", icon: Gauge },
+  { href: "/compare", label: "Compare", icon: Scale },
+  { href: "/saved", label: "My shortlist", icon: Bookmark },
+  { href: "/plan", label: "My deadlines", icon: CalendarDays },
 ];
 
 export function SiteHeader({ savedCount }: { savedCount?: number }) {
@@ -136,9 +140,7 @@ export function SiteHeader({ savedCount }: { savedCount?: number }) {
         Skip to main content
       </a>
       <Link className="brand" href="/" aria-label="CollegeSearch home">
-        <span className="brand-mark" aria-hidden="true">
-          <Compass size={19} strokeWidth={1.8} />
-        </span>
+        <BrandMark />
         <span className="brand-wordmark">CollegeSearch</span>
       </Link>
 
@@ -146,7 +148,7 @@ export function SiteHeader({ savedCount }: { savedCount?: number }) {
         <nav className="desktop-nav" aria-label="Primary navigation">
           {navigation.map(({ href, label, icon: Icon }) => {
             const isActive =
-              href === pathname || pathname.startsWith(`${href}/`);
+              href === pathname || (href === "/explore" && pathname === "/") || pathname.startsWith(`${href}/`);
 
             return (
               <Link
@@ -157,15 +159,15 @@ export function SiteHeader({ savedCount }: { savedCount?: number }) {
               >
                 <Icon size={15} aria-hidden="true" />
                 {label}
-                {label === "Saved" && displayedSavedCount > 0 ? (
+                {href === "/saved" && displayedSavedCount > 0 ? (
                   <span className="nav-count">{displayedSavedCount}</span>
                 ) : null}
-                {label === "Saved" && syncPhase === "error" ? (
+                {href === "/saved" && syncPhase === "error" ? (
                   <span className="nav-sync-state is-error">
                     <CircleAlert size={15} aria-hidden="true" />
                     <span className="sr-only">{savedStatusLabel}</span>
                   </span>
-                ) : label === "Saved" &&
+                ) : href === "/saved" &&
                   (syncPhase === "syncing" ||
                     syncPhase === "loading-account") ? (
                   <span className="nav-sync-state is-pending">
@@ -234,7 +236,7 @@ export function SiteHeader({ savedCount }: { savedCount?: number }) {
                     href={href}
                     key={href}
                     aria-current={
-                      href === pathname || pathname.startsWith(`${href}/`)
+                      href === pathname || (href === "/explore" && pathname === "/") || pathname.startsWith(`${href}/`)
                         ? "page"
                         : undefined
                     }
@@ -242,7 +244,7 @@ export function SiteHeader({ savedCount }: { savedCount?: number }) {
                   >
                     <Icon size={18} aria-hidden="true" />
                     <span>{label}</span>
-                    {label === "Saved" ? (
+                    {href === "/saved" ? (
                       <small>
                         {displayedSavedCount} saved · {savedStatusLabel.toLowerCase()}
                       </small>

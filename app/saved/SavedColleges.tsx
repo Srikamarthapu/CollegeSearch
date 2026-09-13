@@ -5,12 +5,16 @@ import {
   BarChart3,
   BookmarkX,
   Database,
+  Download,
   MapPin,
   ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
+import { ResearchBackupControls } from "@/app/components/ResearchBackupControls";
+import { readResearchForExport } from "@/app/lib/research-drafts";
+import { ResearchNotebook } from "@/app/components/ResearchNotebook";
 import { CollegeLogo } from "@/app/components/CollegeLogo";
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
@@ -24,9 +28,15 @@ import {
   type SavedComparisonSelection,
   visibleSavedComparisonIds,
 } from "@/app/lib/saved-comparison-selection";
+import { researchCsv } from "@/app/lib/research-export";
+import {
+  retainResearchCollection,
+  type ResearchCollectionSnapshot,
+} from "@/app/lib/research-notebook";
 import styles from "./saved.module.css";
 
 export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
+  const [exportStatus, setExportStatus] = useState("");
   const [comparisonSelection, setComparisonSelection] =
     useState<SavedComparisonSelection>({ ids: [], scopeKey: "loading" });
   const {
@@ -53,12 +63,23 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
         .filter((college): college is ClientCollege => Boolean(college)),
     [colleges, savedIds],
   );
+  const [previousCollection, setPreviousCollection] =
+    useState<ResearchCollectionSnapshot<ClientCollege>>({ scopeKey: null, items: [] });
+  const collection = retainResearchCollection(previousCollection, scopeKey, hydrated, saved);
+  if (collection !== previousCollection) {
+    // Preserve notebook instances through re-verification, but replace the
+    // collection before rendering a different verified account's children.
+    setPreviousCollection(collection);
+  }
+  const collectionVisible = hydrated && collection.scopeKey === scopeKey;
+  const collectionInteractive = collectionVisible && canMutate;
   const selected = useMemo(
     () => visibleSavedComparisonIds(comparisonSelection, scopeKey, savedIds),
     [comparisonSelection, savedIds, scopeKey],
   );
 
   function persist(next: number[]) {
+    if (!collectionInteractive) return;
     replaceSavedIds(next);
     setComparisonSelection((current) => ({
       ids: visibleSavedComparisonIds(current, scopeKey, next),
@@ -97,6 +118,7 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
               };
 
   function toggleComparison(unitId: number) {
+    if (!collectionInteractive) return;
     setComparisonSelection((current) => {
       const currentIds = visibleSavedComparisonIds(
         current,
@@ -116,6 +138,30 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
     });
   }
 
+  function exportResearch() {
+    if (!collectionInteractive) return;
+    try {
+      const result = readResearchForExport(scopeKey, saved.map((college) => college.unitId));
+      if (result.status !== "ready") {
+        setExportStatus("Resolve unreadable or conflicting notebooks, and wait for pending saves, before exporting. Your drafts are retained.");
+        return;
+      }
+      const notebooks = result.notebooks;
+      const url = URL.createObjectURL(new Blob(["\uFEFF", researchCsv(saved, notebooks, window.location.origin)], {type: "text/csv;charset=utf-8;"}));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "my-college-research.csv";
+      link.hidden = true;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setExportStatus(`Your research CSV is ready with full profile links and your latest notes, including ${result.draftCount} current-tab drafts. Exporting does not commit drafts to browser storage.`);
+    } catch {
+      setExportStatus("The export could not be created. Please try again.");
+    }
+  }
+
   const compareHref = `/compare?colleges=${selected.join(",")}`;
 
   return (
@@ -123,12 +169,12 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
       <SiteHeader savedCount={saved.length} />
       <main id="main-content" className={styles.page}>
         <header className={styles.masthead}>
-          <span className={styles.eyebrow}>Your research shelf</span>
+          <span className={styles.eyebrow}>Your college shortlist</span>
           <div>
-            <h1>Your saved colleges.</h1>
+            <h1>A few possibilities. Your next steps.</h1>
             <p>
-              Keep a short list, inspect the evidence, then choose up to four
-              colleges to compare side by side.
+              Keep your favorites together. Compare the details, write down questions,
+              and work out what to explore next.
             </p>
           </div>
           <aside className={styles.localNote}>
@@ -179,7 +225,9 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
                 {guestImportCount} browser-only {guestImportCount === 1 ? "save" : "saves"}
               </strong>
               <p>
-                These remain separate from your account unless you choose to import them.
+                Import moves these college saves into your account after sync succeeds,
+                then removes them from the guest shortlist. Guest notes, your profile,
+                and deadlines stay in this browser and are not imported.
               </p>
             </div>
             <button type="button" onClick={() => void importGuestSaves()}>
@@ -195,6 +243,8 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
             retry record. The browser copy may not survive a reload.
           </p>
         ) : null}
+
+        <ResearchBackupControls key={`backup:${collection.scopeKey}`} colleges={colleges} scopeKey={scopeKey} canUse={collectionInteractive} />
 
         {!hydrated && syncPhase === "error" ? (
           <section className={styles.empty} role="alert">
@@ -216,7 +266,7 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
         ) : saved.length === 0 ? (
           <section className={styles.empty}>
             <BookmarkX size={31} aria-hidden="true" />
-            <h2>Your shelf is empty.</h2>
+            <h2>Your next chapter starts with a shortlist.</h2>
             <p>
               {syncPhase === "local-only"
                 ? "No colleges are saved in this browser yet. You can start without creating an account."
@@ -227,20 +277,29 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
               <ArrowRight size={16} aria-hidden="true" />
             </Link>
           </section>
-        ) : (
-          <section className={styles.collection} aria-labelledby="saved-heading">
+        ) : null}
+
+        {collection.items.length > 0 ? (
+          <section
+            key={`collection:${collection.scopeKey}`}
+            className={styles.collection}
+            aria-labelledby="saved-heading"
+            hidden={!collectionVisible}
+            inert={!collectionVisible}
+          >
             <div className={styles.collectionHeader}>
               <div>
-                <span>{String(saved.length).padStart(2, "0")}</span>
+                <span>{String(collection.items.length).padStart(2, "0")}</span>
                 <h2 id="saved-heading">
-                  {saved.length === 1 ? "college saved" : "colleges saved"}
+                  {collection.items.length === 1 ? "college saved" : "colleges saved"}
                 </h2>
               </div>
-              <p>Select 2–4 for a source-aware comparison.</p>
+              <div className={styles.exportActions}><p>Select 2–4 to compare.</p><button type="button" className="page-secondary-action" onClick={exportResearch} disabled={!collectionInteractive}><Download size={16} aria-hidden="true" /> Export research</button></div>
             </div>
 
+            {exportStatus ? <p className={styles.exportStatus} role="status">{exportStatus}</p> : null}
             <div className={styles.grid}>
-              {saved.map((college) => {
+              {collection.items.map((college) => {
                 const source = observationSourceKind(
                   college.observations.admitRate,
                 );
@@ -287,7 +346,7 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
                         </dd>
                       </div>
                       <div>
-                        <dt>Graduation rate</dt>
+                        <dt>{observationSourceKind(college.observations.graduationRate).isFederal ? "Completion rate" : "6-year graduation"}</dt>
                         <dd>
                           <strong>
                             {formatObservation(
@@ -300,6 +359,7 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
                         </dd>
                       </div>
                     </dl>
+                    <ResearchNotebook unitId={college.unitId} collegeName={college.name} />
                     <div className={styles.actions}>
                       <button
                         type="button"
@@ -311,14 +371,14 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
                             : `Add ${college.name} to comparison`
                         }
                         onClick={() => toggleComparison(college.unitId)}
-                        disabled={!isSelected && selected.length >= 4}
+                        disabled={!collectionInteractive || (!isSelected && selected.length >= 4)}
                       >
                         <BarChart3 size={16} aria-hidden="true" />
                         {isSelected ? "Selected" : "Compare"}
                       </button>
                       <button
                         type="button"
-                        disabled={!canMutate}
+                        disabled={!collectionInteractive}
                         aria-label={`Remove ${college.name} from saved colleges`}
                         onClick={() =>
                           persist(
@@ -337,7 +397,7 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
               })}
             </div>
           </section>
-        )}
+        ) : null}
       </main>
 
       {selected.length > 0 ? (

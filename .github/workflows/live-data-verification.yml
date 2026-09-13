@@ -37,4 +37,20 @@ jobs:
         run: npm ci
 
       - name: Verify live first-party artifacts
-        run: npm run data:verify-overlays
+        id: verify
+        run: |
+          rm -f data/institution-source-verification.json
+          npm run data:verify-overlays
+
+      - name: Summarize source verification
+        if: always() && steps.verify.outcome != 'skipped'
+        run: node scripts/summarize-institution-verification.mjs >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Preserve source verification report
+        if: always() && steps.verify.outcome != 'skipped'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: institution-source-verification-${{ github.run_id }}-${{ github.run_attempt }}
+          path: data/institution-source-verification.json
+          if-no-files-found: error
+          retention-days: 90

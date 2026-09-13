@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -251,5 +251,64 @@ test("independently downloads and fingerprint-checks every source in a multi-art
     );
   } finally {
     await rm(temporaryDirectory, { recursive: true, force: true });
+  }
+});
+
+test("records every source failure and preserves the last approved evidence before rejecting", async () => {
+  const { dataset } = verifiedMultiSourceDataset();
+  const directory = await mkdtemp(join(tmpdir(), "college-search-report-"));
+  const manifestPath = join(directory, "overlays.json");
+  const reportPath = join(directory, "report.json");
+  const checkedAt = "2026-09-13T20:00:00.000Z";
+  const requested = [];
+  await writeFile(manifestPath, JSON.stringify(dataset));
+  try {
+    await assert.rejects(verifyInstitutionOverlays({
+      path: manifestPath,
+      reportPath,
+      now: () => checkedAt,
+      fetchImplementation: async (url) => {
+        requested.push(url.href);
+        return url.href.endsWith("admissions.pdf")
+          ? new Response(null, { status: 404 })
+          : new Response("%PDF-changed", { headers: { "content-type": "application/pdf" } });
+      },
+    }), /failed for 2 of 2 artifacts/);
+    assert.equal(requested.length, 2);
+    const report = JSON.parse(await readFile(reportPath, "utf8"));
+    assert.equal(report.status, "failed");
+    assert.equal(report.checkedAt, checkedAt);
+    assert.equal(report.checkKind, "artifact-integrity");
+    assert.deepEqual(report.counts, { total: 2, passed: 0, failed: 2, notChecked: 0 });
+    assert.equal(report.sources[0].httpStatus, 404);
+    assert.equal(report.sources[0].error.stage, "request");
+    assert.equal(report.sources[1].error.stage, "fingerprint");
+    assert.equal(report.sources[1].actualSha256, sha256Hex(new TextEncoder().encode("%PDF-changed")));
+    assert.equal(report.sources[1].lastApprovedEvidence.artifactSha256, dataset.sources[1].artifactSha256);
+    assert.equal(report.sources[1].lastApprovedEvidence.reviewedOn, "2026-08-09");
+    assert.deepEqual(JSON.parse(await readFile(manifestPath, "utf8")), dataset);
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test("an invalid manifest produces a schema failure report without fetching or approving sources", async () => {
+  const directory = await mkdtemp(join(tmpdir(), "college-search-report-schema-"));
+  const manifestPath = join(directory, "overlays.json");
+  const reportPath = join(directory, "report.json");
+  await writeFile(manifestPath, "{}");
+  try {
+    await assert.rejects(verifyInstitutionOverlays({
+      path: manifestPath,
+      reportPath,
+      fetchImplementation: () => assert.fail("invalid manifest must not fetch"),
+    }), /needs a sources array/);
+    const report = JSON.parse(await readFile(reportPath, "utf8"));
+    assert.equal(report.status, "failed");
+    assert.equal(report.schemaStatus, "failed");
+    assert.equal(report.error.stage, "schema");
+    assert.deepEqual(report.sources, []);
+  } finally {
+    await rm(directory, { recursive: true, force: true });
   }
 });

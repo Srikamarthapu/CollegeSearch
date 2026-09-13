@@ -6,7 +6,6 @@ import {
   ArrowDown,
   ArrowRight,
   ArrowUpRight,
-  BarChart3,
   Bookmark,
   BookmarkCheck,
   Check,
@@ -19,7 +18,11 @@ import {
   Search,
   ShieldCheck,
   SlidersHorizontal,
-  Sparkles,
+  Copy,
+  LayoutGrid,
+  List,
+  Plus,
+  BookOpen,
   X,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -38,8 +41,8 @@ import {
 } from "react";
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
-import { SourceSpotlight } from "@/app/components/SourceSpotlight";
 import { CollegeLogo } from "@/app/components/CollegeLogo";
+import { CampusCarousel } from "@/app/components/CampusCarousel";
 import { useSavedColleges } from "@/app/components/saved/SavedCollegesProvider";
 import {
   compactName,
@@ -132,7 +135,7 @@ function explorerReducer(
   action: ExplorerAction,
 ): ExplorerState {
   if (action.type === "set") {
-    return { ...state, [action.key]: action.value, visibleCount: 12 };
+    return { ...state, [action.key]: action.value, ...(action.key === "major" && !action.value && state.sort === "major" ? { sort: "name" } : {}), visibleCount: 12 };
   }
   if (action.type === "toggle") {
     return {
@@ -192,189 +195,62 @@ function SourceBadge({ observation }: { observation: ClientObservation }) {
   );
 }
 
-function MetricStamp({
-  label,
-  observation,
-  note,
-  emphasis = false,
-}: {
-  label: string;
-  observation: ClientObservation;
-  note?: string;
-  emphasis?: boolean;
-}) {
-  return (
-    <div className={`metric-stamp ${emphasis ? "metric-primary" : ""}`}>
-      <div className="metric-stamp-head">
-        <span>{label}</span>
-        <small>{observation.periodLabel}</small>
-      </div>
-      <strong>{formatObservation(observation)}</strong>
-      {note ? <span className="metric-stamp-note">{note}</span> : null}
-      <a
-        className="metric-stamp-source"
-        href={observation.sourceUrl}
-        target="_blank"
-        rel="noreferrer"
-      >
-        {observation.publisher}
-        <ArrowUpRight size={12} aria-hidden="true" />
-      </a>
-    </div>
-  );
+function MetricStamp({ label, observation, emphasis = false }: { label: string; observation: ClientObservation; emphasis?: boolean }) {
+  return <div className={`metric-stamp ${emphasis ? "metric-primary" : ""}`}>
+    <span className="metric-label">{label}</span>
+    <strong>{formatObservation(observation)}</strong>
+    <small>{observation.periodLabel}</small>
+  </div>;
 }
 
-const CollegeCard = memo(function CollegeCard({
-  college,
-  selectedMajor,
-  isSelected,
-  isSaved,
-  saveDisabled,
-  onCompare,
-  onSave,
-}: {
-  college: ClientCollege;
-  selectedMajor: string;
-  isSelected: boolean;
-  isSaved: boolean;
-  saveDisabled: boolean;
-  onCompare: (college: ClientCollege) => void;
-  onSave: (college: ClientCollege) => void;
+const CollegeCard = memo(function CollegeCard({ college, selectedMajor, isSelected, isSaved, saveDisabled, onCompare, onSave }: {
+  college: ClientCollege; selectedMajor: string; isSelected: boolean; isSaved: boolean; saveDisabled: boolean;
+  onCompare: (college: ClientCollege) => void; onSave: (college: ClientCollege) => void;
 }) {
   const admitRate = college.observations.admitRate;
-  const graduationSource = observationSourceKind(
-    college.observations.graduationRate,
-  );
-  const majorEvidence = selectedMajor
-    ? majorEvidenceFor(college, selectedMajor)
-    : null;
-
-  return (
-    <article
-      className="college-card"
-      data-testid={`college-${college.unitId}`}
-    >
-      <div className="college-card-main">
-        <div className="college-card-heading">
-          <Link
-            className="college-identity"
-            href={`/colleges/${college.slug}`}
-          >
-            <CollegeLogo college={college} />
-            <span>
-              <span className="college-name">{college.name}</span>
-              <span className="college-meta">
-                <MapPin size={14} aria-hidden="true" />
-                {college.city}, {college.state}
-                <span aria-hidden="true">/</span>
-                {college.ownership}
-              </span>
-            </span>
-          </Link>
-          <SourceBadge observation={admitRate} />
-        </div>
-
-        <div className="card-actions">
-          <button
-            className={`save-button ${isSaved ? "is-active" : ""}`}
-            type="button"
-            aria-pressed={isSaved}
-            aria-label={
-              isSaved
-                ? `Remove ${college.name} from saved colleges`
-                : `Save ${college.name}`
-            }
-            disabled={saveDisabled}
-            title={
-              saveDisabled ? "Checking which saved list is active." : undefined
-            }
-            onClick={() => onSave(college)}
-          >
-            {isSaved ? (
-              <BookmarkCheck size={17} aria-hidden="true" />
-            ) : (
-              <Bookmark size={17} aria-hidden="true" />
-            )}
-            {isSaved ? "Saved" : "Save"}
-          </button>
-          <button
-            className={`compare-button ${isSelected ? "is-active" : ""}`}
-            type="button"
-            aria-pressed={isSelected}
-            aria-label={
-              isSelected
-                ? `Remove ${college.name} from comparison`
-                : `Add ${college.name} to comparison`
-            }
-            onClick={() => onCompare(college)}
-          >
-            {isSelected ? (
-              <Check size={17} aria-hidden="true" />
-            ) : (
-              <BarChart3 size={17} aria-hidden="true" />
-            )}
-            {isSelected ? "Remove" : "Compare"}
-          </button>
-        </div>
-      </div>
-
-      <div className="metric-ledger">
-        <MetricStamp
-          label="Overall acceptance rate"
-          observation={admitRate}
-          note={selectivityLabel(admitRate.value)}
-          emphasis
-        />
-        <MetricStamp
-          label="Average annual cost after grants"
-          observation={college.observations.averageNetPrice}
-          note="Historical federal aid cohort"
-        />
-        <MetricStamp
-          label="Graduate within 6 years"
-          observation={college.observations.graduationRate}
-          note={
-            graduationSource.isFederal
-              ? "Historical federal cohort"
-              : "Official completion cohort"
-          }
-        />
-      </div>
-
-      <div className="college-card-footer">
-        <div className="major-evidence">
-          <GraduationCap size={16} aria-hidden="true" />
-          {selectedMajor ? (
-            majorEvidence ? (
-              <span>
-                <strong>{selectedMajor}</strong> bachelor&apos;s field reported ·{" "}
-                {percentFormatter.format(majorEvidence.share)} of all awards
-              </span>
-            ) : (
-              <span>No recent {selectedMajor} completion evidence found.</span>
-            )
-          ) : (
-            <span>
-              Bachelor&apos;s-field evidence available for {college.majors.length}{" "}
-              broad fields
-            </span>
-          )}
-        </div>
-        <Link className="evidence-link" href={`/colleges/${college.slug}`}>
-          View college details
-          <ArrowUpRight size={15} aria-hidden="true" />
-        </Link>
-      </div>
-
-      {selectedMajor ? (
-        <div className="rate-clarifier">
-          <Info size={14} aria-hidden="true" />
-          {formatObservation(admitRate)} is the college-wide acceptance
-          rate—not a {selectedMajor} acceptance rate.
-        </div>
-      ) : null}
-    </article>
-  );
+  const majorEvidence = selectedMajor ? majorEvidenceFor(college, selectedMajor) : null;
+  const records = [
+    { label: "Average annual cost after grants", observation: college.observations.averageNetPrice },
+    { label: "Overall acceptance rate", observation: admitRate },
+    { label: observationSourceKind(college.observations.graduationRate).isFederal ? "150% completion rate" : "Graduate within 6 years", observation: college.observations.graduationRate },
+    { label: "Undergraduate enrollment", observation: college.observations.undergraduateEnrollment },
+  ];
+  return <article className={`college-card research-card ${isSelected ? "is-selected" : ""}`} data-testid={`college-${college.unitId}`}>
+    <div className="college-card-main">
+      <Link className="college-identity" href={`/colleges/${college.slug}`} title={college.name}>
+        <CollegeLogo college={college} />
+        <span><span className="college-name">{compactName(college)}</span><span className="college-meta"><MapPin size={13} aria-hidden="true" />{college.city}, {college.state}</span></span>
+      </Link>
+      <button className={`save-button ${isSaved ? "is-active" : ""}`} type="button" aria-pressed={isSaved}
+        aria-label={isSaved ? `Remove ${college.name} from saved colleges` : `Save ${college.name}`} disabled={saveDisabled}
+        title={saveDisabled ? "Checking which saved list is active." : isSaved ? "Saved to your shortlist" : "Save to your shortlist"} onClick={() => onSave(college)}>
+        {isSaved ? <BookmarkCheck size={20} aria-hidden="true" /> : <Bookmark size={20} aria-hidden="true" />}
+      </button>
+    </div>
+    <div className="college-character"><span>{college.ownership === "Private nonprofit" ? "Private nonprofit" : "Public university"}</span><span>{college.setting} campus</span><span title={`${college.observations.undergraduateEnrollment.periodLabel} · ${college.observations.undergraduateEnrollment.publisher}`}>{formatObservation(college.observations.undergraduateEnrollment)} undergrads</span></div>
+    <div className="metric-ledger">
+      <MetricStamp label="Net price / year" observation={college.observations.averageNetPrice} emphasis />
+      <MetricStamp label="Overall admit rate" observation={admitRate} />
+      <MetricStamp label={observationSourceKind(college.observations.graduationRate).isFederal ? "Completion rate" : "6-year graduation"} observation={college.observations.graduationRate} />
+    </div>
+    <div className="card-field-line"><GraduationCap size={16} aria-hidden="true" />
+      {selectedMajor && majorEvidence ? <span><strong>{selectedMajor}</strong> · {percentFormatter.format(majorEvidence.share)} of all awards</span> : <span>{college.majors.length} broad fields reported <span className="field-dot">·</span> <Link href={`/colleges/${college.slug}#majors-heading`}>Explore fields</Link></span>}
+    </div>
+    {selectedMajor ? <p className="rate-clarifier"><Info size={14} aria-hidden="true" />{formatObservation(admitRate)} is college-wide, not a {selectedMajor} admission rate.</p> : null}
+    <details className="card-source-details">
+      <summary><BookOpen size={14} aria-hidden="true" /> Sources & what these numbers mean <ChevronDown size={14} aria-hidden="true" /></summary>
+      <div><SourceBadge observation={admitRate} /><p>Net price is a historical average after grants for federal aid recipients, not your personal quote. Rates describe past cohorts. Federal completion measures finishing within 150% of normal program time; official six-year graduation uses each college’s stated cohort.</p>
+      {records.map(({label,observation}) => <div className="card-source-row" key={label}><strong>{label}</strong><span>{observation.periodLabel}</span><a href={observation.sourceUrl} target="_blank" rel="noreferrer">{observation.publisher}<ArrowUpRight size={12} aria-hidden="true" /></a></div>)}
+      <span>{selectivityLabel(admitRate.value)}</span></div>
+    </details>
+    <div className="college-card-footer">
+      <button className={`compare-button ${isSelected ? "is-active" : ""}`} type="button" aria-pressed={isSelected}
+        aria-label={isSelected ? `Remove ${college.name} from comparison` : `Add ${college.name} to comparison`} onClick={() => onCompare(college)}>
+        {isSelected ? <Check size={16} aria-hidden="true" /> : <Plus size={16} aria-hidden="true" />}{isSelected ? "Selected" : "Compare"}
+      </button>
+      <Link className="evidence-link" href={`/colleges/${college.slug}`}>View college <ArrowUpRight size={17} aria-hidden="true" /></Link>
+    </div>
+  </article>;
 });
 
 function SelectField({
@@ -762,7 +638,7 @@ function SearchBox({
           aria-expanded={open}
           aria-controls={`search-suggestions-${size}`}
           aria-activedescendant={
-            activeIndex >= 0
+            open && activeIndex >= 0 && activeIndex < items.length
               ? `search-suggestion-${size}-${activeIndex}`
               : undefined
           }
@@ -879,6 +755,8 @@ export function CollegeSearchApp({
   } = useSavedColleges();
   const [selected, setSelected] = useState<number[]>([]);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [view, setView] = useState<"grid" | "list">("grid");
+  const [shareUrl, setShareUrl] = useState("");
   const [status, setStatus] = useState("");
   const [hydrated, setHydrated] = useState(false);
   const deferredQuery = useDeferredValue(state.query);
@@ -915,6 +793,9 @@ export function CollegeSearchApp({
   }, [colleges]);
 
   useEffect(() => {
+    let cancelled = false;
+    const restore = () => {
+    if (!["/", "/explore"].includes(window.location.pathname)) return;
     const params = new URLSearchParams(window.location.search);
     const allowedBands = new Set([
       "",
@@ -993,21 +874,24 @@ export function CollegeSearchApp({
       .filter((unitId) => collegeIds.has(unitId))
       .slice(0, 4);
     const hydratedComparison = Array.from(new Set(comparison));
-    let cancelled = false;
+    if (hydratedState.sort === "major" && !hydratedState.major) hydratedState.sort = "name";
     queueMicrotask(() => {
-      if (cancelled) return;
+      if (cancelled || !["/", "/explore"].includes(window.location.pathname)) return;
       dispatch({ type: "hydrate", value: hydratedState });
       setSelected(hydratedComparison);
       setHydrated(true);
     });
-
+    };
+    restore();
+    window.addEventListener("popstate", restore);
     return () => {
       cancelled = true;
+      window.removeEventListener("popstate", restore);
     };
   }, [collegeIds, stateOptions]);
 
   useEffect(() => {
-    if (!hydrated) return;
+    if (!hydrated || !["/", "/explore"].includes(window.location.pathname)) return;
     const params = new URLSearchParams();
     if (state.query) params.set("q", state.query);
     if (state.major) params.set("major", state.major);
@@ -1027,9 +911,9 @@ export function CollegeSearchApp({
     if (selected.length) params.set("compare", selected.join(","));
     const query = params.toString();
     window.history.replaceState(
-      null,
+      window.history.state,
       "",
-      `${window.location.pathname}${query ? `?${query}` : ""}`,
+      `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`,
     );
   }, [hydrated, selected, state]);
 
@@ -1148,6 +1032,17 @@ export function CollegeSearchApp({
 
   function toggleSaved(college: ClientCollege) {
     toggleSavedId(college.unitId);
+    setStatus(saved.includes(college.unitId) ? `${compactName(college)} removed from your list.` : `${compactName(college)} added to your list.`);
+  }
+
+  async function shareSearch() {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setStatus("Search link copied. Your filters and comparison travel with it.");
+      setShareUrl("");
+    } catch {
+      setShareUrl(window.location.href);
+    }
   }
 
   function toggleCompare(college: ClientCollege) {
@@ -1314,160 +1209,22 @@ export function CollegeSearchApp({
       <main
         id="main-content"
         className={mode === "explore" ? "explore-page" : ""}
+        data-discovery-mode={mode}
       >
-        {mode === "home" ? (
-        <section className="hero">
-          <div className="hero-copy">
-            <span className="edition-label">
-              <span>Edition 01</span>
-              College discovery, clearly sourced
-            </span>
-            <h1>
-              Find a college you can <em>understand.</em>
-            </h1>
-            <p>
-              Search and compare 50 reviewed colleges using current UC and
-              selected manually reviewed college records alongside
-              source-transparent federal evidence—without rankings, mystery
-              scores, or fake predictions.
-            </p>
-            <SearchBox
-              colleges={colleges}
-              value={state.query}
-              onChange={(value) =>
-                dispatch({ type: "set", key: "query", value })
-              }
-              onMajor={applyMajor}
-              onSubmit={submitSearch}
-              resultCount={savedListUnavailable ? undefined : results.length}
-            />
-            <div className="quick-starts" aria-label="Popular starting points">
-              <span>Start with</span>
-              {[
-                { label: "Computing", value: "Computing & Information Sciences" },
-                { label: "Business", value: "Business & Marketing" },
-                { label: "Biology", value: "Biological & Biomedical Sciences" },
-              ].map((field) => (
-                <button
-                  type="button"
-                  key={field.value}
-                  onClick={() => applyMajor(field.value)}
-                >
-                  {field.label}
-                </button>
-              ))}
-              <button
-                type="button"
-                onClick={() => {
-                  dispatch({ type: "set", key: "stateCode", value: "CA" });
-                  scrollToExplore();
-                }}
-              >
-                California
-              </button>
-            </div>
+        <section className="discovery-masthead" aria-labelledby="discovery-title">
+          <div className="discovery-intro">
+            <span className="discovery-eyebrow"><span /> Your college search, all together</span>
+            <h1 id="discovery-title"><span>Big possibilities.</span><br /><em>Find your starting point.</em></h1>
+            <p>Explore {colleges.length} U.S. colleges. Get clear on costs, find your field, and build a list that makes sense for you.</p>
           </div>
-
-          <SourceSpotlight className="evidence-ledger-card">
-            <div className="ledger-card-head">
-              <div>
-                <span>Data at a glance</span>
-                <strong>Newest reviewed records first</strong>
-              </div>
-              <ShieldCheck size={23} aria-hidden="true" />
-            </div>
-            <div className="ledger-release-list">
-              <div>
-                <span className="ledger-index">01</span>
-                <span>
-                  <strong>UC admissions</strong>
-                  <small>Preliminary UC Fall 2026 + reviewed updates</small>
-                </span>
-                <span className="release-status">2026</span>
-              </div>
-              <div>
-                <span className="ledger-index">02</span>
-                <span>
-                  <strong>College-reported updates</strong>
-                  <small>
-                    {evidenceCounts.reviewedInstitutionRecords} reviewed
-                    institution records ·{" "}
-                    {evidenceCounts.reviewedCollegeAdmissions} admission
-                    headlines
-                  </small>
-                </span>
-                <span className="release-status neutral">
-                  {evidenceCounts.reviewedInstitutionRecords} reviewed
-                </span>
-              </div>
-              <div>
-                <span className="ledger-index">03</span>
-                <span>
-                  <strong>Federal baseline + fields</strong>
-                  <small>College Scorecard · reporting periods vary</small>
-                </span>
-                <span className="release-status neutral">DATED</span>
-              </div>
-            </div>
-            <div className="ledger-card-foot">
-              <span>50 colleges</span>
-              <span>
-                {evidenceCounts.firstPartyAdmissions} first-party admission
-                headlines
-              </span>
-              <Link href="/data-sources">
-                View all sources
-                <ArrowRight size={14} aria-hidden="true" />
-              </Link>
-            </div>
-          </SourceSpotlight>
+          <CampusCarousel />
         </section>
-      ) : (
-        <section className="explore-masthead">
-          <span className="edition-label">
-            <span>Evidence explorer</span>
-            50 reviewed colleges
-          </span>
-          <div>
-            <h1>Search the evidence, not a ranking.</h1>
+
+        <section className="explore-section research-explorer" id="explore" aria-label="Explore colleges">
+          <div className="research-section-heading">
+            <div><h2>Explore colleges</h2><span>{colleges.length} in this collection</span></div>
+            <div className="research-heading-links"><Link href="/match"><SlidersHorizontal size={17} aria-hidden="true" /> Find my fit</Link><Link href="/saved"><Bookmark size={17} aria-hidden="true" /> My shortlist{saved.length ? ` (${saved.length})` : ""}</Link></div>
           </div>
-          <p>
-            Filter by field, location, cost, and selectivity. Every headline
-            metric keeps its source and reporting period attached.
-          </p>
-        </section>
-      )}
-
-      <section className="trust-strip" aria-label="Data trust statement">
-        <div>
-          <ShieldCheck size={18} aria-hidden="true" />
-          <span>
-            <strong>Every number shows its source and period.</strong>
-            <span className="trust-detail">
-              {" "}Newer official college records replace older federal fields
-              only after verification.
-            </span>
-          </span>
-        </div>
-        <Link href="/methodology">
-          How the data works
-          <ArrowRight size={15} aria-hidden="true" />
-        </Link>
-      </section>
-
-      <section className="explore-section" id="explore">
-        <div className="section-intro">
-          <div>
-            <span className="section-number">01 / Explore</span>
-            <h2>Find colleges that match what matters to you.</h2>
-          </div>
-          <p>
-            Search by college or field of study, then narrow by location, cost,
-            and acceptance rate. Field filters use 2024-2025 federal program
-            and award data.
-          </p>
-        </div>
-
         <div className="explorer-shell">
           <aside className="filter-panel" aria-label="College filters">
             <div className="filter-panel-head">
@@ -1477,6 +1234,7 @@ export function CollegeSearchApp({
                 <span>{activeFilters.length} active</span>
               ) : null}
             </div>
+            {activeFilters.length ? <button className="sidebar-reset" type="button" onClick={() => dispatch({ type: "clear" })}>Reset filters</button> : null}
             <FilterControls
               state={state}
               dispatch={dispatch}
@@ -1484,6 +1242,7 @@ export function CollegeSearchApp({
               idPrefix="sidebar"
               stateOptions={stateOptions}
             />
+            <div className="filter-help"><Info size={17} aria-hidden="true" /><p>Our collection covers 50 colleges, with a focus on California. <Link href="/data-sources">See coverage & sources</Link></p></div>
           </aside>
 
           <div className="results-panel">
@@ -1498,6 +1257,12 @@ export function CollegeSearchApp({
                 onMajor={applyMajor}
                 onSubmit={submitSearch}
               />
+            </div>
+            <div className="discovery-shortcuts" aria-label="Starting points">
+              <button type="button" aria-pressed={state.maxPrice === "20000"} onClick={() => dispatch({type: "set", key: "maxPrice", value: state.maxPrice === "20000" ? "" : "20000"})}>Net price under $20k</button>
+              <button type="button" aria-pressed={state.ucOnly} onClick={() => dispatch({type: "toggle", key: "ucOnly"})}>UC campuses</button>
+              <button type="button" aria-pressed={state.major === "Engineering"} onClick={() => dispatch({type: "set", key: "major", value: state.major === "Engineering" ? "" : "Engineering"})}>Engineering</button>
+              <button type="button" aria-pressed={state.enrollmentBand === "small"} onClick={() => dispatch({type: "set", key: "enrollmentBand", value: state.enrollmentBand === "small" ? "" : "small"})}>Smaller campuses</button>
             </div>
             <div className="results-toolbar">
               <div>
@@ -1568,7 +1333,7 @@ export function CollegeSearchApp({
                 </p>
               </div>
 
-              <SelectField
+              <div className="results-tools"><SelectField
                 id="sort-results"
                 label="Sort by"
                 value={state.sort}
@@ -1597,7 +1362,14 @@ export function CollegeSearchApp({
                 <option value="enrollment">Enrollment: largest first</option>
                 <option value="earnings">Median earnings: highest first</option>
               </SelectField>
+                <div className="view-switch" aria-label="Result layout">
+                  <button type="button" aria-label="Grid view" aria-pressed={view === "grid"} onClick={() => setView("grid")}><LayoutGrid size={17} aria-hidden="true" /></button>
+                  <button type="button" aria-label="List view" aria-pressed={view === "list"} onClick={() => setView("list")}><List size={19} aria-hidden="true" /></button>
+                </div>
+                <button className="share-search" type="button" aria-label="Copy search link" onClick={() => void shareSearch()}><Copy size={17} aria-hidden="true" /></button>
+              </div>
             </div>
+            {shareUrl ? <label className="share-fallback">Copy this search link<input readOnly value={shareUrl} onFocus={(event) => event.target.select()} /></label> : null}
 
             {activeFilters.length ? (
               <div className="filter-chips" aria-label="Applied filters">
@@ -1638,7 +1410,7 @@ export function CollegeSearchApp({
             ) : null}
 
             <div
-              className="results-list"
+              className={`results-list research-results is-${view}`}
               id="results-list"
               aria-busy={state.query !== deferredQuery || savedListUnavailable}
             >
@@ -1697,7 +1469,7 @@ export function CollegeSearchApp({
                 type="button"
                 onClick={() => dispatch({ type: "showMore" })}
               >
-                Show 12 more colleges
+                Show {Math.min(12, results.length - state.visibleCount)} more colleges
                 <ArrowDown size={16} aria-hidden="true" />
               </button>
             ) : null}
@@ -1705,35 +1477,12 @@ export function CollegeSearchApp({
         </div>
       </section>
 
-      {mode === "home" ? (
-        <section className="foundation-section">
-          <div>
-            <span className="section-number">02 / Trust</span>
-            <h2>A field guide, not a leaderboard.</h2>
-            <p>
-              CollegeSearch keeps source, year, cohort, and definition close to
-              the number. When evidence is missing, the app says so.
-            </p>
-          </div>
-          <div className="foundation-ledger">
-            <article>
-              <span>Source before score</span>
-              <strong>Every metric has a record.</strong>
-              <p>Open the college profile to inspect the exact field and cohort.</p>
-            </article>
-            <article>
-              <span>Context before prediction</span>
-              <strong>No invented admission odds.</strong>
-              <p>Overall rates describe past cohorts, never one student’s future.</p>
-            </article>
-            <article>
-              <span>Missing means missing</span>
-              <strong>Never silently converted to zero.</strong>
-              <p>Unavailable and suppressed observations keep distinct states.</p>
-            </article>
-          </div>
-        </section>
-      ) : null}
+      <section className="research-data-note" aria-label="Data trust statement">
+        <ShieldCheck size={21} aria-hidden="true" />
+        <div><strong>Good decisions start with clear information.</strong><p>College Scorecard and official college records. Every metric keeps its source and reporting period. UC admissions include preliminary Fall 2026 records.</p>
+        <details><summary>What’s in this collection?</summary><p>{evidenceCounts.reviewedInstitutionRecords} reviewed institution records · {evidenceCounts.reviewedCollegeAdmissions} college admission headlines · {evidenceCounts.firstPartyAdmissions} first-party admission headlines. Field filters use 2024-2025 federal program and award data. Federal baseline metrics use their own dated cohorts.</p></details></div>
+        <Link href="/data-sources">See our sources <ArrowUpRight size={16} aria-hidden="true" /></Link>
+      </section>
 
       </main>
 
@@ -1787,7 +1536,7 @@ export function CollegeSearchApp({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 6 }}
           >
-            <Sparkles size={15} aria-hidden="true" />
+            <Check size={15} aria-hidden="true" />
             {status}
           </motion.div>
         ) : null}

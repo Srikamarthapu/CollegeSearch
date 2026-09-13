@@ -41,11 +41,13 @@ type AuthStateCoordinatorOptions<TUser extends { id: string }> = {
   auth: AuthClientPort<TUser>;
   onChange(snapshot: AuthSnapshot<TUser>): void;
   schedule(callback: () => void): void;
+  isUserErased?(userId: string): boolean;
 };
 
 export type AuthStateCoordinator<TUser extends { id: string }> = {
   dispose(): void;
   getSnapshot(): AuthSnapshot<TUser>;
+  invalidateDeletedAccount(userId: string): boolean;
   handleAuthEvent(event: AuthChangeEvent, sessionUserId: string | null): void;
   refresh(): Promise<void>;
   signOut(): Promise<{ error: string | null }>;
@@ -64,6 +66,14 @@ function errorMessage(error: unknown): string {
     if (message) return message;
   }
   return "CollegeSearch could not verify the current session.";
+}
+
+/** Supabase returns this exact error for an absent browser session and maps
+ * server session_not_found to it. This is signed-out, not a transport failure. */
+function isMissingBrowserSession(error: unknown) {
+  if (!error || typeof error !== "object") return false;
+  const candidate = error as Partial<AuthErrorLike>;
+  return candidate.name === "AuthSessionMissingError" && candidate.status === 400 && !candidate.code;
 }
 
 function isRetryableVerificationError(error: AuthErrorLike) {
@@ -87,6 +97,7 @@ export function createAuthStateCoordinator<TUser extends { id: string }>({
   auth,
   onChange,
   schedule,
+  isUserErased = () => false,
 }: AuthStateCoordinatorOptions<TUser>): AuthStateCoordinator<TUser> {
   let active = true;
   let epoch = 0;
@@ -94,9 +105,14 @@ export function createAuthStateCoordinator<TUser extends { id: string }>({
   let lastVerifiedSnapshot: AuthSnapshot<TUser> | null = null;
   let inFlight: { epoch: number; promise: Promise<void> } | null = null;
   let pendingSignOutEpoch: number | null = null;
+  let boundaryUserId: string | null = null;
+  const deletedUserIds = new Set<string>();
+  const erased = (id: string) => deletedUserIds.has(id) || isUserErased(id);
+  const guestSnapshot = (): AuthSnapshot<TUser> => ({ status: "signed-out", user: null, verification: "verified", verificationError: null });
 
   function publish(next: AuthSnapshot<TUser>) {
     if (!active) return;
+    if (next.user && erased(next.user.id)) next = guestSnapshot();
     snapshot = next;
     if (
       next.verification === "verified" &&
@@ -170,6 +186,7 @@ export function createAuthStateCoordinator<TUser extends { id: string }>({
   function refreshForEpoch(requestEpoch: number): Promise<void> {
     if (!active || requestEpoch !== epoch) return Promise.resolve();
     if (pendingSignOutEpoch === requestEpoch) return Promise.resolve();
+    if (boundaryUserId && erased(boundaryUserId)) { publish(guestSnapshot()); return Promise.resolve(); }
     if (inFlight?.epoch === requestEpoch) return inFlight.promise;
 
     publish(checkingSnapshot());
@@ -185,7 +202,10 @@ export function createAuthStateCoordinator<TUser extends { id: string }>({
         if (!active || epoch !== requestEpoch) return;
 
         if (error) {
-          if (isRetryableVerificationError(error)) {
+          if (isMissingBrowserSession(error)) {
+            boundaryUserId = null;
+            publish(guestSnapshot());
+          } else if (isRetryableVerificationError(error)) {
             publish(failedVerification(errorMessage(error)));
           } else {
             lastVerifiedSnapshot = null;
@@ -199,7 +219,8 @@ export function createAuthStateCoordinator<TUser extends { id: string }>({
           return;
         }
 
-        if (!data.user) {
+        if (!data.user || erased(data.user.id)) {
+          boundaryUserId = data.user?.id ?? null;
           publish(
             {
               status: "signed-out",
@@ -211,6 +232,7 @@ export function createAuthStateCoordinator<TUser extends { id: string }>({
           return;
         }
 
+        boundaryUserId = data.user.id;
         publish(
           {
             status: "signed-in",
@@ -221,7 +243,10 @@ export function createAuthStateCoordinator<TUser extends { id: string }>({
         );
       } catch (error) {
         if (!active || epoch !== requestEpoch) return;
-        publish(failedVerification(errorMessage(error)));
+        if (isMissingBrowserSession(error)) {
+          boundaryUserId = null;
+          publish(guestSnapshot());
+        } else publish(failedVerification(errorMessage(error)));
       } finally {
         if (inFlight === entry) inFlight = null;
       }
@@ -243,9 +268,30 @@ export function createAuthStateCoordinator<TUser extends { id: string }>({
       return snapshot;
     },
 
+    invalidateDeletedAccount(userId) {
+      if (!active || !userId) return false;
+      deletedUserIds.add(userId);
+      const currentId = boundaryUserId ?? snapshot.user?.id ?? null;
+      if (currentId !== userId) return false;
+      invalidatePendingWork();
+      pendingSignOutEpoch = null;
+      // Keep the erased boundary until a new Auth event supplies a new owner.
+      boundaryUserId = userId;
+      lastVerifiedSnapshot = null;
+      publish(guestSnapshot());
+      return true;
+    },
+
     handleAuthEvent(event, sessionUserId) {
       if (!active) return;
       const eventEpoch = invalidatePendingWork();
+      boundaryUserId = sessionUserId;
+      if (sessionUserId && erased(sessionUserId)) {
+        pendingSignOutEpoch = null;
+        lastVerifiedSnapshot = null;
+        publish(guestSnapshot());
+        return;
+      }
 
       if (event === "SIGNED_OUT") {
         publish(

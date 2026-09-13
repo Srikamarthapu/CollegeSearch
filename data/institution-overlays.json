@@ -195,8 +195,8 @@
       "publisher": "Georgia Institute of Technology",
       "sourceName": "Georgia Institute of Technology Common Data Set 2025-2026",
       "sourcePage": "https://irp.gatech.edu/common-data-set",
-      "sourceUrl": "https://irp.gatech.edu/files/CDS/CDS_2025-2026_FINAL_R4_03JUN2026.pdf",
-      "artifactUrl": "https://irp.gatech.edu/files/CDS/CDS_2025-2026_FINAL_R4_03JUN2026.pdf",
+      "sourceUrl": "https://irp.gatech.edu/sites/default/files/CDS/CDS_2025-2026_FINAL_R4_03JUN2026.pdf",
+      "artifactUrl": "https://irp.gatech.edu/sites/default/files/CDS/CDS_2025-2026_FINAL_R4_03JUN2026.pdf",
       "artifactSha256": "598830d23246891448e3859e3ae961274984cd31161980280d2293737af25a68",
       "artifactKind": "pdf",
       "allowedArtifactHosts": [
@@ -204,12 +204,12 @@
       ],
       "review": {
         "status": "approved",
-        "reviewedOn": "2026-08-09",
+        "reviewedOn": "2026-09-13",
         "approvedSha256": "598830d23246891448e3859e3ae961274984cd31161980280d2293737af25a68",
         "method": "manual",
-        "notes": "Checked CDS B1 p.3, B4-B21 p.5, C1 p.8, and G1 p.20 in extracted and rendered form. C1 totals agree across tables; G1 is the published FINAL R4 revision dated June 3, 2026."
+        "notes": "On 2026-09-13 followed the official IRP 2025-26 link to its moved PDF; bytes retain the previously approved fingerprint. Rechecked rendered B1 p.3 (21,028 total undergraduates), B4-B21 p.5 (Fall 2019 adjusted cohort 3,054; 2,860 graduates; published rounded 94%), C1 p.8 (66,881 applicants, 8,921 admits, 4,071 enrollees and matching gender totals), and G1 p.20 (2026-27 in-state tuition 10,618, out-of-state 34,604, required fees 1,516). Derived admission and yield ratios agree. Residency admit/enrollee subtotals do not exactly sum to published totals and are excluded; no subgroup observations are registered."
       },
-      "accessedOn": "2026-08-09",
+      "accessedOn": "2026-09-13",
       "finality": "finalized",
       "publicationStatus": "published",
       "revisionStatus": "FINAL R4, updated June 3, 2026",
@@ -220,22 +220,24 @@
       "id": "illinois-cds-2025-26",
       "publisher": "University of Illinois Urbana-Champaign",
       "sourceName": "University of Illinois Urbana-Champaign Common Data Set 2025-2026",
-      "sourcePage": "https://www.dmi.illinois.edu/stuenr/",
-      "sourceUrl": "https://www.dmi.illinois.edu/stuenr/misc/cds_2025_2026.xlsx",
-      "artifactUrl": "https://www.dmi.illinois.edu/stuenr/misc/cds_2025_2026.xlsx",
+      "sourcePage": "https://dair.illinois.edu/access-data/common-data-set/",
+      "sourceUrl": "https://uofi.box.com/shared/static/orx4vnmzkt2drmgoiksxpfs39pr42uor.xlsx",
+      "artifactUrl": "https://uofi.box.com/shared/static/orx4vnmzkt2drmgoiksxpfs39pr42uor.xlsx",
       "artifactSha256": "9fd806a412276af516571b680b68bbec1319620cd3884540845ca29e59cf9d85",
       "artifactKind": "xlsx",
       "allowedArtifactHosts": [
-        "www.dmi.illinois.edu"
+        "uofi.box.com",
+        "uofi.app.box.com",
+        "public.boxcloud.com"
       ],
       "review": {
         "status": "approved",
-        "reviewedOn": "2026-08-09",
+        "reviewedOn": "2026-09-13",
         "approvedSha256": "9fd806a412276af516571b680b68bbec1319620cd3884540845ca29e59cf9d85",
         "method": "manual",
-        "notes": "Imported with the bundled spreadsheet runtime and checked rendered ranges CDS-B C51 and F107:F112, CDS-C I37:I39, and CDS-G. Formula totals were reconciled to their inputs; costs were excluded because G1 names the 2025-2026 year rather than 2026-2027."
+        "notes": "On 2026-09-13 followed the official DAIR 2025-26 link to its Box static XLSX; bytes retain the previously approved fingerprint. Verified exact redirects uofi.box.com to uofi.app.box.com to public.boxcloud.com. Independently re-read all seven registered observations and their definitions: CDS-C!B3 Fall 2025 cohort; I37:I39 = 83,045 applicants, 30,384 admits, 9,207 enrollees, reconciled to residency rows and E11:E23 gender totals; CDS-B!B4 Fall 2025 reporting date and C51 = 38,572 total undergraduates; Fall 2019 heading B102, F107 = 7,655 adjusted entrants, F108:F110 = 5,689 + 760 + 157, F111 = 6,606 graduates, F112 = 0.8629653821032005. Recalculated admission and yield ratios. Misaligned C1 enrollment-status subtable remains excluded. G1 still explicitly names 2025-26 and marks costs unavailable; costs remain excluded."
       },
-      "accessedOn": "2026-08-09",
+      "accessedOn": "2026-09-13",
       "finality": "snapshot",
       "publicationStatus": "published",
       "revisionStatus": "published snapshot",
@@ -510,7 +512,7 @@
       "sourcePage": "https://reports.utexas.edu/common-data-set/pdf",
       "sourceUrl": "https://utexas.app.box.com/index.php?rm=box_download_shared_file&shared_name=z5p8zzbr6yk4eluam3v3dt2wyaha3cja&file_id=f_2260094902915",
       "artifactUrl": "https://utexas.app.box.com/index.php?rm=box_download_shared_file&shared_name=z5p8zzbr6yk4eluam3v3dt2wyaha3cja&file_id=f_2260094902915",
-      "artifactSha256": "29ed60a524e625343a1dafe0f433de1639efd5f09180db1c205f679b9d8138ce",
+      "artifactSha256": "d453f39a9dba579560061555d3a8634fa1a9fbcfebf2b5ce376d3546f82033f0",
       "artifactKind": "pdf",
       "allowedArtifactHosts": [
         "utexas.app.box.com",
@@ -518,15 +520,15 @@
       ],
       "review": {
         "status": "approved",
-        "reviewedOn": "2026-08-09",
-        "approvedSha256": "29ed60a524e625343a1dafe0f433de1639efd5f09180db1c205f679b9d8138ce",
+        "reviewedOn": "2026-09-13",
+        "approvedSha256": "d453f39a9dba579560061555d3a8634fa1a9fbcfebf2b5ce376d3546f82033f0",
         "method": "manual",
-        "notes": "Checked rendered CDS B1 p.4, B4-B21 pp.7-8, C1 pp.12-13, and G1 p.28. Gender subtotals reconcile to the principal totals. Required-fee cells are blank, so tuition is excluded."
+        "notes": "On 2026-09-13 rechecked every registered observation in the changed official PDF with text extraction and rendered pages. B1 p.5: 44,314 total undergraduates at Fall 2025 reporting date; six gender/status totals sum to 44,314. B4-B21 pp.8-9: Fall 2019 adjusted cohort 8,007; 5,962 + 998 + 182 = 7,142 six-year graduates; reported 89.20% retained. C1 p.13 gender counts independently sum to 90,690 applicants, 20,154 admits and 9,900 enrollees; p.14 residency totals agree. Recomputed admission and yield ratios. G1 p.29 required fees remain blank, so tuition remains excluded. Corrected all moved page references; no registered numerical values changed."
       },
-      "accessedOn": "2026-08-09",
+      "accessedOn": "2026-09-13",
       "finality": "snapshot",
       "publicationStatus": "published",
-      "revisionStatus": "official current 2025-2026 release; PDF created June 9, 2026",
+      "revisionStatus": "official current 2025-2026 release; changed PDF re-reviewed September 13, 2026",
       "cohort": "Fall 2025 admissions and enrollment; Fall 2019 graduation cohort",
       "notes": "Current first-party UT Austin admission, enrollment, and graduation values are used. The 2026-2027 tuition-only values are excluded because required fees are blank."
     },
@@ -615,7 +617,7 @@
       "sourcePage": "https://registrar.caltech.edu/records/enrollment-statistics",
       "sourceUrl": "https://registrar.caltech.edu/records/enrollment-statistics",
       "artifactUrl": "https://registrar.caltech.edu/records/enrollment-statistics",
-      "artifactSha256": "b0e833e73f343cf92ce3ccefd837b39f87bf04212a89424d5054dbe3f4e33564",
+      "artifactSha256": "7b5985302b7530a771cc4ee1916c5b7c88cc32ecf28c5a633ad4beceb153beed",
       "artifactKind": "html",
       "allowedArtifactHosts": [
         "registrar.caltech.edu"
@@ -627,12 +629,12 @@
       ],
       "review": {
         "status": "approved",
-        "reviewedOn": "2026-08-12",
-        "approvedSha256": "b0e833e73f343cf92ce3ccefd837b39f87bf04212a89424d5054dbe3f4e33564",
+        "reviewedOn": "2026-09-13",
+        "approvedSha256": "7b5985302b7530a771cc4ee1916c5b7c88cc32ecf28c5a633ad4beceb153beed",
         "method": "manual",
-        "notes": "Rechecked the official Registrar page after its raw HTML changed. The Fall Enrollment 2025-26 heading, Undergraduate Total of 971, and October 24, 2025 page date remain unchanged; Caltech's July 17, 2026 At a Glance page independently corroborates 971 undergraduates. Only the institution-wide undergraduate total is registered."
+        "notes": "On 2026-09-13 re-read the current official Registrar table and all registered enrollment evidence: Fall Enrollment 2025-26 heading, Undergraduate Total 971, female 445 plus male 526 = 971, and October 24, 2025 page date. Graduate total 1,398 is a separate population. Only the all-undergraduate total is registered. Reviewed the new raw HTML fingerprint; numerical value and cohort are unchanged."
       },
-      "accessedOn": "2026-08-12",
+      "accessedOn": "2026-09-13",
       "finality": "snapshot",
       "publicationStatus": "published",
       "revisionStatus": "official Registrar page updated October 24, 2025",
@@ -646,7 +648,7 @@
       "sourcePage": "https://www.finaid.caltech.edu/Costs",
       "sourceUrl": "https://www.finaid.caltech.edu/Costs",
       "artifactUrl": "https://www.finaid.caltech.edu/Costs",
-      "artifactSha256": "034972cb9ebec71a6d45779a137091125cc4aa3c6e08cd3065fae4cbdeae7abe",
+      "artifactSha256": "a197add41ecd482903c7174051a64564baeab99129aede51a541c192c3f0f3f5",
       "artifactKind": "html",
       "allowedArtifactHosts": [
         "www.finaid.caltech.edu"
@@ -659,12 +661,12 @@
       ],
       "review": {
         "status": "approved",
-        "reviewedOn": "2026-08-12",
-        "approvedSha256": "034972cb9ebec71a6d45779a137091125cc4aa3c6e08cd3065fae4cbdeae7abe",
+        "reviewedOn": "2026-09-13",
+        "approvedSha256": "a197add41ecd482903c7174051a64564baeab99129aede51a541c192c3f0f3f5",
         "method": "manual",
-        "notes": "Rechecked the official page after its raw HTML changed. The 2026-27 undergraduate table still reports $68,574 tuition plus $2,655 mandatory fees, independently corroborated by Caltech's Bursar schedule; housing, food, books, travel, optional health insurance, and the one-time $600 entering-student orientation fee remain excluded."
+        "notes": "On 2026-09-13 re-read the official cost table, full-time undergraduate 2026-27 cohort, and fee footnotes. Tuition 68,574 plus mandatory fees 2,655 = 71,229 for each private-tuition observation. Housing, food, books, personal expenses, travel, optional health insurance and the additional one-time 600 entering-student orientation fee remain excluded. Reviewed the new raw HTML fingerprint; registered annual amounts and population are unchanged."
       },
-      "accessedOn": "2026-08-12",
+      "accessedOn": "2026-09-13",
       "finality": "snapshot",
       "publicationStatus": "published",
       "revisionStatus": "official published 2026-27 undergraduate cost table",
@@ -678,7 +680,7 @@
       "sourcePage": "https://www.pomona.edu/administration/finance-office/student-accounts/tuition-and-costs",
       "sourceUrl": "https://www.pomona.edu/administration/finance-office/student-accounts/tuition-and-costs",
       "artifactUrl": "https://www.pomona.edu/administration/finance-office/student-accounts/tuition-and-costs",
-      "artifactSha256": "43d02e1a3677813f4ac7bc2a718f540411f8ee15fe2db88310a41af4c9b1f674",
+      "artifactSha256": "02a995ecc74dfc0a5fa3287a05ff1dcf1d6c108cdcdbb4b7acbf2ca136cbb76b",
       "artifactKind": "html",
       "allowedArtifactHosts": [
         "www.pomona.edu"
@@ -692,12 +694,12 @@
       ],
       "review": {
         "status": "approved",
-        "reviewedOn": "2026-08-12",
-        "approvedSha256": "43d02e1a3677813f4ac7bc2a718f540411f8ee15fe2db88310a41af4c9b1f674",
+        "reviewedOn": "2026-09-13",
+        "approvedSha256": "02a995ecc74dfc0a5fa3287a05ff1dcf1d6c108cdcdbb4b7acbf2ca136cbb76b",
         "method": "manual",
-        "notes": "Rechecked the official page after its raw HTML changed while its April 30, 2026 modification timestamp remained unchanged. The semester and annual 2026-27 tables still report $71,660 annual tuition plus $420 annual fees; the one-time deposit, housing and food, medical insurance, departmental charges, and other conditional fees remain excluded."
+        "notes": "On 2026-09-13 re-read the current official 2026-27 semester and annual tables and exclusions. Two semesters of tuition 35,830 and student-body fees 210 give annual tuition 71,660 plus fees 420 = 72,080 for each private-tuition observation. Annual table agrees across housing arrangements. One-time 500 deposit, housing/food, medical insurance, department charges and conditional fees remain excluded. Reviewed the new raw HTML fingerprint; annual amounts and full-time undergraduate cohort are unchanged."
       },
-      "accessedOn": "2026-08-12",
+      "accessedOn": "2026-09-13",
       "finality": "snapshot",
       "publicationStatus": "published",
       "revisionStatus": "official published 2026-27 tuition and costs page",
@@ -2535,7 +2537,7 @@
           "periodLabel": "Fall 2025",
           "finality": "snapshot",
           "comparabilityKey": "admissions.first-year.rate",
-          "sourceField": "CDS C1 p.13: 20,154 admits divided by 90,690 applicants",
+          "sourceField": "CDS C1 p.14: 20,154 admits divided by 90,690 applicants",
           "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
           "definition": "First-time, first-year applicants admitted by The University of Texas at Austin divided by actionable applicants.",
           "status": "derived"
@@ -2547,7 +2549,7 @@
           "periodLabel": "Fall 2025",
           "finality": "snapshot",
           "comparabilityKey": "admissions.first-year.applicants",
-          "sourceField": "CDS C1 p.13 residency table: total first-time, first-year applicants; gender subtotals independently reconcile",
+          "sourceField": "CDS C1 p.14 residency table: total first-time, first-year applicants; gender subtotals on p.13 independently reconcile",
           "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
           "definition": "Completed actionable first-time, first-year applications reported by The University of Texas at Austin.",
           "status": "reported"
@@ -2559,7 +2561,7 @@
           "periodLabel": "Fall 2025",
           "finality": "snapshot",
           "comparabilityKey": "admissions.first-year.admits",
-          "sourceField": "CDS C1 p.13 residency table: total first-time, first-year admits; gender subtotals independently reconcile",
+          "sourceField": "CDS C1 p.14 residency table: total first-time, first-year admits; gender subtotals on p.13 independently reconcile",
           "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
           "definition": "First-time, first-year applicants offered admission by The University of Texas at Austin.",
           "status": "reported"
@@ -2571,7 +2573,7 @@
           "periodLabel": "Fall 2025",
           "finality": "snapshot",
           "comparabilityKey": "admissions.first-year.enrollees",
-          "sourceField": "CDS C1 p.13 residency table: total first-time, first-year enrollees; gender subtotals independently reconcile",
+          "sourceField": "CDS C1 p.14 residency table: total first-time, first-year enrollees; gender subtotals on p.13 independently reconcile",
           "cohort": "Fall 2025 first-time, first-year degree-seeking applicants",
           "definition": "Admitted first-time, first-year students who enrolled at The University of Texas at Austin.",
           "status": "reported"
@@ -2595,7 +2597,7 @@
           "periodLabel": "Fall 2025",
           "finality": "snapshot",
           "comparabilityKey": "undergraduate-enrollment.total",
-          "sourceField": "CDS B1 p.4: total all undergraduates",
+          "sourceField": "CDS B1 p.5: total all undergraduates",
           "cohort": "The University of Texas at Austin enrollment as of the Fall 2025 official reporting date or October 15, 2025",
           "definition": "All full-time and part-time, degree-seeking and non-degree-seeking undergraduates reported by The University of Texas at Austin.",
           "status": "reported"
@@ -2607,7 +2609,7 @@
           "periodLabel": "Fall 2019 entering cohort",
           "finality": "snapshot",
           "comparabilityKey": "completion.bachelors.150-percent",
-          "sourceField": "CDS B4-B21 pp.7-8: 7,142 graduates divided by an adjusted Fall 2019 cohort of 8,007; H = 89.20%",
+          "sourceField": "CDS B4-B21 pp.8-9: 7,142 graduates divided by an adjusted Fall 2019 cohort of 8,007; H = 89.20%",
           "cohort": "Adjusted Fall 2019 first-time, full-time bachelor's degree-seeking cohort",
           "definition": "Share of the adjusted Fall 2019 cohort graduating within six years.",
           "status": "reported"

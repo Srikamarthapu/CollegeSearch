@@ -45,6 +45,9 @@ test("both workflows are bounded, read-only, secret-free, and SHA-pinned", () =>
 test("live artifact availability is monitored outside the pull-request gate", () => {
   assert.match(liveWorkflow, /\n  schedule:\n/);
   assert.match(liveWorkflow, /\n  workflow_dispatch:\n/);
-  assert.match(liveWorkflow, /run: npm run data:verify-overlays/);
+  assert.match(liveWorkflow, /npm run data:verify-overlays/);
+  assert.match(liveWorkflow, /if: always\(\).*steps.verify.outcome/);
+  assert.match(liveWorkflow, /uses: actions\/upload-artifact@[0-9a-f]{40}/);
+  assert.match(liveWorkflow, /path: data\/institution-source-verification.json/);
   assert.doesNotMatch(liveWorkflow, /\n  (?:pull_request|push):\n/);
 });

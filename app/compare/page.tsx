@@ -38,46 +38,16 @@ type ComparisonRow = {
 };
 
 const comparisonRows: ComparisonRow[] = [
-  {
-    label: "Headline admit rate",
-    observation: (college) => college.observations.admitRate,
-  },
-  {
-    label: "Applicants",
-    observation: (college) => college.observations.applicants,
-  },
-  {
-    label: "Admitted",
-    observation: (college) => college.observations.admits,
-  },
-  {
-    label: "Enrolled",
-    observation: (college) => college.observations.enrollees,
-  },
-  {
-    label: "Undergraduate enrollment",
-    observation: (college) => college.observations.undergraduateEnrollment,
-  },
-  {
-    label: "Average net price",
-    observation: (college) => college.observations.averageNetPrice,
-  },
-  {
-    label: "Graduation rate",
-    observation: (college) => college.observations.graduationRate,
-  },
-  {
-    label: "Median earnings",
-    observation: (college) => college.observations.medianEarnings,
-  },
-  {
-    label: "In-state tuition",
-    observation: (college) => college.observations.tuitionInState,
-  },
-  {
-    label: "Out-of-state tuition",
-    observation: (college) => college.observations.tuitionOutOfState,
-  },
+  { label: "Average net price", observation: (college) => college.observations.averageNetPrice },
+  { label: "In-state tuition", observation: (college) => college.observations.tuitionInState },
+  { label: "Out-of-state tuition", observation: (college) => college.observations.tuitionOutOfState },
+  { label: "Headline admit rate", observation: (college) => college.observations.admitRate },
+  { label: "Graduation rate", observation: (college) => college.observations.graduationRate },
+  { label: "Median earnings", observation: (college) => college.observations.medianEarnings },
+  { label: "Undergraduate enrollment", observation: (college) => college.observations.undergraduateEnrollment },
+  { label: "Applicants", observation: (college) => college.observations.applicants },
+  { label: "Admitted", observation: (college) => college.observations.admits },
+  { label: "Enrolled", observation: (college) => college.observations.enrollees },
 ];
 
 function first(value: string | string[] | undefined) {
@@ -208,12 +178,12 @@ export default async function ComparePage({
           <div>
             <span className="page-eyebrow">
               <Scale size={15} aria-hidden="true" />
-              Evidence table
+              Your comparison
             </span>
-            <h1>Compare the record, not a ranking.</h1>
+            <h1>Your options, side by side.</h1>
             <p>
-              Place up to four colleges side by side. Every cell carries its
-              own reporting period and publisher so unlike cohorts stay visible.
+              Compare costs, admissions, and outcomes for up to four colleges.
+              Check the reporting years as you go; they can differ between schools.
             </p>
           </div>
           <Link
@@ -256,6 +226,8 @@ export default async function ComparePage({
               </ComparisonNotice>
             ) : null}
 
+            <details className="comparison-field-disclosure" open={Boolean(selectedMajor)}>
+              <summary><GraduationCap size={18} aria-hidden="true" />{selectedMajor ? `Field: ${selectedMajor}` : "Add a field of study to your comparison"}<ChevronDown size={17} aria-hidden="true" /></summary>
             <section
               className="comparison-field-lens"
               aria-labelledby="comparison-field-heading"
@@ -330,6 +302,7 @@ export default async function ComparePage({
                 </span>
               </p>
             </section>
+            </details>
 
             <section
               className="comparison-table-section"

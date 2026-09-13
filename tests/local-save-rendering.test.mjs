@@ -71,7 +71,7 @@ test("the provider delegates each locked account cycle to the tested sync primit
 
   assert.match(source, /await syncSavedCollegeAccountCycle\(\{/);
   assert.match(source, /lockManager: session\.lockManager/);
-  assert.match(source, /storage: session\.storage/);
+  assert.match(source, /storage: guardAccountStorage\(session\.storage, \(\) => sessionIsCurrent\(session\)\)/);
   assert.match(source, /remote: guardedRemote/);
   for (const operation of ["listOwned", "removeOwned", "upsertOwned"]) {
     assert.match(

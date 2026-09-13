@@ -12,6 +12,8 @@ import {
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import { CollegeLogo } from "@/app/components/CollegeLogo";
+import { ResearchNotebook } from "@/app/components/ResearchNotebook";
+import { CollegeActionLinks } from "@/app/components/CollegeActionLinks";
 import { LocalSaveButton } from "@/app/components/LocalSaveButton";
 import {
   collegeBySlug,
@@ -292,7 +294,7 @@ export default async function CollegeProfilePage({
             </span>
             <h1>{college.name}</h1>
             <p className="profile-location">
-              {college.city}, {college.state} · UNITID {college.unitId}
+              {college.city}, {college.state}
             </p>
             <p className="profile-deck">
               Current official records where available, plus clearly dated
@@ -325,6 +327,13 @@ export default async function CollegeProfilePage({
           </div>
         </header>
 
+        <CollegeActionLinks unitId={college.unitId} />
+        <nav className="profile-jump-nav" aria-label="College profile sections">
+          <a href="#admissions-heading">Admissions</a><a href="#outcomes-heading">Cost & outcomes</a><a href="#majors-heading">Fields of study</a><a href="#research-notebook">My research</a>
+        </nav>
+        <div className="profile-overview" aria-label="College at a glance">
+          {[{label: "Average net price / year", observation: averageNetPrice}, {label: "Overall admit rate", observation: admissions}, {label: graduationIsFederal ? "Completion rate" : "6-year graduation rate", observation: graduationRate}, {label: "Undergraduate enrollment", observation: undergraduateEnrollment}].map(({label,observation}) => <div key={label}><span>{label}</span><strong>{formatObservation(observation)}</strong><small>{observation.periodLabel}</small></div>)}
+        </div>
         <aside
           className="profile-source-banner"
           aria-label="Headline admissions source"
@@ -561,6 +570,9 @@ export default async function CollegeProfilePage({
             </Link>
           </div>
         </aside>
+        <section className="profile-notebook" id="research-notebook" aria-label="My college research">
+          <ResearchNotebook unitId={college.unitId} collegeName={college.name} expanded />
+        </section>
       </main>
       <SiteFooter />
     </>

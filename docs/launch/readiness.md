@@ -1,0 +1,25 @@
+# CollegeSearch school launch acceptance ledger
+
+Updated September 13, 2026. Scope: implement the September 10 audit findings and prepare a reliable school-facing release. **Not yet approved for school-wide production use.** Historical evidence remains in `artifacts/audit/production-readiness-2026-09-10/`.
+
+| Gate | Established evidence | Remaining acceptance work |
+|---|---|---|
+| Release checks | Final build, types and lint pass; 306/306 regression checks; zero dependency advisories including development dependencies. | Bind the final source to the deployed release and verify it on the host. |
+| Data integrity | All 26 official source artifacts verified; 163 observations across 24 overlays; changed artifacts reviewed; no numerical/cohort changes across 50 colleges. | Maintain a recurring review/publication owner. A dated snapshot is not a live scheduler result. |
+| Student research | Navigation/reload recovery, explicit save, visible-draft export, two-tab conflict detection and explicit resolution passed in the browser. Add-only JSON restore preserved existing research. | Broader browser/device coverage; keep exported files private. |
+| Applicant profile | Optional GPA with original scale/weighting, activities and preparation checklist persist locally. Guest/account isolation and omission from matching URLs verified. | Counselor brief and clear behavior have regression coverage; broader browser coverage remains. No admissions model or validated reach/target/safety classifier is claimed. |
+| Preference matching | Residency-aware historical net-price context and consistent outcome/enrollment populations are tested. | Historical averages cannot establish personal affordability or admission outcomes. |
+| College preparation | 186 verified official links across 200 action slots for 50 colleges; 14 unavailable slots disclosed. Five calculator-year caveats retained. Student task creation, date, reload and completion passed in browser. | Deadline edit/backup/restore have automated coverage; full browser restore matrix remains. Dates are student-entered; no automatic deadline feed or notifications. |
+| Responsive accessibility | Mobile navigation, Escape/focus return, 320px planner/profile, and long-name signed-in account layouts checked. | Complete enlarged text, reduced motion and additional browser/device coverage before broad rollout. |
+| Accounts | Dedicated free project; real local and hosted two-user/anonymous isolation, revoked-JWT denial and exact-owner deletion passed (6 checks each). Local production HTTP endpoint to hosted DB also passed 6 checks. Real browser sign-in, explicit import, hosted save persistence and sign-out passed. | Custom SMTP, real confirmation/recovery delivery, expired-session browser checks and deployed Worker endpoint verification. Google stays hidden while unconfigured. |
+| Privacy and deletion | Ownership, server revocation/deletion, browser erasure/fencing regressions pass. Deletion confirmation, disabled blank confirmation and cancel checked in browser. | Operator/support contact, effective date, retention/provider disclosures and backup/deletion operating process need owner details. Final destructive browser click was not exercised. |
+| Operations | Local smoke passed 15 checks; local anonymous classroom probe passed 120/120 requests, 30 virtual students, p95 18.6 ms. Bounded probe and operations runbook exist. | Hosted/device/school-network rehearsal, real alert receipt, schedule monitoring, database backup/restore and compatible rollback drill. Local probe excludes assets/rendering and account writes; it does not prove hosted capacity. |
+| Publication | Existing owner-private Sites project identified; dedicated hosted environment configured. | Updated deployment and exact-host checks in progress. Preserve private access until the release gates are satisfied. |
+
+Ooru is paused with owner approval. ResourceDex is unchanged. CollegeSearch has its own active free Supabase project; no paid upgrade was made.
+
+## Evidence
+
+Current release logs: `artifacts/launch-2026-09-13/release-{build,tests,typecheck,lint}.log`. Dependency and data evidence: `dependency-audit-final.json`, `data-offline-final.log`, `data/`, and `college-links/` in the same directory. Account evidence: `local-account-integration.json`, `hosted-account-integration.json`, `hosted-endpoint-integration.json`, and `browser-account-sync.json`. The endpoint report's application origin is localhost; its filename does not establish a deployed Worker check. Browser observations and limitations are recorded in `browser-checklist.md`.
+
+This ledger keeps the full account-enabled launch goal open. Passing local checks or privately publishing a review build does not complete that goal. The optional hourly probe workflow is a proposal only; no alert delivery is claimed.

@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -10,6 +10,7 @@ import {
   validateInstitutionOverlays,
 } from "./lib/institution-overlays.mjs";
 import { readResponseBytes } from "./lib/limited-response.mjs";
+import { atomicWriteFile } from "./lib/atomic-write.mjs";
 
 const MAXIMUM_ARTIFACT_BYTES = {
   html: 4 * 1024 * 1024,
@@ -244,58 +245,158 @@ export async function verifyInstitutionOverlays({
   fetchImplementation = fetch,
   offline = false,
   path = resolveOverlayPath(),
+  reportPath,
+  now = () => new Date().toISOString(),
 } = {}) {
-  const dataset = JSON.parse(await readFile(path, "utf8"));
-  const summary = validateInstitutionOverlays(dataset);
+  const report = {
+    schemaVersion: 1,
+    checkKind: offline ? "offline-schema" : "artifact-integrity",
+    startedAt: now(),
+    checkedAt: null,
+    status: "failed",
+    schemaStatus: "not_checked",
+    counts: { total: 0, passed: 0, failed: 0, notChecked: 0 },
+    sources: [],
+  };
+  async function saveReport() {
+    report.checkedAt = now();
+    if (!reportPath) return;
+    await mkdir(dirname(resolve(reportPath)), { recursive: true });
+    await atomicWriteFile(resolve(reportPath), `${JSON.stringify(report, null, 2)}\n`);
+  }
+  let dataset;
+  let summary;
+  try {
+    dataset = JSON.parse(await readFile(path, "utf8"));
+    summary = validateInstitutionOverlays(dataset);
+    report.schemaStatus = "passed";
+  } catch (error) {
+    report.schemaStatus = "failed";
+    report.error = { stage: "schema", message: error.message };
+    await saveReport();
+    throw error;
+  }
+
+  const failures = [];
 
   if (!offline) {
     let totalBytes = 0;
+    let byteBudgetExceeded = false;
     for (const source of dataset.sources) {
-      if (!source.artifactUrl) {
-        throw new Error(
-          `Source ${source.id} has no refresh-verifiable artifact. Add an official artifact URL and hash before publication.`,
-        );
-      }
+      const result = {
+        sourceId: source.id,
+        publisher: source.publisher,
+        sourceName: source.sourceName,
+        artifactUrl: source.artifactUrl ?? null,
+        artifactKind: source.artifactKind,
+        artifactHashMode: source.artifactHashMode ?? "raw",
+        checkedAt: now(),
+        status: "failed",
+        httpStatus: null,
+        finalHost: null,
+        artifactBytes: null,
+        expectedSha256: source.artifactSha256 ?? null,
+        actualSha256: null,
+        error: null,
+        lastApprovedEvidence: {
+          reviewedOn: source.review?.reviewedOn ?? null,
+          artifactSha256: source.review?.approvedSha256 ?? null,
+          artifactUrl: source.artifactUrl ?? null,
+          sourcePage: source.sourcePage ?? source.sourceUrl,
+          cohort: source.cohort,
+          reviewNotes: source.review?.notes ?? null,
+        },
+      };
+      let stage = "request";
+      try {
+        if (byteBudgetExceeded) {
+          stage = "byte-budget";
+          result.status = "not_checked";
+          throw new Error(`Source ${source.id} was not fetched because the refresh byte budget was exhausted.`);
+        }
+        if (!source.artifactUrl) {
+          throw new Error(
+            `Source ${source.id} has no refresh-verifiable artifact. Add an official artifact URL and hash before publication.`,
+          );
+        }
+        const response = await fetchArtifactWithRedirectValidation(source, {
+          fetchImplementation,
+        });
+        result.httpStatus = response.status;
+        // Box download URLs contain expiring opaque tokens; persist only the final host.
+        result.finalHost = response.url ? new URL(response.url).hostname : null;
+        if (!response.ok) {
+          await response.body?.cancel();
+          throw new Error(
+            `Source ${source.id} artifact request failed with HTTP ${response.status}.`,
+          );
+        }
+        stage = "body";
+        const remainingBytes = MAXIMUM_TOTAL_BYTES - totalBytes;
+        const maximumBytes = Math.min(MAXIMUM_ARTIFACT_BYTES[source.artifactKind], remainingBytes);
+        const bytes = await readResponseBytes(response, maximumBytes, `${source.id} artifact`);
+        totalBytes += bytes.byteLength;
+        result.artifactBytes = bytes.byteLength;
+        byteBudgetExceeded = totalBytes >= MAXIMUM_TOTAL_BYTES;
 
-      const response = await fetchArtifactWithRedirectValidation(source, {
-        fetchImplementation,
-      });
-      if (!response.ok) {
-        await response.body?.cancel();
-        throw new Error(
-          `Source ${source.id} artifact request failed with HTTP ${response.status}.`,
+        stage = "artifact-format";
+        validateArtifactResponse(source, response, bytes);
+        stage = "fingerprint";
+        result.actualSha256 = sha256Hex(
+          artifactBytesForHash(bytes, source.artifactHashMode ?? "raw"),
         );
+        if (result.actualSha256 !== source.artifactSha256) {
+          throw new Error(
+            `Source ${source.id} changed: expected ${source.artifactSha256}, received ${result.actualSha256}. Review the official artifact before updating the overlay.`,
+          );
+        }
+        result.status = "passed";
+      } catch (error) {
+        // Conservatively reserve the whole allowed body after a body-reader failure.
+        // Its partial bytes cannot be safely reused for later requests.
+        if (stage === "body") {
+          totalBytes += Math.min(MAXIMUM_ARTIFACT_BYTES[source.artifactKind], MAXIMUM_TOTAL_BYTES - totalBytes);
+          byteBudgetExceeded = totalBytes >= MAXIMUM_TOTAL_BYTES;
+        }
+        result.error = { stage, message: error.message };
+        failures.push(error);
       }
-      const bytes = await readResponseBytes(
-        response,
-        MAXIMUM_ARTIFACT_BYTES[source.artifactKind],
-        `${source.id} artifact`,
-      );
-      totalBytes += bytes.byteLength;
-      if (totalBytes > MAXIMUM_TOTAL_BYTES) {
-        throw new Error(
-          "Institution overlay artifacts exceed the refresh byte budget.",
-        );
-      }
-
-      validateArtifactResponse(source, response, bytes);
-      const actualHash = sha256Hex(
-        artifactBytesForHash(bytes, source.artifactHashMode ?? "raw"),
-      );
-      if (actualHash !== source.artifactSha256) {
-        throw new Error(
-          `Source ${source.id} changed: expected ${source.artifactSha256}, received ${actualHash}. Review the official artifact before updating the overlay.`,
-        );
-      }
+      result.checkedAt = now();
+      report.sources.push(result);
     }
   }
 
+  report.counts = {
+    total: report.sources.length,
+    passed: report.sources.filter((source) => source.status === "passed").length,
+    failed: report.sources.filter((source) => source.status === "failed").length,
+    notChecked: report.sources.filter((source) => source.status === "not_checked").length,
+  };
+  report.status = failures.length ? "failed" : "passed";
+  await saveReport();
+  if (failures.length) {
+    const error = new AggregateError(
+      failures,
+      `Institution source verification failed for ${failures.length} of ${report.sources.length} artifacts:\n${failures.map((failure) => failure.message).join("\n")}`,
+    );
+    error.report = report;
+    throw error;
+  }
   return summary;
 }
 
 async function main() {
   const offline = process.argv.includes("--offline");
-  const summary = await verifyInstitutionOverlays({ offline });
+  const reportFlag = process.argv.indexOf("--report");
+  if (reportFlag >= 0 && (!process.argv[reportFlag + 1] || process.argv[reportFlag + 1].startsWith("--"))) {
+    throw new Error("--report requires an output path.");
+  }
+  const reportPath = process.argv[reportFlag + 1] && reportFlag >= 0
+    ? resolve(process.argv[reportFlag + 1])
+    : process.env.INSTITUTION_VERIFICATION_REPORT_PATH
+      ? resolve(process.env.INSTITUTION_VERIFICATION_REPORT_PATH)
+      : offline ? undefined : resolve(scriptDirectory, "../data/institution-source-verification.json");
+  const summary = await verifyInstitutionOverlays({ offline, reportPath });
   console.log(
     `Verified ${summary.collegeCount} institution overlays, ${summary.observationCount} observations, and ${summary.artifactCount} registered artifacts${offline ? " (offline schema check)" : ""}.`,
   );

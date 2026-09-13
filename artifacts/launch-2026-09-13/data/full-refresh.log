@@ -1,0 +1,5 @@
+Verified 24 institution overlays, 163 observations, and 26 registered artifacts.
+Imported 9 UC campuses from 2.1.1 to /private/tmp/collegesearch-launch-data-2026-09-13/project/data/.refresh-xPb7cj/uc-admissions-2025.json.
+Imported 9 UC Fall 2026 campus snapshots to /private/tmp/collegesearch-launch-data-2026-09-13/project/data/.refresh-xPb7cj/uc-admissions-latest.json.
+Imported 50 colleges to /private/tmp/collegesearch-launch-data-2026-09-13/project/data/.refresh-xPb7cj/colleges.json from College Scorecard.
+Published 4 generated data files as one refresh transaction.

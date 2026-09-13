@@ -1,0 +1,93 @@
+
+> college-search@0.1.0 build
+> WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build
+
+
+  vinext build  (Vite 8.2.1)
+
+[1/5] analyze client references...
+[2Ktransforming...✓ 409 modules transformed.
+rendering chunks...
+✓ built in 5.93s
+[33m[PLUGIN_TIMINGS] [0mYour build spent 86% of 5.9s inside plugin hooks (5.0s).
+Not measurable — 7 hooks whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - rsc:virtual-client-package resolveId (1403 calls)
+  - alias resolveId (1566 calls)
+  - vinext:og-inline-fetch-assets resolveId (1398 calls)
+  … and 4 more
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[2/5] analyze server references...
+[2Ktransforming...✓ 830 modules transformed.
+rendering chunks...
+✓ built in 4.07s
+[33m[PLUGIN_TIMINGS] [0mYour build spent 27% of 4.1s inside plugin hooks (1.1s).
+Not measurable — 3 hooks whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - alias resolveId (2399 calls)
+  - vinext:og-inline-fetch-assets resolveId (2196 calls)
+  - vinext:optimize-imports transform (570 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[3/5] build rsc environment...
+[2Ktransforming...✓ 401 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 1.91s
+[4/5] build client environment...
+[2Ktransforming...✓ 2532 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 18.47s
+[33m[PLUGIN_TIMINGS] [0mYour build spent 34% of 18.5s inside plugin hooks (6.3s).
+Measured inside the callback, so queue time is excluded and time the callback itself awaited is not:
+  - vinext:validate-middleware-exports transform (16%, 3.0s, 2532 calls)
+  - vite:prepare-out-dir renderStart (7%, 1.4s, 1 call)
+Those rows are 24% of the build; the rest of the 34% is below.
+Not measurable — 2 hooks whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - alias resolveId (7561 calls)
+  - vinext:og-inline-fetch-assets resolveId (7340 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[5/5] build ssr environment...
+[2Ktransforming...✓ 829 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 6.55s
+[33m[PLUGIN_TIMINGS] [0mYour build spent 23% of 6.5s inside plugin hooks (1.5s).
+Not measurable — 3 hooks whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - alias resolveId (2363 calls)
+  - vinext:og-inline-fetch-assets resolveId (2158 calls)
+  - vinext:optimize-imports transform (564 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[0m
+  Route (app)
+  ┌ ? /                      
+  ├ ? /account               
+  ├ λ /api/account           
+  ├ ? /auth/auth-code-error  
+  ├ λ /auth/callback         
+  ├ λ /auth/recovery-callback
+  ├ ? /auth/update-password  
+  ├ ? /chances               
+  ├ ƒ /colleges/:slug        
+  ├ ? /compare               
+  ├ ? /data-health           
+  ├ ? /data-sources          
+  ├ ? /explore               
+  ├ ? /majors                
+  ├ ƒ /majors/:slug          
+  ├ ? /match                 
+  ├ ? /methodology           
+  ├ ? /plan                  
+  ├ ? /privacy               
+  └ ? /saved                 
+
+  λ API  ƒ Dynamic  ? Unknown
+
+  ? Some routes could not be classified. vinext currently uses static analysis
+    and cannot detect dynamic API usage (headers(), cookies(), etc.) at build time.
+    Automatic classification will be improved in a future release.
+
+  Build complete. Run `vinext start` to start the production server.
+

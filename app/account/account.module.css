@@ -13,7 +13,7 @@
 .eyebrow {
   color: var(--oxblood);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 720;
   letter-spacing: 0.13em;
   text-transform: uppercase;
@@ -23,7 +23,7 @@
   max-width: 760px;
   margin: 15px 0 15px;
   font-family: var(--font-newsreader), Georgia, serif;
-  font-size: clamp(48px, 8vw, 72px);
+  font-size: clamp(36px, 4.3vw, 56px);
   font-weight: 520;
   letter-spacing: -0.04em;
   line-height: 0.98;
@@ -38,7 +38,7 @@
 .card {
   margin-top: 32px;
   border: 1px solid var(--line-strong);
-  background: rgba(251, 249, 243, 0.92);
+  background: var(--paper-bright);
 }
 
 .state {
@@ -78,7 +78,7 @@
   border: 1px solid var(--forest);
   background: var(--forest);
   color: white;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 720;
   gap: 8px;
 }
@@ -102,6 +102,7 @@
   gap: 17px;
   grid-template-columns: auto 1fr;
 }
+.identity > div { min-width: 0; overflow-wrap: anywhere; }
 
 .identity > span {
   display: grid;
@@ -116,7 +117,7 @@
 .identity small {
   color: var(--forest-raised);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -145,7 +146,7 @@
 
 .details dt {
   color: var(--ink-faint);
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .details dd {
@@ -153,14 +154,28 @@
   overflow-wrap: anywhere;
   color: var(--ink);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
   padding: 16px;
   gap: 9px;
 }
+
+.deleteAccount {
+  margin-top: 28px;
+  padding: 24px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper-bright);
+}
+.deleteAccount h2 { margin: 0 0 12px; font: 500 28px var(--font-newsreader), Georgia, serif; }
+.deleteAccount p { color: var(--ink-soft); font-size: 14px; }
+.deleteAccount label { display: block; font-weight: 650; margin: 18px 0 8px; }
+.deleteAccount input { display: block; width: min(100%, 280px); min-height: 44px; padding: 8px 12px; margin-bottom: 14px; border: 1px solid var(--line-strong); background: white; }
+.dangerAction { min-height: 44px; padding: 10px 16px; color: white; background: var(--oxblood); border: 1px solid var(--oxblood); font-weight: 650; }
+.dangerAction:disabled { opacity: .5; cursor: not-allowed; }
 
 .actions a {
   border-color: var(--line-strong);
@@ -173,7 +188,7 @@
   padding: 11px 16px;
   border-top: 1px solid var(--line);
   color: var(--ink-soft);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .note {
@@ -191,11 +206,11 @@
 .note p {
   margin: 0;
   color: #3e5d53;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .note a {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 720;
   text-decoration: underline;
   text-underline-offset: 3px;

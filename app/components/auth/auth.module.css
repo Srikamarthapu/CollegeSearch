@@ -61,7 +61,7 @@
 .accountKicker {
   color: var(--forest-raised);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 690;
   letter-spacing: 0.13em;
   text-transform: uppercase;
@@ -125,7 +125,7 @@
   margin: 21px 0;
   align-items: center;
   color: var(--ink-faint);
-  font-size: 11px;
+  font-size: 13px;
   gap: 12px;
   grid-template-columns: 1fr auto 1fr;
 }
@@ -145,7 +145,7 @@
 .field {
   display: grid;
   color: var(--ink-soft);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 660;
   gap: 6px;
 }
@@ -189,7 +189,7 @@
   height: 44px;
   place-items: center;
   border: 0;
-  border-radius: 4px;
+  border-radius: 8px;
   background: transparent;
   color: var(--ink-faint);
 }
@@ -206,7 +206,7 @@
   border: 0;
   background: transparent;
   color: var(--forest-raised);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 670;
 }
 
@@ -230,7 +230,7 @@
   justify-content: center;
   margin-top: 16px;
   color: var(--ink-faint);
-  font-size: 12px;
+  font-size: 13px;
   gap: 7px;
 }
 
@@ -251,8 +251,8 @@
   margin: 0;
   padding: 10px 12px;
   border: 1px solid;
-  border-radius: 4px;
-  font-size: 12px;
+  border-radius: 8px;
+  font-size: 13px;
 }
 
 .errorNotice {
@@ -287,7 +287,7 @@
 .setupPanel p {
   margin: 4px 0 0;
   color: var(--ink-soft);
-  font-size: 12px;
+  font-size: 13px;
   overflow-wrap: anywhere;
 }
 
@@ -300,7 +300,7 @@
   min-height: 44px;
   padding: 0 14px;
   border: 1px solid rgba(18, 63, 53, 0.42);
-  background: rgba(251, 249, 243, 0.62);
+  background: var(--paper-bright);
   color: var(--forest);
 }
 
@@ -333,8 +333,8 @@
   padding: 4px 12px 4px 5px;
   border: 1px solid var(--line);
   border-radius: 5px;
-  background: rgba(251, 249, 243, 0.66);
-  font-size: 12px;
+  background: var(--paper-bright);
+  font-size: 13px;
   font-weight: 680;
   gap: 8px;
   list-style: none;
@@ -391,7 +391,7 @@
 
 .accountPopover small {
   color: var(--ink-faint);
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .accountPopover button {
@@ -401,9 +401,9 @@
   justify-content: center;
   margin-top: 13px;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 8px;
   background: var(--paper);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 680;
   gap: 8px;
 }
@@ -411,7 +411,7 @@
 .accountPopover p {
   margin: 7px 0 0;
   color: var(--oxblood);
-  font-size: 11px;
+  font-size: 13px;
 }
 
 @keyframes spin {
@@ -440,6 +440,9 @@
 }
 
 @media (max-width: 560px) {
+  .accountSummary { width: 44px; min-width: 44px; max-width: 44px; height: 44px; padding: 0; justify-content: center; }
+  .accountSummary > span:last-child { display: none; }
+  .accountPopover { position: fixed; top: 76px; left: 16px; right: 16px; width: auto; max-width: none; }
   .dialog {
     top: auto;
     right: 10px;

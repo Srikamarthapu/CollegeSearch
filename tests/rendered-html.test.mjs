@@ -162,12 +162,12 @@ test("server-renders the CollegeSearch product shell", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>CollegeSearch<\/title>/i);
-  assert.match(html, /Find a college you can/);
-  assert.match(html, /College discovery, clearly sourced/);
+  assert.match(html, /Find your starting point\./);
+  assert.match(html, /Your college search, all together/);
   assert.match(html, /UC admissions/);
   assert.match(html, /Fall 2026/);
   assert.match(html, /College Scorecard/);
-  assert.match(html, /Federal baseline \+ fields/);
+  assert.match(html, /Federal baseline metrics use their own dated cohorts/);
   const firstPartyAdmissions = payload.colleges.filter(
     (college) => college.observations.admitRate.sourceId !== federalSourceId,
   ).length;
@@ -200,7 +200,7 @@ test("server-renders the CollegeSearch product shell", async () => {
   assert.match(
     html,
     new RegExp(
-      `${reviewedCollegeAdmissions}(?:(?:<!-- -->)|\\s)*admission headlines`,
+      `${reviewedCollegeAdmissions}(?:(?:<!-- -->)|\\s)*college admission headlines`,
     ),
   );
   assert.match(html, /http:\/\/localhost\/og\.png/);
@@ -220,6 +220,7 @@ test("global HTML responses enforce one fresh nonce on every executable block", 
     assert.ok(nonceMatch, `${pathname} has a URL-safe CSP nonce`);
     const nonce = nonceMatch[1];
     observedNonces.push(nonce);
+    assert.match(html, new RegExp(`<meta property="csp-nonce" nonce="${nonce}"`), "Vite dynamic style modules receive the document nonce");
 
     assert.match(policy, /default-src 'self'/);
     assert.match(policy, /script-src 'self' 'nonce-/);
@@ -261,7 +262,7 @@ test("global HTML responses enforce one fresh nonce on every executable block", 
     for (const [, attributes] of modulePreloads) {
       assert.match(
         attributes,
-        /\bhref=["']\/assets\/[A-Za-z0-9._-]+\.js["']/,
+        /\bhref=["']\/(?:assets|_next\/static\/chunks)\/[A-Za-z0-9._-]+\.js["']/,
         `${pathname} module preload stays on the content-hashed local asset path`,
       );
     }
@@ -306,10 +307,11 @@ test("auth redirects inherit CSP and reject an external next destination", async
   );
 
   assert.equal(response.status, 307);
-  assert.equal(
-    response.headers.get("location"),
-    "http://localhost/auth/auth-code-error?reason=configuration",
-  );
+  const target = new URL(response.headers.get("location"));
+  assert.equal(target.origin, "http://localhost");
+  assert.equal(target.pathname, "/auth/auth-code-error");
+  assert.ok(["configuration", "exchange"].includes(target.searchParams.get("reason")));
+  assert.equal(target.searchParams.has("next"), false);
   assert.match(
     response.headers.get("content-security-policy") ?? "",
     /frame-ancestors 'none'/,
@@ -324,9 +326,9 @@ test("auth redirects inherit CSP and reject an external next destination", async
     response.headers.get("permissions-policy"),
     "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()",
   );
-  assert.equal(
-    response.headers.get("cache-control"),
-    "private, no-cache, no-store, must-revalidate, max-age=0",
+  assert.deepEqual(
+    response.headers.get("cache-control").split(",").map((part) => part.trim()).sort(),
+    ["private", "no-cache", "no-store", "must-revalidate", "max-age=0"].sort(),
     "auth redirects cannot be cached with a request-specific nonce",
   );
 });
@@ -362,7 +364,7 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
     {
       path: "/explore",
       markers: [
-        /Search the evidence, not a ranking\./,
+        /Find your starting point\./,
         /Field filters use 2024-2025 federal program and award data\./,
       ],
     },
@@ -405,7 +407,7 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
     {
       path: "/compare?colleges=110635,243744&major=Engineering",
       markers: [
-        /Compare the record, not a ranking\./,
+        /Your options, side by side\./,
         /UC Berkeley/,
         /Stanford/,
         /different definitions or reporting periods/,
@@ -434,7 +436,7 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
       path: "/majors",
       markers: [
         /Broad fields of study · CollegeSearch/,
-        /Start with a field\. Keep the claim honest\./,
+        /What would you like to study\?/,
         /A zero and a missing record mean different things\./,
       ],
     },
@@ -442,7 +444,7 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
       path: "/match",
       markers: [
         /Preference match · CollegeSearch/,
-        /A college list with reasons attached\./,
+        /What matters to you in a college\?/,
         /Fit and admission likelihood are different questions\./,
       ],
     },
@@ -450,7 +452,7 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
       path: "/chances",
       markers: [
         /Admit-rate context · CollegeSearch/,
-        /Read the rate\. Keep its limits in view\./,
+        /Put admission rates in perspective\./,
         /No “87% chance\.” No reach, target, or safety labels\./,
       ],
     },
@@ -462,8 +464,8 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
       path: "/account",
       markers: [
         /Account \| CollegeSearch/,
-        /A clear boundary for your account\./,
-        /Authentication can sync a college list without attaching browser-only[\s\S]*unless you explicitly import them/,
+        /Your shortlist, wherever you go\./,
+        /Keep your shortlist across devices[\s\S]*profile, and deadlines stay in this browser/,
       ],
     },
     {
@@ -471,7 +473,7 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
       markers: [
         /Privacy \| CollegeSearch/,
         /Your college list is yours\./,
-        /No academic profile is collected in this release\./,
+        /Your optional application profile stays local\./,
         /Signing out[\s\S]*does not erase that recovery copy/,
       ],
     },

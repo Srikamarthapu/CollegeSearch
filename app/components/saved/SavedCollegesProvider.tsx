@@ -12,6 +12,8 @@ import {
   useState,
 } from "react";
 
+import { createAccountMutationFence, guardAccountStorage } from "@/app/lib/account-mutation-fence";
+import { normalizeAccountErasureId } from "@/app/lib/account-browser-erasure";
 import { useAuth } from "@/app/components/auth/AuthProvider";
 import {
   SavedCollegeAccountCycleError,
@@ -63,6 +65,9 @@ type SavedCollegeContextValue = {
   accountCacheAvailable: boolean;
   canImportGuestSaves: boolean;
   canMutate: boolean;
+  freezeAccountScope(scope: string): boolean;
+  unfreezeAccountScope(scope: string): void;
+  forgetAccountScope(scope: string): boolean;
   guestImportCount: number;
   hydrated: boolean;
   ids: number[];
@@ -164,6 +169,8 @@ export function SavedCollegesProvider({
   const sessionRef = useRef<SyncSession | null>(null);
   const epochRef = useRef(0);
   const authScopeRef = useRef<"guest" | "loading" | string>("loading");
+  const [mutationFence] = useState(() => createAccountMutationFence());
+  const [, setFenceVersion] = useState(0);
 
   const effectiveAuthStatus =
     authStatus === "unconfigured" || verification === "verified"
@@ -187,7 +194,8 @@ export function SavedCollegesProvider({
 
   useLayoutEffect(() => {
     authScopeRef.current = viewState.expectedScope;
-  }, [viewState.expectedScope]);
+    mutationFence.activate(viewState.expectedScope);
+  }, [mutationFence, viewState.expectedScope]);
 
   const publishIds = useCallback((next: number[]) => {
     idsRef.current = next;
@@ -203,8 +211,9 @@ export function SavedCollegesProvider({
       sessionRef.current?.epoch === session.epoch &&
       sessionRef.current.userId === session.userId &&
       epochRef.current === session.epoch &&
-      authScopeRef.current === session.userId,
-    [],
+      authScopeRef.current === session.userId &&
+      mutationFence.canWrite(session.userId),
+    [mutationFence],
   );
 
   const persistMutations = useCallback(
@@ -213,11 +222,18 @@ export function SavedCollegesProvider({
       mutations: readonly SavedCollegePendingMutation[],
       storage: SavedCollegeStorage,
     ) => {
+      if (!mutationFence.canWrite(userId)) return {
+        failedMutations: mutationFence.isForgotten(userId) ? [] : [...mutations],
+        persisted: false,
+        storageAvailable: true,
+        succeededMutations: [] as SavedCollegePendingMutation[],
+      };
       let persisted = true;
       let available = true;
       const failedMutations: SavedCollegePendingMutation[] = [];
       const succeededMutations: SavedCollegePendingMutation[] = [];
       for (const mutation of mutations) {
+        if (!mutationFence.canWrite(userId)) { persisted = false; break; }
         const result = writeSavedCollegeMutation(
           userId,
           mutation,
@@ -237,7 +253,7 @@ export function SavedCollegesProvider({
         succeededMutations,
       };
     },
-    [knownIds, recordStorageResult],
+    [knownIds, recordStorageResult, mutationFence],
   );
 
   const runAccountCycle = useCallback(
@@ -316,7 +332,7 @@ export function SavedCollegesProvider({
             );
           },
           remote: guardedRemote,
-          storage: session.storage,
+          storage: guardAccountStorage(session.storage, () => sessionIsCurrent(session)),
           userId: session.userId,
         });
 
@@ -428,6 +444,50 @@ export function SavedCollegesProvider({
     [runAccountCycle, sessionIsCurrent],
   );
 
+  const freezeAccountScope = useCallback((scope: string) => {
+    const paused = mutationFence.freeze(scope);
+    if (paused) setFenceVersion((version) => version + 1);
+    return paused;
+  }, [mutationFence]);
+
+  const unfreezeAccountScope = useCallback((scope: string) => {
+    if (!mutationFence.unfreeze(scope)) return;
+    setFenceVersion((version) => version + 1);
+    const userId = normalizeAccountErasureId(scope);
+    if (!userId || !mutationFence.canWrite(userId)) return;
+    const session = sessionRef.current;
+    if (session && session.userId === userId) {
+      const resume = () => { if (sessionIsCurrent(session)) void flushSession(session); };
+      if (session.running) void session.running.then(resume, resume);
+      else resume();
+    } else {
+      // No account mutations were possible before initial binding completed.
+      setRetryToken((version) => version + 1);
+    }
+  }, [flushSession, mutationFence, sessionIsCurrent]);
+
+  const forgetAccountScope = useCallback((scope: string) => {
+    const matches = mutationFence.forget(scope);
+    setFenceVersion((version) => version + 1);
+    if (!matches) return false;
+    epochRef.current += 1;
+    const session = sessionRef.current;
+    if (session) session.requested = false;
+    sessionRef.current = null;
+    volatilePendingRef.current.clear();
+    publishIds([]);
+    setRenderedScope("loading");
+    setBaseSource("none");
+    setRemoteRead("idle");
+    setSyncConfirmed(false);
+    setPendingCount(0);
+    setCoordinationAvailable(false);
+    setLastError(null);
+    setSyncPhase("loading-account");
+    // Persisted copies are erased by eraseAccountBrowserData under product locks.
+    return true;
+  }, [mutationFence, publishIds]);
+
   useEffect(() => {
     const epoch = epochRef.current + 1;
     epochRef.current = epoch;
@@ -482,6 +542,14 @@ export function SavedCollegesProvider({
 
       const verifiedUserId = viewState.normalizedUserId;
       if (!verifiedUserId) return;
+      if (!mutationFence.canWrite(verifiedUserId)) {
+        setRenderedScope("loading");
+        setBaseSource("none");
+        setCoordinationAvailable(false);
+        setLastError(mutationFence.isForgotten(verifiedUserId) ? "This account was deleted." : "Account changes are paused.");
+        setSyncPhase("error");
+        return;
+      }
 
       // Account mutations stay disabled until this exact verified scope has
       // both durable storage and a cross-tab lock-backed sync session.
@@ -559,7 +627,8 @@ export function SavedCollegesProvider({
           if (
             cancelled ||
             epochRef.current !== epoch ||
-            authScopeRef.current !== verifiedUserId
+            authScopeRef.current !== verifiedUserId ||
+            !mutationFence.canWrite(verifiedUserId)
           ) {
             return;
           }
@@ -581,7 +650,8 @@ export function SavedCollegesProvider({
           if (
             cancelled ||
             epochRef.current !== epoch ||
-            authScopeRef.current !== verifiedUserId
+            authScopeRef.current !== verifiedUserId ||
+            !mutationFence.canWrite(verifiedUserId)
           ) {
             return;
           }
@@ -609,15 +679,18 @@ export function SavedCollegesProvider({
     verificationError,
     viewState.normalizedUserId,
     viewState.scopeKind,
+    mutationFence,
   ]);
 
+  const accountErased = viewState.scopeKind === "account" && mutationFence.isForgotten(viewState.expectedScope);
   const canMutate =
     viewState.canMutate &&
-    (viewState.scopeKind === "guest" || coordinationAvailable);
+    (viewState.scopeKind === "guest" || (coordinationAvailable && mutationFence.canWrite(viewState.expectedScope)));
   const canImportGuestSaves =
     viewState.canImportGuestSaves &&
     coordinationAvailable &&
-    storageAvailable;
+    storageAvailable &&
+    mutationFence.canWrite(viewState.expectedScope);
 
   const replaceSavedIds = useCallback(
     (value: unknown) => {
@@ -693,6 +766,7 @@ export function SavedCollegesProvider({
         return;
       }
 
+      if (!sessionIsCurrent(session)) return;
       const cacheWrite = writeSavedCollegeIdsAtKey(
         session.cacheKey,
         nextIds,
@@ -834,6 +908,7 @@ export function SavedCollegesProvider({
       return;
     }
 
+    if (!sessionIsCurrent(session)) return;
     const cacheWrite = writeSavedCollegeIdsAtKey(
       session.cacheKey,
       idsRef.current,
@@ -873,6 +948,7 @@ export function SavedCollegesProvider({
     const remainingGuestIds = latestGuest.ids.filter(
       (unitId) => !importedIds.has(unitId),
     );
+    if (!sessionIsCurrent(session)) return;
     const guestWrite = writeSavedCollegeIds(
       remainingGuestIds,
       knownIds,
@@ -934,23 +1010,30 @@ export function SavedCollegesProvider({
 
   const value = useMemo<SavedCollegeContextValue>(
     () => ({
-      accountCacheAvailable: viewState.accountBaseAvailable,
+      accountCacheAvailable: !accountErased && viewState.accountBaseAvailable,
+      freezeAccountScope,
+      unfreezeAccountScope,
+      forgetAccountScope,
       canImportGuestSaves,
       canMutate,
       guestImportCount,
-      hydrated: viewState.hydrated,
-      ids: viewState.visibleIds,
+      hydrated: !accountErased && viewState.hydrated,
+      ids: accountErased ? [] : viewState.visibleIds,
       importGuestSaves,
       lastError,
       pendingCount,
       replaceSavedIds,
       retrySync,
-      scopeKey: viewState.expectedScope,
+      scopeKey: accountErased ? "loading" : viewState.expectedScope,
       storageAvailable,
       syncPhase,
       toggleSaved,
     }),
     [
+      accountErased,
+      freezeAccountScope,
+      unfreezeAccountScope,
+      forgetAccountScope,
       canImportGuestSaves,
       canMutate,
       guestImportCount,

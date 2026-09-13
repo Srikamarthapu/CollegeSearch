@@ -44,11 +44,12 @@ class FakeAuthClient implements AuthClientPort<TestUser> {
   }
 }
 
-function createHarness(client = new FakeAuthClient()) {
+function createHarness(client = new FakeAuthClient(), isUserErased: (id: string) => boolean = () => false) {
   const scheduled: Array<() => void> = [];
   const snapshots: AuthSnapshot<TestUser>[] = [];
   const coordinator = createAuthStateCoordinator<TestUser>({
     auth: client,
+    isUserErased,
     onChange(snapshot) {
       snapshots.push(snapshot);
     },
@@ -350,4 +351,94 @@ test("a failed sign-out during a new identity boundary never restores the prior 
 
   assert.equal(harness.coordinator.getSnapshot().user, null);
   assert.equal(harness.coordinator.getSnapshot().status, "verification-error");
+});
+
+test("the installed Supabase client reports a fresh empty session without a network call, and guest saves remain enabled", async () => {
+  const { createClient, AuthSessionMissingError } = await import("@supabase/supabase-js");
+  const { deriveSavedCollegeViewState } = await import("../app/lib/saved-college-view-state.ts");
+  let networkCalls = 0;
+  const client = createClient("https://guest-regression.invalid", "sb_publishable_fresh_guest_fixture_not_a_real_key", {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+    global: { fetch: async () => { networkCalls += 1; throw new Error("Unexpected network call in an empty-session regression test"); } },
+  });
+  const missing = await client.auth.getUser();
+  assert.ok(missing.error instanceof AuthSessionMissingError);
+  assert.equal(missing.error.status, 400);
+  assert.equal(missing.data.user, null);
+  const coordinator = createAuthStateCoordinator({ auth: client.auth, onChange() {}, schedule: (callback) => callback() });
+  coordinator.handleAuthEvent("INITIAL_SESSION", null);
+  await coordinator.refresh();
+  assert.deepEqual(coordinator.getSnapshot(), { status: "signed-out", user: null, verification: "verified", verificationError: null });
+  assert.equal(networkCalls, 0);
+  const view = deriveSavedCollegeViewState({ authStatus: coordinator.getSnapshot().status, baseSource: "guest", guestImportCount: 0, hasPendingOutbox: false, knownIds: new Set([101]), remoteRead: "idle", renderedIds: [101], renderedScope: "guest", syncConfirmed: false });
+  assert.equal(view.scopeKind, "guest");
+  assert.equal(view.canMutate, true);
+  assert.deepEqual(view.visibleIds, [101]);
+  coordinator.dispose();
+});
+
+test("returned and thrown genuine missing-session errors classify as signed out while arbitrary 400 errors do not", async () => {
+  const missing = { name: "AuthSessionMissingError", status: 400, message: "Auth session missing!" };
+  for (const result of [Promise.resolve({ data: { user: null }, error: missing }), Promise.reject(missing)]) {
+    const harness = createHarness(); harness.client.userResults.push(result);
+    await harness.coordinator.refresh();
+    assert.equal(harness.coordinator.getSnapshot().status, "signed-out");
+    assert.equal(harness.coordinator.getSnapshot().verification, "verified");
+  }
+  for (const error of [{ name: "AuthApiError", status: 400, code: "bad_jwt", message: "Bad token" }, { name: "AuthRetryableFetchError", status: 503, message: "Offline" }, { name: "AuthSessionMissingError", status: 503, message: "Contradictory transport failure" }]) {
+    const harness = createHarness(); harness.client.userResults.push(Promise.resolve({ data: { user: null }, error }));
+    await harness.coordinator.refresh();
+    assert.equal(harness.coordinator.getSnapshot().status, "verification-error");
+  }
+});
+
+test("an old missing-session response cannot sign out a newer verified account", async () => {
+  const harness = createHarness(); const old = deferred<UserResult>();
+  harness.client.userResults.push(old.promise);
+  const initial = harness.coordinator.refresh();
+  harness.client.userResults.push(Promise.resolve({ data: { user: { id: "user-b" } }, error: null }));
+  harness.coordinator.handleAuthEvent("SIGNED_IN", "user-b");
+  harness.flushScheduled(); await harness.coordinator.refresh();
+  old.resolve({ data: { user: null }, error: { name: "AuthSessionMissingError", status: 400, message: "Missing" } });
+  await initial;
+  assert.equal(harness.coordinator.getSnapshot().user?.id, "user-b");
+});
+
+test("exact deletion invalidation cancels pending work and cached future Auth events cannot revive the account", async () => {
+  const harness = createHarness();
+  harness.client.userResults.push(Promise.resolve({ data: { user: { id: "user-a" } }, error: null }));
+  harness.coordinator.handleAuthEvent("SIGNED_IN", "user-a"); harness.flushScheduled(); await harness.coordinator.refresh();
+  const stale = deferred<UserResult>(); harness.client.userResults.push(stale.promise); const pending = harness.coordinator.refresh();
+  assert.equal(harness.coordinator.invalidateDeletedAccount("user-a"), true);
+  stale.resolve({ data: { user: { id: "user-a" } }, error: null }); await pending;
+  for (const event of ["INITIAL_SESSION", "TOKEN_REFRESHED", "SIGNED_IN"] as const) {
+    harness.coordinator.handleAuthEvent(event, "user-a"); harness.flushScheduled(); await harness.coordinator.refresh();
+    assert.equal(harness.coordinator.getSnapshot().status, "signed-out");
+    assert.equal(harness.coordinator.getSnapshot().user, null);
+  }
+  assert.equal(harness.client.getUserCalls, 2);
+  assert.equal(harness.client.signOutCalls.length, 0, "exact local invalidation must not sign out whichever SDK session is current");
+});
+
+test("deletion of the old account preserves a newer pending account boundary", async () => {
+  const harness = createHarness();
+  harness.client.userResults.push(Promise.resolve({ data: { user: { id: "user-a" } }, error: null }));
+  harness.coordinator.handleAuthEvent("SIGNED_IN", "user-a"); harness.flushScheduled(); await harness.coordinator.refresh();
+  const next = deferred<UserResult>(); harness.client.userResults.push(next.promise);
+  harness.coordinator.handleAuthEvent("SIGNED_IN", "user-b"); harness.flushScheduled();
+  assert.equal(harness.coordinator.invalidateDeletedAccount("user-a"), false);
+  next.resolve({ data: { user: { id: "user-b" } }, error: null }); await harness.coordinator.refresh();
+  assert.equal(harness.coordinator.getSnapshot().user?.id, "user-b");
+});
+
+test("a persisted deletion receipt rejects both initial event identities and unseen getUser identities", async () => {
+  const harness = createHarness(undefined, (id) => id === "deleted-user");
+  harness.coordinator.handleAuthEvent("INITIAL_SESSION", "deleted-user"); harness.flushScheduled(); await harness.coordinator.refresh();
+  assert.equal(harness.client.getUserCalls, 0);
+  assert.equal(harness.coordinator.getSnapshot().status, "signed-out");
+  harness.coordinator.handleAuthEvent("INITIAL_SESSION", null);
+  harness.client.userResults.push(Promise.resolve({ data: { user: { id: "deleted-user" } }, error: null }));
+  harness.flushScheduled(); await harness.coordinator.refresh();
+  assert.equal(harness.coordinator.getSnapshot().status, "signed-out");
+  assert.equal(harness.coordinator.getSnapshot().user, null);
 });

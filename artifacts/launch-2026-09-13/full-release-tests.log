@@ -1,0 +1,3244 @@
+
+> college-search@0.1.0 test
+> npm run build && node --test tests/*.test.mjs tests/*.test.ts
+
+
+> college-search@0.1.0 build
+> WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build
+
+
+  vinext build  (Vite 8.2.1)
+
+[1/5] analyze client references...
+[2Ktransforming...✓ 409 modules transformed.
+rendering chunks...
+✓ built in 8.06s
+[33m[PLUGIN_TIMINGS] [0mYour build spent 91% of 8.0s inside plugin hooks (7.3s).
+Measured inside the callback, so queue time is excluded and time the callback itself awaited is not:
+  - vinext:validate-middleware-exports transform (16%, 1.3s, 409 calls)
+Those rows are 16% of the build; the rest of the 91% is below.
+Not measurable — 8 hooks whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - rsc:virtual-client-package resolveId (1403 calls)
+  - alias resolveId (1566 calls)
+  - vinext:og-inline-fetch-assets resolveId (1398 calls)
+  … and 5 more
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[2/5] analyze server references...
+[2Ktransforming...✓ 829 modules transformed.
+rendering chunks...
+✓ built in 6.87s
+[33m[PLUGIN_TIMINGS] [0mYour build spent 56% of 6.9s inside plugin hooks (3.9s).
+Measured inside the callback, so queue time is excluded and time the callback itself awaited is not:
+  - vinext:validate-middleware-exports transform (40%, 2.7s, 829 calls)
+Those rows are 40% of the build; the rest of the 56% is below.
+Not measurable — 2 hooks whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - alias resolveId (2398 calls)
+  - vinext:og-inline-fetch-assets resolveId (2195 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[3/5] build rsc environment...
+[2Ktransforming...✓ 401 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 3.06s
+[33m[PLUGIN_TIMINGS] [0mYour build spent 32% of 3.0s inside plugin hooks (961ms).
+Not measurable — 6 hooks whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - rsc:virtual-client-package resolveId (1353 calls)
+  - alias resolveId (1527 calls)
+  - vinext:og-inline-fetch-assets resolveId (1349 calls)
+  … and 3 more
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[4/5] build client environment...
+[2Ktransforming...✓ 2531 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 21.11s
+[33m[PLUGIN_TIMINGS] [0mYour build spent 33% of 21.1s inside plugin hooks (7.0s).
+Measured inside the callback, so queue time is excluded and time the callback itself awaited is not:
+  - vinext:validate-middleware-exports transform (12%, 2.6s, 2531 calls)
+  - vite:prepare-out-dir renderStart (11%, 2.4s, 1 call)
+Those rows are 23% of the build; the rest of the 33% is below.
+Not measurable — 2 hooks whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - vinext:og-inline-fetch-assets resolveId (7339 calls)
+  - alias resolveId (7560 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[5/5] build ssr environment...
+[2Ktransforming...✓ 828 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 6.68s
+[33m[PLUGIN_TIMINGS] [0mYour build spent 25% of 6.7s inside plugin hooks (1.6s).
+Not measurable — 3 hooks whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - alias resolveId (2362 calls)
+  - vinext:og-inline-fetch-assets resolveId (2157 calls)
+  - vinext:optimize-imports transform (564 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[0m
+  Route (app)
+  ┌ ? /                      
+  ├ ? /account               
+  ├ λ /api/account           
+  ├ ? /auth/auth-code-error  
+  ├ λ /auth/callback         
+  ├ λ /auth/recovery-callback
+  ├ ? /auth/update-password  
+  ├ ? /chances               
+  ├ ƒ /colleges/:slug        
+  ├ ? /compare               
+  ├ ? /data-health           
+  ├ ? /data-sources          
+  ├ ? /explore               
+  ├ ? /majors                
+  ├ ƒ /majors/:slug          
+  ├ ? /match                 
+  ├ ? /methodology           
+  ├ ? /plan                  
+  ├ ? /privacy               
+  └ ? /saved                 
+
+  λ API  ƒ Dynamic  ? Unknown
+
+  ? Some routes could not be classified. vinext currently uses static analysis
+    and cannot detect dynamic API usage (headers(), cookies(), etc.) at build time.
+    Automatic classification will be improved in a future release.
+
+  Build complete. Run `vinext start` to start the production server.
+
+TAP version 13
+# Subtest: small trust and metadata colors meet AA contrast on app surfaces
+ok 1 - small trust and metadata colors meet AA contrast on app surfaces
+  ---
+  duration_ms: 0.496333
+  type: 'test'
+  ...
+# Subtest: high-frequency student controls retain 44px touch targets
+ok 2 - high-frequency student controls retain 44px touch targets
+  ---
+  duration_ms: 0.436708
+  type: 'test'
+  ...
+# Subtest: account key matching uses complete scope delimiters and never erases guest or unrelated namespaces
+ok 3 - account key matching uses complete scope delimiters and never erases guest or unrelated namespaces
+  ---
+  duration_ms: 0.630542
+  type: 'test'
+  ...
+# Subtest: purge snapshots storage indexes and removes every owned key including out-of-directory records
+ok 4 - purge snapshots storage indexes and removes every owned key including out-of-directory records
+  ---
+  duration_ms: 0.625917
+  type: 'test'
+  ...
+# Subtest: successful erasure keeps other owners, marker and guest records and invalidates the captured account
+ok 5 - successful erasure keeps other owners, marker and guest records and invalidates the captured account
+  ---
+  duration_ms: 2.623083
+  type: 'test'
+  ...
+# Subtest: blocked receipt storage reports partial cleanup instead of changing the server deletion result
+ok 6 - blocked receipt storage reports partial cleanup instead of changing the server deletion result
+  ---
+  duration_ms: 0.10175
+  type: 'test'
+  ...
+# Subtest: storage read failure is unavailable, not fabricated evidence of deletion
+ok 7 - storage read failure is unavailable, not fabricated evidence of deletion
+  ---
+  duration_ms: 0.094917
+  type: 'test'
+  ...
+# Subtest: resumed tab erases its old session journals from the durable deletion marker without touching guest drafts
+ok 8 - resumed tab erases its old session journals from the durable deletion marker without touching guest drafts
+  ---
+  duration_ms: 0.255583
+  type: 'test'
+  ...
+# Subtest: cleanup fences immediately then drains an already running research write before final sweep
+ok 9 - cleanup fences immediately then drains an already running research write before final sweep
+  ---
+  duration_ms: 0.20175
+  type: 'test'
+  ...
+# Subtest: confirmed notebook deletion prevents pending results or subsequent input from recreating memory or storage
+ok 10 - confirmed notebook deletion prevents pending results or subsequent input from recreating memory or storage
+  ---
+  duration_ms: 0.476042
+  type: 'test'
+  ...
+# Subtest: temporarily paused initial notebook recovers a retained journal when writing is allowed again
+ok 11 - temporarily paused initial notebook recovers a retained journal when writing is allowed again
+  ---
+  duration_ms: 0.30725
+  type: 'test'
+  ...
+# Subtest: invalid deletion targets never call callbacks or touch either storage
+ok 12 - invalid deletion targets never call callbacks or touch either storage
+  ---
+  duration_ms: 0.269875
+  type: 'test'
+  ...
+# Subtest: a stale backup restore cannot recreate notebooks for a deleted account
+ok 13 - a stale backup restore cannot recreate notebooks for a deleted account
+  ---
+  duration_ms: 0.282917
+  type: 'test'
+  ...
+# Subtest: deletion uses verified identity and revokes all sessions before deletion
+ok 14 - deletion uses verified identity and revokes all sessions before deletion
+  ---
+  duration_ms: 14.118208
+  type: 'test'
+  ...
+# Subtest: cross-origin, missing confirmation, malformed bearer, and wrong method cannot call Auth
+ok 15 - cross-origin, missing confirmation, malformed bearer, and wrong method cannot call Auth
+  ---
+  duration_ms: 1.033833
+  type: 'test'
+  ...
+# Subtest: a revoked session and provider verification errors fail closed
+ok 16 - a revoked session and provider verification errors fail closed
+  ---
+  duration_ms: 1.093917
+  type: 'test'
+  ...
+# Subtest: failed revocation prevents deletion and failed deletion reports retry after sign-in
+ok 17 - failed revocation prevents deletion and failed deletion reports retry after sign-in
+  ---
+  duration_ms: 0.98175
+  type: 'test'
+  ...
+# Subtest: freezing blocks matching callbacks until unfreeze without authorizing guest or another account
+ok 18 - freezing blocks matching callbacks until unfreeze without authorizing guest or another account
+  ---
+  duration_ms: 0.477208
+  type: 'test'
+  ...
+# Subtest: confirmed forget blocks the exact account permanently and never invalidates the new owner
+ok 19 - confirmed forget blocks the exact account permanently and never invalidates the new owner
+  ---
+  duration_ms: 0.066333
+  type: 'test'
+  ...
+# Subtest: receipt read failures pause changes and are never treated as confirmed deletion
+ok 20 - receipt read failures pause changes and are never treated as confirmed deletion
+  ---
+  duration_ms: 0.075833
+  type: 'test'
+  ...
+# Subtest: freezing while a remote write completes preserves outbox and prevents subsequent cache/ack writes
+ok 21 - freezing while a remote write completes preserves outbox and prevents subsequent cache/ack writes
+  ---
+  duration_ms: 8.687125
+  type: 'test'
+  ...
+# Subtest: guest and verified account profiles never migrate or share records
+ok 22 - guest and verified account profiles never migrate or share records
+  ---
+  duration_ms: 3.158375
+  type: 'test'
+  ...
+# Subtest: loading, email, malformed IDs, and unverified states cannot expose an editor or access storage
+ok 23 - loading, email, malformed IDs, and unverified states cannot expose an editor or access storage
+  ---
+  duration_ms: 0.364916
+  type: 'test'
+  ...
+# Subtest: a scope change or verification pause never selects the previous owner or guesses guest
+ok 24 - a scope change or verification pause never selects the previous owner or guesses guest
+  ---
+  duration_ms: 0.704291
+  type: 'test'
+  ...
+# Subtest: bounded parser preserves original GPA/context and ignores unapproved prediction or identity fields
+ok 25 - bounded parser preserves original GPA/context and ignores unapproved prediction or identity fields
+  ---
+  duration_ms: 0.643917
+  type: 'test'
+  ...
+# Subtest: invalid structure and duplicate or invented preparation assertions are rejected
+ok 26 - invalid structure and duplicate or invented preparation assertions are rejected
+  ---
+  duration_ms: 0.133416
+  type: 'test'
+  ...
+# Subtest: incomplete GPA context survives autosave while review prompts remain advisory
+ok 27 - incomplete GPA context survives autosave while review prompts remain advisory
+  ---
+  duration_ms: 0.414
+  type: 'test'
+  ...
+# Subtest: completed autosaves restore from the shared browser copy after reload
+ok 28 - completed autosaves restore from the shared browser copy after reload
+  ---
+  duration_ms: 0.18175
+  type: 'test'
+  ...
+# Subtest: a final keystroke is journaled synchronously before autosave and survives immediate reload
+ok 29 - a final keystroke is journaled synchronously before autosave and survives immediate reload
+  ---
+  duration_ms: 0.137083
+  type: 'test'
+  ...
+# Subtest: simultaneous tab autosaves serialize: exactly one commits and the other retains its journal
+ok 30 - simultaneous tab autosaves serialize: exactly one commits and the other retains its journal
+  ---
+  duration_ms: 0.317833
+  type: 'test'
+  ...
+# Subtest: identity is checked again after lock wait, and stale account drafts remain scoped
+ok 31 - identity is checked again after lock wait, and stale account drafts remain scoped
+  ---
+  duration_ms: 0.437
+  type: 'test'
+  ...
+# Subtest: account-deletion invalidation prevents queued writes and drops the deleted owner's cached draft
+ok 32 - account-deletion invalidation prevents queued writes and drops the deleted owner's cached draft
+  ---
+  duration_ms: 0.398
+  type: 'test'
+  ...
+# Subtest: typing while an autosave waits preserves later edits and rebases their recovery revision
+ok 33 - typing while an autosave waits preserves later edits and rebases their recovery revision
+  ---
+  duration_ms: 0.324708
+  type: 'test'
+  ...
+# Subtest: unsupported locking keeps a reloadable draft and never falls back to unlocked writes
+ok 34 - unsupported locking keeps a reloadable draft and never falls back to unlocked writes
+  ---
+  duration_ms: 0.851542
+  type: 'test'
+  ...
+# Subtest: clear does not erase a later edit made while it waits for the shared lock
+ok 35 - clear does not erase a later edit made while it waits for the shared lock
+  ---
+  duration_ms: 0.505209
+  type: 'test'
+  ...
+# Subtest: blocked storage retains edits for same-tab route changes and isolates them by owner
+ok 36 - blocked storage retains edits for same-tab route changes and isolates them by owner
+  ---
+  duration_ms: 0.245875
+  type: 'test'
+  ...
+# Subtest: quota and read failures never claim persistence or lose the active draft
+ok 37 - quota and read failures never claim persistence or lose the active draft
+  ---
+  duration_ms: 0.189083
+  type: 'test'
+  ...
+# Subtest: stale edits keep a recoverable draft and do not silently overwrite a newer browser copy
+ok 38 - stale edits keep a recoverable draft and do not silently overwrite a newer browser copy
+  ---
+  duration_ms: 0.233792
+  type: 'test'
+  ...
+# Subtest: retry after storage returns detects a previously unseen copy before offering replacement
+ok 39 - retry after storage returns detects a previously unseen copy before offering replacement
+  ---
+  duration_ms: 0.139
+  type: 'test'
+  ...
+# Subtest: unreadable records stay untouched until explicit replacement or clear
+ok 40 - unreadable records stay untouched until explicit replacement or clear
+  ---
+  duration_ms: 0.081375
+  type: 'test'
+  ...
+# Subtest: clear removes only the selected scope and the in-memory draft; failure retains contents
+ok 41 - clear removes only the selected scope and the in-memory draft; failure retains contents
+  ---
+  duration_ms: 0.131
+  type: 'test'
+  ...
+# Subtest: brief exports the current self-reported draft, original grading context, responsibilities, and marked preparation
+ok 42 - brief exports the current self-reported draft, original grading context, responsibilities, and marked preparation
+  ---
+  duration_ms: 1.615709
+  type: 'test'
+  ...
+# Subtest: plain-text export preserves user content as text, handles empty entries honestly, and invents no deadlines
+ok 43 - plain-text export preserves user content as text, handles empty entries honestly, and invents no deadlines
+  ---
+  duration_ms: 0.279167
+  type: 'test'
+  ...
+# Subtest: typing every profile field empty retains that clear intent across a competing tab write and reload
+ok 44 - typing every profile field empty retains that clear intent across a competing tab write and reload
+  ---
+  duration_ms: 0.318417
+  type: 'test'
+  ...
+# Subtest: all account consumers use the shared verification trust decision
+ok 45 - all account consumers use the shared verification trust decision
+  ---
+  duration_ms: 42.051833
+  type: 'test'
+  ...
+# Subtest: the account page gates account-scoped actions on current verification
+ok 46 - the account page gates account-scoped actions on current verification
+  ---
+  duration_ms: 10.087375
+  type: 'test'
+  ...
+# Subtest: password mutation has both a runtime trust gate and a disabled control
+ok 47 - password mutation has both a runtime trust gate and a disabled control
+  ---
+  duration_ms: 3.349375
+  type: 'test'
+  ...
+# Subtest: terminal account state offers retry and local-session clearing
+ok 48 - terminal account state offers retry and local-session clearing
+  ---
+  duration_ms: 1.486875
+  type: 'test'
+  ...
+# Subtest: only a currently verified signed-in identity enables account actions
+ok 49 - only a currently verified signed-in identity enables account actions
+  ---
+  duration_ms: 0.626917
+  type: 'test'
+  ...
+# Subtest: a checking or failed prior identity is labeled as last verified
+ok 50 - a checking or failed prior identity is labeled as last verified
+  ---
+  duration_ms: 0.05475
+  type: 'test'
+  ...
+# Subtest: unknown, failed signed-out, and inconsistent states fail closed
+ok 51 - unknown, failed signed-out, and inconsistent states fail closed
+  ---
+  duration_ms: 0.050458
+  type: 'test'
+  ...
+# Subtest: verified signed-out and unconfigured states remain distinct
+ok 52 - verified signed-out and unconfigured states remain distinct
+  ---
+  duration_ms: 0.070125
+  type: 'test'
+  ...
+# Subtest: a deferred old identity cannot overwrite sign-out followed by another account
+ok 53 - a deferred old identity cannot overwrite sign-out followed by another account
+  ---
+  duration_ms: 2.868667
+  type: 'test'
+  ...
+# Subtest: an auth event invalidates a different identity before verification finishes
+ok 54 - an auth event invalidates a different identity before verification finishes
+  ---
+  duration_ms: 0.297917
+  type: 'test'
+  ...
+# Subtest: transient getUser failures never claim a confirmed sign-out
+ok 55 - transient getUser failures never claim a confirmed sign-out
+  ---
+  duration_ms: 0.269417
+  type: 'test'
+  ...
+# Subtest: terminal getUser failures clear a previously verified identity
+ok 56 - terminal getUser failures clear a previously verified identity
+  ---
+  duration_ms: 0.138625
+  type: 'test'
+  ...
+# Subtest: initial, event, and manual refreshes share one in-flight verification
+ok 57 - initial, event, and manual refreshes share one in-flight verification
+  ---
+  duration_ms: 0.070917
+  type: 'test'
+  ...
+# Subtest: local sign-out invalidates old refreshes and restores a verified identity only on a safe failure
+ok 58 - local sign-out invalidates old refreshes and restores a verified identity only on a safe failure
+  ---
+  duration_ms: 0.181042
+  type: 'test'
+  ...
+# Subtest: a failed sign-out never promotes a degraded identity back to verified
+ok 59 - a failed sign-out never promotes a degraded identity back to verified
+  ---
+  duration_ms: 0.065041
+  type: 'test'
+  ...
+# Subtest: a failed sign-out cannot restore the old identity over a newer auth event
+ok 60 - a failed sign-out cannot restore the old identity over a newer auth event
+  ---
+  duration_ms: 0.097667
+  type: 'test'
+  ...
+# Subtest: a failed sign-out during a new identity boundary never restores the prior account
+ok 61 - a failed sign-out during a new identity boundary never restores the prior account
+  ---
+  duration_ms: 0.82725
+  type: 'test'
+  ...
+# Subtest: the installed Supabase client reports a fresh empty session without a network call, and guest saves remain enabled
+ok 62 - the installed Supabase client reports a fresh empty session without a network call, and guest saves remain enabled
+  ---
+  duration_ms: 1328.225583
+  type: 'test'
+  ...
+# Subtest: returned and thrown genuine missing-session errors classify as signed out while arbitrary 400 errors do not
+ok 63 - returned and thrown genuine missing-session errors classify as signed out while arbitrary 400 errors do not
+  ---
+  duration_ms: 0.143083
+  type: 'test'
+  ...
+# Subtest: an old missing-session response cannot sign out a newer verified account
+ok 64 - an old missing-session response cannot sign out a newer verified account
+  ---
+  duration_ms: 0.051583
+  type: 'test'
+  ...
+# Subtest: exact deletion invalidation cancels pending work and cached future Auth events cannot revive the account
+ok 65 - exact deletion invalidation cancels pending work and cached future Auth events cannot revive the account
+  ---
+  duration_ms: 0.067917
+  type: 'test'
+  ...
+# Subtest: deletion of the old account preserves a newer pending account boundary
+ok 66 - deletion of the old account preserves a newer pending account boundary
+  ---
+  duration_ms: 0.03925
+  type: 'test'
+  ...
+# Subtest: a persisted deletion receipt rejects both initial event identities and unseen getUser identities
+ok 67 - a persisted deletion receipt rejects both initial event identities and unseen getUser identities
+  ---
+  duration_ms: 0.046584
+  type: 'test'
+  ...
+# Subtest: app build inputs avoid the currently vulnerable image-size parser
+ok 68 - app build inputs avoid the currently vulnerable image-size parser
+  ---
+  duration_ms: 2295.9885
+  type: 'test'
+  ...
+# Subtest: admit-rate selector resolves the aliases advertised in its search field
+ok 69 - admit-rate selector resolves the aliases advertised in its search field
+  ---
+  duration_ms: 0.877541
+  type: 'test'
+  ...
+# Subtest: admit-rate selector tolerates a one-edit college-name misspelling
+ok 70 - admit-rate selector tolerates a one-edit college-name misspelling
+  ---
+  duration_ms: 6.507584
+  type: 'test'
+  ...
+# Subtest: admit-rate selector keeps selected colleges out of filtered options
+ok 71 - admit-rate selector keeps selected colleges out of filtered options
+  ---
+  duration_ms: 0.455084
+  type: 'test'
+  ...
+# Subtest: the pull-request gate runs the complete deterministic verification sequence
+ok 72 - the pull-request gate runs the complete deterministic verification sequence
+  ---
+  duration_ms: 0.389125
+  type: 'test'
+  ...
+# Subtest: both workflows are bounded, read-only, secret-free, and SHA-pinned
+ok 73 - both workflows are bounded, read-only, secret-free, and SHA-pinned
+  ---
+  duration_ms: 0.115833
+  type: 'test'
+  ...
+# Subtest: live artifact availability is monitored outside the pull-request gate
+ok 74 - live artifact availability is monitored outside the pull-request gate
+  ---
+  duration_ms: 0.089
+  type: 'test'
+  ...
+# Subtest: the client projection preserves every explorer evidence field
+ok 75 - the client projection preserves every explorer evidence field
+  ---
+  duration_ms: 4.500875
+  type: 'test'
+  ...
+# Subtest: the browser projection does not copy profile-only provenance
+ok 76 - the browser projection does not copy profile-only provenance
+  ---
+  duration_ms: 0.40525
+  type: 'test'
+  ...
+# Subtest: exact short aliases take precedence over broad substring matches
+ok 77 - exact short aliases take precedence over broad substring matches
+  ---
+  duration_ms: 0.835917
+  type: 'test'
+  ...
+# Subtest: canonical aliases and one-edit misspellings resolve college identity
+ok 78 - canonical aliases and one-edit misspellings resolve college identity
+  ---
+  duration_ms: 2.137042
+  type: 'test'
+  ...
+# Subtest: short field aliases filter by actual broad-field evidence
+ok 79 - short field aliases filter by actual broad-field evidence
+  ---
+  duration_ms: 4.686416
+  type: 'test'
+  ...
+# Subtest: combined fuzzy field and location queries preserve both intents
+ok 80 - combined fuzzy field and location queries preserve both intents
+  ---
+  duration_ms: 0.214
+  type: 'test'
+  ...
+# Subtest: accepts a distinct UC archive and the exact reviewed cohort
+ok 81 - accepts a distinct UC archive and the exact reviewed cohort
+  ---
+  duration_ms: 0.595291
+  type: 'test'
+  ...
+# Subtest: rejects a finalized/latest UC filename collision
+ok 82 - rejects a finalized/latest UC filename collision
+  ---
+  duration_ms: 0.345084
+  type: 'test'
+  ...
+# Subtest: rejects missing, duplicate, or unexpected cohort UNITIDs
+ok 83 - rejects missing, duplicate, or unexpected cohort UNITIDs
+  ---
+  duration_ms: 0.227458
+  type: 'test'
+  ...
+# Subtest: detects a manifest edit between verification and publication
+ok 84 - detects a manifest edit between verification and publication
+  ---
+  duration_ms: 0.531958
+  type: 'test'
+  ...
+# Subtest: publishes every staged data file together
+ok 85 - publishes every staged data file together
+  ---
+  duration_ms: 25.992208
+  type: 'test'
+  ...
+# Subtest: restores existing and previously absent files when publication fails
+ok 86 - restores existing and previously absent files when publication fails
+  ---
+  duration_ms: 9.702792
+  type: 'test'
+  ...
+# Subtest: preserves backups and a recovery lock when rollback is incomplete
+ok 87 - preserves backups and a recovery lock when rollback is incomplete
+  ---
+  duration_ms: 15.822208
+  type: 'test'
+  ...
+# Subtest: rejects duplicate targets before changing live data
+ok 88 - rejects duplicate targets before changing live data
+  ---
+  duration_ms: 4.969209
+  type: 'test'
+  ...
+# Subtest: rejects missing and non-file staged targets before publication
+ok 89 - rejects missing and non-file staged targets before publication
+  ---
+  duration_ms: 55.894375
+  type: 'test'
+  ...
+# Subtest: serializes publication locks and releases only the owning token
+ok 90 - serializes publication locks and releases only the owning token
+  ---
+  duration_ms: 13.643166
+  type: 'test'
+  ...
+# Subtest: calendar validation handles leap years, month lengths, and date-only values
+ok 91 - calendar validation handles leap years, month lengths, and date-only values
+  ---
+  duration_ms: 1.109417
+  type: 'test'
+  ...
+# Subtest: local today and date display do not shift an entered date through timezone conversion
+ok 92 - local today and date display do not shift an entered date through timezone conversion
+  ---
+  duration_ms: 9.607042
+  type: 'test'
+  ...
+# Subtest: upcoming, past, and completed are derived from today's local calendar date
+ok 93 - upcoming, past, and completed are derived from today's local calendar date
+  ---
+  duration_ms: 0.73675
+  type: 'test'
+  ...
+# Subtest: source URLs reject script schemes, embedded credentials, and controls without claiming a source is official
+ok 94 - source URLs reject script schemes, embedded credentials, and controls without claiming a source is official
+  ---
+  duration_ms: 0.4835
+  type: 'test'
+  ...
+# Subtest: new forms never invent a date, source, cycle, or confirmation
+ok 95 - new forms never invent a date, source, cycle, or confirmation
+  ---
+  duration_ms: 0.107084
+  type: 'test'
+  ...
+# Subtest: material edits reset student confirmation, and notes do not create a new checked-on date
+ok 96 - material edits reset student confirmation, and notes do not create a new checked-on date
+  ---
+  duration_ms: 0.181708
+  type: 'test'
+  ...
+# Subtest: add/edit preserve completion, and stale edit forms do not overwrite changed tasks
+ok 97 - add/edit preserve completion, and stale edit forms do not overwrite changed tasks
+  ---
+  duration_ms: 0.117125
+  type: 'test'
+  ...
+# Subtest: parser validates known colleges, 100-task limit, duplicates, fields, and checked provenance
+ok 98 - parser validates known colleges, 100-task limit, duplicates, fields, and checked provenance
+  ---
+  duration_ms: 0.286375
+  type: 'test'
+  ...
+# Subtest: portable backup round-trips user text and dates without account scope or executable formats
+ok 99 - portable backup round-trips user text and dates without account scope or executable formats
+  ---
+  duration_ms: 0.275875
+  type: 'test'
+  ...
+# Subtest: a full 100-task tracker with bounded Unicode notes produces a restorable backup
+ok 100 - a full 100-task tracker with bounded Unicode notes produces a restorable backup
+  ---
+  duration_ms: 1.879166
+  type: 'test'
+  ...
+# Subtest: scope gates never guess guest during verification or allow unverified identifiers
+ok 101 - scope gates never guess guest during verification or allow unverified identifiers
+  ---
+  duration_ms: 0.199625
+  type: 'test'
+  ...
+# Subtest: guest/account records and unfinished form drafts survive reload without crossing scopes
+ok 102 - guest/account records and unfinished form drafts survive reload without crossing scopes
+  ---
+  duration_ms: 0.606916
+  type: 'test'
+  ...
+# Subtest: incomplete editor drafts are bounded and preserve invalid dates for correction
+ok 103 - incomplete editor drafts are bounded and preserve invalid dates for correction
+  ---
+  duration_ms: 0.053042
+  type: 'test'
+  ...
+# Subtest: collection edits are journaled before autosave and restore after an immediate reload
+ok 104 - collection edits are journaled before autosave and restore after an immediate reload
+  ---
+  duration_ms: 0.100167
+  type: 'test'
+  ...
+# Subtest: simultaneous writers serialize and the losing tab retains a recoverable conflict draft
+ok 105 - simultaneous writers serialize and the losing tab retains a recoverable conflict draft
+  ---
+  duration_ms: 0.288625
+  type: 'test'
+  ...
+# Subtest: removing the final task is a durable empty intent, even when another tab changes the list
+ok 106 - removing the final task is a durable empty intent, even when another tab changes the list
+  ---
+  duration_ms: 0.263625
+  type: 'test'
+  ...
+# Subtest: account switches while waiting for a lock prevent stale writes and preserve old-owner drafts
+ok 107 - account switches while waiting for a lock prevent stale writes and preserve old-owner drafts
+  ---
+  duration_ms: 0.226375
+  type: 'test'
+  ...
+# Subtest: confirmed deletion fences writes and clears only that owner's plan/form journals and cache
+ok 108 - confirmed deletion fences writes and clears only that owner's plan/form journals and cache
+  ---
+  duration_ms: 0.658708
+  type: 'test'
+  ...
+# Subtest: unsupported locks and quota failures never pretend a shared save succeeded
+ok 109 - unsupported locks and quota failures never pretend a shared save succeeded
+  ---
+  duration_ms: 0.358042
+  type: 'test'
+  ...
+# Subtest: a transient deletion-marker failure blocks access without deleting previously retained drafts
+ok 110 - a transient deletion-marker failure blocks access without deleting previously retained drafts
+  ---
+  duration_ms: 0.117125
+  type: 'test'
+  ...
+# Subtest: preference scoring never uses overall admit rate
+ok 111 - preference scoring never uses overall admit rate
+  ---
+  duration_ms: 1.970167
+  type: 'test'
+  ...
+# Subtest: missing evidence is excluded instead of treated as zero
+ok 112 - missing evidence is excluded instead of treated as zero
+  ---
+  duration_ms: 0.465583
+  type: 'test'
+  ...
+# Subtest: ownership remains an explicit hard filter
+ok 113 - ownership remains an explicit hard filter
+  ---
+  duration_ms: 1.129708
+  type: 'test'
+  ...
+# Subtest: a required broad field removes colleges without that evidence
+ok 114 - a required broad field removes colleges without that evidence
+  ---
+  duration_ms: 0.322125
+  type: 'test'
+  ...
+# Subtest: campus setting is an explicit auditable preference signal
+ok 115 - campus setting is an explicit auditable preference signal
+  ---
+  duration_ms: 0.756
+  type: 'test'
+  ...
+# Subtest: zero weights leave the match worksheet unranked
+ok 116 - zero weights leave the match worksheet unranked
+  ---
+  duration_ms: 0.150542
+  type: 'test'
+  ...
+# Subtest: untouched suggested weights keep the match worksheet neutral
+ok 117 - untouched suggested weights keep the match worksheet neutral
+  ---
+  duration_ms: 0.203542
+  type: 'test'
+  ...
+# Subtest: choosing one preference activates only its mapped criterion
+ok 118 - choosing one preference activates only its mapped criterion
+  ---
+  duration_ms: 0.445458
+  type: 'test'
+  ...
+# Subtest: a hard ownership filter cannot create an unscored ranking
+ok 119 - a hard ownership filter cannot create an unscored ranking
+  ---
+  duration_ms: 0.469792
+  type: 'test'
+  ...
+# Subtest: the sticky preference rail keeps every control reachable
+ok 120 - the sticky preference rail keeps every control reachable
+  ---
+  duration_ms: 8.771709
+  type: 'test'
+  ...
+# Subtest: historical admit bands are descriptive and deterministic
+ok 121 - historical admit bands are descriptive and deterministic
+  ---
+  duration_ms: 0.381458
+  type: 'test'
+  ...
+# Subtest: balanced shortlist keeps the leading fit in each observed rate band
+ok 122 - balanced shortlist keeps the leading fit in each observed rate band
+  ---
+  duration_ms: 8.83125
+  type: 'test'
+  ...
+# Subtest: undergraduate-size bands are mutually exclusive at their boundaries
+ok 123 - undergraduate-size bands are mutually exclusive at their boundaries
+  ---
+  duration_ms: 0.319125
+  type: 'test'
+  ...
+# Subtest: advanced filters apply exact evidence thresholds and exclude missing values
+ok 124 - advanced filters apply exact evidence thresholds and exclude missing values
+  ---
+  duration_ms: 0.158667
+  type: 'test'
+  ...
+# Subtest: auth dialog always releases its busy state after unexpected auth failures
+ok 125 - auth dialog always releases its busy state after unexpected auth failures
+  ---
+  duration_ms: 6.548875
+  type: 'test'
+  ...
+# Subtest: saved-only Explore never represents an unavailable account list as empty
+ok 126 - saved-only Explore never represents an unavailable account list as empty
+  ---
+  duration_ms: 9.692333
+  type: 'test'
+  ...
+# Subtest: auth callback routes convert unexpected exchange failures into safe redirects
+ok 127 - auth callback routes convert unexpected exchange failures into safe redirects
+  ---
+  duration_ms: 133.143
+  type: 'test'
+  ...
+# Subtest: repeated save and comparison controls name their college
+ok 128 - repeated save and comparison controls name their college
+  ---
+  duration_ms: 2.053834
+  type: 'test'
+  ...
+# Subtest: admit-rate cards name the college in remove controls
+ok 129 - admit-rate cards name the college in remove controls
+  ---
+  duration_ms: 0.743458
+  type: 'test'
+  ...
+# Subtest: the reviewed institution cohort has 26 artifacts and 19 admission headlines
+ok 130 - the reviewed institution cohort has 26 artifacts and 19 admission headlines
+  ---
+  duration_ms: 52.037792
+  type: 'test'
+  ...
+# Subtest: Purdue stays on the federal baseline while its first-party workbook blocks automated verification
+ok 131 - Purdue stays on the federal baseline while its first-party workbook blocks automated verification
+  ---
+  duration_ms: 7.850083
+  type: 'test'
+  ...
+# Subtest: Northwestern uses two pinned Data Book PDFs without changing admission or cost
+ok 132 - Northwestern uses two pinned Data Book PDFs without changing admission or cost
+  ---
+  duration_ms: 9.411584
+  type: 'test'
+  ...
+# Subtest: Caltech and Pomona add only verifier-safe current fields and keep coherent federal admissions
+ok 133 - Caltech and Pomona add only verifier-safe current fields and keep coherent federal admissions
+  ---
+  duration_ms: 10.661542
+  type: 'test'
+  ...
+# Subtest: new reviewed admissions exactly match their approved PDF and XLSX records
+ok 134 - new reviewed admissions exactly match their approved PDF and XLSX records
+  ---
+  duration_ms: 3.949166
+  type: 'test'
+  ...
+# Subtest: unsupported Duke and Yale admissions and deliberately excluded costs stay federal
+ok 135 - unsupported Duke and Yale admissions and deliberately excluded costs stay federal
+  ---
+  duration_ms: 3.629041
+  type: 'test'
+  ...
+# Subtest: institution overlays satisfy lineage and arithmetic invariants
+ok 136 - institution overlays satisfy lineage and arithmetic invariants
+  ---
+  duration_ms: 7.638875
+  type: 'test'
+  ...
+# Subtest: the generated release exactly reflects every reviewed overlay
+ok 137 - the generated release exactly reflects every reviewed overlay
+  ---
+  duration_ms: 6.362375
+  type: 'test'
+  ...
+# Subtest: a complete derived-admissions fixture passes validation
+ok 138 - a complete derived-admissions fixture passes validation
+  ---
+  duration_ms: 0.282208
+  type: 'test'
+  ...
+# Subtest: a college can bind different metrics to explicitly declared reviewed sources
+ok 139 - a college can bind different metrics to explicitly declared reviewed sources
+  ---
+  duration_ms: 0.24475
+  type: 'test'
+  ...
+# Subtest: multi-source overlays require explicit, declared, and used metric lineage
+ok 140 - multi-source overlays require explicit, declared, and used metric lineage
+  ---
+  duration_ms: 0.336
+  type: 'test'
+  ...
+# Subtest: derived metrics cannot combine operands from different artifacts
+ok 141 - derived metrics cannot combine operands from different artifacts
+  ---
+  duration_ms: 0.092542
+  type: 'test'
+  ...
+# Subtest: multi-source declarations reject ambiguous or unregistered source sets
+ok 142 - multi-source declarations reject ambiguous or unregistered source sets
+  ---
+  duration_ms: 0.32275
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a reportingYear mismatch
+ok 143 - admit-rate inputs reject a reportingYear mismatch
+  ---
+  duration_ms: 0.390625
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a reportingYear mismatch
+ok 144 - yield-rate inputs reject a reportingYear mismatch
+  ---
+  duration_ms: 0.384458
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a periodLabel mismatch
+ok 145 - admit-rate inputs reject a periodLabel mismatch
+  ---
+  duration_ms: 0.274666
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a periodLabel mismatch
+ok 146 - yield-rate inputs reject a periodLabel mismatch
+  ---
+  duration_ms: 0.110375
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a cohort mismatch
+ok 147 - admit-rate inputs reject a cohort mismatch
+  ---
+  duration_ms: 0.060333
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a cohort mismatch
+ok 148 - yield-rate inputs reject a cohort mismatch
+  ---
+  duration_ms: 0.055042
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a finality mismatch
+ok 149 - admit-rate inputs reject a finality mismatch
+  ---
+  duration_ms: 0.049291
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a finality mismatch
+ok 150 - yield-rate inputs reject a finality mismatch
+  ---
+  duration_ms: 0.049917
+  type: 'test'
+  ...
+# Subtest: an observation cannot override its college source lineage
+ok 151 - an observation cannot override its college source lineage
+  ---
+  duration_ms: 0.0605
+  type: 'test'
+  ...
+# Subtest: a derived rate cannot omit its source observations
+ok 152 - a derived rate cannot omit its source observations
+  ---
+  duration_ms: 0.102833
+  type: 'test'
+  ...
+# Subtest: HTML artifact hashing ignores volatile asset versions and edge challenges
+ok 153 - HTML artifact hashing ignores volatile asset versions and edge challenges
+  ---
+  duration_ms: 0.778042
+  type: 'test'
+  ...
+# Subtest: student decision surfaces render an explicit browser-local save action
+ok 154 - student decision surfaces render an explicit browser-local save action
+  ---
+  duration_ms: 1725.526875
+  type: 'test'
+  ...
+# Subtest: match results offer local saves once preferences produce a shortlist
+ok 155 - match results offer local saves once preferences produce a shortlist
+  ---
+  duration_ms: 0.965166
+  type: 'test'
+  ...
+# Subtest: account saves are rendered immediately but never sent before the outbox persists
+ok 156 - account saves are rendered immediately but never sent before the outbox persists
+  ---
+  duration_ms: 0.791375
+  type: 'test'
+  ...
+# Subtest: the provider delegates each locked account cycle to the tested sync primitive
+not ok 157 - the provider delegates each locked account cycle to the tested sync primitive
+  ---
+  duration_ms: 1.143584
+  type: 'test'
+  location: '/Volumes/Seagate /CollegeSearch/tests/local-save-rendering.test.mjs:66:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /storage: session\.storage/. Input:
+    
+    '"use client";\n' +
+      '\n' +
+      'import {\n' +
+      '  createContext,\n' +
+      '  type ReactNode,\n' +
+      '  useCallback,\n' +
+      '  useContext,\n' +
+      '  useEffect,\n' +
+      '  useLayoutEffect,\n' +
+      '  useMemo,\n' +
+      '  useRef,\n' +
+      '  useState,\n' +
+      '} from "react";\n' +
+      '\n' +
+      'import { createAccountMutationFence, guardAccountStorage } from "@/app/lib/account-mutation-fence";\n' +
+      'import { normalizeAccountErasureId } from "@/app/lib/account-browser-erasure";\n' +
+      'import { useAuth } from "@/app/components/auth/AuthProvider";\n' +
+      'import {\n' +
+      '  SavedCollegeAccountCycleError,\n' +
+      '  syncSavedCollegeAccountCycle,\n' +
+      '} from "@/app/lib/saved-college-account-cycle";\n' +
+      'import {\n' +
+      '  getSavedCollegeBrowserLockManager,\n' +
+      '  type SavedCollegeLockManager,\n' +
+      '} from "@/app/lib/saved-college-lock";\n' +
+      'import {\n' +
+      '  savedCollegeIdsEqual,\n' +
+      '  type SavedCollegeRemoteStore,\n' +
+      '} from "@/app/lib/saved-college-sync";\n' +
+      'import {\n' +
+      '  applySavedCollegeOutbox,\n' +
+      '  getSavedCollegeBrowserStorage,\n' +
+      '  readGuestSavedCollegeIds,\n' +
+      '  readSavedCollegeIdsAtKey,\n' +
+      '  readSavedCollegeOutbox,\n' +
+      '  savedCollegeUserCacheKey,\n' +
+      '  savedCollegeUserOutboxKey,\n' +
+      '  type SavedCollegePendingMutation,\n' +
+      '  writeSavedCollegeIdsAtKey,\n' +
+      '  writeSavedCollegeMutation,\n' +
+      '} from "@/app/lib/saved-college-storage";\n' +
+      'import {\n' +
+      '  deriveSavedCollegeViewState,\n' +
+      '  type SavedCollegeBaseSource,\n' +
+      '  type SavedCollegeRemoteRead,\n' +
+      '} from "@/app/lib/saved-college-view-state";\n' +
+      'import {\n' +
+      '  LEGACY_SAVED_COLLEGES_STORAGE_KEY,\n' +
+      '  SAVED_COLLEGES_STORAGE_KEY,\n' +
+      '  sanitizeSavedCollegeIds,\n' +
+      '  type SavedCollegeStorage,\n' +
+      '  writeSavedCollegeIds,\n' +
+      '} from "@/app/lib/local-saves";\n' +
+      'import { getSupabaseBrowserClient } from "@/app/lib/supabase/browser";\n' +
+      'import { createVerifiedSupabaseSavedCollegeStore } from "@/app/lib/supabase/saved-colleges";\n' +
+      '\n' +
+      'export type SavedCollegeSyncPhase =\n' +
+      '  | "local-only"\n' +
+      '  | "loading-account"\n' +
+      '  | "syncing"\n' +
+      '  | "synced"\n' +
+      '  | "error";\n' +
+      '\n' +
+      'type SavedCollegeContextValue = {\n' +
+      '  accountCacheAvailable: boolean;\n' +
+      '  canImportGuestSaves: boolean;\n' +
+      '  canMutate: boolean;\n' +
+      '  freezeAccountScope(scope: string): boolean;\n' +
+      '  unfreezeAccountScope(scope: string): void;\n' +
+      '  forgetAccountScope(scope: string): boolean;\n' +
+      '  guestImportCount: number;\n' +
+      '  hydrated: boolean;\n' +
+      '  ids: number[];\n' +
+      '  importGuestSaves(): Promise<void>;\n' +
+      '  lastError: string | null;\n' +
+      '  pendingCount: number;\n' +
+      '  replaceSavedIds(value: unknown): void;\n' +
+      '  retrySync(): void;\n' +
+      '  scopeKey: string;\n' +
+      '  storageAvailable: boolean;\n' +
+      '  syncPhase: SavedCollegeSyncPhase;\n' +
+      '  toggleSaved(unitId: number): void;\n' +
+      '};\n' +
+      '\n' +
+      'type SyncSession = {\n' +
+      '  cacheKey: string;\n' +
+      '  epoch: number;\n' +
+      '  lockManager: SavedCollegeLockManager;\n' +
+      '  remote: SavedCollegeRemoteStore;\n' +
+      '  requested: boolean;\n' +
+      '  running: Promise<boolean> | null;\n' +
+      '  storage: SavedCollegeStorage;\n' +
+      '  userId: string;\n' +
+      '};\n' +
+      '\n' +
+      'const SavedCollegeContext = createContext<SavedCollegeContextValue | null>(\n' +
+      '  null,\n' +
+      ');\n' +
+      '\n' +
+      'function genericSyncError() {\n' +
+      '  return "Account sync needs another try. Any complete browser copy remains available, and pending changes are kept for retry.";\n' +
+      '}\n' +
+      '\n' +
+      'function coordinationError() {\n' +
+      '  return "This browser cannot safely coordinate account saves across tabs. Use a current browser or keep a browser-only list while signed out.";\n' +
+      '}\n' +
+      '\n' +
+      'function accountCycleErrorMessage(error: SavedCollegeAccountCycleError) {\n' +
+      '  switch (error.stage) {\n' +
+      '    case "lock":\n' +
+      '      return coordinationError();\n' +
+      '    case "outbox-read":\n' +
+      '      return "Pending browser changes are damaged or unavailable. CollegeSearch will not send account writes until they can be read safely.";\n' +
+      '    case "cache-write":\n' +
+      '      return "Account data was read, but this browser could not update its complete offline copy. Pending changes remain available for a safe retry.";\n' +
+      '    case "outbox-ack":\n' +
+      '      return "The account change was applied, but this browser could not mark its pending copy complete. It remains available for a safe retry.";\n' +
+      '    case "outbox-reread":\n' +
+      '      return "Account sync finished, but this browser could not confirm which pending changes remain. Nothing was discarded.";\n' +
+      '    case "scope":\n' +
+      '      return "The verified account identifier could not be scoped safely.";\n' +
+      '    default:\n' +
+      '      return genericSyncError();\n' +
+      '  }\n' +
+      '}\n' +
+      '\n' +
+      'export function SavedCollegesProvider({\n' +
+      '  children,\n' +
+      '  knownCollegeIds,\n' +
+      '}: {\n' +
+      '  children: ReactNode;\n' +
+      '  knownCollegeIds: readonly number[];\n' +
+      '}) {\n' +
+      '  const {\n' +
+      '    refreshUser,\n' +
+      '    status: authStatus,\n' +
+      '    user,\n' +
+      '    verification,\n' +
+      '    verificationError,\n' +
+      '  } = useAuth();\n' +
+      '  const knownIds = useMemo(\n' +
+      '    () => new Set(knownCollegeIds),\n' +
+      '    [knownCollegeIds],\n' +
+      '  );\n' +
+      '\n' +
+      '  const [ids, setIds] = useState<number[]>([]);\n' +
+      '  const [renderedScope, setRenderedScope] = useState<string>("loading");\n' +
+      '  const [baseSource, setBaseSource] =\n' +
+      '    useState<SavedCollegeBaseSource>("none");\n' +
+      '  const [remoteRead, setRemoteRead] =\n' +
+      '    useState<SavedCollegeRemoteRead>("idle");\n' +
+      '  const [syncConfirmed, setSyncConfirmed] = useState(false);\n' +
+      '  const [storageAvailable, setStorageAvailable] = useState(true);\n' +
+      '  const [coordinationAvailable, setCoordinationAvailable] = useState(true);\n' +
+      '  const [syncPhase, setSyncPhase] =\n' +
+      '    useState<SavedCollegeSyncPhase>("local-only");\n' +
+      '  const [pendingCount, setPendingCount] = useState(0);\n' +
+      '  const [lastError, setLastError] = useState<string | null>(null);\n' +
+      '  const [guestImportCount, setGuestImportCount] = useState(0);\n' +
+      '  const [retryToken, setRetryToken] = useState(0);\n' +
+      '\n' +
+      '  const idsRef = useRef<number[]>([]);\n' +
+      '  // Only mutations that could not be written to the per-unit outbox live\n' +
+      '  // here. Durable mutations are always re-read from browser storage, keeping\n' +
+      '  // one cross-tab source of truth instead of a second in-memory queue.\n' +
+      '  const volatilePendingRef = useRef<Map<number, "remove" | "save">>(\n' +
+      '    new Map(),\n' +
+      '  );\n' +
+      '  const sessionRef = useRef<SyncSession | null>(null);\n' +
+      '  const epochRef = useRef(0);\n' +
+      '  const authScopeRef = useRef<"guest" | "loading" | string>("loading");\n' +
+      '  const [mutationFence] = useState(() => createAccountMutationFence());\n' +
+      '  const [, setFenceVersion] = useState(0);\n' +
+      '\n' +
+      '  const effectiveAuthStatus =\n' +
+      '    authStatus === "unconfigured" || verification === "verified"\n' +
+      '      ? authStatus\n' +
+      '      : authStatus === "verification-error"\n' +
+      '        ? "verification-error"\n' +
+      '        : "loading";\n' +
+      '\n' +
+      '  const viewState = deriveSavedCollegeViewState({\n' +
+      '    authStatus: effectiveAuthStatus,\n' +
+      '    baseSource,\n' +
+      '    guestImportCount,\n' +
+      '    hasPendingOutbox: pendingCount > 0,\n' +
+      '    knownIds,\n' +
+      '    remoteRead,\n' +
+      '    renderedIds: ids,\n' +
+      '    renderedScope,\n' +
+      '    syncConfirmed,\n' +
+      '    userId: user?.id,\n' +
+      '  });\n' +
+      '\n' +
+      '  useLayoutEffect(() => {\n' +
+      '    authScopeRef.current = viewState.expectedScope;\n' +
+      '    mutationFence.activate(viewState.expectedScope);\n' +
+      '  }, [mutationFence, viewState.expectedScope]);\n' +
+      '\n' +
+      '  const publishIds = useCallback((next: number[]) => {\n' +
+      '    idsRef.current = next;\n' +
+      '    setIds(next);\n' +
+      '  }, []);\n' +
+      '\n' +
+      '  const recordStorageResult = useCallback((available: boolean) => {\n' +
+      '    setStorageAvailable((current) => current && available);\n' +
+      '  }, []);\n' +
+      '\n' +
+      '  const sessionIsCurrent = useCallback(\n' +
+      '    (session: Pick<SyncSession, "epoch" | "userId">) =>\n' +
+      '      sessionRef.current?.epoch === session.epoch &&\n' +
+      '      sessionRef.current.userId === session.userId &&\n' +
+      '      epochRef.current === session.epoch &&\n' +
+      '      authScopeRef.current === session.userId &&\n' +
+      '      mutationFence.canWrite(session.userId),\n' +
+      '    [mutationFence],\n' +
+      '  );\n' +
+      '\n' +
+      '  const persistMutations = useCallback(\n' +
+      '    (\n' +
+      '      userId: string,\n' +
+      '      mutations: readonly SavedCollegePendingMutation[],\n' +
+      '      storage: SavedCollegeStorage,\n' +
+      '    ) => {\n' +
+      '      if (!mutationFence.canWrite(userId)) return {\n' +
+      '        failedMutations: mutationFence.isForgotten(userId) ? [] : [...mutations],\n' +
+      '        persisted: false,\n' +
+      '        storageAvailable: true,\n' +
+      '        succeededMutations: [] as SavedCollegePendingMutation[],\n' +
+      '      };\n' +
+      '      let persisted = true;\n' +
+      '      let available = true;\n' +
+      '      const failedMutations: SavedCollegePendingMutation[] = [];\n' +
+      '      const succeededMutations: SavedCollegePendingMutation[] = [];\n' +
+      '      for (const mutation of mutations) {\n' +
+      '        if (!mutationFence.canWrite(userId)) { persisted = false; break; }\n' +
+      '        const result = writeSavedCollegeMutation(\n' +
+      '          userId,\n' +
+      '          mutation,\n' +
+      '          knownIds,\n' +
+      '          storage,\n' +
+      '        );\n' +
+      '        persisted &&= result.persisted;\n' +
+      '        available &&= result.storageAvailable;\n' +
+      '        if (result.persisted) succeededMutations.push(mutation);\n' +
+      '        else failedMutations.push(mutation);\n' +
+      '      }\n' +
+      '      recordStorageResult(available);\n' +
+      '      return {\n' +
+      '        failedMutations,\n' +
+      '        persisted,\n' +
+      '        storageAvailable: available,\n' +
+      '        succeededMutations,\n' +
+      '      };\n' +
+      '    },\n' +
+      '    [knownIds, recordStorageResult, mutationFence],\n' +
+      '  );\n' +
+      '\n' +
+      '  const runAccountCycle = useCallback(\n' +
+      '    async (session: SyncSession) => {\n' +
+      '      if (!sessionIsCurrent(session)) return false;\n' +
+      '\n' +
+      '      setRemoteRead("loading");\n' +
+      '      setSyncConfirmed(false);\n' +
+      '      setSyncPhase("syncing");\n' +
+      '      setLastError(null);\n' +
+      '\n' +
+      '      try {\n' +
+      '        // The shared Supabase client can change identities while an older\n' +
+      '        // request is in flight. Guard both sides of every remote operation so\n' +
+      "        // an account-boundary change can never turn another user's RLS-filtered\n" +
+      '        // empty response into a new cache snapshot or acknowledgement.\n' +
+      '        const guardedRemote: SavedCollegeRemoteStore = {\n' +
+      '          async listOwned(userId) {\n' +
+      '            if (!sessionIsCurrent(session)) throw new Error("Stale account scope.");\n' +
+      '            const remoteIds = await session.remote.listOwned(userId);\n' +
+      '            if (!sessionIsCurrent(session)) throw new Error("Stale account scope.");\n' +
+      '            return remoteIds;\n' +
+      '          },\n' +
+      '          async removeOwned(userId, unitIds) {\n' +
+      '            if (!sessionIsCurrent(session)) throw new Error("Stale account scope.");\n' +
+      '            await session.remote.removeOwned(userId, unitIds);\n' +
+      '            if (!sessionIsCurrent(session)) throw new Error("Stale account scope.");\n' +
+      '          },\n' +
+      '          async upsertOwned(userId, unitIds) {\n' +
+      '            if (!sessionIsCurrent(session)) throw new Error("Stale account scope.");\n' +
+      '            await session.remote.upsertOwned(userId, unitIds);\n' +
+      '            if (!sessionIsCurrent(session)) throw new Error("Stale account scope.");\n' +
+      '          },\n' +
+      '        };\n' +
+      '        const result = await syncSavedCollegeAccountCycle({\n' +
+      '          knownIds,\n' +
+      '          lockMa'... 23807 more characters
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    "use client";
+    
+    import {
+      createContext,
+      type ReactNode,
+      useCallback,
+      useContext,
+      useEffect,
+      useLayoutEffect,
+      useMemo,
+      useRef,
+      useState,
+    } from "react";
+    
+    import { createAccountMutationFence, guardAccountStorage } from "@/app/lib/account-mutation-fence";
+    import { normalizeAccountErasureId } from "@/app/lib/account-browser-erasure";
+    import { useAuth } from "@/app/components/auth/AuthProvider";
+    import {
+      SavedCollegeAccountCycleError,
+      syncSavedCollegeAccountCycle,
+    } from "@/app/lib/saved-college-account-cycle";
+    import {
+      getSavedCollegeBrowserLockManager,
+      type SavedCollegeLockManager,
+    } from "@/app/lib/saved-college-lock";
+    import {
+      savedCollegeIdsEqual,
+      type SavedCollegeRemoteStore,
+    } from "@/app/lib/saved-college-sync";
+    import {
+      applySavedCollegeOutbox,
+      getSavedCollegeBrowserStorage,
+      readGuestSavedCollegeIds,
+      readSavedCollegeIdsAtKey,
+      readSavedCollegeOutbox,
+      savedCollegeUserCacheKey,
+      savedCollegeUserOutboxKey,
+      type SavedCollegePendingMutation,
+      writeSavedCollegeIdsAtKey,
+      writeSavedCollegeMutation,
+    } from "@/app/lib/saved-college-storage";
+    import {
+      deriveSavedCollegeViewState,
+      type SavedCollegeBaseSource,
+      type SavedCollegeRemoteRead,
+    } from "@/app/lib/saved-college-view-state";
+    import {
+      LEGACY_SAVED_COLLEGES_STORAGE_KEY,
+      SAVED_COLLEGES_STORAGE_KEY,
+      sanitizeSavedCollegeIds,
+      type SavedCollegeStorage,
+      writeSavedCollegeIds,
+    } from "@/app/lib/local-saves";
+    import { getSupabaseBrowserClient } from "@/app/lib/supabase/browser";
+    import { createVerifiedSupabaseSavedCollegeStore } from "@/app/lib/supabase/saved-colleges";
+    
+    export type SavedCollegeSyncPhase =
+      | "local-only"
+      | "loading-account"
+      | "syncing"
+      | "synced"
+      | "error";
+    
+    type SavedCollegeContextValue = {
+      accountCacheAvailable: boolean;
+      canImportGuestSaves: boolean;
+      canMutate: boolean;
+      freezeAccountScope(scope: string): boolean;
+      unfreezeAccountScope(scope: string): void;
+      forgetAccountScope(scope: string): boolean;
+      guestImportCount: number;
+      hydrated: boolean;
+      ids: number[];
+      importGuestSaves(): Promise<void>;
+      lastError: string | null;
+      pendingCount: number;
+      replaceSavedIds(value: unknown): void;
+      retrySync(): void;
+      scopeKey: string;
+      storageAvailable: boolean;
+      syncPhase: SavedCollegeSyncPhase;
+      toggleSaved(unitId: number): void;
+    };
+    
+    type SyncSession = {
+      cacheKey: string;
+      epoch: number;
+      lockManager: SavedCollegeLockManager;
+      remote: SavedCollegeRemoteStore;
+      requested: boolean;
+      running: Promise<boolean> | null;
+      storage: SavedCollegeStorage;
+      userId: string;
+    };
+    
+    const SavedCollegeContext = createContext<SavedCollegeContextValue | null>(
+      null,
+    );
+    
+    function genericSyncError() {
+      return "Account sync needs another try. Any complete browser copy remains available, and pending changes are kept for retry.";
+    }
+    
+    function coordinationError() {
+      return "This browser cannot safely coordinate account saves across tabs. Use a current browser or keep a browser-only list while signed out.";
+    }
+    
+    function accountCycleErrorMessage(error: SavedCollegeAccountCycleError) {
+      switch (error.stage) {
+        case "lock":
+          return coordinationError();
+        case "outbox-read":
+          return "Pending browser changes are damaged or unavailable. CollegeSearch will not send account writes until they can be read safely.";
+        case "cache-write":
+          return "Account data was read, but this browser could not update its complete offline copy. Pending changes remain available for a safe retry.";
+        case "outbox-ack":
+          return "The account change was applied, but this browser could not mark its pending copy complete. It remains available for a safe retry.";
+        case "outbox-reread":
+          return "Account sync finished, but this browser could not confirm which pending changes remain. Nothing was discarded.";
+        case "scope":
+          return "The verified account identifier could not be scoped safely.";
+        default:
+          return genericSyncError();
+      }
+    }
+    
+    export function SavedCollegesProvider({
+      children,
+      knownCollegeIds,
+    }: {
+      children: ReactNode;
+      knownCollegeIds: readonly number[];
+    }) {
+      const {
+        refreshUser,
+        status: authStatus,
+        user,
+        verification,
+        verificationError,
+      } = useAuth();
+      const knownIds = useMemo(
+        () => new Set(knownCollegeIds),
+        [knownCollegeIds],
+      );
+    
+      const [ids, setIds] = useState<number[]>([]);
+      const [renderedScope, setRenderedScope] = useState<string>("loading");
+      const [baseSource, setBaseSource] =
+        useState<SavedCollegeBaseSource>("none");
+      const [remoteRead, setRemoteRead] =
+        useState<SavedCollegeRemoteRead>("idle");
+      const [syncConfirmed, setSyncConfirmed] = useState(false);
+      const [storageAvailable, setStorageAvailable] = useState(true);
+      const [coordinationAvailable, setCoordinationAvailable] = useState(true);
+      const [syncPhase, setSyncPhase] =
+        useState<SavedCollegeSyncPhase>("local-only");
+      const [pendingCount, setPendingCount] = useState(0);
+      const [lastError, setLastError] = useState<string | null>(null);
+      const [guestImportCount, setGuestImportCount] = useState(0);
+      const [retryToken, setRetryToken] = useState(0);
+    
+      const idsRef = useRef<number[]>([]);
+      // Only mutations that could not be written to the per-unit outbox live
+      // here. Durable mutations are always re-read from browser storage, keeping
+      // one cross-tab source of truth instead of a second in-memory queue.
+      const volatilePendingRef = useRef<Map<number, "remove" | "save">>(
+        new Map(),
+      );
+      const sessionRef = useRef<SyncSession | null>(null);
+      const epochRef = useRef(0);
+      const authScopeRef = useRef<"guest" | "loading" | string>("loading");
+      const [mutationFence] = useState(() => createAccountMutationFence());
+      const [, setFenceVersion] = useState(0);
+    
+      const effectiveAuthStatus =
+        authStatus === "unconfigured" || verification === "verified"
+          ? authStatus
+          : authStatus === "verification-error"
+            ? "verification-error"
+            : "loading";
+    
+      const viewState = deriveSavedCollegeViewState({
+        authStatus: effectiveAuthStatus,
+        baseSource,
+        guestImportCount,
+        hasPendingOutbox: pendingCount > 0,
+        knownIds,
+        remoteRead,
+        renderedIds: ids,
+        renderedScope,
+        syncConfirmed,
+        userId: user?.id,
+      });
+    
+      useLayoutEffect(() => {
+        authScopeRef.current = viewState.expectedScope;
+        mutationFence.activate(viewState.expectedScope);
+      }, [mutationFence, viewState.expectedScope]);
+    
+      const publishIds = useCallback((next: number[]) => {
+        idsRef.current = next;
+        setIds(next);
+      }, []);
+    
+      const recordStorageResult = useCallback((available: boolean) => {
+        setStorageAvailable((current) => current && available);
+      }, []);
+    
+      const sessionIsCurrent = useCallback(
+        (session: Pick<SyncSession, "epoch" | "userId">) =>
+          sessionRef.current?.epoch === session.epoch &&
+          sessionRef.current.userId === session.userId &&
+          epochRef.current === session.epoch &&
+          authScopeRef.current === session.userId &&
+          mutationFence.canWrite(session.userId),
+        [mutationFence],
+      );
+    
+      const persistMutations = useCallback(
+        (
+          userId: string,
+          mutations: readonly SavedCollegePendingMutation[],
+          storage: SavedCollegeStorage,
+        ) => {
+          if (!mutationFence.canWrite(userId)) return {
+            failedMutations: mutationFence.isForgotten(userId) ? [] : [...mutations],
+            persisted: false,
+            storageAvailable: true,
+            succeededMutations: [] as SavedCollegePendingMutation[],
+          };
+          let persisted = true;
+          let available = true;
+          const failedMutations: SavedCollegePendingMutation[] = [];
+          const succeededMutations: SavedCollegePendingMutation[] = [];
+          for (const mutation of mutations) {
+            if (!mutationFence.canWrite(userId)) { persisted = false; break; }
+            const result = writeSavedCollegeMutation(
+              userId,
+              mutation,
+              knownIds,
+              storage,
+            );
+            persisted &&= result.persisted;
+            available &&= result.storageAvailable;
+            if (result.persisted) succeededMutations.push(mutation);
+            else failedMutations.push(mutation);
+          }
+          recordStorageResult(available);
+          return {
+            failedMutations,
+            persisted,
+            storageAvailable: available,
+            succeededMutations,
+          };
+        },
+        [knownIds, recordStorageResult, mutationFence],
+      );
+    
+      const runAccountCycle = useCallback(
+        async (session: SyncSession) => {
+          if (!sessionIsCurrent(session)) return false;
+    
+          setRemoteRead("loading");
+          setSyncConfirmed(false);
+          setSyncPhase("syncing");
+          setLastError(null);
+    
+          try {
+            // The shared Supabase client can change identities while an older
+            // request is in flight. Guard both sides of every remote operation so
+            // an account-boundary change can never turn another user's RLS-filtered
+            // empty response into a new cache snapshot or acknowledgement.
+            const guardedRemote: SavedCollegeRemoteStore = {
+              async listOwned(userId) {
+                if (!sessionIsCurrent(session)) throw new Error("Stale account scope.");
+                const remoteIds = await session.remote.listOwned(userId);
+                if (!sessionIsCurrent(session)) throw new Error("Stale account scope.");
+                return remoteIds;
+              },
+              async removeOwned(userId, unitIds) {
+                if (!sessionIsCurrent(session)) throw new Error("Stale account scope.");
+                await session.remote.removeOwned(userId, unitIds);
+                if (!sessionIsCurrent(session)) throw new Error("Stale account scope.");
+              },
+              async upsertOwned(userId, unitIds) {
+                if (!sessionIsCurrent(session)) throw new Error("Stale account scope.");
+                await session.remote.upsertOwned(userId, unitIds);
+                if (!sessionIsCurrent(session)) throw new Error("Stale account scope.");
+              },
+            };
+            const result = await syncSavedCollegeAccountCycle({
+              knownIds,
+              lockManager: session.lockManager,
+              onRemoteSnapshot(snapshot) {
+                if (!sessionIsCurrent(session)) return;
+    
+                setRemoteRead("succeeded");
+                setBaseSource("remote");
+    
+                // A newer same-tab or cross-tab intent can replace a per-unit
+                // record while the authoritative read is in flight. Render the
+                // latest durable record, not the snapshot that began this cycle.
+                const latest = readSavedCollegeOutbox(
+                  session.userId,
+                  knownIds,
+                  session.storage,
+                );
+                recordStorageResult(latest.storageAvailable);
+                const durableMutations =
+                  latest.storageAvailable && latest.valid
+                    ? latest.mutations
+                    : snapshot.pendingMutations;
+                const pendingForDisplay = new Map(
+                  durableMutations.map((mutation) => [
+                    mutation.unitId,
+                    mutation.action,
+                  ]),
+                );
+                for (const [unitId, action] of volatilePendingRef.current) {
+                  pendingForDisplay.set(unitId, action);
+                }
+                setPendingCount(pendingForDisplay.size);
+                publishIds(
+                  applySavedCollegeOutbox(
+                    snapshot.syncedIds,
+                    Array.from(pendingForDisplay, ([unitId, action]) => ({
+                      action,
+                      unitId,
+                    })),
+                    knownIds,
+                  ),
+                );
+              },
+              remote: guardedRemote,
+              storage: guardAccountStorage(session.storage, () => sessionIsCurrent(session)),
+              userId: session.userId,
+            });
+    
+            if (!sessionIsCurrent(session)) return false;
+    
+            setRemoteRead("succeeded");
+            setBaseSource("remote");
+            const remainingForDisplay = new Map(
+              result.remainingMutations.map((mutation) => [
+                mutation.unitId,
+                mutation.action,
+              ]),
+            );
+            for (const [unitId, action] of volatilePendingRef.current) {
+              remainingForDisplay.set(unitId, action);
+            }
+            publishIds(
+              applySavedCollegeOutbox(
+                result.syncedIds,
+                Array.from(remainingForDisplay, ([unitId, action]) => ({
+                  action,
+                  unitId,
+                })),
+                knownIds,
+              ),
+            );
+            setPendingCount(remainingForDisplay.size);
+    
+            if (result.remainingMutations.length > 0) {
+              session.requested = true;
+              setSyncPhase("syncing");
+              return true;
+            }
+    
+            if (volatilePendingRef.current.size > 0) {
+              setLastError(
+                "A change remains in this tab but could not be preserved for a safe account retry.",
+              );
+              setSyncPhase("error");
+              return false;
+            }
+    
+            setSyncConfirmed(true);
+            setSyncPhase("synced");
+            return true;
+          } catch (error) {
+            if (!sessionIsCurrent(session)) return false;
+            if (error instanceof SavedCollegeAccountCycleError) {
+              setRemoteRead(
+                error.remoteReadSucceeded ? "succeeded" : "failed",
+              );
+              if (error.remoteReadSucceeded) setBaseSource("remote");
+              if (error.storageAvailable !== null) {
+                recordStorageResult(error.storageAvailable);
+              }
+            } else {
+              setRemoteRead("failed");
+            }
+            setSyncConfirmed(false);
+            const durable = readSavedCollegeOutbox(
+              session.userId,
+              knownIds,
+              session.storage,
+            );
+            recordStorageResult(durable.storageAvailable);
+            const pendingUnitIds = new Set(
+              durable.mutations.map((mutation) => mutation.unitId),
+            );
+            for (const unitId of volatilePendingRef.current.keys()) {
+              pendingUnitIds.add(unitId);
+            }
+            setPendingCount(pendingUnitIds.size);
+            setLastError(
+              error instanceof SavedCollegeAccountCycleError
+                ? accountCycleErrorMessage(error)
+                : genericSyncError(),
+            );
+            setSyncPhase("error");
+            return false;
+          }
+        },
+        [
+          knownIds,
+          publishIds,
+          recordStorageResult,
+          sessionIsCurrent,
+        ],
+      );
+    
+      const flushSession = useCallback(
+        (session: SyncSession) => {
+          if (!sessionIsCurrent(session)) return Promise.resolve(false);
+          session.requested = true;
+          if (session.running) return session.running;
+    
+          session.running = (async () => {
+            let succeeded = true;
+            while (session.requested && sessionIsCurrent(session)) {
+              session.requested = false;
+              succeeded = await runAccountCycle(session);
+              if (!succeeded) break;
+            }
+            return succeeded;
+          })().finally(() => {
+            session.running = null;
+          });
+          return session.running;
+        },
+        [runAccountCycle, sessionIsCurrent],
+      );
+    
+      const freezeAccountScope = useCallback((scope: string) => {
+        const paused = mutationFence.freeze(scope);
+        if (paused) setFenceVersion((version) => version + 1);
+        return paused;
+      }, [mutationFence]);
+    
+      const unfreezeAccountScope = useCallback((scope: string) => {
+        if (!mutationFence.unfreeze(scope)) return;
+        setFenceVersion((version) => version + 1);
+        const userId = normalizeAccountErasureId(scope);
+        if (!userId || !mutationFence.canWrite(userId)) return;
+        const session = sessionRef.current;
+        if (session && session.userId === userId) {
+          const resume = () => { if (sessionIsCurrent(session)) void flushSession(session); };
+          if (session.running) void session.running.then(resume, resume);
+          else resume();
+        } else {
+          // No account mutations were possible before initial binding completed.
+          setRetryToken((version) => version + 1);
+        }
+      }, [flushSession, mutationFence, sessionIsCurrent]);
+    
+      const forgetAccountScope = useCallback((scope: string) => {
+        const matches = mutationFence.forget(scope);
+        setFenceVersion((version) => version + 1);
+        if (!matches) return false;
+        epochRef.current += 1;
+        const session = sessionRef.current;
+        if (session) session.requested = false;
+        sessionRef.current = null;
+        volatilePendingRef.current.clear();
+        publishIds([]);
+        setRenderedScope("loading");
+        setBaseSource("none");
+        setRemoteRead("idle");
+        setSyncConfirmed(false);
+        setPendingCount(0);
+        setCoordinationAvailable(false);
+        setLastError(null);
+        setSyncPhase("loading-account");
+        // Persisted copies are erased by eraseAccountBrowserData under product locks.
+        return true;
+      }, [mutationFence, publishIds]);
+    
+      useEffect(() => {
+        const epoch = epochRef.current + 1;
+        epochRef.current = epoch;
+        sessionRef.current = null;
+        volatilePendingRef.current.clear();
+        let cancelled = false;
+    
+        // Scope initialization reads browser storage and may start remote work, so
+        // schedule it after this effect's synchronous auth-boundary invalidation.
+        // This avoids a cascading render while still masking the prior scope in
+        // the render that triggered this effect.
+        window.queueMicrotask(() => {
+          if (cancelled || epochRef.current !== epoch) return;
+    
+          if (viewState.scopeKind === "blocked") {
+            setRenderedScope("loading");
+            setBaseSource("none");
+            setRemoteRead("idle");
+            setSyncConfirmed(false);
+            setPendingCount(0);
+            if (authStatus === "verification-error" || verification === "failed") {
+              setLastError(
+                verificationError ??
+                  "CollegeSearch could not verify which account is active.",
+              );
+              setSyncPhase("error");
+            } else {
+              setLastError(null);
+              setSyncPhase("loading-account");
+            }
+            return;
+          }
+    
+          setLastError(null);
+          setPendingCount(0);
+          setRemoteRead("idle");
+          setSyncConfirmed(false);
+    
+          const storage = getSavedCollegeBrowserStorage();
+          const guest = readGuestSavedCollegeIds(knownIds, storage);
+          setGuestImportCount(guest.ids.length);
+          setStorageAvailable(guest.storageAvailable);
+    
+          if (viewState.scopeKind === "guest") {
+            setCoordinationAvailable(true);
+            setRenderedScope("guest");
+            setBaseSource("guest");
+            publishIds(guest.ids);
+            setSyncPhase("local-only");
+            return;
+          }
+    
+          const verifiedUserId = viewState.normalizedUserId;
+          if (!verifiedUserId) return;
+          if (!mutationFence.canWrite(verifiedUserId)) {
+            setRenderedScope("loading");
+            setBaseSource("none");
+            setCoordinationAvailable(false);
+            setLastError(mutationFence.isForgotten(verifiedUserId) ? "This account was deleted." : "Account changes are paused.");
+            setSyncPhase("error");
+            return;
+          }
+    
+          // Account mutations stay disabled until this exact verified scope has
+          // both durable storage and a cross-tab lock-backed sync session.
+          setCoordinationAvailable(false);
+    
+          let cacheKey: string;
+          try {
+            cacheKey = savedCollegeUserCacheKey(verifiedUserId);
+          } catch {
+            setRenderedScope(verifiedUserId);
+            setBaseSource("none");
+            publishIds([]);
+            setRemoteRead("failed");
+            setLastError(
+              "The verified account identifier could not be scoped safely.",
+            );
+            setSyncPhase("error");
+            return;
+          }
+    
+          const cached = readSavedCollegeIdsAtKey(cacheKey, knownIds, storage);
+          const persisted = readSavedCollegeOutbox(
+            verifiedUserId,
+            knownIds,
+            storage,
+          );
+          const hasValidCache = cached.present && cached.valid;
+          setRenderedScope(verifiedUserId);
+          setBaseSource(hasValidCache ? "cache" : "none");
+          publishIds(
+            hasValidCache
+              ? applySavedCollegeOutbox(cached.ids, persisted.mutations, knownIds)
+              : [],
+          );
+          setStorageAvailable(
+            guest.storageAvailable &&
+              cached.storageAvailable &&
+              persisted.storageAvailable,
+          );
+          setPendingCount(persisted.mutations.length);
+          setRemoteRead("loading");
+          setSyncPhase("loading-account");
+    
+          if (!storage || !persisted.storageAvailable || !persisted.valid) {
+            setRemoteRead("failed");
+            setLastError(
+              "Pending browser changes are damaged or unavailable. CollegeSearch will not send account writes until they can be read safely.",
+            );
+            setSyncPhase("error");
+            return;
+          }
+    
+          const supabase = getSupabaseBrowserClient();
+          if (!supabase) {
+            setRemoteRead("failed");
+            setLastError("Account sync is not configured in this deployment.");
+            setSyncPhase("error");
+            return;
+          }
+    
+          const lockManager = getSavedCollegeBrowserLockManager();
+          if (!lockManager) {
+            setRemoteRead("failed");
+            setLastError(coordinationError());
+            setSyncPhase("error");
+            return;
+          }
+    
+          void (async () => {
+            try {
+              const remote = await createVerifiedSupabaseSavedCollegeStore(
+                supabase,
+                verifiedUserId,
+              );
+              if (
+                cancelled ||
+                epochRef.current !== epoch ||
+                authScopeRef.current !== verifiedUserId ||
+                !mutationFence.canWrite(verifiedUserId)
+              ) {
+                return;
+              }
+    
+              const session: SyncSession = {
+                cacheKey,
+                epoch,
+                lockManager,
+                remote,
+                requested: false,
+                running: null,
+                storage,
+                userId: verifiedUserId,
+              };
+              sessionRef.current = session;
+              setCoordinationAvailable(true);
+              void flushSession(session);
+            } catch {
+              if (
+                cancelled ||
+                epochRef.current !== epoch ||
+                authScopeRef.current !== verifiedUserId ||
+                !mutationFence.canWrite(verifiedUserId)
+              ) {
+                return;
+              }
+              setCoordinationAvailable(false);
+              setRemoteRead("failed");
+              setLastError(
+                "Account sync is paused because the active session could not be bound safely. Retry account verification before syncing saves.",
+              );
+              setSyncPhase("error");
+            }
+          })();
+        });
+    
+        return () => {
+          cancelled = true;
+        };
+      }, [
+        authStatus,
+        flushSession,
+        knownIds,
+        publishIds,
+        retryToken,
+        user?.id,
+        verification,
+        verificationError,
+        viewState.normalizedUserId,
+        viewState.scopeKind,
+        mutationFence,
+      ]);
+    
+      const accountErased = viewState.scopeKind === "account" && mutationFence.isForgotten(viewState.expectedScope);
+      const canMutate =
+        viewState.canMutate &&
+        (viewState.scopeKind === "guest" || (coordinationAvailable && mutationFence.canWrite(viewState.expectedScope)));
+      const canImportGuestSaves =
+        viewState.canImportGuestSaves &&
+        coordinationAvailable &&
+        storageAvailable &&
+        mutationFence.canWrite(viewState.expectedScope);
+    
+      const replaceSavedIds = useCallback(
+        (value: unknown) => {
+          if (!canMutate) return;
+    
+          const nextIds = sanitizeSavedCollegeIds(value, knownIds);
+          const currentIds = idsRef.current;
+          if (savedCollegeIdsEqual(nextIds, currentIds)) return;
+    
+          const session = sessionRef.current;
+          if (
+            viewState.scopeKind === "account" &&
+            (!session || !sessionIsCurrent(session))
+          ) {
+            return;
+          }
+          publishIds(nextIds);
+    
+          if (viewState.scopeKind === "guest") {
+            const local = writeSavedCollegeIds(
+              nextIds,
+              knownIds,
+              getSavedCollegeBrowserStorage(),
+            );
+            recordStorageResult(local.storageAvailable);
+            return;
+          }
+          if (!session) return;
+    
+          const currentSet = new Set(currentIds);
+          const nextSet = new Set(nextIds);
+          const changed: SavedCollegePendingMutation[] = [];
+          for (const unitId of knownIds) {
+            if (!currentSet.has(unitId) && nextSet.has(unitId)) {
+              changed.push({ action: "save", unitId });
+            } else if (currentSet.has(unitId) && !nextSet.has(unitId)) {
+              changed.push({ action: "remove", unitId });
+            }
+          }
+          setSyncConfirmed(false);
+    
+          // The exact operation must be durable before a cloud request can start.
+          // A cache is only a display snapshot; the per-unit outbox is the retry
+          // source of truth.
+          const pendingWrite = persistMutations(
+            session.userId,
+            changed,
+            session.storage,
+          );
+          for (const mutation of pendingWrite.succeededMutations) {
+            volatilePendingRef.current.delete(mutation.unitId);
+          }
+          for (const mutation of pendingWrite.failedMutations) {
+            volatilePendingRef.current.set(mutation.unitId, mutation.action);
+          }
+          const durable = readSavedCollegeOutbox(
+            session.userId,
+            knownIds,
+            session.storage,
+          );
+          const pendingUnitIds = new Set(
+            durable.mutations.map((mutation) => mutation.unitId),
+          );
+          for (const unitId of volatilePendingRef.current.keys()) {
+            pendingUnitIds.add(unitId);
+          }
+          setPendingCount(pendingUnitIds.size);
+          if (!pendingWrite.persisted) {
+            setLastError(
+              "This change remains in this tab only because the browser could not preserve it for a safe account retry.",
+            );
+            setSyncPhase("error");
+            return;
+          }
+    
+          if (!sessionIsCurrent(session)) return;
+          const cacheWrite = writeSavedCollegeIdsAtKey(
+            session.cacheKey,
+            nextIds,
+            knownIds,
+            session.storage,
+          );
+          recordStorageResult(cacheWrite.storageAvailable);
+          setSyncPhase("syncing");
+          void flushSession(session);
+        },
+        [
+          canMutate,
+          flushSession,
+          knownIds,
+          persistMutations,
+          publishIds,
+          recordStorageResult,
+          sessionIsCurrent,
+          viewState.scopeKind,
+        ],
+      );
+    
+      const toggleSaved = useCallback(
+        (unitId: number) => {
+          if (!knownIds.has(unitId)) return;
+          const current = idsRef.current;
+          replaceSavedIds(
+            current.includes(unitId)
+              ? current.filter((id) => id !== unitId)
+              : [...current, unitId],
+          );
+        },
+        [knownIds, replaceSavedIds],
+      );
+    
+      const retrySync = useCallback(() => {
+        if (
+          authStatus === "verification-error" ||
+          (authStatus !== "unconfigured" && verification !== "verified")
+        ) {
+          void refreshUser();
+          return;
+        }
+    
+        const session = sessionRef.current;
+        if (session && sessionIsCurrent(session)) {
+          const pending = Array.from(
+            volatilePendingRef.current,
+            ([unitId, action]) => ({ action, unitId }),
+          );
+          const persisted = persistMutations(
+            session.userId,
+            pending,
+            session.storage,
+          );
+          for (const mutation of persisted.succeededMutations) {
+            volatilePendingRef.current.delete(mutation.unitId);
+          }
+          for (const mutation of persisted.failedMutations) {
+            volatilePendingRef.current.set(mutation.unitId, mutation.action);
+          }
+          if (!persisted.persisted) {
+            setLastError(
+              "This browser still cannot preserve the pending changes for a safe retry.",
+            );
+            setSyncPhase("error");
+            return;
+          }
+          void flushSession(session);
+          return;
+        }
+    
+        setCoordinationAvailable(false);
+        setRetryToken((current) => current + 1);
+      }, [
+        authStatus,
+        flushSession,
+        persistMutations,
+        refreshUser,
+        sessionIsCurrent,
+        verification,
+      ]);
+    
+      const importGuestSaves = useCallback(async () => {
+        const session = sessionRef.current;
+        if (
+          !canImportGuestSaves ||
+          !session ||
+          !sessionIsCurrent(session)
+        ) {
+          setLastError("Connect and verify your account before importing browser saves.");
+          setSyncPhase("error");
+          return;
+        }
+    
+        const guest = readGuestSavedCollegeIds(knownIds, session.storage);
+        recordStorageResult(guest.storageAvailable);
+        if (guest.ids.length === 0) {
+          setGuestImportCount(0);
+          return;
+        }
+    
+        const importedSnapshot = [...guest.ids];
+        const mutations = importedSnapshot.map((unitId) => ({
+          action: "save" as const,
+          unitId,
+        }));
+        publishIds(applySavedCollegeOutbox(idsRef.current, mutations, knownIds));
+        setSyncConfirmed(false);
+    
+        const pendingWrite = persistMutations(
+          session.userId,
+          mutations,
+          session.storage,
+        );
+        for (const mutation of pendingWrite.succeededMutations) {
+          volatilePendingRef.current.delete(mutation.unitId);
+        }
+        for (const mutation of pendingWrite.failedMutations) {
+          volatilePendingRef.current.set(mutation.unitId, mutation.action);
+        }
+        const durable = readSavedCollegeOutbox(
+          session.userId,
+          knownIds,
+          session.storage,
+        );
+        const pendingUnitIds = new Set(
+          durable.mutations.map((mutation) => mutation.unitId),
+        );
+        for (const unitId of volatilePendingRef.current.keys()) {
+          pendingUnitIds.add(unitId);
+        }
+        setPendingCount(pendingUnitIds.size);
+        if (!pendingWrite.persisted) {
+          setLastError(
+            "This browser could not preserve the import for a safe retry. No browser-only saves were removed.",
+          );
+          setSyncPhase("error");
+          return;
+        }
+    
+        if (!sessionIsCurrent(session)) return;
+        const cacheWrite = writeSavedCollegeIdsAtKey(
+          session.cacheKey,
+          idsRef.current,
+          knownIds,
+          session.storage,
+        );
+        recordStorageResult(cacheWrite.storageAvailable);
+        const flushed = await flushSession(session);
+        if (!flushed || !sessionIsCurrent(session)) return;
+    
+        const remainingAccountMutations = readSavedCollegeOutbox(
+          session.userId,
+          knownIds,
+          session.storage,
+        );
+        if (
+          !remainingAccountMutations.storageAvailable ||
+          !remainingAccountMutations.valid ||
+          remainingAccountMutations.mutations.some(
+            (mutation) =>
+              importedSnapshot.includes(mutation.unitId) &&
+              mutation.action === "save",
+          )
+        ) {
+          setLastError(
+            "The account import has not been fully confirmed, so no browser-only saves were removed.",
+          );
+          setSyncPhase("error");
+          return;
+        }
+    
+        const latestGuest = readGuestSavedCollegeIds(
+          knownIds,
+          session.storage,
+        );
+        const importedIds = new Set(importedSnapshot);
+        const remainingGuestIds = latestGuest.ids.filter(
+          (unitId) => !importedIds.has(unitId),
+        );
+        if (!sessionIsCurrent(session)) return;
+        const guestWrite = writeSavedCollegeIds(
+          remainingGuestIds,
+          knownIds,
+          session.storage,
+        );
+        recordStorageResult(guestWrite.storageAvailable);
+        setGuestImportCount(
+          guestWrite.persisted ? remainingGuestIds.length : latestGuest.ids.length,
+        );
+        if (!guestWrite.persisted) {
+          setLastError(
+            "The account import succeeded, but this browser would not update its separate guest copy.",
+          );
+          setSyncPhase("error");
+        }
+      }, [
+        canImportGuestSaves,
+        flushSession,
+        knownIds,
+        persistMutations,
+        publishIds,
+        recordStorageResult,
+        sessionIsCurrent,
+      ]);
+    
+      useEffect(() => {
+        const handleStorage = (event: StorageEvent) => {
+          if (
+            event.key === SAVED_COLLEGES_STORAGE_KEY ||
+            event.key === LEGACY_SAVED_COLLEGES_STORAGE_KEY
+          ) {
+            const guest = readGuestSavedCollegeIds(knownIds);
+            setGuestImportCount(guest.ids.length);
+            if (authScopeRef.current === "guest") publishIds(guest.ids);
+            return;
+          }
+    
+          const session = sessionRef.current;
+          if (
+            session &&
+            sessionIsCurrent(session) &&
+            event.key?.startsWith(`${savedCollegeUserOutboxKey(session.userId)}:`)
+          ) {
+            void flushSession(session);
+          }
+        };
+        const handleOnline = () => {
+          const session = sessionRef.current;
+          if (session && sessionIsCurrent(session)) void flushSession(session);
+        };
+    
+        window.addEventListener("storage", handleStorage);
+        window.addEventListener("online", handleOnline);
+        return () => {
+          window.removeEventListener("storage", handleStorage);
+          window.removeEventListener("online", handleOnline);
+        };
+      }, [flushSession, knownIds, publishIds, sessionIsCurrent]);
+    
+      const value = useMemo<SavedCollegeContextValue>(
+        () => ({
+          accountCacheAvailable: !accountErased && viewState.accountBaseAvailable,
+          freezeAccountScope,
+          unfreezeAccountScope,
+          forgetAccountScope,
+          canImportGuestSaves,
+          canMutate,
+          guestImportCount,
+          hydrated: !accountErased && viewState.hydrated,
+          ids: accountErased ? [] : viewState.visibleIds,
+          importGuestSaves,
+          lastError,
+          pendingCount,
+          replaceSavedIds,
+          retrySync,
+          scopeKey: accountErased ? "loading" : viewState.expectedScope,
+          storageAvailable,
+          syncPhase,
+          toggleSaved,
+        }),
+        [
+          accountErased,
+          freezeAccountScope,
+          unfreezeAccountScope,
+          forgetAccountScope,
+          canImportGuestSaves,
+          canMutate,
+          guestImportCount,
+          importGuestSaves,
+          lastError,
+          pendingCount,
+          replaceSavedIds,
+          retrySync,
+          storageAvailable,
+          syncPhase,
+          toggleSaved,
+          viewState.accountBaseAvailable,
+          viewState.expectedScope,
+          viewState.hydrated,
+          viewState.visibleIds,
+        ],
+      );
+    
+      return (
+        <SavedCollegeContext.Provider value={value}>
+          {children}
+        </SavedCollegeContext.Provider>
+      );
+    }
+    
+    export function useSavedColleges() {
+      const context = useContext(SavedCollegeContext);
+      if (!context) {
+        throw new Error("useSavedColleges must be used inside SavedCollegesProvider.");
+      }
+      return context;
+    }
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///Volumes/Seagate%20/CollegeSearch/tests/local-save-rendering.test.mjs:74:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: guest save updates use the canonical writer that removes the legacy key
+ok 158 - guest save updates use the canonical writer that removes the legacy key
+  ---
+  duration_ms: 1.045459
+  type: 'test'
+  ...
+# Subtest: saved college IDs are positive, unique integers from the known release
+ok 159 - saved college IDs are positive, unique integers from the known release
+  ---
+  duration_ms: 1.0825
+  type: 'test'
+  ...
+# Subtest: reads the canonical list first and safely falls back to the legacy key
+ok 160 - reads the canonical list first and safely falls back to the legacy key
+  ---
+  duration_ms: 0.501916
+  type: 'test'
+  ...
+# Subtest: blocked or malformed storage never crashes the save flow
+ok 161 - blocked or malformed storage never crashes the save flow
+  ---
+  duration_ms: 0.401
+  type: 'test'
+  ...
+# Subtest: writes migrate the legacy key and notify same-tab and other-tab listeners
+ok 162 - writes migrate the legacy key and notify same-tab and other-tab listeners
+  ---
+  duration_ms: 0.310708
+  type: 'test'
+  ...
+# Subtest: portrait and landscape college marks stay contained in fixed logo frames
+ok 163 - portrait and landscape college marks stay contained in fixed logo frames
+  ---
+  duration_ms: 3.635042
+  type: 'test'
+  ...
+# Subtest: matching uses one exact federal graduation and enrollment population
+ok 164 - matching uses one exact federal graduation and enrollment population
+  ---
+  duration_ms: 0.954459
+  type: 'test'
+  ...
+# Subtest: a public in-state average cannot contribute price points for unknown or nonresident students
+ok 165 - a public in-state average cannot contribute price points for unknown or nonresident students
+  ---
+  duration_ms: 0.452
+  type: 'test'
+  ...
+# Subtest: mismatched future graduation cohorts and earnings horizons are excluded consistently
+ok 166 - mismatched future graduation cohorts and earnings horizons are excluded consistently
+  ---
+  duration_ms: 0.873625
+  type: 'test'
+  ...
+# Subtest: residency survives shared preferences and rejects unknown states
+ok 167 - residency survives shared preferences and rejects unknown states
+  ---
+  duration_ms: 0.540416
+  type: 'test'
+  ...
+# Subtest: a shared worksheet restores exact preferences, weights, and active criteria
+ok 168 - a shared worksheet restores exact preferences, weights, and active criteria
+  ---
+  duration_ms: 0.81325
+  type: 'test'
+  ...
+# Subtest: restoring one preference does not turn on untouched weights
+ok 169 - restoring one preference does not turn on untouched weights
+  ---
+  duration_ms: 0.11275
+  type: 'test'
+  ...
+# Subtest: invalid URL values return neutral defaults instead of changing the formula
+ok 170 - invalid URL values return neutral defaults instead of changing the formula
+  ---
+  duration_ms: 0.070834
+  type: 'test'
+  ...
+# Subtest: zero weights and unset criteria cannot be reactivated by a URL
+ok 171 - zero weights and unset criteria cannot be reactivated by a URL
+  ---
+  duration_ms: 0.593667
+  type: 'test'
+  ...
+# Subtest: reset removes worksheet parameters and preserves unrelated URL context
+ok 172 - reset removes worksheet parameters and preserves unrelated URL context
+  ---
+  duration_ms: 0.355291
+  type: 'test'
+  ...
+# Subtest: initial worksheets do not share mutable weights
+ok 173 - initial worksheets do not share mutable weights
+  ---
+  duration_ms: 0.066709
+  type: 'test'
+  ...
+# Subtest: the mobile navigation behaves as a contained modal surface
+ok 174 - the mobile navigation behaves as a contained modal surface
+  ---
+  duration_ms: 0.598625
+  type: 'test'
+  ...
+# Subtest: new passwords respect minimum length and the provider's UTF-8 byte limit without truncation
+ok 175 - new passwords respect minimum length and the provider's UTF-8 byte limit without truncation
+  ---
+  duration_ms: 0.628334
+  type: 'test'
+  ...
+# Subtest: student-facing stylesheets avoid unreadable microcopy
+ok 176 - student-facing stylesheets avoid unreadable microcopy
+  ---
+  duration_ms: 163.805916
+  type: 'test'
+  ...
+# Subtest: server-renders the CollegeSearch product shell
+ok 177 - server-renders the CollegeSearch product shell
+  ---
+  duration_ms: 1572.597375
+  type: 'test'
+  ...
+# Subtest: global HTML responses enforce one fresh nonce on every executable block
+ok 178 - global HTML responses enforce one fresh nonce on every executable block
+  ---
+  duration_ms: 77.744917
+  type: 'test'
+  ...
+# Subtest: auth redirects inherit CSP and reject an external next destination
+ok 179 - auth redirects inherit CSP and reject an external next destination
+  ---
+  duration_ms: 66.507375
+  type: 'test'
+  ...
+# Subtest: account copy is student-facing and keeps the local-save boundary explicit
+ok 180 - account copy is student-facing and keeps the local-save boundary explicit
+  ---
+  duration_ms: 0.557958
+  type: 'test'
+  ...
+# Subtest: canonical discovery, evidence, comparison, and source routes render HTML
+ok 181 - canonical discovery, evidence, comparison, and source routes render HTML
+  ---
+  duration_ms: 317.42325
+  type: 'test'
+  ...
+# Subtest: comparison field form preserves colleges and renders the selected broad field
+ok 182 - comparison field form preserves colleges and renders the selected broad field
+  ---
+  duration_ms: 20.825208
+  type: 'test'
+  ...
+# Subtest: the source ledger renders one action per unique source URL
+ok 183 - the source ledger renders one action per unique source URL
+  ---
+  duration_ms: 33.815417
+  type: 'test'
+  ...
+# Subtest: the published cohort has complete, source-registered observations
+ok 184 - the published cohort has complete, source-registered observations
+  ---
+  duration_ms: 3.507584
+  type: 'test'
+  ...
+# Subtest: all nine UC headlines use Fall 2026 snapshots without mixing Fall 2025 yield
+ok 185 - all nine UC headlines use Fall 2026 snapshots without mixing Fall 2025 yield
+  ---
+  duration_ms: 4.199375
+  type: 'test'
+  ...
+# Subtest: ASU uses its latest official campus-immersion record and keeps the federal alternate
+ok 186 - ASU uses its latest official campus-immersion record and keeps the federal alternate
+  ---
+  duration_ms: 2.502958
+  type: 'test'
+  ...
+# Subtest: Stanford and MIT use reviewed current Common Data Set records
+ok 187 - Stanford and MIT use reviewed current Common Data Set records
+  ---
+  duration_ms: 3.048917
+  type: 'test'
+  ...
+# Subtest: backup parser round-trips every research field and rejects unsupported or ambiguous input
+ok 188 - backup parser round-trips every research field and rejects unsupported or ambiguous input
+  ---
+  duration_ms: 1.538916
+  type: 'test'
+  ...
+# Subtest: preview identifies drafts, existing, unreadable and unavailable colleges without modifying storage
+ok 189 - preview identifies drafts, existing, unreadable and unavailable colleges without modifying storage
+  ---
+  duration_ms: 0.256625
+  type: 'test'
+  ...
+# Subtest: restore rechecks after preview, never overwrites any existing notes, and isolates owners
+ok 190 - restore rechecks after preview, never overwrites any existing notes, and isolates owners
+  ---
+  duration_ms: 0.270959
+  type: 'test'
+  ...
+# Subtest: restore reports completed entries exactly if storage fills partway through
+ok 191 - restore reports completed entries exactly if storage fills partway through
+  ---
+  duration_ms: 0.097125
+  type: 'test'
+  ...
+# Subtest: restore refuses unverified identities and unavailable coordination
+ok 192 - restore refuses unverified identities and unavailable coordination
+  ---
+  duration_ms: 0.096167
+  type: 'test'
+  ...
+# Subtest: draft journals recover all fields after controller and route destruction without changing saved v1 data
+ok 193 - draft journals recover all fields after controller and route destruction without changing saved v1 data
+  ---
+  duration_ms: 1.607542
+  type: 'test'
+  ...
+# Subtest: simultaneous stale writes serialize revision check with commit and only one succeeds
+ok 194 - simultaneous stale writes serialize revision check with commit and only one succeeds
+  ---
+  duration_ms: 0.175041
+  type: 'test'
+  ...
+# Subtest: save without cross-tab locks is explicitly unsupported and never writes
+ok 195 - save without cross-tab locks is explicitly unsupported and never writes
+  ---
+  duration_ms: 0.291542
+  type: 'test'
+  ...
+# Subtest: verification changes while waiting for lock abort writes while retaining scoped draft
+ok 196 - verification changes while waiting for lock abort writes while retaining scoped draft
+  ---
+  duration_ms: 0.505166
+  type: 'test'
+  ...
+# Subtest: edits typed while a save is waiting are retained and rebased for the next save
+ok 197 - edits typed while a save is waiting are retained and rebased for the next save
+  ---
+  duration_ms: 0.418833
+  type: 'test'
+  ...
+# Subtest: another tab's commit preserves dirty local edits and explicit replacement is conflict checked
+ok 198 - another tab's commit preserves dirty local edits and explicit replacement is conflict checked
+  ---
+  duration_ms: 0.738083
+  type: 'test'
+  ...
+# Subtest: clear removes notes, checks, category and recoverable draft; another tab's unreviewed save survives
+ok 199 - clear removes notes, checks, category and recoverable draft; another tab's unreviewed save survives
+  ---
+  duration_ms: 0.319666
+  type: 'test'
+  ...
+# Subtest: corrupt or full draft storage is visible and never silently replaces recoverable bytes
+ok 200 - corrupt or full draft storage is visible and never silently replaces recoverable bytes
+  ---
+  duration_ms: 0.090791
+  type: 'test'
+  ...
+# Subtest: existing v1 saved records recover without mutation and dirty journal detects changes during reload
+ok 201 - existing v1 saved records recover without mutation and dirty journal detects changes during reload
+  ---
+  duration_ms: 0.231791
+  type: 'test'
+  ...
+# Subtest: exports include the latest uncommitted notes, checks, and category; conflicts block the whole export
+ok 202 - exports include the latest uncommitted notes, checks, and category; conflicts block the whole export
+  ---
+  duration_ms: 0.296958
+  type: 'test'
+  ...
+# Subtest: explicit draft replacement cannot overwrite a copy changed since the student reviewed it
+ok 203 - explicit draft replacement cannot overwrite a copy changed since the student reviewed it
+  ---
+  duration_ms: 0.102417
+  type: 'test'
+  ...
+# Subtest: CSV cells preserve user punctuation while neutralizing spreadsheet formulas
+ok 204 - CSV cells preserve user punctuation while neutralizing spreadsheet formulas
+  ---
+  duration_ms: 0.589916
+  type: 'test'
+  ...
+# Subtest: research exports retain missing states, exact periods, sources and notes
+ok 205 - research exports retain missing states, exact periods, sources and notes
+  ---
+  duration_ms: 0.243667
+  type: 'test'
+  ...
+# Subtest: every real projected college exports without profile-only fields
+ok 206 - every real projected college exports without profile-only fields
+  ---
+  duration_ms: 7.56725
+  type: 'test'
+  ...
+# Subtest: student list roles preserve legacy notebooks and never accept inferred rating fields
+ok 207 - student list roles preserve legacy notebooks and never accept inferred rating fields
+  ---
+  duration_ms: 0.898792
+  type: 'test'
+  ...
+# Subtest: notebook records remain separate by college and verified account scope
+ok 208 - notebook records remain separate by college and verified account scope
+  ---
+  duration_ms: 0.416834
+  type: 'test'
+  ...
+# Subtest: loading, unverified, malformed, and unsafe college scopes never read or write storage
+ok 209 - loading, unverified, malformed, and unsafe college scopes never read or write storage
+  ---
+  duration_ms: 0.100166
+  type: 'test'
+  ...
+# Subtest: parser rejects corrupt or unsupported data and projects known fields only
+ok 210 - parser rejects corrupt or unsupported data and projects known fields only
+  ---
+  duration_ms: 0.149417
+  type: 'test'
+  ...
+# Subtest: missing notes are empty, malformed notes preserve a revision for explicit replacement
+ok 211 - missing notes are empty, malformed notes preserve a revision for explicit replacement
+  ---
+  duration_ms: 0.117583
+  type: 'test'
+  ...
+# Subtest: a stale notebook save cannot replace a copy that changed after it was loaded
+ok 212 - a stale notebook save cannot replace a copy that changed after it was loaded
+  ---
+  duration_ms: 0.060459
+  type: 'test'
+  ...
+# Subtest: unavailable and quota-limited storage fail visibly without claiming persistence
+ok 213 - unavailable and quota-limited storage fail visibly without claiming persistence
+  ---
+  duration_ms: 0.135667
+  type: 'test'
+  ...
+# Subtest: invalid writes leave the existing stored research intact
+ok 214 - invalid writes leave the existing stored research intact
+  ---
+  duration_ms: 0.606333
+  type: 'test'
+  ...
+# Subtest: checklist order does not create false dirty states and empty records do not share arrays
+ok 215 - checklist order does not create false dirty states and empty records do not share arrays
+  ---
+  duration_ms: 0.625666
+  type: 'test'
+  ...
+# Subtest: transient verification preserves an account's editor key and resumes only that scope
+ok 216 - transient verification preserves an account's editor key and resumes only that scope
+  ---
+  duration_ms: 0.598083
+  type: 'test'
+  ...
+# Subtest: a different verified account replaces the hidden editor before its list hydrates
+ok 217 - a different verified account replaces the hidden editor before its list hydrates
+  ---
+  duration_ms: 0.1245
+  type: 'test'
+  ...
+# Subtest: sign-out discards the account editor and subsequent loading retains only guest research
+ok 218 - sign-out discards the account editor and subsequent loading retains only guest research
+  ---
+  duration_ms: 0.044667
+  type: 'test'
+  ...
+# Subtest: server and initial loading render no editor, while readiness failures disable retained editors
+ok 219 - server and initial loading render no editor, while readiness failures disable retained editors
+  ---
+  duration_ms: 0.054083
+  type: 'test'
+  ...
+# Subtest: saved-card snapshots preserve item references during same-account re-verification
+ok 220 - saved-card snapshots preserve item references during same-account re-verification
+  ---
+  duration_ms: 0.044167
+  type: 'test'
+  ...
+# Subtest: a newly verified account clears old cards immediately, without waiting for hydration
+ok 221 - a newly verified account clears old cards immediately, without waiting for hydration
+  ---
+  duration_ms: 0.033916
+  type: 'test'
+  ...
+# Subtest: hydrated changes replace retained cards, including a genuinely empty saved list
+ok 222 - hydrated changes replace retained cards, including a genuinely empty saved list
+  ---
+  duration_ms: 0.027833
+  type: 'test'
+  ...
+# Subtest: every published profile, broad field, and internal app link resolves
+ok 223 - every published profile, broad field, and internal app link resolves
+  ---
+  duration_ms: 2038.276083
+  type: 'test'
+  ...
+# Subtest: two tabs serialize the same unit and preserve the newer intent
+ok 224 - two tabs serialize the same unit and preserve the newer intent
+  ---
+  duration_ms: 3.340625
+  type: 'test'
+  ...
+# Subtest: an invalid outbox stops before every network and cache operation
+ok 225 - an invalid outbox stops before every network and cache operation
+  ---
+  duration_ms: 0.679792
+  type: 'test'
+  ...
+# Subtest: cache and acknowledgement failures retain exact pending records
+    # Subtest: cache failure retains the pending record
+    ok 1 - cache failure retains the pending record
+      ---
+      duration_ms: 1.00675
+      type: 'test'
+      ...
+    # Subtest: ack failure retains the pending record
+    ok 2 - ack failure retains the pending record
+      ---
+      duration_ms: 0.381084
+      type: 'test'
+      ...
+    1..2
+ok 226 - cache and acknowledgement failures retain exact pending records
+  ---
+  duration_ms: 1.67375
+  type: 'test'
+  ...
+# Subtest: a no-op authoritative read still persists the complete account cache
+ok 227 - a no-op authoritative read still persists the complete account cache
+  ---
+  duration_ms: 0.202084
+  type: 'test'
+  ...
+# Subtest: account lock names are canonical and reject unverified identifiers
+ok 228 - account lock names are canonical and reject unverified identifiers
+  ---
+  duration_ms: 0.611334
+  type: 'test'
+  ...
+# Subtest: same-account work is serialized across concurrent callers
+ok 229 - same-account work is serialized across concurrent callers
+  ---
+  duration_ms: 0.349542
+  type: 'test'
+  ...
+# Subtest: remote mutation is rejected when the browser has no lock manager
+ok 230 - remote mutation is rejected when the browser has no lock manager
+  ---
+  duration_ms: 0.095042
+  type: 'test'
+  ...
+# Subtest: guest saves, user caches, and user outboxes remain isolated by key
+ok 231 - guest saves, user caches, and user outboxes remain isolated by key
+  ---
+  duration_ms: 0.998416
+  type: 'test'
+  ...
+# Subtest: guest reads preserve the legacy College Compass save key
+ok 232 - guest reads preserve the legacy College Compass save key
+  ---
+  duration_ms: 0.123416
+  type: 'test'
+  ...
+# Subtest: account cache reports missing, valid-empty, valid, corrupt, and unavailable separately
+ok 233 - account cache reports missing, valid-empty, valid, corrupt, and unavailable separately
+  ---
+  duration_ms: 0.08475
+  type: 'test'
+  ...
+# Subtest: scoped storage rejects empty, malformed, nil, and non-RFC UUIDs
+ok 234 - scoped storage rejects empty, malformed, nil, and non-RFC UUIDs
+  ---
+  duration_ms: 0.243208
+  type: 'test'
+  ...
+# Subtest: storage read, write, and remove failures are reported without throwing
+ok 235 - storage read, write, and remove failures are reported without throwing
+  ---
+  duration_ms: 0.098417
+  type: 'test'
+  ...
+# Subtest: the outbox keeps only the latest valid intent for each known college
+ok 236 - the outbox keeps only the latest valid intent for each known college
+  ---
+  duration_ms: 0.426166
+  type: 'test'
+  ...
+# Subtest: outbox reads distinguish missing, corrupt, and unavailable records
+ok 237 - outbox reads distinguish missing, corrupt, and unavailable records
+  ---
+  duration_ms: 0.324833
+  type: 'test'
+  ...
+# Subtest: different tabs cannot overwrite pending intentions for other colleges
+ok 238 - different tabs cannot overwrite pending intentions for other colleges
+  ---
+  duration_ms: 0.256959
+  type: 'test'
+  ...
+# Subtest: acknowledgement never clears a newer same-college intention
+ok 239 - acknowledgement never clears a newer same-college intention
+  ---
+  duration_ms: 0.736875
+  type: 'test'
+  ...
+# Subtest: acknowledgement reports corrupt records without deleting them
+ok 240 - acknowledgement reports corrupt records without deleting them
+  ---
+  duration_ms: 0.496
+  type: 'test'
+  ...
+# Subtest: a pending mutation is synchronously durable before its writer returns
+ok 241 - a pending mutation is synchronously durable before its writer returns
+  ---
+  duration_ms: 0.858083
+  type: 'test'
+  ...
+# Subtest: an offline remove remains a tombstone over a stale account cache
+ok 242 - an offline remove remains a tombstone over a stale account cache
+  ---
+  duration_ms: 0.11175
+  type: 'test'
+  ...
+# Subtest: mutation sanitization keeps the last intent and drops unknown colleges
+ok 243 - mutation sanitization keeps the last intent and drops unknown colleges
+  ---
+  duration_ms: 2.074333
+  type: 'test'
+  ...
+# Subtest: remote state is authoritative before local actions are applied
+ok 244 - remote state is authoritative before local actions are applied
+  ---
+  duration_ms: 0.597708
+  type: 'test'
+  ...
+# Subtest: duplicate add/remove actions collapse into idempotent final operations
+ok 245 - duplicate add/remove actions collapse into idempotent final operations
+  ---
+  duration_ms: 0.265375
+  type: 'test'
+  ...
+# Subtest: sync rejects a non-UUID owner before any remote request
+ok 246 - sync rejects a non-UUID owner before any remote request
+  ---
+  duration_ms: 0.445
+  type: 'test'
+  ...
+# Subtest: save-remove-save during an in-flight save preserves the final save
+ok 247 - save-remove-save during an in-flight save preserves the final save
+  ---
+  duration_ms: 0.6565
+  type: 'test'
+  ...
+# Subtest: a failed remote write retains the local intent for a safe retry
+ok 248 - a failed remote write retains the local intent for a safe retry
+  ---
+  duration_ms: 0.216125
+  type: 'test'
+  ...
+# Subtest: enqueue starts no network work, allowing the outbox to persist before flush
+ok 249 - enqueue starts no network work, allowing the outbox to persist before flush
+  ---
+  duration_ms: 0.184708
+  type: 'test'
+  ...
+# Subtest: a failed commit acknowledgement retains the operation for idempotent retry
+ok 250 - a failed commit acknowledgement retains the operation for idempotent retry
+  ---
+  duration_ms: 0.899583
+  type: 'test'
+  ...
+# Subtest: a partial save-then-remove failure retries the complete idempotent batch
+ok 251 - a partial save-then-remove failure retries the complete idempotent batch
+  ---
+  duration_ms: 0.395167
+  type: 'test'
+  ...
+# Subtest: account A is hidden through every loading and account-B transition frame
+ok 252 - account A is hidden through every loading and account-B transition frame
+  ---
+  duration_ms: 0.699584
+  type: 'test'
+  ...
+# Subtest: a valid account cache is complete but an outbox by itself is not
+ok 253 - a valid account cache is complete but an outbox by itself is not
+  ---
+  duration_ms: 0.094375
+  type: 'test'
+  ...
+# Subtest: a failed remote read without a complete base is unavailable, not empty
+ok 254 - a failed remote read without a complete base is unavailable, not empty
+  ---
+  duration_ms: 0.097041
+  type: 'test'
+  ...
+# Subtest: cached offline data remains labeled cached rather than synced
+ok 255 - cached offline data remains labeled cached rather than synced
+  ---
+  duration_ms: 0.043583
+  type: 'test'
+  ...
+# Subtest: a previously confirmed remote base stays visible during a retry
+ok 256 - a previously confirmed remote base stays visible during a retry
+  ---
+  duration_ms: 0.087583
+  type: 'test'
+  ...
+# Subtest: guest import is enabled only for a current, confirmed remote account view
+ok 257 - guest import is enabled only for a current, confirmed remote account view
+  ---
+  duration_ms: 0.060208
+  type: 'test'
+  ...
+# Subtest: only canonical verified UUIDs can define an account storage scope
+ok 258 - only canonical verified UUIDs can define an account storage scope
+  ---
+  duration_ms: 0.073208
+  type: 'test'
+  ...
+# Subtest: comparison selections never cross saved-list account scopes
+ok 259 - comparison selections never cross saved-list account scopes
+  ---
+  duration_ms: 1.25225
+  type: 'test'
+  ...
+# Subtest: comparison selections retain only colleges still saved in the same scope
+ok 260 - comparison selections retain only colleges still saved in the same scope
+  ---
+  duration_ms: 0.169167
+  type: 'test'
+  ...
+# Subtest: Supabase CSP origins are reduced to a safe public origin
+ok 261 - Supabase CSP origins are reduced to a safe public origin
+  ---
+  duration_ms: 0.442625
+  type: 'test'
+  ...
+# Subtest: Supabase CSP origins reject header injection and non-origin URLs
+ok 262 - Supabase CSP origins reject header injection and non-origin URLs
+  ---
+  duration_ms: 0.236833
+  type: 'test'
+  ...
+# Subtest: production CSP is strict for scripts and scoped for optional auth
+ok 263 - production CSP is strict for scripts and scoped for optional auth
+  ---
+  duration_ms: 0.267458
+  type: 'test'
+  ...
+# Subtest: development CSP permits only the extra runtime transports it needs
+ok 264 - development CSP permits only the extra runtime transports it needs
+  ---
+  duration_ms: 0.111708
+  type: 'test'
+  ...
+# Subtest: CSP refuses a fixed-shape injection value as a nonce
+ok 265 - CSP refuses a fixed-shape injection value as a nonce
+  ---
+  duration_ms: 0.094625
+  type: 'test'
+  ...
+# Subtest: public Supabase config accepts publishable and legacy anon keys
+ok 266 - public Supabase config accepts publishable and legacy anon keys
+  ---
+  duration_ms: 2.041584
+  type: 'test'
+  ...
+# Subtest: public Supabase config rejects privileged keys before a browser client can exist
+ok 267 - public Supabase config rejects privileged keys before a browser client can exist
+  ---
+  duration_ms: 0.188875
+  type: 'test'
+  ...
+# Subtest: malformed or missing public settings fail closed
+ok 268 - malformed or missing public settings fail closed
+  ---
+  duration_ms: 0.090875
+  type: 'test'
+  ...
+# Subtest: saved_colleges has a constrained user-owned identity
+ok 269 - saved_colleges has a constrained user-owned identity
+  ---
+  duration_ms: 42.944125
+  type: 'test'
+  ...
+# Subtest: saved_colleges exposes only the required authenticated operations
+ok 270 - saved_colleges exposes only the required authenticated operations
+  ---
+  duration_ms: 1.338166
+  type: 'test'
+  ...
+# Subtest: saved_colleges RLS has separate owner-only policies
+ok 271 - saved_colleges RLS has separate owner-only policies
+  ---
+  duration_ms: 1.66225
+  type: 'test'
+  ...
+# Subtest: saved_colleges migration stays free of privileged database code
+ok 272 - saved_colleges migration stays free of privileged database code
+  ---
+  duration_ms: 0.982708
+  type: 'test'
+  ...
+# Subtest: local Supabase config disables anonymous Auth users
+ok 273 - local Supabase config disables anonymous Auth users
+  ---
+  duration_ms: 40.613709
+  type: 'test'
+  ...
+# Subtest: listOwned selects only unit IDs and applies the exact owner filter
+ok 274 - listOwned selects only unit IDs and applies the exact owner filter
+  ---
+  duration_ms: 0.802458
+  type: 'test'
+  ...
+# Subtest: upsertOwned sends explicit owners and uses conflict-safe duplicate ignoring
+ok 275 - upsertOwned sends explicit owners and uses conflict-safe duplicate ignoring
+  ---
+  duration_ms: 0.128125
+  type: 'test'
+  ...
+# Subtest: removeOwned applies both the owner and unit filters before execution
+ok 276 - removeOwned applies both the owner and unit filters before execution
+  ---
+  duration_ms: 0.077666
+  type: 'test'
+  ...
+# Subtest: empty mutations do not issue Supabase requests
+ok 277 - empty mutations do not issue Supabase requests
+  ---
+  duration_ms: 0.042042
+  type: 'test'
+  ...
+# Subtest: Supabase adapter errors are surfaced without leaking query details
+ok 278 - Supabase adapter errors are surfaced without leaking query details
+  ---
+  duration_ms: 0.159
+  type: 'test'
+  ...
+# Subtest: the adapter rejects a caller whose UUID differs from its bound token owner
+ok 279 - the adapter rejects a caller whose UUID differs from its bound token owner
+  ---
+  duration_ms: 0.107917
+  type: 'test'
+  ...
+# Subtest: a verified identity and matching local token are captured together
+ok 280 - a verified identity and matching local token are captured together
+  ---
+  duration_ms: 0.620458
+  type: 'test'
+  ...
+# Subtest: a shared-client account switch fails before a token can be bound
+ok 281 - a shared-client account switch fails before a token can be bound
+  ---
+  duration_ms: 0.204917
+  type: 'test'
+  ...
+# Subtest: malformed expected identities fail before Auth is read
+ok 282 - malformed expected identities fail before Auth is read
+  ---
+  duration_ms: 0.074292
+  type: 'test'
+  ...
+# Subtest: accepts a bounded XLSX workbook with the required OOXML entries
+ok 283 - accepts a bounded XLSX workbook with the required OOXML entries
+  ---
+  duration_ms: 15.321875
+  type: 'test'
+  ...
+# Subtest: rejects an arbitrary ZIP that is not an XLSX workbook
+ok 284 - rejects an arbitrary ZIP that is not an XLSX workbook
+  ---
+  duration_ms: 0.24025
+  type: 'test'
+  ...
+# Subtest: rejects a workbook served with an unapproved MIME type
+ok 285 - rejects a workbook served with an unapproved MIME type
+  ---
+  duration_ms: 0.4695
+  type: 'test'
+  ...
+# Subtest: rejects a redirect host before making the redirected request
+ok 286 - rejects a redirect host before making the redirected request
+  ---
+  duration_ms: 0.556125
+  type: 'test'
+  ...
+# Subtest: independently downloads and fingerprint-checks every source in a multi-artifact overlay
+ok 287 - independently downloads and fingerprint-checks every source in a multi-artifact overlay
+  ---
+  duration_ms: 8.901459
+  type: 'test'
+  ...
+# Subtest: records every source failure and preserves the last approved evidence before rejecting
+ok 288 - records every source failure and preserves the last approved evidence before rejecting
+  ---
+  duration_ms: 2.390375
+  type: 'test'
+  ...
+# Subtest: an invalid manifest produces a schema failure report without fetching or approving sources
+ok 289 - an invalid manifest produces a schema failure report without fetching or approving sources
+  ---
+  duration_ms: 2.159292
+  type: 'test'
+  ...
+1..289
+# tests 291
+# suites 0
+# pass 290
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4200.890166

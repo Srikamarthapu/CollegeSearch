@@ -6,6 +6,7 @@ import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import { colleges, observationSourceKind, release } from "@/app/lib/college-data";
 import styles from "./data-health.module.css";
+import verification from "@/data/institution-source-verification.json";
 
 export const metadata: Metadata = {
   title: "Data health | CollegeSearch",
@@ -55,6 +56,31 @@ export default function DataHealthPage() {
             actually describes.
           </p>
         </header>
+
+        <section className={styles.releases} aria-labelledby="verification-heading">
+          <div className={styles.sectionHeading}>
+            <span>Live source check</span>
+            <h2 id="verification-heading">{verification.counts.passed} of {verification.counts.total} registered artifacts passed</h2>
+          </div>
+          <p>Published verification snapshot: <time dateTime={verification.checkedAt}>{new Date(verification.checkedAt).toISOString().replace("T", " ").slice(0, 16)} UTC</time>. This checks official source availability and agreement with approved fingerprints. It does not make every reporting year current or repeat every manual factual review.</p>
+          <p>{verification.counts.failed + verification.counts.notChecked > 0 ? `${verification.counts.failed} failed and ${verification.counts.notChecked} unchecked sources need review. The last approved college records remain available.` : "Every registered artifact agreed with its approved evidence at that check."} Later scheduled checks are retained in the maintenance workflow; this published snapshot changes when a reviewed update is released.</p>
+          <details>
+            <summary>Inspect each source and its last factual review</summary>
+            <div className={styles.releaseList}>
+              {verification.sources.map((source) => (
+                <article key={source.sourceId}>
+                  <div><span>{source.status === "passed" ? "Passed" : "Needs review"} · {source.publisher}</span><h3>{source.sourceName}</h3></div>
+                  <dl>
+                    <div><dt>Artifact checked</dt><dd>{source.checkedAt.slice(0, 10)}</dd></div>
+                    <div><dt>Last manual factual review</dt><dd>{source.lastApprovedEvidence.reviewedOn ?? "Not recorded"}</dd></div>
+                    <div><dt>Population</dt><dd>{source.lastApprovedEvidence.cohort ?? "Metric-specific"}</dd></div>
+                  </dl>
+                  <a href={source.lastApprovedEvidence.sourcePage} target="_blank" rel="noreferrer">Inspect official source <ArrowRight size={14} aria-hidden="true" /></a>
+                </article>
+              ))}
+            </div>
+          </details>
+        </section>
 
         <section className={styles.summary} aria-labelledby="coverage-heading">
           <div className={styles.sectionHeading}>

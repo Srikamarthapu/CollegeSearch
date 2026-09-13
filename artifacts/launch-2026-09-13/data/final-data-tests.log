@@ -1,0 +1,256 @@
+TAP version 13
+# Subtest: accepts a distinct UC archive and the exact reviewed cohort
+ok 1 - accepts a distinct UC archive and the exact reviewed cohort
+  ---
+  duration_ms: 0.55
+  type: 'test'
+  ...
+# Subtest: rejects a finalized/latest UC filename collision
+ok 2 - rejects a finalized/latest UC filename collision
+  ---
+  duration_ms: 0.253417
+  type: 'test'
+  ...
+# Subtest: rejects missing, duplicate, or unexpected cohort UNITIDs
+ok 3 - rejects missing, duplicate, or unexpected cohort UNITIDs
+  ---
+  duration_ms: 0.075166
+  type: 'test'
+  ...
+# Subtest: detects a manifest edit between verification and publication
+ok 4 - detects a manifest edit between verification and publication
+  ---
+  duration_ms: 0.270208
+  type: 'test'
+  ...
+# Subtest: publishes every staged data file together
+ok 5 - publishes every staged data file together
+  ---
+  duration_ms: 9.838125
+  type: 'test'
+  ...
+# Subtest: restores existing and previously absent files when publication fails
+ok 6 - restores existing and previously absent files when publication fails
+  ---
+  duration_ms: 6.028833
+  type: 'test'
+  ...
+# Subtest: preserves backups and a recovery lock when rollback is incomplete
+ok 7 - preserves backups and a recovery lock when rollback is incomplete
+  ---
+  duration_ms: 4.901333
+  type: 'test'
+  ...
+# Subtest: rejects duplicate targets before changing live data
+ok 8 - rejects duplicate targets before changing live data
+  ---
+  duration_ms: 2.106375
+  type: 'test'
+  ...
+# Subtest: rejects missing and non-file staged targets before publication
+ok 9 - rejects missing and non-file staged targets before publication
+  ---
+  duration_ms: 3.300375
+  type: 'test'
+  ...
+# Subtest: serializes publication locks and releases only the owning token
+ok 10 - serializes publication locks and releases only the owning token
+  ---
+  duration_ms: 2.357
+  type: 'test'
+  ...
+# Subtest: the reviewed institution cohort has 26 artifacts and 19 admission headlines
+ok 11 - the reviewed institution cohort has 26 artifacts and 19 admission headlines
+  ---
+  duration_ms: 7.564083
+  type: 'test'
+  ...
+# Subtest: Purdue stays on the federal baseline while its first-party workbook blocks automated verification
+ok 12 - Purdue stays on the federal baseline while its first-party workbook blocks automated verification
+  ---
+  duration_ms: 3.897166
+  type: 'test'
+  ...
+# Subtest: Northwestern uses two pinned Data Book PDFs without changing admission or cost
+ok 13 - Northwestern uses two pinned Data Book PDFs without changing admission or cost
+  ---
+  duration_ms: 3.395208
+  type: 'test'
+  ...
+# Subtest: Caltech and Pomona add only verifier-safe current fields and keep coherent federal admissions
+ok 14 - Caltech and Pomona add only verifier-safe current fields and keep coherent federal admissions
+  ---
+  duration_ms: 3.285584
+  type: 'test'
+  ...
+# Subtest: new reviewed admissions exactly match their approved PDF and XLSX records
+ok 15 - new reviewed admissions exactly match their approved PDF and XLSX records
+  ---
+  duration_ms: 3.411667
+  type: 'test'
+  ...
+# Subtest: unsupported Duke and Yale admissions and deliberately excluded costs stay federal
+ok 16 - unsupported Duke and Yale admissions and deliberately excluded costs stay federal
+  ---
+  duration_ms: 3.103042
+  type: 'test'
+  ...
+# Subtest: institution overlays satisfy lineage and arithmetic invariants
+ok 17 - institution overlays satisfy lineage and arithmetic invariants
+  ---
+  duration_ms: 5.084667
+  type: 'test'
+  ...
+# Subtest: the generated release exactly reflects every reviewed overlay
+ok 18 - the generated release exactly reflects every reviewed overlay
+  ---
+  duration_ms: 4.623459
+  type: 'test'
+  ...
+# Subtest: a complete derived-admissions fixture passes validation
+ok 19 - a complete derived-admissions fixture passes validation
+  ---
+  duration_ms: 0.208084
+  type: 'test'
+  ...
+# Subtest: a college can bind different metrics to explicitly declared reviewed sources
+ok 20 - a college can bind different metrics to explicitly declared reviewed sources
+  ---
+  duration_ms: 0.204667
+  type: 'test'
+  ...
+# Subtest: multi-source overlays require explicit, declared, and used metric lineage
+ok 21 - multi-source overlays require explicit, declared, and used metric lineage
+  ---
+  duration_ms: 0.339875
+  type: 'test'
+  ...
+# Subtest: derived metrics cannot combine operands from different artifacts
+ok 22 - derived metrics cannot combine operands from different artifacts
+  ---
+  duration_ms: 0.089209
+  type: 'test'
+  ...
+# Subtest: multi-source declarations reject ambiguous or unregistered source sets
+ok 23 - multi-source declarations reject ambiguous or unregistered source sets
+  ---
+  duration_ms: 0.241625
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a reportingYear mismatch
+ok 24 - admit-rate inputs reject a reportingYear mismatch
+  ---
+  duration_ms: 0.1065
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a reportingYear mismatch
+ok 25 - yield-rate inputs reject a reportingYear mismatch
+  ---
+  duration_ms: 0.267125
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a periodLabel mismatch
+ok 26 - admit-rate inputs reject a periodLabel mismatch
+  ---
+  duration_ms: 0.255875
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a periodLabel mismatch
+ok 27 - yield-rate inputs reject a periodLabel mismatch
+  ---
+  duration_ms: 0.109125
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a cohort mismatch
+ok 28 - admit-rate inputs reject a cohort mismatch
+  ---
+  duration_ms: 0.059584
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a cohort mismatch
+ok 29 - yield-rate inputs reject a cohort mismatch
+  ---
+  duration_ms: 0.054041
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a finality mismatch
+ok 30 - admit-rate inputs reject a finality mismatch
+  ---
+  duration_ms: 0.049208
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a finality mismatch
+ok 31 - yield-rate inputs reject a finality mismatch
+  ---
+  duration_ms: 0.050208
+  type: 'test'
+  ...
+# Subtest: an observation cannot override its college source lineage
+ok 32 - an observation cannot override its college source lineage
+  ---
+  duration_ms: 0.057583
+  type: 'test'
+  ...
+# Subtest: a derived rate cannot omit its source observations
+ok 33 - a derived rate cannot omit its source observations
+  ---
+  duration_ms: 0.09875
+  type: 'test'
+  ...
+# Subtest: HTML artifact hashing ignores volatile asset versions and edge challenges
+ok 34 - HTML artifact hashing ignores volatile asset versions and edge challenges
+  ---
+  duration_ms: 0.365375
+  type: 'test'
+  ...
+# Subtest: accepts a bounded XLSX workbook with the required OOXML entries
+ok 35 - accepts a bounded XLSX workbook with the required OOXML entries
+  ---
+  duration_ms: 10.141416
+  type: 'test'
+  ...
+# Subtest: rejects an arbitrary ZIP that is not an XLSX workbook
+ok 36 - rejects an arbitrary ZIP that is not an XLSX workbook
+  ---
+  duration_ms: 0.21275
+  type: 'test'
+  ...
+# Subtest: rejects a workbook served with an unapproved MIME type
+ok 37 - rejects a workbook served with an unapproved MIME type
+  ---
+  duration_ms: 0.501
+  type: 'test'
+  ...
+# Subtest: rejects a redirect host before making the redirected request
+ok 38 - rejects a redirect host before making the redirected request
+  ---
+  duration_ms: 0.498375
+  type: 'test'
+  ...
+# Subtest: independently downloads and fingerprint-checks every source in a multi-artifact overlay
+ok 39 - independently downloads and fingerprint-checks every source in a multi-artifact overlay
+  ---
+  duration_ms: 5.269959
+  type: 'test'
+  ...
+# Subtest: records every source failure and preserves the last approved evidence before rejecting
+ok 40 - records every source failure and preserves the last approved evidence before rejecting
+  ---
+  duration_ms: 2.153167
+  type: 'test'
+  ...
+# Subtest: an invalid manifest produces a schema failure report without fetching or approving sources
+ok 41 - an invalid manifest produces a schema failure report without fetching or approving sources
+  ---
+  duration_ms: 1.169667
+  type: 'test'
+  ...
+1..41
+# tests 41
+# suites 0
+# pass 41
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 66.008166

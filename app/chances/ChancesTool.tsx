@@ -102,9 +102,9 @@ export function ChancesTool({ colleges, initialIds }: ChancesToolProps) {
         <div>
           <span className="page-eyebrow">
             <ShieldCheck size={15} aria-hidden="true" />
-            Historical context, no false precision
+            Understand admissions
           </span>
-          <h1>Read the rate. Keep its limits in view.</h1>
+          <h1>Put admission rates in perspective.</h1>
           <p>
             Compare up to four colleges using their reported overall first-year
             admit rates. We describe the observed cohort; we do not turn it
@@ -124,12 +124,11 @@ export function ChancesTool({ colleges, initialIds }: ChancesToolProps) {
       <section className={styles.deferredNotice} aria-labelledby="model-boundary-heading">
         <FileWarning size={22} aria-hidden="true" />
         <div>
-          <h2 id="model-boundary-heading">Applicant-range modeling is intentionally deferred.</h2>
+          <h2 id="model-boundary-heading">What an admit rate can tell you.</h2>
           <p>
-            This dataset does not yet contain verified, consistently defined
-            GPA and test-score ranges for these colleges. We will not ask for
-            sensitive academic inputs until those source ranges and their
-            cohorts can be shown beside every result.
+            It shows the share of applicants admitted in a past cycle. It cannot
+            predict your result. This collection does not include verified,
+            comparable GPA and test-score ranges.
           </p>
         </div>
       </section>
