@@ -3,6 +3,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import { deleteCurrentAccount } from "../app/lib/account-deletion.ts";
+import { createSupabaseSavedCollegeStore, SavedCollegeSessionUnavailableError } from "../app/lib/supabase/saved-colleges.ts";
 
 // Explicitly supplied, ignored connection file. Never print credentials or JWTs.
 const [configPath, reportPath, appOrigin] = process.argv.slice(2);
@@ -31,8 +32,12 @@ try {
   const [a, b] = users;
   await check("authenticated current session is active", async () => { const r = await a.client.rpc("account_session_active"); assert.equal(r.error, null); assert.equal(r.data, true); });
   await check("owner can save and read a college", async () => {
-    assert.equal((await a.client.from("saved_colleges").insert({ user_id: a.id, unit_id: 110635 })).error, null);
-    const r = await a.client.from("saved_colleges").select("unit_id"); assert.equal(r.error, null); assert.deepEqual(r.data, [{ unit_id: 110635 }]);
+    const store = createSupabaseSavedCollegeStore(a.client, a.id);
+    await store.upsertOwned(a.id, [110635]);
+    assert.deepEqual(await store.listOwned(a.id), [110635]);
+    await store.removeOwned(a.id, [110635]);
+    assert.deepEqual(await store.listOwned(a.id), []);
+    await store.upsertOwned(a.id, [110635]);
   });
   await check("second user cannot read or write the first user's list", async () => {
     const r = await b.client.from("saved_colleges").select("unit_id").eq("user_id", a.id); assert.equal(r.error, null); assert.deepEqual(r.data, []);
@@ -50,6 +55,10 @@ try {
     assert.equal((await stale.rpc("account_session_active")).data, false);
     const r = await stale.from("saved_colleges").select("unit_id"); assert.equal(r.error, null); assert.deepEqual(r.data, []);
     assert.ok((await stale.from("saved_colleges").insert({ user_id: a.id, unit_id: 110644 })).error);
+    const store = createSupabaseSavedCollegeStore(stale, a.id);
+    await assert.rejects(store.listOwned(a.id), SavedCollegeSessionUnavailableError);
+    await assert.rejects(store.removeOwned(a.id, [110635]), SavedCollegeSessionUnavailableError);
+    assert.deepEqual((await admin.from("saved_colleges").select("unit_id").eq("user_id", a.id)).data, [{ unit_id: 110635 }]);
   });
   await check("account deletion revokes sessions and cascades only the verified owner's list", async () => {
     const origin = appOrigin ?? "https://collegesearch.test";

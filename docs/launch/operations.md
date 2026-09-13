@@ -12,7 +12,7 @@ Before changing the audience, record the final origin, release owner and backup,
 
 The supplied `pilot-probe.mjs` uses Node built-ins and needs no installation. It sends GET requests only, without cookies, credentials, signup, email, or database mutations. It does not follow redirects automatically. It retains status, timing and findings; it does not retain response HTML, cookie values, student profiles, or tokens.
 
-Smoke includes two fresh home documents, explore, Berkeley's profile, compare, saved, match, account, privacy, data health, both no-code auth callbacks, one compiled JS asset, the favicon, and one real image-optimizer request. It verifies CollegeSearch identity, HTTP/MIME, private/no-store document caching, nonce consistency/uniqueness, and expected callback behavior. The optimizer check exercises the Worker’s ASSETS/IMAGES path that stubbed route tests do not establish. There are 15 requests in a successful smoke run.
+Smoke includes two fresh home documents, explore, Berkeley's profile, compare, saved, match, planner, account, privacy, data health, both no-code auth callbacks, one compiled JS asset, the favicon, and one real image-optimizer request. It verifies CollegeSearch identity, HTTP/MIME, private/no-store document caching, nonce consistency/uniqueness, and expected callback behavior. The optimizer check exercises the Worker’s ASSETS/IMAGES path that stubbed route tests do not establish. There are 16 requests in a successful smoke run. Earlier dated 15-request reports predate planner inclusion.
 
 Run these against the exact existing local production preview after the final build, then against the actual deployed origin. Substitute the real origin; the examples do not select or publish one:
 

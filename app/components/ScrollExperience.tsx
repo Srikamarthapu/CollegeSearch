@@ -25,7 +25,7 @@ export function ScrollExperience() {
             wheelMultiplier: 1,
             prevent: (node) =>
               node instanceof HTMLElement &&
-              Boolean(node.closest("[data-lenis-prevent]")),
+              Boolean(node.closest("[data-lenis-prevent], textarea")),
           }}
         />
       ) : null}

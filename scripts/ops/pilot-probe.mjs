@@ -1,5 +1,6 @@
 import { writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
+import { verificationRecency, VERIFICATION_MAX_AGE_HOURS } from "../../app/lib/verification-recency.mjs";
 
 const LOOPBACK = new Set(["localhost", "127.0.0.1", "[::1]"]);
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -12,12 +13,10 @@ export function safeOrigin(value) {
   return url.origin;
 }
 
-export function publishedSnapshot(html, now = Date.now(), maxAgeHours = 192) {
+export function publishedSnapshot(html, now = Date.now(), maxAgeHours = VERIFICATION_MAX_AGE_HOURS) {
   const stamp = /Published verification snapshot:[\s\S]{0,500}?<time\b[^>]*\bdatetime=["']([^"']+)["']/i.exec(html)?.[1];
-  const ageHours = stamp ? (now - Date.parse(stamp)) / 3_600_000 : NaN;
   const counts = /(?:>|\s)(\d+)\s*(?:<!--.*?-->\s*)?of\s*(?:<!--.*?-->\s*)?(\d+)\s*(?:<!--.*?-->\s*)?registered artifacts passed/i.exec(html.replaceAll(/<!--.*?-->/g, ""));
-  if (!stamp || !Number.isFinite(ageHours) || ageHours < -1 || !counts || +counts[2] !== 26 || +counts[1] > +counts[2]) return { state: "unknown", checkedAt: stamp ?? null };
-  return { state: +counts[1] !== +counts[2] ? "needs_review" : ageHours > maxAgeHours ? "stale" : "within_window", checkedAt: stamp, ageHours: +ageHours.toFixed(2), passed: +counts[1], total: +counts[2], maxAgeHours };
+  return verificationRecency({ checkedAt: stamp ?? null, passed: counts ? +counts[1] : NaN, total: counts ? +counts[2] : NaN }, now, maxAgeHours);
 }
 
 export function inspectDocument(response, html, path) {
@@ -88,7 +87,7 @@ function publicResult(result, failures) {
 
 export async function smoke({ origin, authMode = "configured", now = Date.now(), fetcher = fetch }) {
   const checks = [];
-  const paths = ["/", "/", "/explore", "/colleges/university-of-california-berkeley", "/compare", "/saved", "/match", "/account", "/privacy", "/data-health"];
+  const paths = ["/", "/", "/explore", "/colleges/university-of-california-berkeley", "/compare", "/saved", "/match", "/plan", "/account", "/privacy", "/data-health"];
   const nonces = [];
   let sourceSnapshot = { state: "unknown" };
   let homeHtml = "";

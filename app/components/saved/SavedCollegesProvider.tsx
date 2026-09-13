@@ -52,7 +52,7 @@ import {
   writeSavedCollegeIds,
 } from "@/app/lib/local-saves";
 import { getSupabaseBrowserClient } from "@/app/lib/supabase/browser";
-import { createVerifiedSupabaseSavedCollegeStore } from "@/app/lib/supabase/saved-colleges";
+import { createVerifiedSupabaseSavedCollegeStore, SavedCollegeSessionUnavailableError } from "@/app/lib/supabase/saved-colleges";
 
 export type SavedCollegeSyncPhase =
   | "local-only"
@@ -106,6 +106,9 @@ function coordinationError() {
 }
 
 function accountCycleErrorMessage(error: SavedCollegeAccountCycleError) {
+  if (error.cause instanceof SavedCollegeSessionUnavailableError) {
+    return "Your account session could not be verified. Changes have not been confirmed; pending changes are kept in this browser. Retry sync to verify your session, then sign in again if prompted.";
+  }
   switch (error.stage) {
     case "lock":
       return coordinationError();
@@ -835,7 +838,9 @@ export function SavedCollegesProvider({
         setSyncPhase("error");
         return;
       }
-      void flushSession(session);
+      // A manual retry must replace an expired/revoked captured token. First
+      // preserve volatile intent, then let Auth reverify and rebuild the store.
+      void refreshUser();
       return;
     }
 
@@ -843,7 +848,6 @@ export function SavedCollegesProvider({
     setRetryToken((current) => current + 1);
   }, [
     authStatus,
-    flushSession,
     persistMutations,
     refreshUser,
     sessionIsCurrent,

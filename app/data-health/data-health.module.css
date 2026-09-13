@@ -238,3 +238,8 @@
     grid-column: 2;
   }
 }
+
+.recency { margin: 20px 0; padding: 16px 18px; border: 1px solid #8aaa9b; background: var(--forest-pale); color: var(--forest); overflow-wrap: anywhere; }
+.recency strong { font-size: 15px; line-height: 1.4; }
+.recency p { margin: 8px 0 0; color: var(--ink-soft); font-size: 14px; line-height: 1.65; }
+.recency:not([data-verification-state="within_window"]) { border-color: var(--ochre-ink); background: #faf4e8; color: var(--ochre-ink); }
