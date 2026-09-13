@@ -212,6 +212,7 @@ export function SiteHeader({ savedCount }: { savedCount?: number }) {
               ref={mobileNavigationRef}
               id="mobile-navigation"
               className="mobile-nav"
+              data-lenis-prevent
               role="dialog"
               aria-modal="true"
               aria-label="Site navigation"
@@ -240,7 +241,7 @@ export function SiteHeader({ savedCount }: { savedCount?: number }) {
                         ? "page"
                         : undefined
                     }
-                    onClick={() => setMenuOpen(false)}
+                    onClick={() => { if (href === pathname) closeMenuAndRestoreFocus(); else setMenuOpen(false); }}
                   >
                     <Icon size={18} aria-hidden="true" />
                     <span>{label}</span>

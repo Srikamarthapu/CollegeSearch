@@ -47,6 +47,7 @@ button:disabled { cursor: not-allowed; opacity: .6; }
 .header-actions { gap: 20px; }
 .mobile-nav, .menu-button, .mobile-nav-close { border-radius: 10px; }
 .mobile-nav, .mobile-nav-scrim { top: 76px; }
+.mobile-nav { max-height: calc(100vh - 88px); max-height: calc(100dvh - 88px); overflow-y: auto; overscroll-behavior: contain; }
 .mobile-nav nav a { font-size: 16px; }
 .discovery-masthead { display: grid; grid-template-columns: minmax(0,1fr) 410px; gap: 60px; align-items: center; width: min(var(--page-width), calc(100% - 64px)); margin: 0 auto; padding: 42px 0 34px; }
 .discovery-eyebrow { display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 560; color: var(--ink-soft); }
@@ -289,6 +290,7 @@ button:disabled { cursor: not-allowed; opacity: .6; }
   .brand-mark img { width: 32px; height: 32px; }
   .brand-wordmark { font-size: 23px; }
   .mobile-nav, .mobile-nav-scrim { top: 66px; }
+  .mobile-nav { max-height: calc(100vh - 78px); max-height: calc(100dvh - 78px); }
   .discovery-masthead { width: calc(100% - 36px); grid-template-columns: 1fr; padding: 28px 0 24px; gap: 20px; }
   .discovery-intro h1 { font-size: 37px; margin-top: 14px; }
   .discovery-intro > p { font-size: 15px; }

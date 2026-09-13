@@ -18,6 +18,7 @@ const serverReducedMotion = () => true;
 
 export function CampusCarousel() {
   const [active, setActive] = useState(0);
+  const [announcement, setAnnouncement] = useState("");
   const [playing, setPlaying] = useState(true);
   const [hovered, setHovered] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -49,8 +50,10 @@ export function CampusCarousel() {
   }, [rotating]);
 
   function select(index: number) {
+    const next = (index + campusPhotos.length) % campusPhotos.length;
     setPlaying(false);
-    setActive((index + campusPhotos.length) % campusPhotos.length);
+    setActive(next);
+    setAnnouncement(`${campusPhotos[next].shortName}, ${next + 1} of ${campusPhotos.length}`);
   }
 
   return (
@@ -110,13 +113,16 @@ export function CampusCarousel() {
           onPointerCancel={() => { pointerPlaying.current = null; }}
           onKeyDown={() => { pointerPlaying.current = null; }}
           onClick={() => {
-            setPlaying(!(pointerPlaying.current ?? playing));
+            const resume = !(pointerPlaying.current ?? playing);
+            if (resume) setAnnouncement("");
+            setPlaying(resume);
             pointerPlaying.current = null;
           }}
           aria-label={playing ? "Pause campus slideshow" : "Play campus slideshow"}
         >{playing ? <Pause size={12} /> : <Play size={12} />} {playing ? "Pause" : "Play"}</button> : <span className={styles.motionNote}>Browse photos</span>}
       </div>
-      <p className={styles.credit} aria-live={rotating ? "off" : "polite"} aria-atomic="true">
+      <p className="sr-only" role="status" aria-atomic="true">{announcement}</p>
+      <p className={styles.credit}>
         Photo: <a href={photo.sourceUrl} target="_blank" rel="noreferrer">{photo.creator}</a> · <a href={photo.licenseUrl} target="_blank" rel="noreferrer">{photo.license}</a> · {photo.photoDate.slice(0, 4)} · cropped for display
       </p>
     </section>

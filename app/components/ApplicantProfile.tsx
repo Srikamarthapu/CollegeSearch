@@ -1,7 +1,7 @@
 "use client";
 
 import { BookOpen, Check, ChevronDown, Download, HardDrive, Trash2 } from "lucide-react";
-import { useEffect, useId, useLayoutEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 
 import { useSavedColleges } from "@/app/components/saved/SavedCollegesProvider";
 import {
@@ -54,6 +54,8 @@ function ScopedApplicantProfile({ scope }: { scope: string }) {
   const id = useId();
   const [editor, setEditor] = useState(() => sessions.reconcile(scope));
   const [confirmClear, setConfirmClear] = useState(false);
+  const clearProfileButtonRef = useRef<HTMLButtonElement>(null);
+  const keepProfileButtonRef = useRef<HTMLButtonElement>(null);
   const [clearing, setClearing] = useState(false);
   const [actionStatus, setActionStatus] = useState("");
   const [previewDate] = useState(() => new Date());
@@ -85,6 +87,15 @@ function ScopedApplicantProfile({ scope }: { scope: string }) {
     window.addEventListener("beforeunload", warnBeforeReload);
     return () => window.removeEventListener("beforeunload", warnBeforeReload);
   }, [editor.persisted, editor.draft]);
+
+  function setClearConfirmation(open: boolean, restoreFocus = true) {
+    setConfirmClear(open);
+    if (!restoreFocus) return;
+    window.requestAnimationFrame(() => {
+      const control = open ? keepProfileButtonRef.current : clearProfileButtonRef.current;
+      control?.focus();
+    });
+  }
 
   function update(patch: Partial<Profile>) {
     setActionStatus("");
@@ -213,17 +224,17 @@ function ScopedApplicantProfile({ scope }: { scope: string }) {
         <div className={styles.briefArea}>
           <div><h3>Bring the context, and your questions.</h3><p>Preview includes your current entries. Download a text brief to review before sharing it yourself.</p></div>
           <button type="button" className={styles.download} onClick={download}><Download size={17} aria-hidden="true" />Download my brief</button>
-          <details className={styles.preview}><summary>Preview my brief</summary><pre tabIndex={0} aria-label="Applicant preparation brief preview">{brief}</pre></details>
+          <details className={styles.preview}><summary>Preview my brief</summary><pre data-lenis-prevent tabIndex={0} aria-label="Applicant preparation brief preview">{brief}</pre></details>
           <p className={styles.help} role="status">{actionStatus}</p>
         </div>
 
         <div className={styles.clearArea}>
           <p>Signing out hides this account’s profile without erasing it. Anyone using the same browser profile can access guest notes. Clear your profile before leaving a shared device.</p>
           {confirmClear ? <div className={styles.clearConfirm}>
-            <p>Clear this {scope === "guest" ? "guest" : "account"} profile and its current draft from this browser?</p>
-            <button type="button" disabled={clearing} onClick={async () => { setClearing(true); const result = await sessions.clear(scope); setEditor(result); setClearing(false); setConfirmClear(false); setActionStatus(result.status === "ready" ? "Profile cleared from this browser." : result.status === "conflict" ? "Another tab changed this profile before it could be cleared. Review the current copies first." : "The browser could not fully clear the profile. Your draft is still available; clear this site’s browser data to remove all stored copies."); }}>{clearing ? "Clearing profile…" : "Yes, clear this profile"}</button>
-            <button type="button" disabled={clearing} onClick={() => setConfirmClear(false)}>Keep profile</button>
-          </div> : <button type="button" onClick={() => setConfirmClear(true)}><Trash2 size={16} aria-hidden="true" />Clear profile</button>}
+            <p id={`${id}-clear-question`}>Clear this {scope === "guest" ? "guest" : "account"} profile and its current draft from this browser?</p>
+            <button type="button" disabled={clearing} aria-describedby={`${id}-clear-question`} onClick={async () => { const trigger = document.activeElement; setClearing(true); const result = await sessions.clear(scope); setEditor(result); setClearing(false); setClearConfirmation(false, document.activeElement === trigger || document.activeElement === document.body); setActionStatus(result.status === "ready" ? "Profile cleared from this browser." : result.status === "conflict" ? "Another tab changed this profile before it could be cleared. Review the current copies first." : "The browser could not fully clear the profile. Your draft is still available; clear this site’s browser data to remove all stored copies."); }}>{clearing ? "Clearing profile…" : "Yes, clear this profile"}</button>
+            <button ref={keepProfileButtonRef} type="button" disabled={clearing} aria-describedby={`${id}-clear-question`} onClick={() => setClearConfirmation(false)}>Keep profile</button>
+          </div> : <button ref={clearProfileButtonRef} type="button" onClick={() => setClearConfirmation(true)}><Trash2 size={16} aria-hidden="true" />Clear profile</button>}
         </div>
       </div>
     </details>
