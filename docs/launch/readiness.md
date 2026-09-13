@@ -4,7 +4,7 @@ Updated September 13, 2026. Scope: implement the September 10 audit findings and
 
 | Gate | Established evidence | Remaining acceptance work |
 |---|---|---|
-| Release checks | Final build, types and lint pass; 306/306 regression checks; zero dependency advisories including development dependencies. | Private version 2 passed hosted verification. A narrow optional-image fallback correction is being validated for the next private release. |
+| Release checks | Final build, types and lint pass; 306/306 regression checks; zero dependency advisories including development dependencies. | Private version 3 is bound to source 52c8b25618120d979aeb8785663054457dd7a11e; final hosted smoke and matching GitHub CI passed. |
 | Data integrity | All 26 official source artifacts verified; 163 observations across 24 overlays; changed artifacts reviewed; no numerical/cohort changes across 50 colleges. | Maintain a recurring review/publication owner. A dated snapshot is not a live scheduler result. |
 | Student research | Navigation/reload recovery, explicit save, visible-draft export, two-tab conflict detection and explicit resolution passed in the browser. Add-only JSON restore preserved existing research. | Broader browser/device coverage; keep exported files private. |
 | Applicant profile | Optional GPA with original scale/weighting, activities and preparation checklist persist locally. Guest/account isolation and omission from matching URLs verified. | Counselor brief and clear behavior have regression coverage; broader browser coverage remains. No admissions model or validated reach/target/safety classifier is claimed. |
@@ -13,8 +13,8 @@ Updated September 13, 2026. Scope: implement the September 10 audit findings and
 | Responsive accessibility | Mobile navigation, Escape/focus return, 320px planner/profile, and long-name signed-in account layouts checked. | Complete enlarged text, reduced motion and additional browser/device coverage before broad rollout. |
 | Accounts | Dedicated free project; real local and hosted two-user/anonymous isolation, revoked-JWT denial and exact-owner deletion passed (6 checks each). Local production HTTP endpoint to hosted DB also passed 6 checks. Real browser sign-in, explicit import, hosted save persistence and sign-out passed. The exact private hosted website also passed browser sign-in, saved-list reload, sign-out and six HTTP endpoint integration checks. | Custom SMTP, real confirmation/recovery delivery and expired-session browser checks. Google stays hidden while unconfigured. |
 | Privacy and deletion | Ownership, server revocation/deletion, browser erasure/fencing regressions pass. Deletion confirmation, disabled blank confirmation and cancel checked in browser. | Operator/support contact, effective date, retention/provider disclosures and backup/deletion operating process need owner details. Final destructive browser click was not exercised. |
-| Operations | Local and private hosted smoke passed 15 checks each. Private hosted classroom probe: 120/120 document requests, 30 virtual readers, zero failures, p95 913.6 ms. Bounded probe and operations runbook exist. | School-device/network rehearsal, real alert receipt, schedule monitoring, database backup/restore and compatible rollback drill. Classroom probe excludes assets/rendering and account writes; it does not establish school-wide capacity. |
-| Publication | Updated version 2 deployed privately with environment revision 1. An unauthenticated request returned 401 and no app content. GitHub branch CI passed for the matching source. | Final image fallback correction in progress. Preserve private access until the release gates are satisfied. |
+| Operations | Local and private hosted smoke passed 15 checks each. Private hosted classroom probe: 120/120 document requests, 30 virtual readers, zero failures, p95 913.6 ms. Bounded probe and operations runbook exist. | School-device/network rehearsal, real alert receipt, schedule monitoring, database backup/restore and operational ownership. A compatible private application rollback and return to the current version was exercised separately; this does not restore a database. Classroom probe excludes assets/rendering and account writes; it does not establish school-wide capacity. |
+| Publication | Updated version 3 deployed privately with environment revision 1. An unauthenticated request returned 401 and no app content. GitHub branch CI passed for the matching source. | Final image fallback correction passed hosted checks, including rejection of external image URLs and invalid widths. Preserve private access until the release gates are satisfied. |
 
 Ooru is paused with owner approval. ResourceDex is unchanged. CollegeSearch has its own active free Supabase project; no paid upgrade was made.
 
@@ -25,3 +25,13 @@ Current release logs: `artifacts/launch-2026-09-13/release-{build,tests,typechec
 This ledger keeps the full account-enabled launch goal open. Passing local checks or privately publishing a review build does not complete that goal. The optional hourly probe workflow is a proposal only; no alert delivery is claimed.
 
 Private hosted evidence: `private-hosted-smoke.json`, `private-hosted-account-integration.json`, and `private-hosted-classroom.json`. Browser account cleanup is recorded separately. The image endpoint originally returned a valid original image but logged a missing optional service; the final correction preserves the library validation and avoids invoking an absent service.
+
+Final release provenance is in `artifacts/launch-2026-09-13/deployment.json`; final host checks are in `private-hosted-final-smoke.json`. Subsequent evidence-only documentation commits do not change the deployed application source named in that record.
+
+## Remaining owner inputs
+
+- Public operator name and support contact, plus the intended retention and deletion process. These were requested and remain unanswered; no public contact was invented from private account details.
+- A verified sending domain/SMTP service for actual student email confirmation and recovery. Supabase's default organization-only sender cannot support school onboarding.
+- Named maintenance/alert recipients and the private backup destination/restore responsibility. The probe and runbook are implemented, but real alert delivery and database recovery cannot be claimed from configuration alone.
+
+School Wi-Fi/device testing and broader accessibility/browser coverage remain required validation work. The app currently reviews 50 colleges and discloses 14 unavailable official-resource slots; it is not a comprehensive national directory. The applicant profile is a local preparation foundation and does not infer admission odds.

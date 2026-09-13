@@ -24,7 +24,7 @@ Target: local production build at http://127.0.0.1:4173, CollegeSearch identity 
 ## Explicitly unexercised / remaining
 
 - Actual email confirmation and recovery delivery require custom SMTP. Google is hidden while disabled.
-- Deployed website Worker endpoint and browser flows, school Wi-Fi/devices, additional browser engines, enlarged text and full reduced-motion matrix.
+- School Wi-Fi/devices, additional browser engines, enlarged text and full reduced-motion matrix. Hosted Worker and core account flows are covered by the later private-hosted verification below.
 - Full browser planner restore, applicant brief/clear, expired-session and concurrent account-write matrix; automated tests cover their bounded logic, not those complete browser journeys.
 - Do not claim WCAG conformance or large-scale readiness from these observations.
 
@@ -35,3 +35,5 @@ Screenshots in `browser/` are supporting captures. `planner-desktop.png` predate
 On https://college-compass-students.kamarthapusri.chatgpt.site, version 2: CollegeSearch identity, existing synthetic account sign-in, account shortlist reload and sign-out passed. The freshly opened hosted tab reported no browser console warnings/errors across these flows. The exact hosted HTTP deletion/isolation matrix passed 6/6 and cleaned its test accounts. The synthetic browser QA account was removed separately after sign-out. The private access check returned 401 without app content.
 
 Desktop home at a measured 1265px content width had equal document and scroll width. Carousel controls selected UCLA with matching photo/credit and autoplay subsequently advanced to another campus. `home-desktop.png` records the current layout.
+
+Final version 3 passed all 15 hosted smoke checks after the optional image-service correction and after the rollback exercise. External image URLs and invalid widths were rejected. The final Worker log review found zero error-level events after the last deployment; the deliberately invalid image probes completed normally. `deployment.json`, `rollback-exercise.json`, and `runtime-log-review.json` preserve the limits and exact release identity.
