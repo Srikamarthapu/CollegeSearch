@@ -30,9 +30,9 @@ button, a { transition: color 160ms, background-color 160ms, border-color 160ms,
 button:disabled { cursor: not-allowed; opacity: .6; }
 .site-header { min-height: 76px; background: #fff; border-color: var(--line); backdrop-filter: none; }
 .brand { gap: 10px; }
-.brand-mark { display: grid; place-items: center; flex: 0 0 38px; width: 38px; height: 38px; border: 0; border-radius: 0; background: transparent; }
-.brand-mark img { display: block; width: 38px; height: 38px; max-width: 100%; object-fit: contain; }
-.brand-wordmark { font-size: 25px; font-weight: 660; letter-spacing: -.065em; }
+/* Frame the supplied artwork's transparent margins without changing the asset. */
+.brand-logo { position: relative; display: block; flex: none; width: 246px; aspect-ratio: 2040 / 446; overflow: hidden; }
+.brand-logo img { position: absolute; display: block; width: 106.470588%; max-width: none; height: auto; left: -3.431373%; top: -29.147982%; }
 .desktop-nav { gap: 3px; }
 .plan-page { width: min(var(--page-width), calc(100% - 40px)); margin: 0 auto; min-height: 75vh; padding-bottom: 70px; }
 .plan-intro { max-width: 760px; padding: 30px 0 10px; }
@@ -182,7 +182,8 @@ button:disabled { cursor: not-allowed; opacity: .6; }
 .site-footer { background: white; border-color: var(--line); padding-top: 32px; gap: 22px; }
 .footer-links { grid-template-columns: repeat(3,auto); gap: 2px 24px; }
 .footer-links a { font-size: 13px; }
-.footer-brand .brand-wordmark small { font-size: 12px; text-transform: none; letter-spacing: 0; margin-top: 6px; }
+.footer-brand { flex-direction: column; align-items: flex-start; gap: 6px; }
+.footer-tagline { color: var(--ink-faint); font-size: 12px; font-weight: 500; letter-spacing: 0; }
 .footer-disclaimer { font-size: 12px; line-height: 1.6; }
 .compare-tray { background: var(--ink); border: 1px solid #31415e; border-radius: 13px; box-shadow: var(--shadow-large); bottom: 22px; }
 .compare-tray-summary > span { color: #ccd6ec; font-size: 12px; }
@@ -286,9 +287,8 @@ button:disabled { cursor: not-allowed; opacity: .6; }
 }
 @media (max-width: 620px) {
   .site-header { min-height: 66px; padding-left: 18px; padding-right: 18px; }
-  .brand-mark { width: 32px; height: 32px; flex-basis: 32px; border-radius: 0; }
-  .brand-mark img { width: 32px; height: 32px; }
-  .brand-wordmark { font-size: 23px; }
+  .site-header .brand-logo { width: clamp(158px, calc(100vw - 206px), 205px); }
+  .site-header .header-actions { flex-shrink: 0; }
   .mobile-nav, .mobile-nav-scrim { top: 66px; }
   .mobile-nav { max-height: calc(100vh - 78px); max-height: calc(100dvh - 78px); }
   .discovery-masthead { width: calc(100% - 36px); grid-template-columns: 1fr; padding: 28px 0 24px; gap: 20px; }
@@ -400,7 +400,7 @@ button:disabled { cursor: not-allowed; opacity: .6; }
   .research-card .save-button { min-height: 44px; }
 }
 @media (max-width: 360px) {
-  .site-header .brand-wordmark { font-size: 20px; }
+  .site-header .brand-logo { width: min(185px, calc(100vw - 144px)); }
   .site-header .brand { gap: 8px; }
   .header-actions > button { min-width: 44px; min-height: 44px; }
 }

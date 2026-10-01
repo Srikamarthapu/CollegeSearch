@@ -6,12 +6,9 @@ export function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="footer-brand-block">
-        <Link className="brand footer-brand" href="/">
+        <Link className="brand footer-brand" href="/" aria-label="CollegeSearch home">
           <BrandMark />
-          <span className="brand-wordmark">
-            CollegeSearch
-            <small>Your college field guide.</small>
-          </span>
+          <span className="footer-tagline">Your college field guide.</span>
         </Link>
         <p>
           Explore your options. Make a list. Take the next step.

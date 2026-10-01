@@ -141,7 +141,6 @@ export function SiteHeader({ savedCount }: { savedCount?: number }) {
       </a>
       <Link className="brand" href="/" aria-label="CollegeSearch home">
         <BrandMark />
-        <span className="brand-wordmark">CollegeSearch</span>
       </Link>
 
       <div className="header-actions">
