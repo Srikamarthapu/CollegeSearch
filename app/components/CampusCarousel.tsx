@@ -69,7 +69,7 @@ export function CampusCarousel() {
       }}
     >
       <div className={styles.heading}>
-        <span>A look around campus</span>
+        <span>Around campus</span>
         <span>{String(active + 1).padStart(2, "0")} / {String(campusPhotos.length).padStart(2, "0")}</span>
       </div>
       <div className={styles.window}>
@@ -119,7 +119,7 @@ export function CampusCarousel() {
             pointerPlaying.current = null;
           }}
           aria-label={playing ? "Pause campus slideshow" : "Play campus slideshow"}
-        >{playing ? <Pause size={12} /> : <Play size={12} />} {playing ? "Pause" : "Play"}</button> : <span className={styles.motionNote}>Browse photos</span>}
+        >{playing ? <Pause size={12} /> : <Play size={12} />} <span className={styles.rotationLabel}>{playing ? "Pause" : "Play"}</span></button> : <span className={styles.motionNote}>Browse photos</span>}
       </div>
       <p className="sr-only" role="status" aria-atomic="true">{announcement}</p>
       <p className={styles.credit}>

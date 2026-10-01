@@ -1214,8 +1214,15 @@ export function CollegeSearchApp({
         <section className="discovery-masthead" aria-labelledby="discovery-title">
           <div className="discovery-intro">
             <span className="discovery-eyebrow"><span /> Your college search, all together</span>
-            <h1 id="discovery-title"><span>Big possibilities.</span><br /><em>Find your starting point.</em></h1>
-            <p>Explore {colleges.length} U.S. colleges. Get clear on costs, find your field, and build a list that makes sense for you.</p>
+            <h1 id="discovery-title"><span>Find your</span><em>starting point.</em></h1>
+            <p>Compare costs, explore fields of study, and build a shortlist across {colleges.length} U.S. colleges.</p>
+            <div className="discovery-actions">
+              <button type="button" onClick={() => {
+                scrollToExplore();
+                document.getElementById("college-search-compact")?.focus({ preventScroll: true });
+              }}>Explore colleges <ArrowDown size={18} aria-hidden="true" /></button>
+              <Link href="/match">Find my fit <ArrowRight size={17} aria-hidden="true" /></Link>
+            </div>
           </div>
           <CampusCarousel />
         </section>

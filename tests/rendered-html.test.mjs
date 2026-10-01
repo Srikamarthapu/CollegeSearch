@@ -162,7 +162,7 @@ test("server-renders the CollegeSearch product shell", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>CollegeSearch<\/title>/i);
-  assert.match(html, /Find your starting point\./);
+  assert.match(html, /Find your(?:<[^>]*>|\s)*starting point\./);
   assert.match(html, /Your college search, all together/);
   assert.match(html, /UC admissions/);
   assert.match(html, /Fall 2026/);
@@ -364,7 +364,7 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
     {
       path: "/explore",
       markers: [
-        /Find your starting point\./,
+        /Find your(?:<[^>]*>|\s)*starting point\./,
         /Field filters use 2024-2025 federal program and award data\./,
       ],
     },

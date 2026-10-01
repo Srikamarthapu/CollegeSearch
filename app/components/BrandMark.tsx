@@ -5,7 +5,7 @@ export function BrandMark() {
     <span className="brand-logo" aria-hidden="true">
       <Image
         unoptimized
-        src="/brand/collegesearch-campus-pin.png"
+        src="/brand/collegesearch-campus-pin-blue.png"
         width={2172}
         height={724}
         alt=""

@@ -49,13 +49,19 @@ button:disabled { cursor: not-allowed; opacity: .6; }
 .mobile-nav, .mobile-nav-scrim { top: 76px; }
 .mobile-nav { max-height: calc(100vh - 88px); max-height: calc(100dvh - 88px); overflow-y: auto; overscroll-behavior: contain; }
 .mobile-nav nav a { font-size: 16px; }
-.discovery-masthead { display: grid; grid-template-columns: minmax(0,1fr) 410px; gap: 60px; align-items: center; width: min(var(--page-width), calc(100% - 64px)); margin: 0 auto; padding: 42px 0 34px; }
+.discovery-masthead { display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); gap: 48px; align-items: center; width: min(var(--page-width), calc(100% - 64px)); margin: 0 auto; padding: 40px 0 32px; }
 .discovery-eyebrow { display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 560; color: var(--ink-soft); }
 .discovery-eyebrow > span { width: 7px; height: 7px; background: var(--forest); border-radius: 100%; }
-.discovery-intro h1 { margin: 15px 0 12px; font-size: clamp(34px,3.6vw,48px); font-family: var(--font-newsreader), Georgia, serif; line-height: 1.06; font-weight: 480; letter-spacing: -.036em; }
+.discovery-intro h1 { margin: 20px 0; font-size: clamp(44px,4.5vw,64px); font-family: var(--font-newsreader), Georgia, serif; line-height: 1.03; font-weight: 480; letter-spacing: -.036em; }
 .discovery-intro h1 br { display: none; }
 .discovery-intro h1 em { font-style: normal; color: var(--forest); display: block; }
-.discovery-intro > p { max-width: 650px; margin: 0; color: var(--ink-soft); font-size: 16px; line-height: 1.65; }
+.discovery-intro > p { max-width: 410px; margin: 0; color: var(--ink-soft); font-size: 17px; line-height: 1.65; }
+.discovery-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin-top: 28px; }
+.discovery-actions > button, .discovery-actions > a { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; font-size: 14px; font-weight: 600; }
+.discovery-actions > button { padding: 0 20px; border: 1px solid var(--forest); border-radius: 8px; background: var(--forest); color: white; }
+.discovery-actions > button:hover { background: var(--forest-raised); }
+.discovery-actions > a { color: var(--ink); }
+.discovery-actions > a:hover { color: var(--forest); }
 .discovery-guide { position: relative; padding: 24px 26px; background: var(--ink); color: white; border-radius: 13px; overflow: hidden; }
 .guide-kicker { display: flex; align-items: center; gap: 8px; color: #d4ddf4; font-size: 12px; }
 .guide-kicker svg { width: 17px; height: 17px; }
@@ -258,7 +264,7 @@ button:disabled { cursor: not-allowed; opacity: .6; }
   .desktop-nav a { padding: 9px 8px; font-size: 13px; }
   .desktop-nav a > svg { display: none; }
   .header-actions { gap: 8px; }
-  .discovery-masthead { gap: 32px; grid-template-columns: minmax(0,1fr) 290px; }
+  .discovery-masthead { gap: 32px; }
   .research-explorer .explorer-shell { grid-template-columns: 215px minmax(0,1fr); gap: 20px; }
   .research-results { grid-template-columns: 1fr; }
   .research-card .college-identity { grid-template-columns: 76px minmax(0,1fr); }
@@ -267,7 +273,8 @@ button:disabled { cursor: not-allowed; opacity: .6; }
 @media (max-width: 820px) {
   .desktop-nav { display: none; }
   .menu-button { display: grid; }
-  .discovery-masthead { padding: 30px 0; gap: 24px; grid-template-columns: minmax(0,1fr) 250px; }
+  .discovery-masthead { padding: 32px 0; gap: 28px; grid-template-columns: 1fr; }
+  .discovery-intro > p { max-width: 560px; }
   .discovery-guide { padding: 20px; }
   .discovery-guide h2 { font-size: 19px; }
   .research-explorer .explorer-shell { grid-template-columns: 1fr; }
@@ -292,8 +299,9 @@ button:disabled { cursor: not-allowed; opacity: .6; }
   .mobile-nav, .mobile-nav-scrim { top: 66px; }
   .mobile-nav { max-height: calc(100vh - 78px); max-height: calc(100dvh - 78px); }
   .discovery-masthead { width: calc(100% - 36px); grid-template-columns: 1fr; padding: 28px 0 24px; gap: 20px; }
-  .discovery-intro h1 { font-size: 37px; margin-top: 14px; }
-  .discovery-intro > p { font-size: 15px; }
+  .discovery-intro h1 { font-size: clamp(40px,10vw,52px); margin: 16px 0; }
+  .discovery-intro > p { font-size: 16px; }
+  .discovery-actions { margin-top: 20px; gap: 12px 22px; }
   .discovery-guide { display: none; }
   .research-explorer { width: calc(100% - 36px); }
   .research-section-heading { margin-bottom: 18px; padding-bottom: 13px; }
@@ -365,7 +373,6 @@ button:disabled { cursor: not-allowed; opacity: .6; }
 .campus-window strong { display: flex; align-items: center; gap: 32px; color: white; font-size: 15px; font-weight: 550; }
 .campus-window figcaption { color: var(--ink-faint); font-size: 12px; margin: 6px 3px 0; }
 .campus-window figcaption a { text-decoration: underline; text-underline-offset: 2px; }
-.discovery-masthead { padding-top: 30px; padding-bottom: 26px; }
 .results-search-dock { background: transparent; padding: 0; position: relative; top: auto; backdrop-filter: none; }
 .results-toolbar { border: 0; }
 @media (max-width: 620px) { .campus-window { display: none; } }
@@ -383,10 +390,6 @@ button:disabled { cursor: not-allowed; opacity: .6; }
 .research-card .college-identity { width: auto; }
 .research-card .metric-stamp:first-child { grid-column: auto; border-bottom: 0; }
 @media (max-width:620px) {
-  .discovery-intro h1 > span { display: none; }
-  .discovery-intro h1 { font-size: 34px; }
-  .discovery-intro > p { font-size: 14px; line-height: 1.55; }
-  .discovery-masthead { padding-top: 22px; padding-bottom: 18px; }
   .discovery-shortcuts { scrollbar-width: none; }
   .discovery-shortcuts::-webkit-scrollbar { display: none; }
   .research-explorer .results-toolbar { flex-wrap: wrap; gap: 10px; }
@@ -400,6 +403,9 @@ button:disabled { cursor: not-allowed; opacity: .6; }
   .research-card .save-button { min-height: 44px; }
 }
 @media (max-width: 360px) {
+  .discovery-actions { gap: 12px; }
+  .discovery-actions > button { padding: 0 12px; }
+  .discovery-actions > a { gap: 7px; }
   .site-header .brand-logo { width: min(185px, calc(100vw - 144px)); }
   .site-header .brand { gap: 8px; }
   .header-actions > button { min-width: 44px; min-height: 44px; }
