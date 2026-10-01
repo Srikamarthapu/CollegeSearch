@@ -1,0 +1,17 @@
+[
+  {
+    "name": "account-unauthenticated",
+    "status": 403,
+    "location": null
+  },
+  {
+    "name": "callback-missing-code",
+    "status": 307,
+    "location": "https://collegesearch-steel.vercel.app/auth/auth-code-error?reason=missing-code"
+  },
+  {
+    "name": "supabase-auth-health",
+    "status": 521,
+    "location": null
+  }
+]
