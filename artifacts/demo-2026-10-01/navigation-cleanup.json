@@ -1,0 +1,29 @@
+{
+  "verifiedOn": "2026-10-01",
+  "sourceCommit": "8a0edf829b2e414bf566c389990dbf5a827122c2",
+  "scope": "Remove Fields of study and My shortlist from desktop/mobile primary navigation and remove the duplicate explorer shortlist shortcut",
+  "checks": "Native Next build, scoped ESLint, whitespace checks and existing mobile navigation contract passed",
+  "deployment": {
+    "id": "dpl_7Z3BprW6Njihdi6DHDabQHYUtGa9",
+    "productionUrl": "https://collegesearch-steel.vercel.app",
+    "readyState": "READY"
+  },
+  "hosted": {
+    "url": "https://collegesearch-steel.vercel.app",
+    "navigation": [
+      "Colleges",
+      "Find my fit",
+      "Admissions",
+      "Compare",
+      "My deadlines"
+    ],
+    "desktop": true,
+    "mobile": true,
+    "duplicateShortlistShortcutRemoved": true,
+    "fieldFilter": "selected a field and updated URL",
+    "comparison": "selected two colleges and opened comparison table",
+    "mobileEscapeAndFocus": "passed",
+    "overflow": false,
+    "errors": []
+  }
+}
