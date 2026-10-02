@@ -58,7 +58,7 @@ export function CampusCarousel() {
     const timer = window.setTimeout(() => {
       setSlide((current) => advanceSlide(current, 1));
       setAnnouncement("");
-    }, 7000);
+    }, 3500);
     return () => window.clearTimeout(timer);
   }, [active, rotating]);
 
