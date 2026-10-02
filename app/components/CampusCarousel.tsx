@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import { ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { campusPhotos } from "@/app/lib/campus-photos";
 import styles from "./CampusCarousel.module.css";
@@ -17,7 +17,8 @@ const readReducedMotion = () => window.matchMedia(motionQuery).matches;
 const serverReducedMotion = () => true;
 
 export function CampusCarousel() {
-  const [active, setActive] = useState(0);
+  const [slide, setSlide] = useState({ index: 0, animate: false });
+  const active = slide.index;
   const [announcement, setAnnouncement] = useState("");
   const [playing, setPlaying] = useState(true);
   const [hovered, setHovered] = useState(false);
@@ -45,14 +46,18 @@ export function CampusCarousel() {
   const rotating = playing && !hovered && visible && !reducedMotion;
   useEffect(() => {
     if (!rotating) return;
-    const timer = window.setInterval(() => setActive((current) => (current + 1) % campusPhotos.length), 6500);
+    const timer = window.setInterval(() => setSlide((current) => {
+      const next = (current.index + 1) % campusPhotos.length;
+      return { index: next, animate: next === current.index + 1 };
+    }), 6500);
     return () => window.clearInterval(timer);
   }, [rotating]);
 
   function select(index: number) {
     const next = (index + campusPhotos.length) % campusPhotos.length;
     setPlaying(false);
-    setActive(next);
+    // Jump directly when picking a distant campus or wrapping the gallery.
+    setSlide((current) => ({ index: next, animate: Math.abs(next - current.index) === 1 }));
     setAnnouncement(`${campusPhotos[next].shortName}, ${next + 1} of ${campusPhotos.length}`);
   }
 
@@ -73,7 +78,7 @@ export function CampusCarousel() {
         <span>{String(active + 1).padStart(2, "0")} / {String(campusPhotos.length).padStart(2, "0")}</span>
       </div>
       <div className={styles.window}>
-        <div className={styles.track} data-active={active}>
+        <div className={styles.track} data-active={active} data-animate={slide.animate} style={{ transform: `translateX(-${active * 100}%)` }}>
           {campusPhotos.map((item, index) => (
             <div
               key={item.unitId}
@@ -86,7 +91,7 @@ export function CampusCarousel() {
               inert={index !== active}
             >
               <Link href={`/colleges/${item.slug}`} tabIndex={index === active ? 0 : -1} aria-label={`Explore ${item.shortName}`}>
-                <Image unoptimized src={item.src} width={item.width} height={item.height} alt={item.alt} loading={index < 2 ? "eager" : "lazy"} />
+                <Image unoptimized src={item.src} width={item.width} height={item.height} alt={item.alt} loading={index < 2 ? "eager" : "lazy"} style={{ objectPosition: item.objectPosition }} />
                 <span className={styles.caption}>
                   <span>{item.location}</span>
                   <strong>{item.shortName}<ArrowUpRight size={19} aria-hidden="true" /></strong>
@@ -96,15 +101,18 @@ export function CampusCarousel() {
           ))}
         </div>
         <div className={styles.controls}>
-          <button type="button" onClick={() => select(active - 1)} aria-label="Previous campus"><ChevronLeft size={18} /></button>
-          <button type="button" onClick={() => select(active + 1)} aria-label="Next campus"><ChevronRight size={18} /></button>
+          <button type="button" onClick={() => select(active - 1)} aria-label="Previous campus"><ChevronLeft size={18} aria-hidden="true" /></button>
+          <button type="button" onClick={() => select(active + 1)} aria-label="Next campus"><ChevronRight size={18} aria-hidden="true" /></button>
         </div>
       </div>
       <div className={styles.bottom}>
-        <div className={styles.dots} aria-label="Choose a campus photo">
-          {campusPhotos.map((item, index) => (
-            <button key={item.unitId} type="button" aria-label={`Show ${item.shortName} photo`} aria-pressed={active === index} onClick={() => select(index)}><span /></button>
-          ))}
+        <div className={styles.picker}>
+          <select aria-label="Choose a campus photo" value={active} onChange={(event) => select(Number(event.target.value))}>
+            {campusPhotos.map((item, index) => (
+              <option key={item.unitId} value={index}>{item.shortName}</option>
+            ))}
+          </select>
+          <ChevronDown size={16} aria-hidden="true" />
         </div>
         {!reducedMotion ? <button
           className={styles.rotation}
@@ -119,7 +127,7 @@ export function CampusCarousel() {
             pointerPlaying.current = null;
           }}
           aria-label={playing ? "Pause campus slideshow" : "Play campus slideshow"}
-        >{playing ? <Pause size={12} /> : <Play size={12} />} <span className={styles.rotationLabel}>{playing ? "Pause" : "Play"}</span></button> : <span className={styles.motionNote}>Browse photos</span>}
+        >{playing ? <Pause size={14} aria-hidden="true" /> : <Play size={14} aria-hidden="true" />} <span className={styles.rotationLabel}>{playing ? "Pause" : "Play"}</span></button> : <span className={styles.motionNote}>Browse photos</span>}
       </div>
       <p className="sr-only" role="status" aria-atomic="true">{announcement}</p>
       <p className={styles.credit}>

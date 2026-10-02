@@ -31,11 +31,9 @@
   transition: transform 650ms cubic-bezier(.22, .68, 0, 1);
 }
 
-.track[data-active="0"] { transform: translateX(0); }
-.track[data-active="1"] { transform: translateX(-100%); }
-.track[data-active="2"] { transform: translateX(-200%); }
-.track[data-active="3"] { transform: translateX(-300%); }
-.track[data-active="4"] { transform: translateX(-400%); }
+.track[data-animate="false"] {
+  transition: none;
+}
 
 .slide {
   flex: 0 0 100%;
@@ -55,12 +53,6 @@
   height: 100%;
   object-fit: cover;
 }
-
-.slide[data-campus="stanford-university"] img { object-position: 50% 56%; }
-.slide[data-campus="university-of-california-los-angeles"] img { object-position: 50% 10%; }
-.slide[data-campus="university-of-washington-seattle-campus"] img { object-position: 50% 55%; }
-.slide[data-campus="columbia-university-in-the-city-of-new-york"] img { object-position: 50% 72%; }
-.slide[data-campus="university-of-california-berkeley"] img { object-position: 50% 40%; }
 
 .caption {
   position: absolute;
@@ -123,37 +115,37 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 48px;
+  gap: 12px;
+  min-height: 60px;
 }
 
-.dots {
-  display: flex;
-  align-items: center;
-  gap: 2px;
+.picker {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  max-width: 260px;
 }
 
-.dots button {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border: 0;
-  background: transparent;
+.picker select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 36px 0 13px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  appearance: none;
+  background: var(--paper-bright);
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 13px;
   cursor: pointer;
 }
 
-.dots span {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--line-strong);
-}
-
-.dots button[aria-pressed="true"] span {
-  width: 20px;
-  border-radius: 5px;
-  background: var(--forest);
+.picker > svg {
+  position: absolute;
+  right: 12px;
+  top: 14px;
+  color: var(--ink-soft);
+  pointer-events: none;
 }
 
 .rotation {
@@ -162,6 +154,7 @@
   justify-content: center;
   gap: 7px;
   min-width: 76px;
+  flex-shrink: 0;
   min-height: 44px;
   padding: 0 12px;
   border: 1px solid var(--line);
@@ -193,7 +186,8 @@
 }
 
 .carousel button:focus-visible,
-.carousel a:focus-visible {
+.carousel a:focus-visible,
+.carousel select:focus-visible {
   outline: 3px solid var(--forest);
   outline-offset: 3px;
 }
@@ -203,6 +197,10 @@
 }
 
 @media (max-width: 620px) {
+  .picker select {
+    font-size: 16px;
+  }
+
   .carousel {
     margin-top: 2px;
   }

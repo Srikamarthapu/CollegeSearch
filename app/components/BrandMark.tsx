@@ -8,6 +8,7 @@ export function BrandMark() {
         src="/brand/collegesearch-campus-pin-blue.png"
         width={2172}
         height={724}
+        loading="eager"
         alt=""
       />
     </span>

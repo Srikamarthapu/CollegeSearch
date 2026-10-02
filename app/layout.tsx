@@ -47,8 +47,12 @@ export async function generateMetadata(): Promise<Metadata> {
       "College Scorecard",
     ],
     icons: {
-      icon: { url: "/favicon.svg", type: "image/svg+xml" },
-      shortcut: "/favicon.svg",
+      icon: [
+        { url: "/brand/campus-pin-32.png", type: "image/png", sizes: "32x32" },
+        { url: "/brand/campus-pin-icon.svg", type: "image/svg+xml", sizes: "any" },
+      ],
+      shortcut: "/brand/campus-pin-32.png",
+      apple: { url: "/brand/campus-pin-180.png", type: "image/png", sizes: "180x180" },
     },
     openGraph: {
       title: "CollegeSearch — Build a college list you can explain",
