@@ -198,7 +198,7 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
 
   return (
     <>
-      <SiteHeader savedCount={saved.length} />
+      <SiteHeader />
       <main ref={pageRef} id="main-content" className={styles.page}>
         <header className={styles.masthead}>
           <span className={styles.eyebrow}>Your college shortlist</span>

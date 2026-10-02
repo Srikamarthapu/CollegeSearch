@@ -1,13 +1,9 @@
 "use client";
 
 import {
-  Bookmark,
   CalendarDays,
-  CircleAlert,
   Gauge,
-  GraduationCap,
   Menu,
-  RefreshCw,
   Search,
   SlidersHorizontal,
   Scale,
@@ -17,37 +13,22 @@ import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { useSavedColleges } from "./saved/SavedCollegesProvider";
 import { AuthAccountControl } from "./auth/AuthAccountControl";
 import { BrandMark } from "./BrandMark";
 
 const navigation = [
   { href: "/explore", label: "Colleges", icon: Search },
-  { href: "/majors", label: "Fields of study", icon: GraduationCap },
   { href: "/match", label: "Find my fit", icon: SlidersHorizontal },
   { href: "/chances", label: "Admissions", icon: Gauge },
   { href: "/compare", label: "Compare", icon: Scale },
-  { href: "/saved", label: "My shortlist", icon: Bookmark },
   { href: "/plan", label: "My deadlines", icon: CalendarDays },
 ];
 
-export function SiteHeader({ savedCount }: { savedCount?: number }) {
+export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { ids: savedIds, syncPhase } = useSavedColleges();
   const pathname = usePathname();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const mobileNavigationRef = useRef<HTMLDivElement>(null);
-  const displayedSavedCount = savedCount ?? savedIds.length;
-  const savedStatusLabel =
-    syncPhase === "error"
-      ? "Sync needs attention"
-      : syncPhase === "syncing"
-        ? "Waiting to sync"
-        : syncPhase === "loading-account"
-          ? "Checking account saves"
-          : syncPhase === "synced"
-            ? "Account list is up to date"
-            : "Saved in this browser";
 
   const closeMenuAndRestoreFocus = () => {
     setMenuOpen(false);
@@ -158,22 +139,6 @@ export function SiteHeader({ savedCount }: { savedCount?: number }) {
               >
                 <Icon size={15} aria-hidden="true" />
                 {label}
-                {href === "/saved" && displayedSavedCount > 0 ? (
-                  <span className="nav-count">{displayedSavedCount}</span>
-                ) : null}
-                {href === "/saved" && syncPhase === "error" ? (
-                  <span className="nav-sync-state is-error">
-                    <CircleAlert size={15} aria-hidden="true" />
-                    <span className="sr-only">{savedStatusLabel}</span>
-                  </span>
-                ) : href === "/saved" &&
-                  (syncPhase === "syncing" ||
-                    syncPhase === "loading-account") ? (
-                  <span className="nav-sync-state is-pending">
-                    <RefreshCw size={14} aria-hidden="true" />
-                    <span className="sr-only">{savedStatusLabel}</span>
-                  </span>
-                ) : null}
               </Link>
             );
           })}
@@ -244,11 +209,6 @@ export function SiteHeader({ savedCount }: { savedCount?: number }) {
                   >
                     <Icon size={18} aria-hidden="true" />
                     <span>{label}</span>
-                    {href === "/saved" ? (
-                      <small>
-                        {displayedSavedCount} saved · {savedStatusLabel.toLowerCase()}
-                      </small>
-                    ) : null}
                   </Link>
                 ))}
               </nav>

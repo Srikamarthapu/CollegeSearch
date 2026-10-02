@@ -1204,7 +1204,7 @@ export function CollegeSearchApp({
 
   return (
     <>
-      <SiteHeader savedCount={saved.length} />
+      <SiteHeader />
 
       <main
         id="main-content"
@@ -1230,7 +1230,7 @@ export function CollegeSearchApp({
         <section className="explore-section research-explorer" id="explore" aria-label="Explore colleges">
           <div className="research-section-heading">
             <div><h2>Explore colleges</h2><span>{colleges.length} in this collection</span></div>
-            <div className="research-heading-links"><Link href="/match"><SlidersHorizontal size={17} aria-hidden="true" /> Find my fit</Link><Link href="/saved"><Bookmark size={17} aria-hidden="true" /> My shortlist{saved.length ? ` (${saved.length})` : ""}</Link></div>
+            <div className="research-heading-links"><Link href="/match"><SlidersHorizontal size={17} aria-hidden="true" /> Find my fit</Link></div>
           </div>
         <div className="explorer-shell">
           <aside className="filter-panel" aria-label="College filters">
