@@ -31,7 +31,7 @@ const staticRoutes = [
   "/match",
   "/methodology",
   "/privacy",
-  "/saved",
+  "/my-colleges",
 ];
 const profileRoutes = dataset.colleges.map(
   (college) => `/colleges/${college.slug}`,
@@ -103,4 +103,13 @@ test("every published profile, broad field, and internal app link resolves", asy
   assert.equal(profileRoutes.length, 50);
   assert.equal(fieldRoutes.length, 12);
   assert.ok(internalLinks.size >= 70, "the crawl covers the app's linked routes");
+});
+
+// Old bookmarks must still lead to the matching section of the combined workspace.
+test("legacy shortlist and planner routes redirect to My colleges", async () => {
+  for (const [path, target] of [["/saved", "/my-colleges#colleges"], ["/plan", "/my-colleges#deadlines"]]) {
+    const response = await render(path);
+    assert.equal(response.status, 307, path);
+    assert.equal(response.headers.get("location"), target, path);
+  }
 });

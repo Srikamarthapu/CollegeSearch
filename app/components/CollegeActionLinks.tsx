@@ -10,7 +10,7 @@ export function CollegeActionLinks({ unitId }: { unitId: number }) {
     <section className={styles.section} aria-labelledby="college-next-steps">
       <div className={styles.heading}>
         <div><span>Next steps · Official resources</span><h2 id="college-next-steps">Turn your research into a plan.</h2></div>
-        <Link href="/plan">My deadlines <ArrowUpRight size={16} aria-hidden="true" /></Link>
+        <Link href="/my-colleges#deadlines">My deadlines <ArrowUpRight size={16} aria-hidden="true" /></Link>
       </div>
       <div className={styles.links}>
         {Object.entries(actions).map(([key, action]) => (

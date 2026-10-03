@@ -4,6 +4,9 @@ import {
   ArrowRight,
   BarChart3,
   BookmarkX,
+  CalendarDays,
+  ChevronDown,
+  Plus,
   Database,
   Download,
   MapPin,
@@ -16,6 +19,7 @@ import { ResearchBackupControls } from "@/app/components/ResearchBackupControls"
 import { readResearchForExport } from "@/app/lib/research-drafts";
 import { ResearchNotebook } from "@/app/components/ResearchNotebook";
 import { CollegeLogo } from "@/app/components/CollegeLogo";
+import { DeadlinePlanner, type DeadlineCollege } from "@/app/components/DeadlinePlanner";
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import { useSavedColleges } from "@/app/components/saved/SavedCollegesProvider";
@@ -35,7 +39,7 @@ import {
 } from "@/app/lib/research-notebook";
 import styles from "./saved.module.css";
 
-export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
+export function SavedColleges({ colleges, deadlineColleges }: { colleges: ClientCollege[]; deadlineColleges: DeadlineCollege[] }) {
   const [exportStatus, setExportStatus] = useState("");
   const pageRef = useRef<HTMLElement>(null);
   const pendingRemovalFocus = useRef<{
@@ -201,51 +205,32 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
       <SiteHeader />
       <main ref={pageRef} id="main-content" className={styles.page}>
         <header className={styles.masthead}>
-          <span className={styles.eyebrow}>Your college shortlist</span>
           <div>
-            <h1>A few possibilities. Your next steps.</h1>
-            <p>
-              Keep your favorites together. Compare the details, write down questions,
-              and work out what to explore next.
-            </p>
+            <span className={styles.eyebrow}>Your college search, taking shape</span>
+            <h1>My colleges</h1>
+            <p>Keep the colleges you like and the dates that matter in one place.</p>
           </div>
-          <aside className={styles.localNote}>
-            <ShieldCheck size={18} aria-hidden="true" />
-            <span>
-              <strong>{syncMessage.title}</strong>
-              {syncMessage.body}
-            </span>
-          </aside>
+          <Link className="page-primary-action" href="/explore"><Plus size={17} aria-hidden="true" /> Explore colleges</Link>
         </header>
 
-        <section
-          className={`${styles.syncLedger} ${
-            syncPhase === "error"
-              ? styles.syncError
-              : syncPhase === "syncing"
-                ? styles.syncPending
-                : ""
-          }`}
-          role={syncPhase === "error" ? "alert" : "status"}
-          aria-atomic="true"
-          aria-busy={
-            syncPhase === "loading-account" || syncPhase === "syncing"
-          }
-          aria-live={syncPhase === "error" ? "assertive" : "polite"}
-        >
-          <div>
-            <span>Saved-list status</span>
-            <strong>{syncMessage.title}</strong>
-            {pendingCount > 0 ? (
-              <small>
-                {pendingCount} {pendingCount === 1 ? "change" : "changes"} pending
-              </small>
-            ) : null}
-          </div>
-          {syncPhase === "error" ? (
-            <button type="button" onClick={retrySync}>Retry sync</button>
-          ) : null}
-        </section>
+        <nav className={styles.sectionNav} aria-label="My colleges sections">
+          <a href="#colleges">Saved colleges{hydrated ? <span>{saved.length}</span> : null}</a>
+          <a href="#deadlines"><CalendarDays size={16} aria-hidden="true" /> Deadlines</a>
+        </nav>
+
+        <div className={styles.workspace}>
+        <section id="colleges" className={styles.savedPanel} aria-labelledby="saved-heading">
+          <header className={styles.collectionHeader}>
+            <div><h2 id="saved-heading">Saved colleges</h2><p>Your possibilities, ready to revisit.</p></div>
+            {saved.length > 0 && collectionVisible ? <span>{saved.length} saved</span> : null}
+          </header>
+
+          <details className={`${styles.syncLedger} ${syncPhase === "error" ? styles.syncError : ""}`} open={syncPhase === "error" || syncPhase === "syncing" || undefined}>
+            <summary><ShieldCheck size={16} aria-hidden="true" /><span role={syncPhase === "error" ? "alert" : "status"}>{syncMessage.title}</span><ChevronDown size={15} aria-hidden="true" /></summary>
+            <p>{syncMessage.body}</p>
+            {pendingCount > 0 ? <p>{pendingCount} {pendingCount === 1 ? "change" : "changes"} pending.</p> : null}
+            {syncPhase === "error" ? <button type="button" onClick={retrySync}>Retry sync</button> : null}
+          </details>
 
         {canImportGuestSaves ? (
           <section
@@ -276,12 +261,10 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
           </p>
         ) : null}
 
-        <ResearchBackupControls key={`backup:${collection.scopeKey}`} colleges={colleges} scopeKey={scopeKey} canUse={collectionInteractive} />
-
         {!hydrated && syncPhase === "error" ? (
           <section className={styles.empty} role="alert">
             <Database size={27} aria-hidden="true" />
-            <h2>We couldn’t load your account list.</h2>
+            <h3>We couldn’t load your account list.</h3>
             <p>
               Nothing is being represented as an empty list. Retry after your
               connection or account session is available.
@@ -293,12 +276,12 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
         ) : !hydrated ? (
           <section className={styles.empty} aria-live="polite">
             <Database size={27} aria-hidden="true" />
-            <h2>Loading your saved list…</h2>
+            <h3>Loading your saved list…</h3>
           </section>
         ) : saved.length === 0 ? (
           <section className={styles.empty}>
             <BookmarkX size={31} aria-hidden="true" />
-            <h2>Your next chapter starts with a shortlist.</h2>
+            <h3>Start with a college you like.</h3>
             <p>
               {syncPhase === "local-only"
                 ? "No colleges are saved in this browser yet. You can start without creating an account."
@@ -315,21 +298,11 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
           <section
             key={`collection:${collection.scopeKey}`}
             className={styles.collection}
-            aria-labelledby="saved-heading"
+            aria-label="Your saved colleges"
             hidden={!collectionVisible}
             inert={!collectionVisible}
           >
-            <div className={styles.collectionHeader}>
-              <div>
-                <span>{String(collection.items.length).padStart(2, "0")}</span>
-                <h2 id="saved-heading">
-                  {collection.items.length === 1 ? "college saved" : "colleges saved"}
-                </h2>
-              </div>
-              <div className={styles.exportActions}><p>Select 2–4 to compare.</p><button type="button" className="page-secondary-action" onClick={exportResearch} disabled={!collectionInteractive}><Download size={16} aria-hidden="true" /> Export research</button></div>
-            </div>
-
-            {exportStatus ? <p className={styles.exportStatus} role="status">{exportStatus}</p> : null}
+            <p className={styles.compareHint}>Select 2–4 colleges to compare side by side.</p>
             <div className={styles.grid}>
               {collection.items.map((college) => {
                 const source = observationSourceKind(
@@ -377,19 +350,6 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
                           </span>
                         </dd>
                       </div>
-                      <div>
-                        <dt>{observationSourceKind(college.observations.graduationRate).isFederal ? "Completion rate" : "6-year graduation"}</dt>
-                        <dd>
-                          <strong>
-                            {formatObservation(
-                              college.observations.graduationRate,
-                            )}
-                          </strong>
-                          <span>
-                            {college.observations.graduationRate.periodLabel}
-                          </span>
-                        </dd>
-                      </div>
                     </dl>
                     <ResearchNotebook unitId={college.unitId} collegeName={college.name} />
                     <div className={styles.actions}>
@@ -425,6 +385,17 @@ export function SavedColleges({ colleges }: { colleges: ClientCollege[] }) {
             </div>
           </section>
         ) : null}
+          <details className={styles.backupTools}>
+            <summary><Download size={16} aria-hidden="true" /> Research export &amp; backup<ChevronDown size={15} aria-hidden="true" /></summary>
+            {saved.length > 0 ? <button type="button" className="page-secondary-action" onClick={exportResearch} disabled={!collectionInteractive}><Download size={16} aria-hidden="true" /> Export research CSV</button> : null}
+            {exportStatus ? <p className={styles.exportStatus} role="status">{exportStatus}</p> : null}
+            <ResearchBackupControls key={`backup:${collection.scopeKey}`} colleges={colleges} scopeKey={scopeKey} canUse={collectionInteractive} />
+          </details>
+        </section>
+        <section id="deadlines" className={styles.deadlinePanel} aria-label="College deadlines">
+          <DeadlinePlanner colleges={deadlineColleges} embedded savedCollegeIds={collectionVisible ? savedIds : []} />
+        </section>
+        </div>
       </main>
 
       {selected.length > 0 ? (

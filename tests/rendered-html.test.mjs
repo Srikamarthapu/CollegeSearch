@@ -457,8 +457,8 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
       ],
     },
     {
-      path: "/saved",
-      markers: [/Saved colleges \| CollegeSearch/, /Saved in this browser/],
+      path: "/my-colleges",
+      markers: [/My colleges \| CollegeSearch/, /Saved colleges/, /College deadlines/],
     },
     {
       path: "/account",

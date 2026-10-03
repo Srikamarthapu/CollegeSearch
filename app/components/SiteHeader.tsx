@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  CalendarDays,
+  NotebookPen,
   Gauge,
   Menu,
   Search,
@@ -21,7 +21,7 @@ const navigation = [
   { href: "/match", label: "Find my fit", icon: SlidersHorizontal },
   { href: "/chances", label: "Admissions", icon: Gauge },
   { href: "/compare", label: "Compare", icon: Scale },
-  { href: "/plan", label: "My deadlines", icon: CalendarDays },
+  { href: "/my-colleges", label: "My colleges", icon: NotebookPen },
 ];
 
 export function SiteHeader() {

@@ -19,8 +19,7 @@ export function SiteFooter() {
         <Link href="/majors">Explore fields</Link>
         <Link href="/match">Build a match list</Link>
         <Link href="/chances">Read admit-rate context</Link>
-        <Link href="/saved">Saved colleges</Link>
-        <Link href="/plan">My deadlines</Link>
+        <Link href="/my-colleges">My colleges</Link>
         <Link href="/account">Account settings</Link>
         <Link href="/methodology">Methodology</Link>
         <Link href="/data-sources">Data sources</Link>

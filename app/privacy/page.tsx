@@ -177,9 +177,9 @@ export default function PrivacyPage() {
           <ShieldCheck size={22} aria-hidden="true" />
           <div>
             <strong>Want to clear your local list?</strong>
-            <p>Open Saved and remove the colleges you no longer want retained.</p>
+            <p>Open My colleges and remove the colleges you no longer want retained.</p>
           </div>
-          <Link className="page-primary-action" href="/saved">
+          <Link className="page-primary-action" href="/my-colleges#colleges">
             Review saved colleges
           </Link>
         </aside>

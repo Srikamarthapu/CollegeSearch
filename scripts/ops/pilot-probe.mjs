@@ -87,7 +87,7 @@ function publicResult(result, failures) {
 
 export async function smoke({ origin, authMode = "configured", now = Date.now(), fetcher = fetch }) {
   const checks = [];
-  const paths = ["/", "/", "/explore", "/colleges/university-of-california-berkeley", "/compare", "/saved", "/match", "/plan", "/account", "/privacy", "/data-health"];
+  const paths = ["/", "/", "/explore", "/colleges/university-of-california-berkeley", "/compare", "/my-colleges", "/match", "/account", "/privacy", "/data-health"];
   const nonces = [];
   let sourceSnapshot = { state: "unknown" };
   let homeHtml = "";
@@ -125,7 +125,7 @@ export function latencySummary(results) {
 
 export async function classroom({ origin, fetcher = fetch, delay = sleep }) {
   const checks = [];
-  const paths = ["/explore", "/colleges/university-of-california-berkeley", "/compare", "/saved"];
+  const paths = ["/explore", "/colleges/university-of-california-berkeley", "/compare", "/my-colleges"];
   let stop = false;
   await Promise.all(Array.from({ length: 30 }, async (_, student) => {
     await delay(student * 200);

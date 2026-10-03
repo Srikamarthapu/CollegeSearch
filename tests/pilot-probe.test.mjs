@@ -60,19 +60,19 @@ test("smoke records all checked routes, assets, callbacks and freshness without 
     const n = `${nonce}${++serial}`; return response(doc(n, path === "/data-health" ? health : ""), n);
   };
   const result = await smoke({ origin, now: NOW, fetcher });
-  assert.equal(result.status, "passed"); assert.equal(result.freshnessStatus, "passed"); assert.equal(requests.length, 16);
-  assert.ok(requests.some(({ url }) => url.pathname === "/plan"), "planner is included in release smoke");
+  assert.equal(result.status, "passed"); assert.equal(result.freshnessStatus, "passed"); assert.equal(requests.length, 15);
+  assert.ok(requests.some(({ url }) => url.pathname === "/my-colleges"), "planner is included in release smoke");
   assert.equal(JSON.stringify(result).includes("window.ready"), false);
   assert.equal(JSON.stringify(result).includes("Set-Cookie"), false);
-  const brokenPlanner = await smoke({ origin, now: NOW, fetcher: (url, options) => url.pathname === "/plan" ? Promise.resolve(new Response("Unavailable", { status: 503 })) : fetcher(url, options) });
+  const brokenPlanner = await smoke({ origin, now: NOW, fetcher: (url, options) => url.pathname === "/my-colleges" ? Promise.resolve(new Response("Unavailable", { status: 503 })) : fetcher(url, options) });
   assert.equal(brokenPlanner.status, "failed");
-  assert.ok(brokenPlanner.checks.some((check) => check.path === "/plan" && check.failures.some((failure) => failure.includes("503"))), "planner failure is reported explicitly");
+  assert.ok(brokenPlanner.checks.some((check) => check.path === "/my-colleges" && check.failures.some((failure) => failure.includes("503"))), "planner failure is reported explicitly");
 });
 
 test("smoke reports independent endpoint failures instead of stopping at the first", async () => {
   const result = await smoke({ origin, now: NOW, fetcher: async () => new Response("down", { status: 503 }) });
   assert.equal(result.status, "failed"); assert.equal(result.freshnessStatus, "needs_review");
-  assert.ok(result.checks.filter(c => c.failures.length).length >= 14);
+  assert.ok(result.checks.filter(c => c.failures.length).length >= 13);
 });
 
 test("classroom scenario is capped at thirty students and 120 GET requests", async () => {
