@@ -44,6 +44,7 @@ const chancesColleges: ChancesCollege[] = colleges.map((college) => {
     unitId: college.unitId,
     slug: college.slug,
     name: college.name,
+    aliases: college.aliases,
     city: college.city,
     state: college.state,
     ownership: college.ownership,

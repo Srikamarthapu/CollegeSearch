@@ -20,6 +20,7 @@ test("the client projection preserves every explorer evidence field", () => {
   for (const [index, college] of dataset.colleges.entries()) {
     const clientCollege = projected[index];
     assert.equal(clientCollege.unitId, college.unitId);
+    assert.equal(clientCollege.setting, college.setting);
     assert.deepEqual(clientCollege.aliases, college.aliases);
     assert.deepEqual(
       clientCollege.majors,
@@ -32,6 +33,7 @@ test("the client projection preserves every explorer evidence field", () => {
       "graduationRate",
       "undergraduateEnrollment",
       "medianEarnings",
+      "tuitionOutOfState",
     ] as const) {
       const source = college.observations[metric];
       const client = clientCollege.observations[metric];

@@ -1,0 +1,1725 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-13T19:05:49.200746+00:00",
+  "colleges": [
+    {
+      "unitId": 104151,
+      "slug": "arizona-state-university-campus-immersion",
+      "actions": {
+        "admissions": {
+          "url": "https://admission.asu.edu/apply/first-year/admission",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admission.asu.edu/apply/first-year",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admission.asu.edu/apply/first-year/admission",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admission.asu.edu/apply/first-year",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://degrees.asu.edu/bachelors",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://degrees.asu.edu/bachelors",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "Choose an on-campus program; the degree search also includes ASU Online."
+        },
+        "netPriceCalculator": {
+          "url": "https://app.meadowfi.com/asu",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://admission.asu.edu/cost-aid/non-resident-first-year",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 110404,
+      "slug": "california-institute-of-technology",
+      "actions": {
+        "admissions": {
+          "url": "https://www.admissions.caltech.edu/apply/first-year-applicants/application-requirements",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.admissions.caltech.edu/apply/first-year-applicants/deadlines",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://www.admissions.caltech.edu/apply/first-year-applicants/deadlines",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.admissions.caltech.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.admissions.caltech.edu/why-caltech/academics/majors-minors",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.admissions.caltech.edu/why-caltech/academics/majors-minors",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://npc.collegeboard.org/app/cit",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.finaid.caltech.edu/Costs",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 110422,
+      "slug": "california-polytechnic-state-university-san-luis-obispo",
+      "actions": {
+        "admissions": {
+          "url": "https://www.calpoly.edu/admissions/first-year-student/how-to-apply",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.calpoly.edu/admissions",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://www.calpoly.edu/admissions/first-year-student/dates-and-deadlines",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.calpoly.edu/admissions",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://catalog.calpoly.edu/programs/",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://catalog.calpoly.edu/colleges-departments/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://www.calpoly.edu/financial-aid/costs-and-affordability/undergraduate-costs-of-attendance/undergraduate-net-price-calculator",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.calpoly.edu/admissions",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "The official page says 2026–27 updates are pending and calculator outputs currently use 2025–26 costs."
+        }
+      }
+    },
+    {
+      "unitId": 110529,
+      "slug": "california-state-polytechnic-university-pomona",
+      "actions": {
+        "admissions": {
+          "url": "https://www.cpp.edu/admissions/freshmen/",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.cpp.edu/apply/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://www.cpp.edu/admissions/freshmen/",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.cpp.edu/apply/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.cpp.edu/programs/index.shtml",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.cpp.edu/admissions/freshmen/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://www.cpp.edu/financial-aid/resources/net-price-calculator.shtml",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.cpp.edu/financial-aid/undergraduate/prospective/cost.shtml",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 110556,
+      "slug": "california-state-university-fresno",
+      "actions": {
+        "admissions": {
+          "url": "https://studentaffairs.fresnostate.edu/are/futurestudent/freshmen/requirements.html",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://studentaffairs.fresnostate.edu/are/futurestudent/freshmen/index.html",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://studentaffairs.fresnostate.edu/are/futurestudent/freshmen/index.html",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://studentaffairs.fresnostate.edu/are/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://catalog.fresnostate.edu/",
+          "label": "University catalog",
+          "publisherSourceUrl": "https://catalog.fresnostate.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "Current university catalog landing page verified. The direct degrees-and-programs index returned HTTP 202 during this check."
+        },
+        "netPriceCalculator": {
+          "url": "https://studentaffairs.fresnostate.edu/financialaid/netprice/index.html",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://studentaffairs.fresnostate.edu/financialaid/netprice/index.html",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 110565,
+      "slug": "california-state-university-fullerton",
+      "actions": {
+        "admissions": {
+          "url": "https://admissions.fullerton.edu/prospective-students/first-year.html",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admissions.fullerton.edu/prospective-students/first-year.html",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admissions.fullerton.edu/deadlines/",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admissions.fullerton.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.fullerton.edu/academics/",
+          "label": "Degrees and majors",
+          "publisherSourceUrl": "https://www.fullerton.edu/academics/",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "The degree directory lists bachelor’s and graduate degrees; use the degree designation when browsing."
+        },
+        "netPriceCalculator": {
+          "url": "https://app.meadowfi.com/fullerton",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.fullerton.edu/financialaid/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 110583,
+      "slug": "california-state-university-long-beach",
+      "actions": {
+        "admissions": {
+          "url": "https://www.csulb.edu/admissions/first-time-first-year-student-application-process",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.csulb.edu/admissions/residency-for-tuition-purposes",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://www.csulb.edu/enrollment-services/key-dates-and-deadlines",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.csulb.edu/apply",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.csulb.edu/academic-advising/major-search",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.csulb.edu/academic-advising/major-search",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://app.meadowfi.com/csulb",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.csulb.edu/financial-aid-and-scholarships/cost-of-attendance",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 110592,
+      "slug": "california-state-university-los-angeles",
+      "actions": {
+        "admissions": {
+          "url": "https://www.calstatela.edu/admissions/freshman",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.calstatela.edu/admissions",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://www.calstatela.edu/admissions/deadlines",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.calstatela.edu/admissions",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.calstatela.edu/admissions/undergraduate-programs",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.calstatela.edu/admissions/freshman",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://www.calstatela.edu/financialaid/net-price-calculator",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.calstatela.edu/financialaid",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 110608,
+      "slug": "california-state-university-northridge",
+      "actions": {
+        "admissions": {
+          "url": "https://www.csun.edu/admissions-financial-aid/how-to-apply/first-time-freshman-admissions/first-time-freshman-requirements",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.csun.edu/admissions-financial-aid/how-to-apply/first-time-freshman-admissions",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://www.csun.edu/admissions-financial-aid/dates-deadlines",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.csun.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.csun.edu/academics/majors-and-programs?search=&program=Major%3BMinor%3BCertificate%20-%20Undergraduate",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.csun.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://www.csun.edu/financialaid/financial-aid-basics/cost-attendance/net-price-calculator",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.csun.edu/financialaid/financial-aid-basics/cost-attendance/net-price-calculator",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 110617,
+      "slug": "california-state-university-sacramento",
+      "actions": {
+        "admissions": {
+          "url": "https://www.csus.edu/apply/admissions/application-process/freshman-process.html",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://catalog.csus.edu/admission/undergraduate/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://www.csus.edu/apply/admissions/application-process/freshman-process.html",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://catalog.csus.edu/admission/undergraduate/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://catalog.csus.edu/programs/",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.csus.edu/apply/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://www.csus.edu/administration-business-affairs/bursar/net-price-calculator.html",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.csus.edu/administration-business-affairs/bursar/tuition-living-costs.html",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 111948,
+      "slug": "chapman-university",
+      "actions": {
+        "admissions": {
+          "url": "https://www.chapman.edu/admission/undergraduate/how-to-apply/first-year/index.aspx",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.chapman.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://www.chapman.edu/admission/undergraduate/how-to-apply/first-year/index.aspx",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.chapman.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.chapman.edu/admission/undergraduate/academics/majors-and-minors.aspx",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.chapman.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://www.chapman.edu/admission/undergraduate/financing/net-price-calculator.aspx",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.chapman.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 190150,
+      "slug": "columbia-university-in-the-city-of-new-york",
+      "actions": {
+        "admissions": {
+          "url": "https://undergrad.admissions.columbia.edu/apply/firstyear",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://undergrad.admissions.columbia.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://undergrad.admissions.columbia.edu/apply/firstyear",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://undergrad.admissions.columbia.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://bulletin.columbia.edu/",
+          "label": "Undergraduate bulletins",
+          "publisherSourceUrl": "https://bulletin.columbia.edu/columbia-college/requirements-degree-bachelor-arts/",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "Select the Columbia College, Columbia Engineering, or General Studies bulletin for the undergraduate school of interest."
+        },
+        "netPriceCalculator": {
+          "url": "https://cc-seas.financialaid.columbia.edu/estimate-cost",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://cc-seas.financialaid.columbia.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 198419,
+      "slug": "duke-university",
+      "actions": {
+        "admissions": {
+          "url": "https://admissions.duke.edu/apply/",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admissions.duke.edu/resources/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admissions.duke.edu/apply/",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admissions.duke.edu/resources/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://admissions.duke.edu/academic-possibilities/",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.duke.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://financialaid.duke.edu/apply-aid/estimate-your-aid/",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://financialaid.duke.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 139755,
+      "slug": "georgia-institute-of-technology-main-campus",
+      "actions": {
+        "admissions": {
+          "url": "https://admission.gatech.edu/first-year/",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.gatech.edu/admission",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admission.gatech.edu/first-year/deadlines",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.gatech.edu/admission",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.gatech.edu/academics/all-degree-programs",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.gatech.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "The official degree directory includes undergraduate and graduate offerings; select the bachelor’s degree."
+        },
+        "netPriceCalculator": {
+          "url": "https://finaid.gatech.edu/costs/net-price-calculator",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://finaid.gatech.edu/costs/cost-of-attendance",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "The official page describes the calculator’s costs as a historical 2023–24 snapshot."
+        }
+      }
+    },
+    {
+      "unitId": 166027,
+      "slug": "harvard-university",
+      "actions": {
+        "admissions": {
+          "url": "https://college.harvard.edu/admissions/apply/first-year-applicants",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://college.harvard.edu/admissions/apply/first-year-applicants",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://college.harvard.edu/admissions/apply/first-year-applicants",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://college.harvard.edu/admissions/apply/first-year-applicants",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://advising.college.harvard.edu/academic-planning-for-students/concentrations-and-secondaries/",
+          "label": "Concentrations and secondary fields",
+          "publisherSourceUrl": "https://advising.college.harvard.edu/academic-planning-for-students/concentrations-and-secondaries/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://college.harvard.edu/financial-aid/net-price-calculator",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://college.harvard.edu/financial-aid/net-price-calculator",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 117946,
+      "slug": "loyola-marymount-university",
+      "actions": {
+        "admissions": {
+          "url": "https://admission.lmu.edu/learnmore/prospectivestudents/first-yearapplicants/",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admission.lmu.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admission.lmu.edu/learnmore/prospectivestudents/first-yearapplicants/",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admission.lmu.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://bulletin.lmu.edu/academic-degrees-programs/programs-by-type/",
+          "label": "Bachelor’s degree programs",
+          "publisherSourceUrl": "https://bulletin.lmu.edu/financial-aid/",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "Use the Bachelor’s Degrees section of this official program directory."
+        },
+        "netPriceCalculator": {
+          "url": "https://financialaid.lmu.edu/prospectivestudents/netpricecalculator/",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://financialaid.lmu.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 166683,
+      "slug": "massachusetts-institute-of-technology",
+      "actions": {
+        "admissions": {
+          "url": "https://mitadmissions.org/apply/firstyear/deadlines-requirements/",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://mitadmissions.org/apply/firstyear/first-year-eligibility/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://mitadmissions.org/apply/firstyear/deadlines-requirements/",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://mitadmissions.org/apply/firstyear/first-year-eligibility/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://catalog.mit.edu/mit/undergraduate-education/academic-programs/majors/",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://catalog.mit.edu/mit/undergraduate-education/academic-programs/majors/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://sfs.mit.edu/undergraduate-students/the-cost-of-attendance/estimate-your-cost/",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://sfs.mit.edu/undergraduate-students/the-cost-of-attendance/making-mit-affordable/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 193900,
+      "slug": "new-york-university",
+      "actions": {
+        "admissions": {
+          "url": "https://www.nyu.edu/admissions/undergraduate-admissions/how-to-apply/all-freshmen-applicants.html",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.nyu.edu/admissions/undergraduate-admissions/how-to-apply.html",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "The first-year application page covers New York, Abu Dhabi, and Shanghai; choose New York for this college."
+        },
+        "deadlines": {
+          "url": "https://www.nyu.edu/admissions/undergraduate-admissions/how-to-apply/all-freshmen-applicants.html",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.nyu.edu/admissions/undergraduate-admissions/how-to-apply.html",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "The first-year application page covers all three NYU degree-granting campuses; check the New York requirements."
+        },
+        "programs": {
+          "url": "https://bulletins.nyu.edu/undergraduate/",
+          "label": "Undergraduate catalogs",
+          "publisherSourceUrl": "https://bulletins.nyu.edu/programs/",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "The undergraduate bulletin directory includes NYU’s global campuses; select a New York school for this college."
+        },
+        "netPriceCalculator": {
+          "url": "https://npc.collegeboard.org/app/nyu",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.nyu.edu/admissions/financial-aid-and-scholarships/cost-of-attendance.html",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 147767,
+      "slug": "northwestern-university",
+      "actions": {
+        "admissions": {
+          "url": "https://admissions.northwestern.edu/apply/",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admissions.northwestern.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admissions.northwestern.edu/apply/application-deadlines.html",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admissions.northwestern.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://admissions.northwestern.edu/academics/majors-minors/",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.northwestern.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://undergradaid.northwestern.edu/how-aid-works/estimate-your-cost-aid/",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://undergradaid.northwestern.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 204796,
+      "slug": "ohio-state-university-main-campus",
+      "actions": {
+        "admissions": {
+          "url": "https://undergrad.osu.edu/apply/freshmen-columbus",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://undergrad.osu.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://undergrad.osu.edu/apply/freshmen-columbus/apply-step-by-step",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://undergrad.osu.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://undergrad.osu.edu/majors-and-academics/majors",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.osu.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://sfa.osu.edu/incoming-freshmen/about-aid/net-price-calculator",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://sfa.osu.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 209542,
+      "slug": "oregon-state-university",
+      "actions": {
+        "admissions": {
+          "url": "https://admissions.oregonstate.edu/first-year-students",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admissions.oregonstate.edu/apply-choose-application",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admissions.oregonstate.edu/undergraduate-admission-deadlines",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admissions.oregonstate.edu/apply-choose-application",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://admissions.oregonstate.edu/find-your-major",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://admissions.oregonstate.edu/apply-choose-application",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://financialaid.oregonstate.edu/net-price-calculator",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://admissions.oregonstate.edu/cost-and-aid",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 121345,
+      "slug": "pomona-college",
+      "actions": {
+        "admissions": {
+          "url": "https://www.pomona.edu/admissions/paths-apply",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.pomona.edu/admissions/paths-apply",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://www.pomona.edu/admissions/paths-apply",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.pomona.edu/admissions/paths-apply",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://catalog.pomona.edu/majorsminors",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://catalog.pomona.edu",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://www.pomona.edu/financial-aid/cost-attendance/estimate-your-aid",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.pomona.edu/admissions-aid",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 186131,
+      "slug": "princeton-university",
+      "actions": {
+        "admissions": {
+          "url": "https://admission.princeton.edu/apply/application-checklist",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admission.princeton.edu/cost-aid/net-price-calculator",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admission.princeton.edu/apply/first-year-application-dates-deadlines",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admission.princeton.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.princeton.edu/academics/areas-of-study",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.princeton.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "The directory lists undergraduate and graduate study; use undergraduate degree offerings."
+        },
+        "netPriceCalculator": {
+          "url": "https://admission.princeton.edu/cost-aid/net-price-calculator",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://admission.princeton.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 243780,
+      "slug": "purdue-university-main-campus",
+      "actions": {
+        "admissions": {
+          "url": "https://admissions.purdue.edu/become-student/first-year-criteria/",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admissions.purdue.edu/become-student/guide/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admissions.purdue.edu/deadlines/first-year-college-student/",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admissions.purdue.edu/become-student/deadlines/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://admissions.purdue.edu/academics/majors/",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.purdue.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://www.purdue.edu/dfa/cost/calculator/",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://admissions.purdue.edu/cost-financial-aid/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 122409,
+      "slug": "san-diego-state-university",
+      "actions": {
+        "admissions": {
+          "url": "https://admissions.sdsu.edu/first-years",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admissions.sdsu.edu/apply",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admissions.sdsu.edu/first-years",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admissions.sdsu.edu/apply",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.sdsu.edu/programs",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://admissions.sdsu.edu/apply",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://sacd.sdsu.edu/financial-aid/financial-aid/eligibility/cost-of-attendance/net-price-calculator",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://sacd.sdsu.edu/financial-aid/financial-aid/eligibility/cost-of-attendance/cost-of-attendance-tables",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 122755,
+      "slug": "san-jose-state-university",
+      "actions": {
+        "admissions": {
+          "url": "https://www.sjsu.edu/admissions/freshman/index.php",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.sjsu.edu/admissions/index.php",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://www.sjsu.edu/admissions/deadlines/index.php",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.sjsu.edu/admissions/index.php",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://catalog.sjsu.edu/index.php",
+          "label": "University catalog",
+          "publisherSourceUrl": "https://www.sjsu.edu/admissions/deadlines/index.php",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "Current university catalog landing page verified. The direct academic-programs index returned HTTP 202 during this check."
+        },
+        "netPriceCalculator": {
+          "url": "https://app.meadowfi.com/sjsu",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.sjsu.edu/soar/cost-aid/index.php",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 122931,
+      "slug": "santa-clara-university",
+      "actions": {
+        "admissions": {
+          "url": "https://www.scu.edu/admission/undergraduate/first-year-students/",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.scu.edu/admission/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://www.scu.edu/admission/undergraduate/first-year-students/fy-key-deadlines/",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.scu.edu/admission/undergraduate/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.scu.edu/academics/undergraduate-programs/",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.scu.edu/admission/undergraduate/first-year-students/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://www.scu.edu/financialaid/net-price-calculator/",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.scu.edu/admission/financial-aid/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 243744,
+      "slug": "stanford-university",
+      "actions": {
+        "admissions": {
+          "url": "https://admission.stanford.edu/apply/first-year/index.html",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admission.stanford.edu/apply/first-year/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admission.stanford.edu/apply/first-year/index.html",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admission.stanford.edu/apply/first-year/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://majors.stanford.edu/majors",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.stanford.edu/academics",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://financialaid.stanford.edu/undergrad/how/calculator/index.html",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://admission.stanford.edu/apply/first-year/fee.html",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 228778,
+      "slug": "the-university-of-texas-at-austin",
+      "actions": {
+        "admissions": {
+          "url": "https://admissions.utexas.edu/apply/freshman/",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admissions.utexas.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admissions.utexas.edu/apply/freshman/",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admissions.utexas.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://catalog.utexas.edu/undergraduate/",
+          "label": "Undergraduate catalog",
+          "publisherSourceUrl": "https://registrar.utexas.edu/catalogs",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://onestop.utexas.edu/managing-costs/cost-tuition-rates/cost-of-attendance/net-price-calculator/",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://onestop.utexas.edu/managing-costs/cost-tuition-rates/cost-of-attendance/net-price-calculator/",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "The official landing page still describes estimates for 2024–25. Current calculator outputs were not tested."
+        }
+      }
+    },
+    {
+      "unitId": 104179,
+      "slug": "university-of-arizona",
+      "actions": {
+        "admissions": {
+          "url": "https://www.arizona.edu/admissions/undergraduate/first-year",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.arizona.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://www.arizona.edu/admissions/deadlines",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.arizona.edu/admissions/undergraduate/first-year",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.arizona.edu/degree-search/majors?cat-program=bachelor",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.arizona.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://financialaid.arizona.edu/cost/npc",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://financialaid.arizona.edu/types-of-aid/undergraduate-grants",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 110635,
+      "slug": "university-of-california-berkeley",
+      "actions": {
+        "admissions": {
+          "url": "https://admissions.berkeley.edu/apply-to-berkeley/first-year-applicants-uc-berkeley/",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admissions.berkeley.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admissions.berkeley.edu/apply-to-berkeley/dates-deadlines/",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admissions.berkeley.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://admissions.berkeley.edu/academics/academic-programs-majors-uc-berkeley-minors/",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://admissions.berkeley.edu/cost/apply-for-financial-aid/types-of-aid/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://financialaid.berkeley.edu/how-aid-works/estimate-your-financial-aid/",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://financialaid.berkeley.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 110644,
+      "slug": "university-of-california-davis",
+      "actions": {
+        "admissions": {
+          "url": "https://www.ucdavis.edu/admissions/undergraduate/first-year",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.ucdavis.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://www.ucdavis.edu/admissions/undergraduate/first-year/timeline",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.ucdavis.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.ucdavis.edu/academics/majors",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.ucdavis.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://myawards.ucdavis.edu/AidEstimator",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.ucdavis.edu/admissions/cost",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 110653,
+      "slug": "university-of-california-irvine",
+      "actions": {
+        "admissions": {
+          "url": "https://admissions.uci.edu/apply/first-year-students/index.php",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admissions.uci.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admissions.uci.edu/dates-deadlines.php",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admissions.uci.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://admissions.uci.edu/study/majors-minors.php",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://admissions.uci.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://www.ofas.uci.edu/cost/net-price-calculator.php",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.ofas.uci.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "The official calculator page still identifies its estimates as 2024–25. Current-year estimates were not verified."
+        }
+      }
+    },
+    {
+      "unitId": 110662,
+      "slug": "university-of-california-los-angeles",
+      "actions": {
+        "admissions": {
+          "url": "https://admission.ucla.edu/apply/first-year",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admission.ucla.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admission.ucla.edu/apply/first-year",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admission.ucla.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://admission.ucla.edu/apply/majors",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://admission.ucla.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://admission.ucla.edu/tuition-aid/net-price-calculator",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://admission.ucla.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 445188,
+      "slug": "university-of-california-merced",
+      "actions": {
+        "admissions": {
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admissions.ucmerced.edu/first-year/apply",
+          "checkedOn": "2026-09-13",
+          "status": "unavailable",
+          "note": "The official first-year application page returned HTTP 403; its live content could not be verified."
+        },
+        "deadlines": {
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.ucmerced.edu/dates-and-deadlines",
+          "checkedOn": "2026-09-13",
+          "status": "unavailable",
+          "note": "The official dates and deadlines page returned HTTP 403; its live content could not be verified."
+        },
+        "programs": {
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://admissions.ucmerced.edu/node/1225",
+          "checkedOn": "2026-09-13",
+          "status": "unavailable",
+          "note": "The official undergraduate majors directory returned HTTP 403; its live content could not be verified."
+        },
+        "netPriceCalculator": {
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://financialaid.ucmerced.edu/consumer-information",
+          "checkedOn": "2026-09-13",
+          "status": "unavailable",
+          "note": "The official financial aid consumer-information page returned HTTP 403; its linked calculator could not be verified."
+        }
+      }
+    },
+    {
+      "unitId": 110671,
+      "slug": "university-of-california-riverside",
+      "actions": {
+        "admissions": {
+          "url": "https://admissions.ucr.edu/firstyear",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.ucr.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admissions.ucr.edu/firstyear",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.ucr.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://admissions.ucr.edu/majors",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.ucr.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://financialaid.ucr.edu/cost",
+          "label": "Costs and net price calculator",
+          "publisherSourceUrl": "https://admissions.ucr.edu/affordable-oos",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "The official cost page links to the UC systemwide financial aid calculator; choose UC Riverside."
+        }
+      }
+    },
+    {
+      "unitId": 110680,
+      "slug": "university-of-california-san-diego",
+      "actions": {
+        "admissions": {
+          "url": "https://admissions.ucsd.edu/first-year/index.html",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.ucsd.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admissions.ucsd.edu/first-year/application-timeline.html",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admissions.ucsd.edu/first-year/index.html",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://admissions.ucsd.edu/why/majors/index.html",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://admissions.ucsd.edu/first-year/index.html",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://fas.ucsd.edu/resources/helpful-tools/financial-aid-estimator/",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://fas.ucsd.edu/resources/helpful-tools/financial-aid-estimator/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 110705,
+      "slug": "university-of-california-santa-barbara",
+      "actions": {
+        "admissions": {
+          "url": "https://admissions.sa.ucsb.edu/freshman",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.ucsb.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admissions.sa.ucsb.edu/deadlines",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admissions.sa.ucsb.edu/freshman",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.ucsb.edu/academics/undergraduate",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.ucsb.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://www.finaid.ucsb.edu/costs-estimated-aid/net-price-calculator",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.finaid.ucsb.edu/costs-estimated-aid/net-price-calculator",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 110714,
+      "slug": "university-of-california-santa-cruz",
+      "actions": {
+        "admissions": {
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admissions.ucsc.edu/first-year-student",
+          "checkedOn": "2026-09-13",
+          "status": "unavailable",
+          "note": "The official first-year admissions page returned HTTP 403; page availability and purpose could not be verified live."
+        },
+        "deadlines": {
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admissions.ucsc.edu/posts/dates-deadlines",
+          "checkedOn": "2026-09-13",
+          "status": "unavailable",
+          "note": "The official admissions dates page returned HTTP 403; its live content could not be verified."
+        },
+        "programs": {
+          "url": "https://catalog.ucsc.edu/en/current/general-catalog/academic-programs/bachelors-degrees/",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://catalog.ucsc.edu/en/current/general-catalog/academic-programs/bachelors-degrees/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://www2.ucsc.edu/finaidcalc/",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www2.ucsc.edu/finaidcalc/",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "This live calculator identifies its estimates as 2023–24. Current-year estimates were not verified."
+        }
+      }
+    },
+    {
+      "unitId": 145637,
+      "slug": "university-of-illinois-urbana-champaign",
+      "actions": {
+        "admissions": {
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.admissions.illinois.edu/apply",
+          "checkedOn": "2026-09-13",
+          "status": "unavailable",
+          "note": "The official undergraduate admissions site returned HTTP 504; first-year instructions could not be verified live."
+        },
+        "deadlines": {
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.admissions.illinois.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "unavailable",
+          "note": "The official undergraduate admissions site returned HTTP 504; a current first-year deadline page could not be verified."
+        },
+        "programs": {
+          "url": "https://myillini.illinois.edu/Programs",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://illinois.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://secure.osfa.illinois.edu/NPC/NPC.asp",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://secure.osfa.illinois.edu/NPC/NPC.asp",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 166629,
+      "slug": "university-of-massachusetts-amherst",
+      "actions": {
+        "admissions": {
+          "url": "https://www.umass.edu/admissions/first-year-students",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.umass.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://www.umass.edu/admissions/important-dates-deadlines",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.umass.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.umass.edu/gateway/academics/explore-our-programs?field_level_of_study=36&field_degree_type=All&field_delivery=All&field_area_of_interest=All&field_school=All&sort_by=title",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.umass.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://app.meadowfi.com/umass",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.umass.edu/financialaid",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 170976,
+      "slug": "university-of-michigan-ann-arbor",
+      "actions": {
+        "admissions": {
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admissions.umich.edu/apply/first-year-applicants",
+          "checkedOn": "2026-09-13",
+          "status": "unavailable",
+          "note": "The official first-year admissions page returned HTTP 403; its live content could not be verified."
+        },
+        "deadlines": {
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admissions.umich.edu/apply/first-year-applicants/requirements-deadlines",
+          "checkedOn": "2026-09-13",
+          "status": "unavailable",
+          "note": "The official requirements and deadlines page returned HTTP 403; its live content could not be verified."
+        },
+        "programs": {
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://admissions.umich.edu/academics-majors/majors-degrees",
+          "checkedOn": "2026-09-13",
+          "status": "unavailable",
+          "note": "The official majors and degrees directory returned HTTP 403; its live content could not be verified."
+        },
+        "netPriceCalculator": {
+          "url": "https://npc.collegeboard.org/app/umich",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://finaid.umich.edu/tools-resources/planning-tools-calculators",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 199120,
+      "slug": "university-of-north-carolina-at-chapel-hill",
+      "actions": {
+        "admissions": {
+          "url": "https://admissions.unc.edu/apply/types-of-applications/first-year/",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admissions.unc.edu/apply/types-of-applications/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admissions.unc.edu/apply/types-of-applications/first-year/",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admissions.unc.edu/apply/types-of-applications/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://catalog.unc.edu/undergraduate/programs-study/",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://catalog.unc.edu/programs/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://studentaid.unc.edu/net-price-calculator/",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.unc.edu/admissions-aid/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 122612,
+      "slug": "university-of-san-francisco",
+      "actions": {
+        "admissions": {
+          "url": "https://www.usfca.edu/admission/undergraduate/first-year",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.usfca.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://www.usfca.edu/admission/undergraduate/dates-deadlines",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://www.usfca.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.usfca.edu/academics/find-your-program/undergraduate",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.usfca.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://www.usfca.edu/financial-aid/net-price-calculator",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.usfca.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 123961,
+      "slug": "university-of-southern-california",
+      "actions": {
+        "admissions": {
+          "url": "https://admission.usc.edu/prospective-students/how-to-apply/first-year-students/",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admission.usc.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admission.usc.edu/prospective-students/how-to-apply/first-year-students/",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admission.usc.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.usc.edu/majors-minors/",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.usc.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://affordability.usc.edu/financial-aid/net-price-calculator/",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://affordability.usc.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 234076,
+      "slug": "university-of-virginia-main-campus",
+      "actions": {
+        "admissions": {
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admission.virginia.edu/admission/deadlines-instructions",
+          "checkedOn": "2026-09-13",
+          "status": "unavailable",
+          "note": "The official admissions instructions page returned HTTP 403; its live content could not be verified."
+        },
+        "deadlines": {
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admission.virginia.edu/admission/deadlines-instructions",
+          "checkedOn": "2026-09-13",
+          "status": "unavailable",
+          "note": "The official admissions deadlines page returned HTTP 403; its live content could not be verified."
+        },
+        "programs": {
+          "url": "https://www.virginia.edu/majors-minors/",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.virginia.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://sfs.virginia.edu/estimate-your-costs-attend-uva",
+          "checkedOn": "2026-09-13",
+          "status": "unavailable",
+          "note": "The official cost-estimate page returned HTTP 403; the calculator landing page could not be verified."
+        }
+      }
+    },
+    {
+      "unitId": 236948,
+      "slug": "university-of-washington-seattle-campus",
+      "actions": {
+        "admissions": {
+          "url": "https://admit.washington.edu/apply/first-year/",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admit.washington.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admit.washington.edu/apply/dates-deadlines/",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admit.washington.edu/apply/first-year/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://advising.uw.edu/degree-overview/majors/list-of-undergraduate-majors/",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.washington.edu/admissions/?utm_source=whitebar&utm_medium=click&utm_campaign=apply&utm_term=apply",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://www.washington.edu/financialaid/2026/05/10/net-price-calculator/",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://www.washington.edu/financialaid/?utm_source=whitebar&utm_medium=click&utm_campaign=apply&utm_term=financialaid",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 240444,
+      "slug": "university-of-wisconsin-madison",
+      "actions": {
+        "admissions": {
+          "url": "https://admissions.wisc.edu/apply-as-a-freshman/",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://www.wisc.edu/admissions/apply/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admissions.wisc.edu/deadlines/",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admissions.wisc.edu/how-do-i-apply-to-uw-madison/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://www.wisc.edu/academics/majors/",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://www.wisc.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://app.meadowfi.com/wisconsin",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://financialaid.wisc.edu/types-of-aid/tuition-promise/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    },
+    {
+      "unitId": 236939,
+      "slug": "washington-state-university",
+      "actions": {
+        "admissions": {
+          "url": "https://admission.wsu.edu/apply/first-year-students/",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admission.wsu.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admission.wsu.edu/apply/admissions-dates-deadlines/",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admission.wsu.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://degrees.wsu.edu/",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://wsu.edu/admissions/",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "The WSU degree finder spans campuses; select Pullman for this college."
+        },
+        "netPriceCalculator": {
+          "url": "https://financialaid.wsu.edu/price-calculator/",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://financialaid.wsu.edu/estimate-your-college-costs/",
+          "checkedOn": "2026-09-13",
+          "status": "verified",
+          "note": "Select the Pullman campus when the calculator asks for a campus."
+        }
+      }
+    },
+    {
+      "unitId": 130794,
+      "slug": "yale-university",
+      "actions": {
+        "admissions": {
+          "url": "https://admissions.yale.edu/apply",
+          "label": "First-year admissions",
+          "publisherSourceUrl": "https://admissions.yale.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "deadlines": {
+          "url": "https://admissions.yale.edu/timelines",
+          "label": "Application dates and deadlines",
+          "publisherSourceUrl": "https://admissions.yale.edu/apply",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "programs": {
+          "url": "https://admissions.yale.edu/majors",
+          "label": "Undergraduate majors and programs",
+          "publisherSourceUrl": "https://admissions.yale.edu/",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        },
+        "netPriceCalculator": {
+          "url": "https://finaid.yale.edu/estimate",
+          "label": "Net price calculator",
+          "publisherSourceUrl": "https://admissions.yale.edu/affordability",
+          "checkedOn": "2026-09-13",
+          "status": "verified"
+        }
+      }
+    }
+  ]
+}

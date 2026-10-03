@@ -1,0 +1,8 @@
+
+> college-search@0.1.0 start
+> WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start --port 4173
+
+
+  vinext start  (port 4173)
+
+[vinext] Production server running at http://0.0.0.0:4173

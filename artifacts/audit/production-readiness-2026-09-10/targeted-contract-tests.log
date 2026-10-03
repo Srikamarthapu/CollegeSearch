@@ -1,0 +1,485 @@
+TAP version 13
+# Subtest: all account consumers use the shared verification trust decision
+ok 1 - all account consumers use the shared verification trust decision
+  ---
+  duration_ms: 6.719958
+  type: 'test'
+  ...
+# Subtest: the account page gates account-scoped actions on current verification
+ok 2 - the account page gates account-scoped actions on current verification
+  ---
+  duration_ms: 1.785917
+  type: 'test'
+  ...
+# Subtest: password mutation has both a runtime trust gate and a disabled control
+ok 3 - password mutation has both a runtime trust gate and a disabled control
+  ---
+  duration_ms: 0.913958
+  type: 'test'
+  ...
+# Subtest: terminal account state offers retry and local-session clearing
+ok 4 - terminal account state offers retry and local-session clearing
+  ---
+  duration_ms: 1.4585
+  type: 'test'
+  ...
+# Subtest: only a currently verified signed-in identity enables account actions
+ok 5 - only a currently verified signed-in identity enables account actions
+  ---
+  duration_ms: 1.340083
+  type: 'test'
+  ...
+# Subtest: a checking or failed prior identity is labeled as last verified
+ok 6 - a checking or failed prior identity is labeled as last verified
+  ---
+  duration_ms: 0.293708
+  type: 'test'
+  ...
+# Subtest: unknown, failed signed-out, and inconsistent states fail closed
+ok 7 - unknown, failed signed-out, and inconsistent states fail closed
+  ---
+  duration_ms: 0.090459
+  type: 'test'
+  ...
+# Subtest: verified signed-out and unconfigured states remain distinct
+ok 8 - verified signed-out and unconfigured states remain distinct
+  ---
+  duration_ms: 0.441166
+  type: 'test'
+  ...
+# Subtest: a deferred old identity cannot overwrite sign-out followed by another account
+ok 9 - a deferred old identity cannot overwrite sign-out followed by another account
+  ---
+  duration_ms: 1.553
+  type: 'test'
+  ...
+# Subtest: an auth event invalidates a different identity before verification finishes
+ok 10 - an auth event invalidates a different identity before verification finishes
+  ---
+  duration_ms: 0.1505
+  type: 'test'
+  ...
+# Subtest: transient getUser failures never claim a confirmed sign-out
+ok 11 - transient getUser failures never claim a confirmed sign-out
+  ---
+  duration_ms: 0.124875
+  type: 'test'
+  ...
+# Subtest: terminal getUser failures clear a previously verified identity
+ok 12 - terminal getUser failures clear a previously verified identity
+  ---
+  duration_ms: 0.100959
+  type: 'test'
+  ...
+# Subtest: initial, event, and manual refreshes share one in-flight verification
+ok 13 - initial, event, and manual refreshes share one in-flight verification
+  ---
+  duration_ms: 0.072791
+  type: 'test'
+  ...
+# Subtest: local sign-out invalidates old refreshes and restores a verified identity only on a safe failure
+ok 14 - local sign-out invalidates old refreshes and restores a verified identity only on a safe failure
+  ---
+  duration_ms: 0.192167
+  type: 'test'
+  ...
+# Subtest: a failed sign-out never promotes a degraded identity back to verified
+ok 15 - a failed sign-out never promotes a degraded identity back to verified
+  ---
+  duration_ms: 0.063209
+  type: 'test'
+  ...
+# Subtest: a failed sign-out cannot restore the old identity over a newer auth event
+ok 16 - a failed sign-out cannot restore the old identity over a newer auth event
+  ---
+  duration_ms: 0.333875
+  type: 'test'
+  ...
+# Subtest: a failed sign-out during a new identity boundary never restores the prior account
+ok 17 - a failed sign-out during a new identity boundary never restores the prior account
+  ---
+  duration_ms: 0.469375
+  type: 'test'
+  ...
+# Subtest: the pull-request gate runs the complete deterministic verification sequence
+ok 18 - the pull-request gate runs the complete deterministic verification sequence
+  ---
+  duration_ms: 0.360292
+  type: 'test'
+  ...
+# Subtest: both workflows are bounded, read-only, secret-free, and SHA-pinned
+ok 19 - both workflows are bounded, read-only, secret-free, and SHA-pinned
+  ---
+  duration_ms: 0.109166
+  type: 'test'
+  ...
+# Subtest: live artifact availability is monitored outside the pull-request gate
+ok 20 - live artifact availability is monitored outside the pull-request gate
+  ---
+  duration_ms: 0.060791
+  type: 'test'
+  ...
+# Subtest: two tabs serialize the same unit and preserve the newer intent
+ok 21 - two tabs serialize the same unit and preserve the newer intent
+  ---
+  duration_ms: 2.723042
+  type: 'test'
+  ...
+# Subtest: an invalid outbox stops before every network and cache operation
+ok 22 - an invalid outbox stops before every network and cache operation
+  ---
+  duration_ms: 1.359459
+  type: 'test'
+  ...
+# Subtest: cache and acknowledgement failures retain exact pending records
+    # Subtest: cache failure retains the pending record
+    ok 1 - cache failure retains the pending record
+      ---
+      duration_ms: 0.808208
+      type: 'test'
+      ...
+    # Subtest: ack failure retains the pending record
+    ok 2 - ack failure retains the pending record
+      ---
+      duration_ms: 0.3695
+      type: 'test'
+      ...
+    1..2
+ok 23 - cache and acknowledgement failures retain exact pending records
+  ---
+  duration_ms: 1.433833
+  type: 'test'
+  ...
+# Subtest: a no-op authoritative read still persists the complete account cache
+ok 24 - a no-op authoritative read still persists the complete account cache
+  ---
+  duration_ms: 0.2525
+  type: 'test'
+  ...
+# Subtest: account lock names are canonical and reject unverified identifiers
+ok 25 - account lock names are canonical and reject unverified identifiers
+  ---
+  duration_ms: 1.198708
+  type: 'test'
+  ...
+# Subtest: same-account work is serialized across concurrent callers
+ok 26 - same-account work is serialized across concurrent callers
+  ---
+  duration_ms: 1.074834
+  type: 'test'
+  ...
+# Subtest: remote mutation is rejected when the browser has no lock manager
+ok 27 - remote mutation is rejected when the browser has no lock manager
+  ---
+  duration_ms: 0.385417
+  type: 'test'
+  ...
+# Subtest: guest saves, user caches, and user outboxes remain isolated by key
+ok 28 - guest saves, user caches, and user outboxes remain isolated by key
+  ---
+  duration_ms: 11.947667
+  type: 'test'
+  ...
+# Subtest: guest reads preserve the legacy College Compass save key
+ok 29 - guest reads preserve the legacy College Compass save key
+  ---
+  duration_ms: 0.356708
+  type: 'test'
+  ...
+# Subtest: account cache reports missing, valid-empty, valid, corrupt, and unavailable separately
+ok 30 - account cache reports missing, valid-empty, valid, corrupt, and unavailable separately
+  ---
+  duration_ms: 0.185709
+  type: 'test'
+  ...
+# Subtest: scoped storage rejects empty, malformed, nil, and non-RFC UUIDs
+ok 31 - scoped storage rejects empty, malformed, nil, and non-RFC UUIDs
+  ---
+  duration_ms: 2.487875
+  type: 'test'
+  ...
+# Subtest: storage read, write, and remove failures are reported without throwing
+ok 32 - storage read, write, and remove failures are reported without throwing
+  ---
+  duration_ms: 0.353583
+  type: 'test'
+  ...
+# Subtest: the outbox keeps only the latest valid intent for each known college
+ok 33 - the outbox keeps only the latest valid intent for each known college
+  ---
+  duration_ms: 2.15
+  type: 'test'
+  ...
+# Subtest: outbox reads distinguish missing, corrupt, and unavailable records
+ok 34 - outbox reads distinguish missing, corrupt, and unavailable records
+  ---
+  duration_ms: 0.64875
+  type: 'test'
+  ...
+# Subtest: different tabs cannot overwrite pending intentions for other colleges
+ok 35 - different tabs cannot overwrite pending intentions for other colleges
+  ---
+  duration_ms: 0.260125
+  type: 'test'
+  ...
+# Subtest: acknowledgement never clears a newer same-college intention
+ok 36 - acknowledgement never clears a newer same-college intention
+  ---
+  duration_ms: 0.573041
+  type: 'test'
+  ...
+# Subtest: acknowledgement reports corrupt records without deleting them
+ok 37 - acknowledgement reports corrupt records without deleting them
+  ---
+  duration_ms: 0.646125
+  type: 'test'
+  ...
+# Subtest: a pending mutation is synchronously durable before its writer returns
+ok 38 - a pending mutation is synchronously durable before its writer returns
+  ---
+  duration_ms: 0.803458
+  type: 'test'
+  ...
+# Subtest: an offline remove remains a tombstone over a stale account cache
+ok 39 - an offline remove remains a tombstone over a stale account cache
+  ---
+  duration_ms: 0.105375
+  type: 'test'
+  ...
+# Subtest: mutation sanitization keeps the last intent and drops unknown colleges
+ok 40 - mutation sanitization keeps the last intent and drops unknown colleges
+  ---
+  duration_ms: 1.660416
+  type: 'test'
+  ...
+# Subtest: remote state is authoritative before local actions are applied
+ok 41 - remote state is authoritative before local actions are applied
+  ---
+  duration_ms: 1.059625
+  type: 'test'
+  ...
+# Subtest: duplicate add/remove actions collapse into idempotent final operations
+ok 42 - duplicate add/remove actions collapse into idempotent final operations
+  ---
+  duration_ms: 0.652416
+  type: 'test'
+  ...
+# Subtest: sync rejects a non-UUID owner before any remote request
+ok 43 - sync rejects a non-UUID owner before any remote request
+  ---
+  duration_ms: 0.670875
+  type: 'test'
+  ...
+# Subtest: save-remove-save during an in-flight save preserves the final save
+ok 44 - save-remove-save during an in-flight save preserves the final save
+  ---
+  duration_ms: 1.177292
+  type: 'test'
+  ...
+# Subtest: a failed remote write retains the local intent for a safe retry
+ok 45 - a failed remote write retains the local intent for a safe retry
+  ---
+  duration_ms: 1.365417
+  type: 'test'
+  ...
+# Subtest: enqueue starts no network work, allowing the outbox to persist before flush
+ok 46 - enqueue starts no network work, allowing the outbox to persist before flush
+  ---
+  duration_ms: 0.523833
+  type: 'test'
+  ...
+# Subtest: a failed commit acknowledgement retains the operation for idempotent retry
+ok 47 - a failed commit acknowledgement retains the operation for idempotent retry
+  ---
+  duration_ms: 1.361084
+  type: 'test'
+  ...
+# Subtest: a partial save-then-remove failure retries the complete idempotent batch
+ok 48 - a partial save-then-remove failure retries the complete idempotent batch
+  ---
+  duration_ms: 0.893125
+  type: 'test'
+  ...
+# Subtest: account A is hidden through every loading and account-B transition frame
+ok 49 - account A is hidden through every loading and account-B transition frame
+  ---
+  duration_ms: 1.654834
+  type: 'test'
+  ...
+# Subtest: a valid account cache is complete but an outbox by itself is not
+ok 50 - a valid account cache is complete but an outbox by itself is not
+  ---
+  duration_ms: 0.158417
+  type: 'test'
+  ...
+# Subtest: a failed remote read without a complete base is unavailable, not empty
+ok 51 - a failed remote read without a complete base is unavailable, not empty
+  ---
+  duration_ms: 0.10975
+  type: 'test'
+  ...
+# Subtest: cached offline data remains labeled cached rather than synced
+ok 52 - cached offline data remains labeled cached rather than synced
+  ---
+  duration_ms: 0.050084
+  type: 'test'
+  ...
+# Subtest: a previously confirmed remote base stays visible during a retry
+ok 53 - a previously confirmed remote base stays visible during a retry
+  ---
+  duration_ms: 0.095958
+  type: 'test'
+  ...
+# Subtest: guest import is enabled only for a current, confirmed remote account view
+ok 54 - guest import is enabled only for a current, confirmed remote account view
+  ---
+  duration_ms: 0.153625
+  type: 'test'
+  ...
+# Subtest: only canonical verified UUIDs can define an account storage scope
+ok 55 - only canonical verified UUIDs can define an account storage scope
+  ---
+  duration_ms: 0.216958
+  type: 'test'
+  ...
+# Subtest: Supabase CSP origins are reduced to a safe public origin
+ok 56 - Supabase CSP origins are reduced to a safe public origin
+  ---
+  duration_ms: 0.929
+  type: 'test'
+  ...
+# Subtest: Supabase CSP origins reject header injection and non-origin URLs
+ok 57 - Supabase CSP origins reject header injection and non-origin URLs
+  ---
+  duration_ms: 29.147292
+  type: 'test'
+  ...
+# Subtest: production CSP is strict for scripts and scoped for optional auth
+ok 58 - production CSP is strict for scripts and scoped for optional auth
+  ---
+  duration_ms: 5.073417
+  type: 'test'
+  ...
+# Subtest: development CSP permits only the extra runtime transports it needs
+ok 59 - development CSP permits only the extra runtime transports it needs
+  ---
+  duration_ms: 0.401584
+  type: 'test'
+  ...
+# Subtest: CSP refuses a fixed-shape injection value as a nonce
+ok 60 - CSP refuses a fixed-shape injection value as a nonce
+  ---
+  duration_ms: 0.267542
+  type: 'test'
+  ...
+# Subtest: public Supabase config accepts publishable and legacy anon keys
+ok 61 - public Supabase config accepts publishable and legacy anon keys
+  ---
+  duration_ms: 2.564
+  type: 'test'
+  ...
+# Subtest: public Supabase config rejects privileged keys before a browser client can exist
+ok 62 - public Supabase config rejects privileged keys before a browser client can exist
+  ---
+  duration_ms: 0.21325
+  type: 'test'
+  ...
+# Subtest: malformed or missing public settings fail closed
+ok 63 - malformed or missing public settings fail closed
+  ---
+  duration_ms: 0.09975
+  type: 'test'
+  ...
+# Subtest: saved_colleges has a constrained user-owned identity
+ok 64 - saved_colleges has a constrained user-owned identity
+  ---
+  duration_ms: 56.80325
+  type: 'test'
+  ...
+# Subtest: saved_colleges exposes only the required authenticated operations
+ok 65 - saved_colleges exposes only the required authenticated operations
+  ---
+  duration_ms: 2.658708
+  type: 'test'
+  ...
+# Subtest: saved_colleges RLS has separate owner-only policies
+ok 66 - saved_colleges RLS has separate owner-only policies
+  ---
+  duration_ms: 2.15175
+  type: 'test'
+  ...
+# Subtest: saved_colleges migration stays free of privileged database code
+ok 67 - saved_colleges migration stays free of privileged database code
+  ---
+  duration_ms: 1.444084
+  type: 'test'
+  ...
+# Subtest: local Supabase config disables anonymous Auth users
+ok 68 - local Supabase config disables anonymous Auth users
+  ---
+  duration_ms: 1.694625
+  type: 'test'
+  ...
+# Subtest: listOwned selects only unit IDs and applies the exact owner filter
+ok 69 - listOwned selects only unit IDs and applies the exact owner filter
+  ---
+  duration_ms: 0.664917
+  type: 'test'
+  ...
+# Subtest: upsertOwned sends explicit owners and uses conflict-safe duplicate ignoring
+ok 70 - upsertOwned sends explicit owners and uses conflict-safe duplicate ignoring
+  ---
+  duration_ms: 0.122458
+  type: 'test'
+  ...
+# Subtest: removeOwned applies both the owner and unit filters before execution
+ok 71 - removeOwned applies both the owner and unit filters before execution
+  ---
+  duration_ms: 0.072916
+  type: 'test'
+  ...
+# Subtest: empty mutations do not issue Supabase requests
+ok 72 - empty mutations do not issue Supabase requests
+  ---
+  duration_ms: 0.043584
+  type: 'test'
+  ...
+# Subtest: Supabase adapter errors are surfaced without leaking query details
+ok 73 - Supabase adapter errors are surfaced without leaking query details
+  ---
+  duration_ms: 0.153292
+  type: 'test'
+  ...
+# Subtest: the adapter rejects a caller whose UUID differs from its bound token owner
+ok 74 - the adapter rejects a caller whose UUID differs from its bound token owner
+  ---
+  duration_ms: 0.111042
+  type: 'test'
+  ...
+# Subtest: a verified identity and matching local token are captured together
+ok 75 - a verified identity and matching local token are captured together
+  ---
+  duration_ms: 0.613667
+  type: 'test'
+  ...
+# Subtest: a shared-client account switch fails before a token can be bound
+ok 76 - a shared-client account switch fails before a token can be bound
+  ---
+  duration_ms: 0.207875
+  type: 'test'
+  ...
+# Subtest: malformed expected identities fail before Auth is read
+ok 77 - malformed expected identities fail before Auth is read
+  ---
+  duration_ms: 0.069958
+  type: 'test'
+  ...
+1..77
+# tests 79
+# suites 0
+# pass 79
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1632.216083

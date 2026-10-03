@@ -57,23 +57,21 @@ export default async function MajorsPage({ searchParams }: MajorsPageProps) {
           <div className={styles.mastheadCopy}>
             <span className="page-eyebrow">
               <BookOpenCheck size={15} aria-hidden="true" />
-              Broad federal field evidence
+              Find your field
             </span>
-            <h1>Start with a field. Keep the claim honest.</h1>
+            <h1>What would you like to study?</h1>
             <p>
-              Explore bachelor&apos;s-program indicators and the share of all
-              institutional awards reported in each broad federal field. These
-              records help you find places to investigate—not estimate your
-              chance of admission to a particular major.
+              Follow a subject you enjoy. Find colleges with reported bachelor&apos;s
+              programs in that broad field, then explore the details.
             </p>
           </div>
 
           <aside className={styles.boundaryCard}>
-            <span>What this page can answer</span>
-            <strong>Where broad-field evidence appears</strong>
+            <span>Before you choose a program</span>
+            <strong>A starting point for exploring majors</strong>
             <p>
-              It cannot confirm an exact current major, capacity, or
-              program-specific admit rate. Always check the college catalog.
+              These are broad fields from federal records. Check each college’s
+              current catalog for specific majors, requirements, and availability.
             </p>
           </aside>
         </header>

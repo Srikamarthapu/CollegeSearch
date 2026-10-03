@@ -1,0 +1,76 @@
+TAP version 13
+# Subtest: server-renders the CollegeSearch product shell
+ok 1 - server-renders the CollegeSearch product shell
+  ---
+  duration_ms: 1110.478333
+  type: 'test'
+  ...
+# Subtest: global HTML responses enforce one fresh nonce on every executable block
+ok 2 - global HTML responses enforce one fresh nonce on every executable block
+  ---
+  duration_ms: 95.765209
+  type: 'test'
+  ...
+# Subtest: auth redirects inherit CSP and reject an external next destination
+ok 3 - auth redirects inherit CSP and reject an external next destination
+  ---
+  duration_ms: 142.820667
+  type: 'test'
+  ...
+# Subtest: account copy is student-facing and keeps the local-save boundary explicit
+ok 4 - account copy is student-facing and keeps the local-save boundary explicit
+  ---
+  duration_ms: 11.715458
+  type: 'test'
+  ...
+# Subtest: canonical discovery, evidence, comparison, and source routes render HTML
+ok 5 - canonical discovery, evidence, comparison, and source routes render HTML
+  ---
+  duration_ms: 818.019
+  type: 'test'
+  ...
+# Subtest: comparison field form preserves colleges and renders the selected broad field
+ok 6 - comparison field form preserves colleges and renders the selected broad field
+  ---
+  duration_ms: 23.871833
+  type: 'test'
+  ...
+# Subtest: the source ledger renders one action per unique source URL
+ok 7 - the source ledger renders one action per unique source URL
+  ---
+  duration_ms: 28.237042
+  type: 'test'
+  ...
+# Subtest: the published cohort has complete, source-registered observations
+ok 8 - the published cohort has complete, source-registered observations
+  ---
+  duration_ms: 3.674291
+  type: 'test'
+  ...
+# Subtest: all nine UC headlines use Fall 2026 snapshots without mixing Fall 2025 yield
+ok 9 - all nine UC headlines use Fall 2026 snapshots without mixing Fall 2025 yield
+  ---
+  duration_ms: 3.03175
+  type: 'test'
+  ...
+# Subtest: ASU uses its latest official campus-immersion record and keeps the federal alternate
+ok 10 - ASU uses its latest official campus-immersion record and keeps the federal alternate
+  ---
+  duration_ms: 3.997792
+  type: 'test'
+  ...
+# Subtest: Stanford and MIT use reviewed current Common Data Set records
+ok 11 - Stanford and MIT use reviewed current Common Data Set records
+  ---
+  duration_ms: 2.351167
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2283.957875

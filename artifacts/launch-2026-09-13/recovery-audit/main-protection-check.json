@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-09-13T21:39:10.926750+00:00",
+  "repository": "Srikamarthapu/CollegeSearch",
+  "branch": "main",
+  "protected": true,
+  "branchCommitUnchanged": "4519fc12f2eb0e13c68bb56d0fd9d199a5f13559",
+  "requiredCheck": {
+    "name": "Verify application and committed evidence",
+    "appId": 15368,
+    "strict": true,
+    "administratorsIncluded": true,
+    "currentPRState": "SUCCESS",
+    "url": "https://github.com/Srikamarthapu/CollegeSearch/actions/runs/34784168964/job/103796501118"
+  },
+  "reviewerRequired": false,
+  "forcePushAllowed": false,
+  "branchDeletionAllowed": false,
+  "scope": "Only main protection changed. PR remains draft; no merge, workflow dispatch, paid service or website audience change.",
+  "requestCorrection": "First request with both legacy contexts and modern checks returned422 without mutation; modern checks-only payload succeeded."
+}

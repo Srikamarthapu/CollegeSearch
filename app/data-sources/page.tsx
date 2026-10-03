@@ -13,12 +13,33 @@ import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import logoSourcesFirst from "@/data/college-logo-sources-01-25.json";
 import logoSourcesSecond from "@/data/college-logo-sources-26-50.json";
-import { colleges, release, type SourceRelease } from "@/app/lib/college-data";
+import {
+  colleges,
+  observationSourceKind,
+  release,
+  type SourceRelease,
+} from "@/app/lib/college-data";
 
 const logoSources = [...logoSourcesFirst, ...logoSourcesSecond];
 const collegeNames = new Map(
   colleges.map((college) => [college.slug, college.name]),
 );
+const reviewedInstitutionRecords = colleges.filter((college) =>
+  Object.values(college.observations).some(
+    (observation) =>
+      observation !== null &&
+      !observation.sourceId.startsWith("uc-") &&
+      !observationSourceKind(observation).isFederal,
+  ),
+);
+const reviewedAdmissionHeadlines = reviewedInstitutionRecords.filter(
+  (college) => !observationSourceKind(college.observations.admitRate).isFederal,
+);
+const firstPartyAdmissionHeadlines = colleges.filter(
+  (college) => !observationSourceKind(college.observations.admitRate).isFederal,
+);
+const federalAdmissionBaselines =
+  colleges.length - firstPartyAdmissionHeadlines.length;
 
 export const metadata: Metadata = {
   title: "Data sources · CollegeSearch",
@@ -34,7 +55,7 @@ function SourceRecord({
   position: number;
 }) {
   return (
-    <article className="sources-record">
+    <article className="sources-record" id={source.id}>
       <header>
         <span className="sources-record-number">
           {String(position).padStart(2, "0")}
@@ -120,13 +141,19 @@ function SourceRecord({
             <ExternalLink size={14} aria-hidden="true" />
           </a>
         ) : null}
-        <a href={source.sourceUrl} target="_blank" rel="noreferrer">
-          {source.sourcePage ? "Source file" : "Open source"}
-          <ExternalLink size={14} aria-hidden="true" />
-        </a>
-        {source.artifactUrl ? (
+        {!source.sourcePage || source.sourceUrl !== source.sourcePage ? (
+          <a href={source.sourceUrl} target="_blank" rel="noreferrer">
+            {source.sourcePage ? "Source file" : "Open source"}
+            <ExternalLink size={14} aria-hidden="true" />
+          </a>
+        ) : null}
+        {source.artifactUrl &&
+        source.artifactUrl !== source.sourceUrl &&
+        source.artifactUrl !== source.sourcePage ? (
           <a href={source.artifactUrl} target="_blank" rel="noreferrer">
-            {source.artifactKind === "html" ? "Open reviewed page" : "Open source file"}
+            {source.artifactKind === "html"
+              ? "Open reviewed page"
+              : "Open source file"}
             <ExternalLink size={14} aria-hidden="true" />
           </a>
         ) : null}
@@ -175,6 +202,22 @@ export default function DataSourcesPage() {
             <div>
               <dt>Earnings period</dt>
               <dd>{release.earningsPeriodLabel}</dd>
+            </div>
+            <div>
+              <dt>Reviewed institution records</dt>
+              <dd>{reviewedInstitutionRecords.length}</dd>
+            </div>
+            <div>
+              <dt>Reviewed admission headlines</dt>
+              <dd>{reviewedAdmissionHeadlines.length}</dd>
+            </div>
+            <div>
+              <dt>Total first-party admission headlines</dt>
+              <dd>{firstPartyAdmissionHeadlines.length}</dd>
+            </div>
+            <div>
+              <dt>Federal admission baselines</dt>
+              <dd>{federalAdmissionBaselines}</dd>
             </div>
           </dl>
         </header>

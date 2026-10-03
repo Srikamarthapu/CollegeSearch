@@ -1,0 +1,500 @@
+{
+  "date": "2026-10-01",
+  "scope": "Larger campus photography, simpler landing-page hierarchy, and blue/navy logo",
+  "productionUrl": "https://collegesearch-steel.vercel.app",
+  "deploymentId": "dpl_78undGWfEoVUvtE6sxpKGxd5WqYY",
+  "sourceCommit": "59256128511402e25b60b8ab676059b957238d42",
+  "readyState": "READY",
+  "checks": {
+    "nativeNextBuild": "passed",
+    "vinextBuild": "passed",
+    "targetedLint": "passed",
+    "collegeSearchTests": "4/4 passed",
+    "renderedHtmlTests": "11/11 passed",
+    "hostedBrowser": {
+      "url": "https://collegesearch-steel.vercel.app",
+      "layouts": [
+        {
+          "width": 1440,
+          "documentWidth": 1440,
+          "photo": {
+            "width": 739.203125,
+            "height": 415.796875
+          },
+          "logoLoaded": true,
+          "brandGap": 51.640625,
+          "buttons": [
+            {
+              "name": "Previous campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Next campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Stanford photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show UCLA photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Washington photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Columbia photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Berkeley photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Play campus slideshow",
+              "width": 76,
+              "height": 44
+            }
+          ]
+        },
+        {
+          "width": 1280,
+          "documentWidth": 1280,
+          "photo": {
+            "width": 700.8125,
+            "height": 394.203125
+          },
+          "logoLoaded": true,
+          "brandGap": 239.796875,
+          "buttons": [
+            {
+              "name": "Previous campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Next campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Stanford photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show UCLA photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Washington photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Columbia photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Berkeley photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Play campus slideshow",
+              "width": 76,
+              "height": 44
+            }
+          ]
+        },
+        {
+          "width": 1024,
+          "documentWidth": 1024,
+          "photo": {
+            "width": 556.8125,
+            "height": 313.203125
+          },
+          "logoLoaded": true,
+          "brandGap": 579.21875,
+          "buttons": [
+            {
+              "name": "Previous campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Next campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Stanford photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show UCLA photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Washington photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Columbia photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Berkeley photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Play campus slideshow",
+              "width": 76,
+              "height": 44
+            }
+          ]
+        },
+        {
+          "width": 820,
+          "documentWidth": 820,
+          "photo": {
+            "width": 756,
+            "height": 425.25
+          },
+          "logoLoaded": true,
+          "brandGap": 383.21875,
+          "buttons": [
+            {
+              "name": "Previous campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Next campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Stanford photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show UCLA photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Washington photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Columbia photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Berkeley photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Play campus slideshow",
+              "width": 76,
+              "height": 44
+            }
+          ]
+        },
+        {
+          "width": 768,
+          "documentWidth": 768,
+          "photo": {
+            "width": 704,
+            "height": 396
+          },
+          "logoLoaded": true,
+          "brandGap": 331.21875,
+          "buttons": [
+            {
+              "name": "Previous campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Next campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Stanford photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show UCLA photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Washington photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Columbia photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Berkeley photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Play campus slideshow",
+              "width": 76,
+              "height": 44
+            }
+          ]
+        },
+        {
+          "width": 390,
+          "documentWidth": 390,
+          "photo": {
+            "width": 354,
+            "height": 236
+          },
+          "logoLoaded": true,
+          "brandGap": 19.21875,
+          "buttons": [
+            {
+              "name": "Previous campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Next campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Stanford photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show UCLA photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Washington photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Columbia photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Berkeley photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Play campus slideshow",
+              "width": 76,
+              "height": 44
+            }
+          ]
+        },
+        {
+          "width": 375,
+          "documentWidth": 375,
+          "photo": {
+            "width": 339,
+            "height": 226
+          },
+          "logoLoaded": true,
+          "brandGap": 19.21875,
+          "buttons": [
+            {
+              "name": "Previous campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Next campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Stanford photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show UCLA photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Washington photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Columbia photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Berkeley photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Play campus slideshow",
+              "width": 76,
+              "height": 44
+            }
+          ]
+        },
+        {
+          "width": 361,
+          "documentWidth": 361,
+          "photo": {
+            "width": 325,
+            "height": 216.65625
+          },
+          "logoLoaded": true,
+          "brandGap": 16.21875,
+          "buttons": [
+            {
+              "name": "Previous campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Next campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Stanford photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show UCLA photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Washington photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Columbia photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Berkeley photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Play campus slideshow",
+              "width": 76,
+              "height": 44
+            }
+          ]
+        },
+        {
+          "width": 320,
+          "documentWidth": 320,
+          "photo": {
+            "width": 284,
+            "height": 189.328125
+          },
+          "logoLoaded": true,
+          "brandGap": 12,
+          "buttons": [
+            {
+              "name": "Previous campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Next campus",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Stanford photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show UCLA photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Washington photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Columbia photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Show Berkeley photo",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "name": "Play campus slideshow",
+              "width": 44,
+              "height": 44
+            }
+          ]
+        }
+      ],
+      "manualControls": "passed; all five slides loaded; attribution changed; inactive slides inert",
+      "pausedSlideshow": "stable beyond 6.5s interval",
+      "exploreAction": "focused search; Caltech filtered to one result",
+      "reducedMotion": "automatic rotation absent; transition disabled; manual control works",
+      "errors": []
+    }
+  },
+  "logo": {
+    "asset": "public/brand/collegesearch-campus-pin-blue.png",
+    "input": "public/brand/collegesearch-campus-pin.png",
+    "mode": "Built-in image editing tool",
+    "prompt": "Use case: precise-object-edit. Asset: existing CollegeSearch website logo. Edit target: the referenced transparent PNG. Change ONLY the colors, preserve the campus-pin/cap/building/path emblem, exact lettering 'CollegeSearch', typeface, weight, letter spacing, proportions, alignment and composition. Replace every teal/green area (Search word and pin landscape) with the website's royal blue #3559D5. Make the College word and upper emblem the website's dark navy #18263D. Keep the white path and white negative details white. Crisp flat colors; no gradients, shadows, glow, new elements or redesign. Output the complete horizontal logo as a PNG with genuinely transparent background, clean antialiasing and a small even transparent margin. No clipping of any letter or emblem."
+  },
+  "releaseStatus": "Presentation update verified; existing pre-launch gates remain."
+}

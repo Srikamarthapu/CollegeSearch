@@ -1,0 +1,334 @@
+TAP version 13
+# Subtest: account key matching uses complete scope delimiters and never erases guest or unrelated namespaces
+ok 1 - account key matching uses complete scope delimiters and never erases guest or unrelated namespaces
+  ---
+  duration_ms: 0.623042
+  type: 'test'
+  ...
+# Subtest: purge snapshots storage indexes and removes every owned key including out-of-directory records
+ok 2 - purge snapshots storage indexes and removes every owned key including out-of-directory records
+  ---
+  duration_ms: 0.398333
+  type: 'test'
+  ...
+# Subtest: successful erasure keeps other owners, marker and guest records and invalidates the captured account
+ok 3 - successful erasure keeps other owners, marker and guest records and invalidates the captured account
+  ---
+  duration_ms: 0.687125
+  type: 'test'
+  ...
+# Subtest: blocked receipt storage reports partial cleanup instead of changing the server deletion result
+ok 4 - blocked receipt storage reports partial cleanup instead of changing the server deletion result
+  ---
+  duration_ms: 0.126042
+  type: 'test'
+  ...
+# Subtest: storage read failure is unavailable, not fabricated evidence of deletion
+ok 5 - storage read failure is unavailable, not fabricated evidence of deletion
+  ---
+  duration_ms: 0.226083
+  type: 'test'
+  ...
+# Subtest: resumed tab erases its old session journals from the durable deletion marker without touching guest drafts
+ok 6 - resumed tab erases its old session journals from the durable deletion marker without touching guest drafts
+  ---
+  duration_ms: 0.321875
+  type: 'test'
+  ...
+# Subtest: cleanup fences immediately then drains an already running research write before final sweep
+ok 7 - cleanup fences immediately then drains an already running research write before final sweep
+  ---
+  duration_ms: 0.213583
+  type: 'test'
+  ...
+# Subtest: confirmed notebook deletion prevents pending results or subsequent input from recreating memory or storage
+ok 8 - confirmed notebook deletion prevents pending results or subsequent input from recreating memory or storage
+  ---
+  duration_ms: 0.356375
+  type: 'test'
+  ...
+# Subtest: temporarily paused initial notebook recovers a retained journal when writing is allowed again
+ok 9 - temporarily paused initial notebook recovers a retained journal when writing is allowed again
+  ---
+  duration_ms: 0.27275
+  type: 'test'
+  ...
+# Subtest: invalid deletion targets never call callbacks or touch either storage
+ok 10 - invalid deletion targets never call callbacks or touch either storage
+  ---
+  duration_ms: 0.283917
+  type: 'test'
+  ...
+# Subtest: a stale backup restore cannot recreate notebooks for a deleted account
+ok 11 - a stale backup restore cannot recreate notebooks for a deleted account
+  ---
+  duration_ms: 0.242875
+  type: 'test'
+  ...
+# Subtest: guest and verified account profiles never migrate or share records
+ok 12 - guest and verified account profiles never migrate or share records
+  ---
+  duration_ms: 0.945625
+  type: 'test'
+  ...
+# Subtest: loading, email, malformed IDs, and unverified states cannot expose an editor or access storage
+ok 13 - loading, email, malformed IDs, and unverified states cannot expose an editor or access storage
+  ---
+  duration_ms: 0.402
+  type: 'test'
+  ...
+# Subtest: a scope change or verification pause never selects the previous owner or guesses guest
+ok 14 - a scope change or verification pause never selects the previous owner or guesses guest
+  ---
+  duration_ms: 0.084291
+  type: 'test'
+  ...
+# Subtest: bounded parser preserves original GPA/context and ignores unapproved prediction or identity fields
+ok 15 - bounded parser preserves original GPA/context and ignores unapproved prediction or identity fields
+  ---
+  duration_ms: 0.219625
+  type: 'test'
+  ...
+# Subtest: invalid structure and duplicate or invented preparation assertions are rejected
+ok 16 - invalid structure and duplicate or invented preparation assertions are rejected
+  ---
+  duration_ms: 0.07575
+  type: 'test'
+  ...
+# Subtest: incomplete GPA context survives autosave while review prompts remain advisory
+ok 17 - incomplete GPA context survives autosave while review prompts remain advisory
+  ---
+  duration_ms: 0.332458
+  type: 'test'
+  ...
+# Subtest: completed autosaves restore from the shared browser copy after reload
+ok 18 - completed autosaves restore from the shared browser copy after reload
+  ---
+  duration_ms: 0.16375
+  type: 'test'
+  ...
+# Subtest: a final keystroke is journaled synchronously before autosave and survives immediate reload
+ok 19 - a final keystroke is journaled synchronously before autosave and survives immediate reload
+  ---
+  duration_ms: 0.127084
+  type: 'test'
+  ...
+# Subtest: simultaneous tab autosaves serialize: exactly one commits and the other retains its journal
+ok 20 - simultaneous tab autosaves serialize: exactly one commits and the other retains its journal
+  ---
+  duration_ms: 0.311833
+  type: 'test'
+  ...
+# Subtest: identity is checked again after lock wait, and stale account drafts remain scoped
+ok 21 - identity is checked again after lock wait, and stale account drafts remain scoped
+  ---
+  duration_ms: 0.319417
+  type: 'test'
+  ...
+# Subtest: account-deletion invalidation prevents queued writes and drops the deleted owner's cached draft
+ok 22 - account-deletion invalidation prevents queued writes and drops the deleted owner's cached draft
+  ---
+  duration_ms: 0.319917
+  type: 'test'
+  ...
+# Subtest: typing while an autosave waits preserves later edits and rebases their recovery revision
+ok 23 - typing while an autosave waits preserves later edits and rebases their recovery revision
+  ---
+  duration_ms: 0.243416
+  type: 'test'
+  ...
+# Subtest: unsupported locking keeps a reloadable draft and never falls back to unlocked writes
+ok 24 - unsupported locking keeps a reloadable draft and never falls back to unlocked writes
+  ---
+  duration_ms: 0.556625
+  type: 'test'
+  ...
+# Subtest: clear does not erase a later edit made while it waits for the shared lock
+ok 25 - clear does not erase a later edit made while it waits for the shared lock
+  ---
+  duration_ms: 0.159
+  type: 'test'
+  ...
+# Subtest: blocked storage retains edits for same-tab route changes and isolates them by owner
+ok 26 - blocked storage retains edits for same-tab route changes and isolates them by owner
+  ---
+  duration_ms: 0.078125
+  type: 'test'
+  ...
+# Subtest: quota and read failures never claim persistence or lose the active draft
+ok 27 - quota and read failures never claim persistence or lose the active draft
+  ---
+  duration_ms: 0.11375
+  type: 'test'
+  ...
+# Subtest: stale edits keep a recoverable draft and do not silently overwrite a newer browser copy
+ok 28 - stale edits keep a recoverable draft and do not silently overwrite a newer browser copy
+  ---
+  duration_ms: 0.132292
+  type: 'test'
+  ...
+# Subtest: retry after storage returns detects a previously unseen copy before offering replacement
+ok 29 - retry after storage returns detects a previously unseen copy before offering replacement
+  ---
+  duration_ms: 0.093875
+  type: 'test'
+  ...
+# Subtest: unreadable records stay untouched until explicit replacement or clear
+ok 30 - unreadable records stay untouched until explicit replacement or clear
+  ---
+  duration_ms: 0.059792
+  type: 'test'
+  ...
+# Subtest: clear removes only the selected scope and the in-memory draft; failure retains contents
+ok 31 - clear removes only the selected scope and the in-memory draft; failure retains contents
+  ---
+  duration_ms: 0.110208
+  type: 'test'
+  ...
+# Subtest: brief exports the current self-reported draft, original grading context, responsibilities, and marked preparation
+ok 32 - brief exports the current self-reported draft, original grading context, responsibilities, and marked preparation
+  ---
+  duration_ms: 0.804166
+  type: 'test'
+  ...
+# Subtest: plain-text export preserves user content as text, handles empty entries honestly, and invents no deadlines
+ok 33 - plain-text export preserves user content as text, handles empty entries honestly, and invents no deadlines
+  ---
+  duration_ms: 0.129
+  type: 'test'
+  ...
+# Subtest: typing every profile field empty retains that clear intent across a competing tab write and reload
+ok 34 - typing every profile field empty retains that clear intent across a competing tab write and reload
+  ---
+  duration_ms: 0.121625
+  type: 'test'
+  ...
+# Subtest: calendar validation handles leap years, month lengths, and date-only values
+ok 35 - calendar validation handles leap years, month lengths, and date-only values
+  ---
+  duration_ms: 0.497666
+  type: 'test'
+  ...
+# Subtest: local today and date display do not shift an entered date through timezone conversion
+ok 36 - local today and date display do not shift an entered date through timezone conversion
+  ---
+  duration_ms: 9.383458
+  type: 'test'
+  ...
+# Subtest: upcoming, past, and completed are derived from today's local calendar date
+ok 37 - upcoming, past, and completed are derived from today's local calendar date
+  ---
+  duration_ms: 0.7145
+  type: 'test'
+  ...
+# Subtest: source URLs reject script schemes, embedded credentials, and controls without claiming a source is official
+ok 38 - source URLs reject script schemes, embedded credentials, and controls without claiming a source is official
+  ---
+  duration_ms: 0.39
+  type: 'test'
+  ...
+# Subtest: new forms never invent a date, source, cycle, or confirmation
+ok 39 - new forms never invent a date, source, cycle, or confirmation
+  ---
+  duration_ms: 0.093625
+  type: 'test'
+  ...
+# Subtest: material edits reset student confirmation, and notes do not create a new checked-on date
+ok 40 - material edits reset student confirmation, and notes do not create a new checked-on date
+  ---
+  duration_ms: 0.195375
+  type: 'test'
+  ...
+# Subtest: add/edit preserve completion, and stale edit forms do not overwrite changed tasks
+ok 41 - add/edit preserve completion, and stale edit forms do not overwrite changed tasks
+  ---
+  duration_ms: 0.159417
+  type: 'test'
+  ...
+# Subtest: parser validates known colleges, 100-task limit, duplicates, fields, and checked provenance
+ok 42 - parser validates known colleges, 100-task limit, duplicates, fields, and checked provenance
+  ---
+  duration_ms: 0.305542
+  type: 'test'
+  ...
+# Subtest: portable backup round-trips user text and dates without account scope or executable formats
+ok 43 - portable backup round-trips user text and dates without account scope or executable formats
+  ---
+  duration_ms: 0.266458
+  type: 'test'
+  ...
+# Subtest: a full 100-task tracker with bounded Unicode notes produces a restorable backup
+ok 44 - a full 100-task tracker with bounded Unicode notes produces a restorable backup
+  ---
+  duration_ms: 1.771209
+  type: 'test'
+  ...
+# Subtest: scope gates never guess guest during verification or allow unverified identifiers
+ok 45 - scope gates never guess guest during verification or allow unverified identifiers
+  ---
+  duration_ms: 0.11225
+  type: 'test'
+  ...
+# Subtest: guest/account records and unfinished form drafts survive reload without crossing scopes
+ok 46 - guest/account records and unfinished form drafts survive reload without crossing scopes
+  ---
+  duration_ms: 0.532417
+  type: 'test'
+  ...
+# Subtest: incomplete editor drafts are bounded and preserve invalid dates for correction
+ok 47 - incomplete editor drafts are bounded and preserve invalid dates for correction
+  ---
+  duration_ms: 0.0545
+  type: 'test'
+  ...
+# Subtest: collection edits are journaled before autosave and restore after an immediate reload
+ok 48 - collection edits are journaled before autosave and restore after an immediate reload
+  ---
+  duration_ms: 0.097084
+  type: 'test'
+  ...
+# Subtest: simultaneous writers serialize and the losing tab retains a recoverable conflict draft
+ok 49 - simultaneous writers serialize and the losing tab retains a recoverable conflict draft
+  ---
+  duration_ms: 0.188084
+  type: 'test'
+  ...
+# Subtest: removing the final task is a durable empty intent, even when another tab changes the list
+ok 50 - removing the final task is a durable empty intent, even when another tab changes the list
+  ---
+  duration_ms: 0.24
+  type: 'test'
+  ...
+# Subtest: account switches while waiting for a lock prevent stale writes and preserve old-owner drafts
+ok 51 - account switches while waiting for a lock prevent stale writes and preserve old-owner drafts
+  ---
+  duration_ms: 0.086083
+  type: 'test'
+  ...
+# Subtest: confirmed deletion fences writes and clears only that owner's plan/form journals and cache
+ok 52 - confirmed deletion fences writes and clears only that owner's plan/form journals and cache
+  ---
+  duration_ms: 0.144375
+  type: 'test'
+  ...
+# Subtest: unsupported locks and quota failures never pretend a shared save succeeded
+ok 53 - unsupported locks and quota failures never pretend a shared save succeeded
+  ---
+  duration_ms: 0.109917
+  type: 'test'
+  ...
+# Subtest: a transient deletion-marker failure blocks access without deleting previously retained drafts
+ok 54 - a transient deletion-marker failure blocks access without deleting previously retained drafts
+  ---
+  duration_ms: 0.0515
+  type: 'test'
+  ...
+1..54
+# tests 54
+# suites 0
+# pass 54
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 250.226041

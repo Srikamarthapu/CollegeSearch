@@ -6,10 +6,15 @@ import { getSupabasePublicConfig } from "./config";
  * Refreshes an expired cookie session before a route renders. getClaims()
  * validates the JWT and performs refresh-token rotation when needed.
  */
-export async function updateSupabaseSession(request: NextRequest) {
+export async function updateSupabaseSession(
+  request: NextRequest,
+  forwardedRequestHeaders = new Headers(request.headers),
+) {
   const config = getSupabasePublicConfig();
   if (!config.configured) {
-    return NextResponse.next({ request });
+    return NextResponse.next({
+      request: { headers: forwardedRequestHeaders },
+    });
   }
 
   const pendingCookies = new Map<
@@ -43,7 +48,13 @@ export async function updateSupabaseSession(request: NextRequest) {
   // Do not use the unverified user object from getSession() for authorization.
   await supabase.auth.getClaims();
 
-  const response = NextResponse.next({ request });
+  const cookieHeader = request.headers.get("cookie");
+  if (cookieHeader) forwardedRequestHeaders.set("cookie", cookieHeader);
+  else forwardedRequestHeaders.delete("cookie");
+
+  const response = NextResponse.next({
+    request: { headers: forwardedRequestHeaders },
+  });
   pendingCookies.forEach(({ name, options, value }) => {
     response.cookies.set(name, value, options);
   });

@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-09-13T18:43:29.081Z",
+  "collegeCount": 50,
+  "observationContentChanges": [],
+  "sourceHashChanges": [
+    {
+      "sourceId": "ut-austin-cds-2025-26",
+      "previous": "29ed60a524e625343a1dafe0f433de1639efd5f09180db1c205f679b9d8138ce",
+      "current": "d453f39a9dba579560061555d3a8634fa1a9fbcfebf2b5ce376d3546f82033f0"
+    },
+    {
+      "sourceId": "caltech-registrar-enrollment-2025",
+      "previous": "b0e833e73f343cf92ce3ccefd837b39f87bf04212a89424d5054dbe3f4e33564",
+      "current": "7b5985302b7530a771cc4ee1916c5b7c88cc32ecf28c5a633ad4beceb153beed"
+    },
+    {
+      "sourceId": "caltech-financial-aid-costs-2026-27",
+      "previous": "034972cb9ebec71a6d45779a137091125cc4aa3c6e08cd3065fae4cbdeae7abe",
+      "current": "a197add41ecd482903c7174051a64564baeab99129aede51a541c192c3f0f3f5"
+    },
+    {
+      "sourceId": "pomona-tuition-costs-2026-27",
+      "previous": "43d02e1a3677813f4ac7bc2a718f540411f8ee15fe2db88310a41af4c9b1f674",
+      "current": "02a995ecc74dfc0a5fa3287a05ff1dcf1d6c108cdcdbb4b7acbf2ca136cbb76b"
+    }
+  ]
+}

@@ -1,0 +1,868 @@
+{
+  "schemaVersion": 1,
+  "startedAt": "2026-09-13T19:22:28.239Z",
+  "checkedAt": "2026-09-13T19:22:40.089Z",
+  "origin": "http://127.0.0.1:4173",
+  "profile": "classroom",
+  "status": "passed",
+  "workload": {
+    "virtualStudents": 30,
+    "pageviewsPerStudent": 4,
+    "maximumRequests": 120,
+    "startStaggerMs": 200,
+    "thinkTimeMs": 1500,
+    "mode": "anonymous document requests; no browser assets or account writes"
+  },
+  "stoppedEarly": false,
+  "notAttempted": 0,
+  "summary": {
+    "attempted": 120,
+    "failed": 0,
+    "p50Ms": 11.3,
+    "p95Ms": 18.6,
+    "maximumMs": 38.8
+  },
+  "checks": [
+    {
+      "path": "/explore",
+      "ms": 38.8,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 14.5,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 18.6,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 19.5,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 17.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 18.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 17.4,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 16.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 13.7,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 16.7,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 13.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 18.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 14.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 18.5,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 15.6,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 17.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 13.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 16.3,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 12.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 18.7,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 12.7,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 19.2,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 10.2,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 15.5,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 7.7,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 10.8,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 19.8,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 8.2,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 11.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 15.7,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 6.7,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 11,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 18.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 7.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 12.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 14.4,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 6.2,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 12.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 14.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 5.4,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 9.3,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 15.7,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 7.8,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 11.4,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 16.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 7.8,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 10.2,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 12.3,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 6.2,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 13,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 12.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 15.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 5.7,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 11.5,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 10.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 11.7,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 5.6,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 8.3,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 7.6,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 13.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 5.6,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 10.2,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 8.3,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 12.6,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 5.6,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 10.4,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 10.4,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 15.3,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 6.6,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 10.6,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 10.2,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 13.8,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 5.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 11.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 10.8,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 7.6,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 12.7,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 10.2,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 8.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 11.5,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 10.4,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 8.8,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 8.3,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 8.6,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 7.3,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 12.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 10.7,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 8,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 14.4,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 10.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 8,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 12.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 10,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 12,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 11.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 7.7,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 12.5,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 8.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 11.3,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 8.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 9.5,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 8.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 14.8,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 9.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 13.8,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 8.3,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 13.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 7.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 9.7,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 6.9,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 11.3,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 11.5,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 12.6,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 10.7,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 12,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 14,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 15.3,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 9.1,
+      "httpStatus": 200,
+      "setCookiePresent": false,
+      "failures": []
+    }
+  ],
+  "scope": "Read-only HTTP probe. No OAuth, emails, database writes, browser interaction, alert delivery, or rollback was performed."
+}
