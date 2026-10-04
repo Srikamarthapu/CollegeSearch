@@ -20,7 +20,7 @@ test("invalid facts cannot silently render as reliable college evidence", () => 
     (copy) => { copy.colleges[0].observations.admitRate.publisher = "Another university"; },
     (copy) => { copy.colleges[0].observations.admitRate.value = 1.5; },
     (copy) => { copy.colleges[0].observations.admitRate.value = null; },
-    (copy) => { copy.colleges[0].observations.averageNetPrice.value = -1; },
+    (copy) => { copy.colleges[0].observations.tuitionOutOfState.value = -1; },
     (copy) => { copy.colleges[0].observations.undergraduateEnrollment.value = 2.5; },
     (copy) => { copy.colleges[0].alternateObservations.admitRate = { ...copy.colleges[0].observations.admitRate, sourceId: "another-college" }; },
     (copy) => { copy.colleges[0].majors[0].sourceId = "unknown-source"; },
@@ -31,6 +31,8 @@ test("invalid facts cannot silently render as reliable college evidence", () => 
   ];
   for (const mutate of mutations) {
     const copy = structuredClone(dataset);
+    const known = copy.colleges.find(college => college.unitId === 104151)!;
+    copy.colleges = [known, copy.colleges.find(college => college.unitId === 110635)!];
     mutate(copy);
     assert.throws(() => assertCollegeEvidence(copy));
   }
@@ -42,4 +44,11 @@ test("honest unavailable and suppressed facts remain allowed", () => {
     copy.colleges[0].observations.admitRate = { ...copy.colleges[0].observations.admitRate, value: null, status };
     assert.doesNotThrow(() => assertCollegeEvidence(copy));
   }
+});
+
+test("reported negative net price is retained, while tuition cannot be negative", () => {
+  const college = dataset.colleges.find(college => college.unitId === 119137)!;
+  assert.equal(college.observations.averageNetPrice.value, -2296);
+  assert.match(college.observations.averageNetPrice.definition, /not a promise of free/);
+  assert.doesNotThrow(() => assertCollegeEvidence(dataset));
 });

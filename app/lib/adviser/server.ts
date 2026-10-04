@@ -2,7 +2,7 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { collegeDataset } from "../college-data";
 import releaseMarker from "@/data/college-knowledge-release.json";
 import { getSupabasePublicConfig } from "../supabase/config";
-import { nvidiaConfigFromEnv, createNvidiaProvider } from "./nvidia";
+import { nvidiaConfigFromEnv, createNvidiaProvider, createNvidiaRequestBudget } from "./nvidia";
 import { createKnowledgeRetriever } from "./retrieval";
 import { runAdviserTurn } from "./engine";
 import { adviserUuidPattern, type AdviserReservation, type AdviserTurnServices, type AdviserUsage } from "./service";
@@ -86,9 +86,26 @@ export function createAdviserTurnServices(account: VerifiedAdviserAccount): Advi
       if (error || !data) throw new Error("Conversation unavailable.");
       return data.preferences;
     },
-    async generate(message, preferences, signal) {
+    async previousRecommendationIds(conversationId) {
+      const { data, error } = await account.caller.from("adviser_messages").select("payload")
+        .eq("conversation_id", conversationId).eq("role", "assistant")
+        .order("created_at", { ascending: false }).limit(1).maybeSingle();
+      if (error) throw new Error("Conversation context unavailable.");
+      const payload = data?.payload;
+      if (!payload || typeof payload !== "object" || Array.isArray(payload)) return [];
+      const recommendations = (payload as Record<string, unknown>).recommendations;
+      if (!Array.isArray(recommendations)) return [];
+      return recommendations.slice(0, 4).flatMap((recommendation) => {
+        if (!recommendation || typeof recommendation !== "object" || Array.isArray(recommendation)) return [];
+        const unitId = (recommendation as Record<string, unknown>).unitId;
+        return Number.isSafeInteger(unitId) && Number(unitId) > 0 ? [Number(unitId)] : [];
+      });
+    },
+    async generate(message, preferences, signal, previousRecommendationIds) {
       const config = nvidiaConfigFromEnv();
-      const provider = createNvidiaProvider(config);
+      // A single student turn can call embeddings, interpretation and ranking. Bound their
+      // combined external calls so transient fallback cannot multiply one allowance lease.
+      const provider = createNvidiaProvider(config, fetch, { requestBudget: createNvidiaRequestBudget(6) });
       let inputTokens = 0; let outputTokens = 0;
       const retrieve = createKnowledgeRetriever(collegeDataset, releaseMarker.releaseId, async (name, parameters, abort) => {
         const call = account.caller.rpc(name, parameters);
@@ -100,7 +117,7 @@ export function createAdviserTurnServices(account: VerifiedAdviserAccount): Advi
         inputTokens += result.usage.promptTokens ?? result.usage.totalTokens ?? 0;
         return result;
       } });
-      const answer = await runAdviserTurn(message, preferences, { dataset: collegeDataset, retrieve, generate: async (system, input, abort) => {
+      const answer = await runAdviserTurn(message, preferences, { dataset: collegeDataset, retrieve, previousRecommendationIds, generate: async (system, input, abort) => {
         const result = await provider.generateWithUsage(system, input, abort);
         inputTokens += result.usage.promptTokens ?? 0; outputTokens += result.usage.completionTokens ?? 0;
         return result.value;

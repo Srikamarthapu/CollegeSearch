@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="1000" height="1000"><style>
+    #light-icon {
+      display: inline;
+    }
+    #dark-icon {
+      display: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #light-icon {
+        display: none;
+      }
+      #dark-icon {
+        display: inline;
+      }
+    }
+  </style><g id="light-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="1000" height="1000"><g><g transform="matrix(2.8875028875028876,0,0,2.8875028875028876,0,108.82998382998377)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="346.32" height="270.94"><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 346.32 270.94">
+  <!-- Generator: Adobe Illustrator 29.1.0, SVG Export Plug-In . SVG Version: 2.1.0 Build 142)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #871f41;
+      }
+    </style>
+  </defs>
+  <g>
+    <path class="st0" d="M246.09,208.05H26.21c3.03-3.01,5.49-6.37,7.34-10.2L121.09,17.54c2.93-6.08,3.93-11.87,2.98-17.09l222.25-.45-20.92,46.03c-13.64-7.8-39.23-15.6-64.07-15.6l-60.94.77-25.79,53.08,69.53.77-18.75,33.57h-67.19l-25.79,53.86,78.13-.78c29.69.78,63.59-9.54,65.63-10.15l-30.08,46.5h0Z"></path>
+    <polygon class="st0" points="15.13 243.86 253.61 247.29 0 270.94 15.13 243.86 15.13 243.86"></polygon>
+  </g>
+  <path class="st0" d="M275.13,204.84c0,3.35-2.63,5.98-6.05,5.98s-6.08-2.63-6.08-5.98,2.7-5.9,6.08-5.9,6.05,2.63,6.05,5.9ZM264.51,204.84c0,2.63,1.94,4.72,4.61,4.72s4.5-2.09,4.5-4.68-1.91-4.75-4.54-4.75-4.57,2.12-4.57,4.71ZM268.15,207.94h-1.37v-5.9c.54-.11,1.3-.18,2.27-.18,1.12,0,1.62.18,2.05.43.32.25.58.72.58,1.3,0,.65-.5,1.15-1.22,1.37v.07c.58.22.9.65,1.08,1.44.18.9.29,1.26.43,1.48h-1.48c-.18-.22-.29-.76-.47-1.44-.11-.65-.47-.94-1.22-.94h-.65v2.38ZM268.19,204.59h.65c.76,0,1.37-.25,1.37-.86,0-.54-.4-.9-1.26-.9-.36,0-.61.04-.76.07v1.69Z"></path>
+</svg></svg></g></g></svg></g><g id="dark-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="1000" height="1000"><g clip-path="url(#SvgjsClipPath1031)"><rect width="1000" height="1000" fill="#ffffff"></rect><g transform="matrix(2.598752598752599,0,0,2.598752598752599,50,147.9469854469854)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="346.32" height="270.94"><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 346.32 270.94">
+  <!-- Generator: Adobe Illustrator 29.1.0, SVG Export Plug-In . SVG Version: 2.1.0 Build 142)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #871f41;
+      }
+    </style>
+  <clipPath id="SvgjsClipPath1031"><rect width="1000" height="1000" x="0" y="0" rx="100" ry="100"></rect></clipPath></defs>
+  <g>
+    <path class="st0" d="M246.09,208.05H26.21c3.03-3.01,5.49-6.37,7.34-10.2L121.09,17.54c2.93-6.08,3.93-11.87,2.98-17.09l222.25-.45-20.92,46.03c-13.64-7.8-39.23-15.6-64.07-15.6l-60.94.77-25.79,53.08,69.53.77-18.75,33.57h-67.19l-25.79,53.86,78.13-.78c29.69.78,63.59-9.54,65.63-10.15l-30.08,46.5h0Z"></path>
+    <polygon class="st0" points="15.13 243.86 253.61 247.29 0 270.94 15.13 243.86 15.13 243.86"></polygon>
+  </g>
+  <path class="st0" d="M275.13,204.84c0,3.35-2.63,5.98-6.05,5.98s-6.08-2.63-6.08-5.98,2.7-5.9,6.08-5.9,6.05,2.63,6.05,5.9ZM264.51,204.84c0,2.63,1.94,4.72,4.61,4.72s4.5-2.09,4.5-4.68-1.91-4.75-4.54-4.75-4.57,2.12-4.57,4.71ZM268.15,207.94h-1.37v-5.9c.54-.11,1.3-.18,2.27-.18,1.12,0,1.62.18,2.05.43.32.25.58.72.58,1.3,0,.65-.5,1.15-1.22,1.37v.07c.58.22.9.65,1.08,1.44.18.9.29,1.26.43,1.48h-1.48c-.18-.22-.29-.76-.47-1.44-.11-.65-.47-.94-1.22-.94h-.65v2.38ZM268.19,204.59h.65c.76,0,1.37-.25,1.37-.86,0-.54-.4-.9-1.26-.9-.36,0-.61.04-.76.07v1.69Z"></path>
+</svg></svg></g></g></svg></g></svg>

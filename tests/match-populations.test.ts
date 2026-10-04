@@ -7,17 +7,21 @@ import { matchBounds, scoreCollege } from "../app/match/scoring.ts";
 import { initialMatchWorksheet, parseMatchWorksheet, serializeMatchWorksheet } from "../app/match/url-state.ts";
 
 const source = JSON.parse(readFileSync(new URL("../data/colleges.json", import.meta.url), "utf8")) as { colleges: College[] };
-const colleges = source.colleges.map(toMatchCollege);
+const eligibleSource = source.colleges.filter(
+  (college) => college.institutionLevel === "Four-year" && college.undergraduateOffering,
+);
+const colleges = eligibleSource.map(toMatchCollege);
 const publicCollege = colleges.find((college) => college.ownership === "Public")!;
 const preferences = { ...initialMatchWorksheet().preferences, maxNetPrice: 60000, weights: { major: 0, location: 0, price: 4, size: 0, setting: 0, graduation: 0, earnings: 0 } };
 
 test("matching uses one exact federal graduation and enrollment population", () => {
-  assert.ok(colleges.length >= 100);
+  assert.ok(colleges.length >= 2_000);
+  assert.ok(colleges.every((college) => eligibleSource.some((sourceCollege) => sourceCollege.unitId === college.unitId)));
   assert.equal(new Set(colleges.map((college) => college.graduationRate.cohort)).size, 1);
   assert.equal(new Set(colleges.map((college) => college.enrollment.cohort)).size, 1);
   assert.ok(colleges.every((college) => college.graduationRate.comparabilityKey === "completion.four-year-institution.150-percent"));
   assert.ok(colleges.every((college) => college.enrollment.comparabilityKey === "undergraduate-enrollment.degree-certificate-seeking"));
-  assert.ok(colleges.every((college, index) => college.medianEarnings.value === source.colleges[index].observations.medianEarnings.value), "current earnings are not replaced by a different historical horizon");
+  assert.ok(colleges.every((college, index) => college.medianEarnings.value === eligibleSource[index].observations.medianEarnings.value), "current earnings are not replaced by a different historical horizon");
 });
 
 test("a public in-state average cannot contribute price points for unknown or nonresident students", () => {

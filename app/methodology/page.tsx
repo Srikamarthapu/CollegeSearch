@@ -98,7 +98,7 @@ export default function MethodologyPage() {
                 <h3>Separate degree evidence from admissions evidence.</h3>
                 <p>
                   Broad field filters require a 2024-2025 federal
-                  bachelor&apos;s-program indicator. Their percentages still
+                  bachelor&apos;s or associate program indicator. Their percentages still
                   describe all reported awards in the CIP family and do not
                   measure program selectivity or capacity.
                 </p>
@@ -186,7 +186,7 @@ export default function MethodologyPage() {
                 price after grants and scholarships for first-time, full-time,
                 degree/certificate-seeking undergraduates who pay in-state
                 tuition and receive Title IV aid. It is not a personalized aid
-                estimate.
+                estimate. A negative average means grants and scholarships exceeded attendance costs for that cohort; it is not a promise of free attendance.
               </dd>
             </div>
             <div>
@@ -202,7 +202,7 @@ export default function MethodologyPage() {
               <dt>Graduation rate</dt>
               <dd>
                 For the federal baseline, completion of a degree or certificate
-                at a four-year institution within 150% of normal time for the
+                within 150% of normal time for the
                 reported first-time, full-time degree/certificate-seeking
                 cohort. Official overlays keep their own definitions visible.
               </dd>
@@ -221,8 +221,8 @@ export default function MethodologyPage() {
               <dt>Degree share</dt>
               <dd>
                 A broad federal field&apos;s share of all reported awards for
-                2024-2025, shown only when a bachelor&apos;s-program indicator is
-                present. Distance-only program indicators are labeled as such.
+                2024-2025, shown only when a bachelor&apos;s or associate program indicator is
+                present. Reported distance options are labeled; they do not rule out on-campus options.
                 This is not confirmation of an exact current major or access to
                 that program.
               </dd>

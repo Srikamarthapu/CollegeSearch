@@ -13,6 +13,7 @@ import {
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import { CollegeLogo } from "@/app/components/CollegeLogo";
+import { NegativeNetPriceNote } from "@/app/components/NegativeNetPriceNote";
 import {
   collegesByUnitIds,
   compactName,
@@ -45,7 +46,7 @@ const comparisonRows: ComparisonRow[] = [
   { label: "In-district / in-state tuition + fees", publicOnly: true, observation: (college) => college.ownership === "Public" ? college.observations.tuitionInState : null },
   { label: "Out-of-state tuition + fees", privateLabel: "Published tuition + fees", mixedLabel: "Out-of-state / private tuition + fees", observation: (college) => college.observations.tuitionOutOfState },
   { label: "Headline admit rate", observation: (college) => college.observations.admitRate },
-  { label: "Graduation rate", observation: (college) => college.observations.graduationRate },
+  { label: "Completion / graduation rate", observation: (college) => college.observations.graduationRate },
   { label: "Median earnings", observation: (college) => college.observations.medianEarnings },
   { label: "Undergraduate enrollment", observation: (college) => college.observations.undergraduateEnrollment },
   { label: "Applicants", observation: (college) => college.observations.applicants },
@@ -122,8 +123,10 @@ function mixedEvidenceRows(colleges: College[]) {
 
 function ObservationValue({
   observation,
+  showDefinition = false,
 }: {
   observation: Observation | null;
+  showDefinition?: boolean;
 }) {
   if (!observation) {
     return (
@@ -137,6 +140,7 @@ function ObservationValue({
   return (
     <span className="comparison-value">
       <strong>{formatObservation(observation)}</strong>
+      {showDefinition ? <small>{observation.definition}</small> : null}
       <small>
         {observation.periodLabel} · <a href={observation.sourceUrl} target="_blank" rel="noreferrer">{observation.publisher}</a>
       </small>
@@ -250,7 +254,7 @@ export default async function ComparePage({
                   Add a broad field to the table.
                 </h2>
                 <p id="comparison-field-help">
-                  Choose one field to compare its bachelor&apos;s-level evidence
+                  Choose one field to compare its bachelor&apos;s or associate program evidence
                   across the colleges already selected.
                 </p>
               </div>
@@ -266,7 +270,7 @@ export default async function ComparePage({
                   value={selected.map((college) => college.unitId).join(",")}
                 />
                 <label className="filter-field" htmlFor="comparison-major">
-                  <span>Broad bachelor&apos;s field</span>
+                  <span>Broad degree field</span>
                   <div className="select-wrap">
                     <select
                       id="comparison-major"
@@ -305,7 +309,7 @@ export default async function ComparePage({
               >
                 <Info size={16} aria-hidden="true" />
                 <span>
-                  This is broad bachelor&apos;s-award evidence—not a
+                  This shows broad field availability and share of all awards, not a
                   major-specific admit rate or an applicant&apos;s chance of
                   admission.
                 </span>
@@ -345,6 +349,7 @@ export default async function ComparePage({
                           <small>
                             {college.city}, {college.state}
                           </small>
+                          <small>{college.ownership} · {college.institutionLevel}</small>
                           <Link
                             className="comparison-remove"
                             href={comparisonHref(
@@ -367,9 +372,10 @@ export default async function ComparePage({
                         <th scope="row">{comparisonLabel(row, selected)}</th>
                         {selected.map((college) => (
                           <td key={college.unitId}>
-                            {row.publicOnly && college.ownership !== "Public" ? <span className="comparison-missing">See published tuition below</span> : <ObservationValue
-                              observation={row.observation(college)}
-                            />}
+                            {row.publicOnly && college.ownership !== "Public" ? <span className="comparison-missing">See published tuition below</span> : <>
+                              <ObservationValue observation={row.observation(college)} showDefinition={row.label === "Completion / graduation rate"} />
+                              {row.label === "Average net price" ? <NegativeNetPriceNote value={college.observations.averageNetPrice.value} /> : null}
+                            </>}
                           </td>
                         ))}
                       </tr>
@@ -378,7 +384,7 @@ export default async function ComparePage({
                       <tr>
                         <th scope="row">
                           {selectedMajor}
-                          <small>Bachelor&apos;s field · share of all awards</small>
+                          <small>Degree field · share of all awards</small>
                         </th>
                         {selected.map((college) => {
                           const evidence = majorEvidenceFor(
@@ -400,7 +406,7 @@ export default async function ComparePage({
                                 <span className="comparison-missing">
                                   Not listed
                                   <small>
-                                    No bachelor&apos;s-field indicator in this set
+                                    No bachelor&apos;s or associate field indicator in this set
                                   </small>
                                 </span>
                               )}
@@ -430,6 +436,7 @@ export default async function ComparePage({
                             {compactName(college)}
                           </Link>
                         </h3>
+                        <small>{college.ownership} · {college.institutionLevel}</small>
                       </div>
                       <Link
                         className="comparison-remove"
@@ -451,13 +458,15 @@ export default async function ComparePage({
                           <dd>
                             <ObservationValue
                               observation={row.observation(college)}
+                              showDefinition={row.label === "Completion / graduation rate"}
                             />
+                            {row.label === "Average net price" ? <NegativeNetPriceNote value={college.observations.averageNetPrice.value} /> : null}
                           </dd>
                         </div>
                       ))}
                       {selectedMajor ? (
                         <div>
-                          <dt>{selectedMajor} bachelor&apos;s field</dt>
+                          <dt>{selectedMajor} degree field</dt>
                           <dd>
                             {majorEvidenceFor(college, selectedMajor) ? (
                               <span className="comparison-value">

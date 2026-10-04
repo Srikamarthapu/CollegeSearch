@@ -3,7 +3,7 @@
 import { getAccountErasureState } from "@/app/lib/account-browser-erasure";
 import styles from "./ResearchBackupControls.module.css";
 import { useId, useLayoutEffect, useRef, useState } from "react";
-import type { ClientCollege } from "@/app/lib/college-client-record";
+import type { DirectoryCollegeIdentity } from "@/app/lib/college-directory";
 import { getResearchEditor, readResearchForExport } from "@/app/lib/research-drafts";
 import { emptyResearchNotebook, researchNotebooksEqual } from "@/app/lib/research-notebook";
 import { parseResearchBackup, previewResearchRestore, RESEARCH_BACKUP_MAX_BYTES, restoreResearchBackup, type ResearchBackup } from "@/app/lib/research-backup";
@@ -19,7 +19,7 @@ function download(text: string, filename: string) {
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-export function ResearchBackupControls({ colleges, scopeKey, canUse: allowed }: { colleges: ClientCollege[]; scopeKey: string; canUse: boolean }) {
+export function ResearchBackupControls({ colleges, scopeKey, canUse: allowed }: { colleges: DirectoryCollegeIdentity[]; scopeKey: string; canUse: boolean }) {
   const canUse = allowed && getAccountErasureState(scopeKey) === "active";
   const id = useId();
   const fileInput = useRef<HTMLInputElement>(null);

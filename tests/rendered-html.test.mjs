@@ -141,11 +141,18 @@ function assertObservation({
 
   if (mustHaveValue) {
     assert.notEqual(observation.value, null, `${label} is not silently missing`);
-    assert.ok(Number.isFinite(observation.value), `${label} has a finite value`);
-  } else if (observation.value === null) {
+  }
+
+  if (observation.value === null) {
     assert.ok(
       observation.status === "suppressed" || observation.status === "unavailable",
       `${label} keeps an explicit missing-data status`,
+    );
+  } else {
+    assert.ok(Number.isFinite(observation.value), `${label} has a finite value`);
+    assert.ok(
+      observation.status === "reported" || observation.status === "derived" || observation.status === "stale",
+      `${label} has a status consistent with a reported value`,
     );
   }
 }
@@ -362,6 +369,20 @@ test("account copy is student-facing and keeps the local-save boundary explicit"
 test("canonical discovery, evidence, comparison, and source routes render HTML", async () => {
   const routeCases = [
     {
+      path: "/compare?colleges=180203,485500&major=Natural%20Resources%20and%20Conservation",
+      markers: [
+        /Aaniiih Nakoda College/,
+        /ABCO Technology/,
+        /Completion \/ graduation rate/,
+        /less-than-four-year institution within 150%/,
+        /Broad federal associate field/,
+      ],
+    },
+    {
+      path: "/majors/natural-resources-and-conservation?state=MT&sort=name",
+      markers: [/Associate indicator present/, /CIP03ASSOC/, /All locations/],
+    },
+    {
       path: "/explore",
       markers: [
         /Find your(?:<[^>]*>|\s)*starting point\./,
@@ -412,7 +433,7 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
         /Stanford/,
         /different definitions or reporting periods/,
         /Add a broad field to the table\./,
-        /This is broad bachelor&#x27;s-award evidence—not a[\s\S]*major-specific admit rate/,
+        /This shows broad field availability and share of all awards, not a[\s\S]*major-specific admit rate/,
         /Clear field/,
       ],
     },
@@ -539,7 +560,7 @@ test("comparison field form preserves colleges and renders the selected broad fi
   );
   assert.match(
     html,
-    /Engineering<small>Bachelor&#x27;s field · share of all awards<\/small>/,
+    /Engineering<small>Degree field · share of all awards<\/small>/,
   );
 });
 
@@ -629,7 +650,11 @@ test("the published cohort has complete, source-registered observations", async 
   );
   assert.match(
     payload.release.notes,
-    /Broad field filters pair a provisional 2024-2025 bachelor's-program indicator with the field's share of all awards; neither is a major-specific admit rate/i,
+    /Broad field filters pair a provisional 2024-2025 bachelor's or associate program indicator with the field's share of all awards; neither is a major-specific admit rate/i,
+  );
+  assert.match(
+    payload.release.notes,
+    /Operating status is PEPS as of April 30, 2026, not a real-time guarantee/i,
   );
 
   const sourcesById = new Map(
@@ -662,21 +687,29 @@ test("the published cohort has complete, source-registered observations", async 
 
   for (const college of payload.colleges) {
     assert.ok(Number.isInteger(college.unitId), `${college.name} has a UNITID`);
-    assert.match(college.opeId, /^\d{8}$/, `${college.name} has an eight-digit OPEID`);
-    assert.match(college.opeId6, /^\d{6}$/, `${college.name} has a six-digit OPEID`);
-    assert.ok(
-      college.opeId.startsWith(college.opeId6),
-      `${college.name} OPE identity fields agree`,
-    );
-    assert.equal(college.mainCampus, true, `${college.name} is the main campus record`);
+    assert.match(college.opeId, /^(?:NA|\d{8})$/, `${college.name} retains an eight-digit OPEID or the source missing marker`);
+    assert.match(college.opeId6, /^(?:NA|\d{6})$/, `${college.name} retains a six-digit OPEID or the source missing marker`);
+    assert.equal(typeof college.mainCampus, "boolean", `${college.name} retains its federal main-or-branch designation`);
     assert.equal(
       college.currentlyOperating,
       true,
-      `${college.name} is currently operating`,
+      `${college.name} is marked operating in the April 30, 2026 PEPS snapshot`,
     );
     assert.ok(
       Number.isInteger(college.branchCount) && college.branchCount >= 1,
       `${college.name} retains a valid federal branch count`,
+    );
+    assert.ok(
+      ["Four-year", "Two-year"].includes(college.institutionLevel),
+      `${college.name} has a supported undergraduate institution level`,
+    );
+    assert.ok(
+      ["Public", "Private nonprofit", "Private for-profit"].includes(college.ownership),
+      `${college.name} retains a recognized federal ownership type`,
+    );
+    assert.ok(
+      ["Northeast", "Midwest", "South", "West", "U.S. territories"].includes(college.region),
+      `${college.name} retains its Census region or territory classification`,
     );
     assert.ok(college.slug, `${college.name} has a canonical slug`);
     assert.ok(college.name, "College name is present");
@@ -699,30 +732,36 @@ test("the published cohort has complete, source-registered observations", async 
         expectedUnit,
         label: `${college.name} ${key}`,
         sourcesById,
+        mustHaveValue: false,
       });
     }
 
     const admitRate = college.observations.admitRate.value;
     const graduationRate = college.observations.graduationRate.value;
-    assert.ok(admitRate > 0 && admitRate <= 1, `${college.name} has a valid admit rate`);
-    assert.ok(
-      graduationRate > 0 && graduationRate <= 1,
-      `${college.name} has a valid graduation rate`,
-    );
-    assert.ok(
-      college.observations.averageNetPrice.value >= 0,
-      `${college.name} has a non-negative net price`,
-    );
-    assert.ok(
-      college.observations.undergraduateEnrollment.value > 0,
-      `${college.name} has undergraduate enrollment`,
-    );
-    assert.ok(college.majors.length > 0, `${college.name} has major evidence`);
+    if (admitRate !== null) {
+      assert.ok(admitRate >= 0 && admitRate <= 1, `${college.name} has a valid admit rate`);
+    }
+    if (graduationRate !== null) {
+      assert.ok(
+        graduationRate >= 0 && graduationRate <= 1,
+        `${college.name} has a valid graduation rate`,
+      );
+    }
+    for (const [key, expectedUnit] of Object.entries(coreObservationUnits)) {
+      const value = college.observations[key].value;
+      if (value === null) continue;
+      if (expectedUnit === "count") {
+        assert.ok(Number.isInteger(value) && value >= 0, `${college.name} ${key} is a non-negative count`);
+      } else if (expectedUnit === "usd" && key !== "averageNetPrice") {
+        assert.ok(value >= 0, `${college.name} ${key} is a non-negative published price or earnings value`);
+      }
+    }
+    assert.ok(Array.isArray(college.majors), `${college.name} has an explicit major-evidence collection`);
     for (const major of college.majors) {
       const label = `${college.name} ${major.name}`;
       assert.match(
         major.evidence,
-        /^Broad federal bachelor's field(?: · includes a distance-learning program)?$/,
+        /^Broad federal (?:associate|bachelor's(?: and associate)?) field(?: · includes a distance-learning program)?$/,
         `${label} labels its evidence and delivery modality`,
       );
       if (major.deliveryMode === "includes-distance-program") {
@@ -739,10 +778,27 @@ test("the published cohort has complete, source-registered observations", async 
         `${label} identifies the exact evidence period`,
       );
       assert.equal(major.sourceId, federalSourceId, `${label} uses the registered federal release`);
-      const sourceFields = major.sourceField.match(/^PCIP(\d{2}) \+ CIP(\d{2})BACHL$/);
-      assert.ok(sourceFields, `${label} identifies both award share and bachelor's availability fields`);
+      const sourceFields = major.sourceField.match(
+        /^PCIP(\d{2}) \+ CIP(\d{2})(BACHL|ASSOC)(?: \+ CIP(\d{2})(BACHL|ASSOC))?$/,
+      );
+      assert.ok(sourceFields, `${label} identifies award share and degree-level availability fields`);
       assert.equal(sourceFields[1], sourceFields[2], `${label} source fields use the same CIP family`);
-      assert.equal(major.bachelorsAvailable, true, `${label} is available at the bachelor's level`);
+      if (sourceFields[4]) {
+        assert.equal(sourceFields[1], sourceFields[4], `${label} paired degree fields use the same CIP family`);
+        assert.notEqual(sourceFields[3], sourceFields[5], `${label} pairs associate and bachelor's indicators`);
+      }
+      const degreeLevels = [sourceFields[3], sourceFields[5]].filter(Boolean);
+      assert.equal(major.bachelorsAvailable, degreeLevels.includes("BACHL"), `${label} reports bachelor's availability accurately`);
+      assert.equal(major.associatesAvailable, degreeLevels.includes("ASSOC"), `${label} reports associate availability accurately`);
+      assert.equal(
+        major.degreeLevel,
+        major.bachelorsAvailable && major.associatesAvailable
+          ? "bachelors-and-associate"
+          : major.bachelorsAvailable
+            ? "bachelors"
+            : "associate",
+        `${label} classifies the federal degree-level availability`,
+      );
       assert.ok(
         Number.isFinite(major.share) && major.share >= 0 && major.share <= 1,
         `${label} has a valid award share, including an explicit zero-award value`,

@@ -146,7 +146,7 @@ async function main() {
   if (!flags.has("--artifact")) throw new Error("--artifact is required; evaluation samples and partial checkpoints cannot be published.");
   if (flags.has("--write-sql") && flags.has("--verify-sql")) throw new Error("Choose SQL export or verification, not both.");
   const artifactPath = resolve(flags.get("--artifact"));
-  if ((await stat(artifactPath)).size > 128 * 1024 * 1024) throw new Error("Embedding artifact exceeds 128 MiB.");
+  if ((await stat(artifactPath)).size > 512 * 1024 * 1024) throw new Error("Embedding artifact exceeds 512 MiB.");
   const bytes = await readFile(resolve(root, "data/colleges.json"));
   const datasetHash = createHash("sha256").update(bytes).digest("hex");
   const releaseId = `sha256:${datasetHash}`;

@@ -22,7 +22,9 @@ export function toMatchCollege(college: College): MatchCollege {
     netPriceCalculator: calculator?.status === "verified" && calculator.url ? { url: calculator.url, note: calculator.note, checkedOn: calculator.checkedOn } : undefined,
     unitId: college.unitId, slug: college.slug, name: college.name,
     city: college.city, state: college.state, ownership: college.ownership, setting: college.setting,
-    majors: college.majors.map(({ name, share, periodLabel }) => ({ name, share, periodLabel })),
+    majors: college.majors
+      .filter(({ bachelorsAvailable }) => bachelorsAvailable)
+      .map(({ name, share, periodLabel }) => ({ name, share, periodLabel })),
     admitRate: metric(college.observations.admitRate),
     netPrice: metric(college.observations.averageNetPrice),
     graduationRate: metric(comparable("graduationRate", "completion.four-year-institution.150-percent")),

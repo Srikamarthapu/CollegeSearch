@@ -15,28 +15,19 @@ const originalIdentities = JSON.parse(
   await readFile(new URL("./fixtures/original-college-identities.json", import.meta.url), "utf8"),
 );
 
-test("reviewed catalog contains 100 unique institutions with explicit reasons", () => {
-  assert.equal(collegeCatalog.length, 100);
-  assert.equal(new Set(collegeCatalog.map((college) => college.unitId)).size, 100);
-  assert.equal(new Set(collegeCatalog.map((college) => college.slug)).size, 100);
-  assert.equal(new Set(collegeCatalog.map((college) => college.expectedName)).size, 100);
-  assert.ok(collegeCatalog.every((college) => college.inclusionReason.length >= 20));
-  assert.ok(collegeCatalog.every((college) => collegeCatalogCategories.includes(college.catalogCategory)));
-  assert.deepEqual(
-    Object.fromEntries(
-      collegeCatalogCategories.map((category) => [
-        category,
-        collegeCatalog.filter((college) => college.catalogCategory === category).length,
-      ]),
-    ),
-    {
-      "existing-curated": 50,
-      "csu-campus": 12,
-      "major-public": 15,
-      "regional-public": 13,
-      "private-nonprofit": 10,
-    },
-  );
+test("federal undergraduate catalog has 3,912 distinct institutional identities", () => {
+  assert.equal(collegeCatalog.length, 3912);
+  assert.equal(new Set(collegeCatalog.map(college => college.unitId)).size, collegeCatalog.length);
+  assert.equal(new Set(collegeCatalog.map(college => college.slug)).size, collegeCatalog.length);
+  assert.ok(collegeCatalog.every(college => college.inclusionReason.length >= 20));
+  assert.ok(collegeCatalog.every(college => collegeCatalogCategories.includes(college.catalogCategory)));
+  assert.equal(collegeCatalog.filter(college => college.scorecardLevel === 2).length, 1426);
+  assert.equal(collegeCatalog.filter(college => college.scorecardMain === 0).length, 482);
+});
+
+test("all hundred previously published identities keep their routes", async () => {
+  const previous = JSON.parse(await readFile(new URL("./fixtures/catalog-100-identities.json", import.meta.url), "utf8"));
+  for (const original of previous) assert.equal(collegeCatalogByUnitId.get(original.unitId)?.slug, original.slug);
 });
 
 test("every original UNITID keeps its public slug", () => {
@@ -69,6 +60,9 @@ test("Scorecard identity checks allow bachelor's-level institutions and reject d
     UNITID: "121345",
     INSTNM: pomona.expectedName,
     STABBR: pomona.state,
+    CITY: pomona.city,
+    ICLEVEL: String(pomona.scorecardLevel),
+    PREDDEG: String(pomona.scorecardPredominantDegree),
     CONTROL: String(pomona.scorecardControl),
     MAIN: "1",
     CURROPER: "1",
@@ -79,6 +73,9 @@ test("Scorecard identity checks allow bachelor's-level institutions and reject d
     UNITID: "121345",
     INSTNM: pomona.expectedName,
     STABBR: "NY",
+    CITY: pomona.city,
+    ICLEVEL: String(pomona.scorecardLevel),
+    PREDDEG: String(pomona.scorecardPredominantDegree),
     CONTROL: String(pomona.scorecardControl),
     MAIN: "1",
     CURROPER: "1",
@@ -89,6 +86,9 @@ test("Scorecard identity checks allow bachelor's-level institutions and reject d
     UNITID: "121345",
     INSTNM: pomona.expectedName,
     STABBR: pomona.state,
+    CITY: pomona.city,
+    ICLEVEL: String(pomona.scorecardLevel),
+    PREDDEG: String(pomona.scorecardPredominantDegree),
     CONTROL: "3",
     MAIN: "1",
     CURROPER: "1",
@@ -99,6 +99,9 @@ test("Scorecard identity checks allow bachelor's-level institutions and reject d
     UNITID: "121345",
     INSTNM: pomona.expectedName,
     STABBR: pomona.state,
+    CITY: pomona.city,
+    ICLEVEL: String(pomona.scorecardLevel),
+    PREDDEG: String(pomona.scorecardPredominantDegree),
     CONTROL: String(pomona.scorecardControl),
     MAIN: "1",
     CURROPER: "1",
@@ -114,7 +117,7 @@ test("generated rows must match their reviewed aliases, slug, and rationale", ()
     name: manifestEntry.expectedName,
     slug: manifestEntry.slug,
     state: manifestEntry.state,
-    ownership: manifestEntry.scorecardControl === 1 ? "Public" : "Private nonprofit",
+    ownership: { 1: "Public", 2: "Private nonprofit", 3: "Private for-profit" }[manifestEntry.scorecardControl],
     aliases: [...manifestEntry.aliases],
     catalogCategory: manifestEntry.catalogCategory,
     inclusionReason: manifestEntry.inclusionReason,

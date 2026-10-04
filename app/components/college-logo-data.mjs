@@ -1,7 +1,9 @@
 import logoSourcesFirst from "../../data/college-logo-sources-01-25.json" with { type: "json" };
 import logoSourcesSecond from "../../data/college-logo-sources-26-50.json" with { type: "json" };
+import officialIconAssets from "../../data/college-logo-assets.json" with { type: "json" };
 
 const logoAssetsBySlug = new Map();
+const officialExtensionsByUnitId = new Map();
 
 for (const source of [...logoSourcesFirst, ...logoSourcesSecond]) {
   if (logoAssetsBySlug.has(source.slug)) {
@@ -9,6 +11,13 @@ for (const source of [...logoSourcesFirst, ...logoSourcesSecond]) {
   }
 
   logoAssetsBySlug.set(source.slug, source.asset);
+}
+
+for (const [unitId, extension] of officialIconAssets) {
+  if (officialExtensionsByUnitId.has(unitId)) {
+    throw new Error(`Duplicate official college icon for unit ${unitId}`);
+  }
+  officialExtensionsByUnitId.set(unitId, extension);
 }
 
 const genericNameWords = new Set([
@@ -23,9 +32,13 @@ const genericNameWords = new Set([
   "university",
 ]);
 
-/** @param {string} slug @returns {string | null} */
-export function collegeLogoAsset(slug) {
-  return logoAssetsBySlug.get(slug) ?? null;
+/** @param {string} slug @param {number} unitId @returns {string | null} */
+export function collegeLogoAsset(slug, unitId) {
+  const curated = logoAssetsBySlug.get(slug);
+  if (curated) return curated;
+  const extension = officialExtensionsByUnitId.get(unitId);
+  const safeSlug = slug.toLowerCase().replace(/[^a-z0-9-]+/g, "-").slice(0, 52);
+  return extension ? `/college-logos/${unitId}-${safeSlug}.${extension}` : null;
 }
 
 /** @param {string} name @returns {string} */

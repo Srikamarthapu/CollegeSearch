@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 export const collegeEmbeddingArtifactType = "college-embedding-index";
 export const collegeEmbeddingSchemaVersion = 1;
 export const collegeEmbeddingDimensions = 2048;
+export const collegeEmbeddingBatchSize = 32;
 
 const digestPattern = /^[a-f0-9]{64}$/;
 const releasePattern = /^sha256:([a-f0-9]{64})$/;
@@ -41,7 +42,51 @@ function withoutDigest(record) {
 }
 
 export function computeArtifactSha256(record) {
-  return sha256(stableJson(withoutDigest(record)));
+  const hash = createHash("sha256");
+  updateStableHash(hash, withoutDigest(record));
+  return hash.digest("hex");
+}
+
+function updateStableHash(hash, value) {
+  if (value === null || typeof value === "boolean" || typeof value === "string") {
+    hash.update(JSON.stringify(value));
+    return;
+  }
+  if (typeof value === "number") {
+    if (!Number.isFinite(value)) fail("Canonical JSON cannot contain a non-finite number.");
+    hash.update(JSON.stringify(value));
+    return;
+  }
+  if (Array.isArray(value)) {
+    hash.update("[");
+    if (value.every((item) => item === null || typeof item === "boolean" || typeof item === "number" || typeof item === "string")) {
+      hash.update(value.map((item) => {
+        if (typeof item === "number" && !Number.isFinite(item)) fail("Canonical JSON cannot contain a non-finite number.");
+        return JSON.stringify(item);
+      }).join(","));
+      hash.update("]");
+      return;
+    }
+    for (let index = 0; index < value.length; index += 1) {
+      if (index) hash.update(",");
+      updateStableHash(hash, value[index]);
+    }
+    hash.update("]");
+    return;
+  }
+  if (typeof value !== "object" || Object.getPrototypeOf(value) !== Object.prototype) {
+    fail("Canonical JSON contains an unsupported value.");
+  }
+  const keys = Object.keys(value).sort();
+  if (keys.some((key) => value[key] === undefined)) fail("Canonical JSON cannot contain undefined values.");
+  hash.update("{");
+  for (let index = 0; index < keys.length; index += 1) {
+    if (index) hash.update(",");
+    hash.update(JSON.stringify(keys[index]));
+    hash.update(":");
+    updateStableHash(hash, value[keys[index]]);
+  }
+  hash.update("}");
 }
 
 function requireLabel(value, label) {
@@ -136,9 +181,22 @@ export function createEmbeddingArtifactMetadata(canonicalSeed, model, modelVersi
   };
 }
 
-function normalizeVector(vector, expectedDimensions = collegeEmbeddingDimensions) {
+function normalizeVector(vector, expectedDimensions = collegeEmbeddingDimensions, reuseCanonical = false) {
   if (!Array.isArray(vector) || vector.length !== expectedDimensions) {
     fail(`Embedding vectors must contain exactly ${expectedDimensions} dimensions.`);
+  }
+  if (reuseCanonical) {
+    let nonzero = false;
+    let alreadyCanonical = true;
+    for (const value of vector) {
+      if (typeof value !== "number" || !Number.isFinite(value)) fail("Embedding vectors must contain only finite numbers.");
+      const float32 = Math.fround(value);
+      if (!Number.isFinite(float32)) fail("Embedding vector value exceeds PostgreSQL float32 range.");
+      if (float32 !== 0) nonzero = true;
+      if (value !== float32) alreadyCanonical = false;
+    }
+    if (!nonzero) fail("Embedding vectors must be nonzero after float32 conversion.");
+    if (alreadyCanonical) return vector;
   }
   const normalized = vector.map((value) => {
     if (typeof value !== "number" || !Number.isFinite(value)) fail("Embedding vectors must contain only finite numbers.");
@@ -157,7 +215,7 @@ function normalizeEntry(entry, descriptor, model, modelVersion) {
       entry.dimensions !== collegeEmbeddingDimensions) {
     fail("Embedding entry is not bound to the expected canonical passage, model, version, or dimensions.");
   }
-  const embedding = normalizeVector(entry.embedding);
+  const embedding = normalizeVector(entry.embedding, collegeEmbeddingDimensions, true);
   if (entry.embedding.some((value, index) => value !== embedding[index])) {
     fail("Embedding entries must store canonical float32 vector values.");
   }
@@ -192,7 +250,7 @@ export function sealEmbeddingArtifact(record) {
   if (!record || typeof record !== "object" || Array.isArray(record)) fail("Embedding record must be an object.");
   const entries = Array.isArray(record.entries)
     ? record.entries.map((entry) => entry && Array.isArray(entry.embedding)
-      ? { ...entry, embedding: normalizeVector(entry.embedding) }
+      ? { ...entry, embedding: normalizeVector(entry.embedding, collegeEmbeddingDimensions, true) }
       : entry).sort((left, right) => String(left?.passageId).localeCompare(String(right?.passageId)))
     : record.entries;
   const sealed = { ...record, entries, completedPassageCount: Array.isArray(entries) ? entries.length : record.completedPassageCount };
@@ -286,15 +344,18 @@ export async function runEmbeddingIndex({
   modelVersion,
   provider,
   maxCalls,
+  batchSize = collegeEmbeddingBatchSize,
   checkpoint: savedCheckpoint = null,
   checkpointEvery = 32,
   onCheckpoint = async () => {},
   now = () => new Date().toISOString(),
 }) {
-  if (!provider || typeof provider.embed !== "function") fail("An embedding provider is required.");
+  if (!provider || (typeof provider.embed !== "function" && typeof provider.embedMany !== "function")) fail("An embedding provider is required.");
   if (!Number.isSafeInteger(maxCalls) || maxCalls < 1 || maxCalls > 64) fail("maxCalls must be an integer from 1 through 64.");
+  if (!Number.isSafeInteger(batchSize) || batchSize < 1 || batchSize > collegeEmbeddingBatchSize) fail(`batchSize must be an integer from 1 through ${collegeEmbeddingBatchSize}.`);
   assertExplicitEmbeddingModelVersion(modelVersion);
-  if (!Number.isSafeInteger(checkpointEvery) || checkpointEvery < 1 || checkpointEvery > 64) fail("checkpointEvery must be an integer from 1 through 64.");
+  if (!Number.isSafeInteger(checkpointEvery) || checkpointEvery < 1 || checkpointEvery > 512) fail("checkpointEvery must be an integer from 1 through 512 passages.");
+  const effectiveBatchSize = typeof provider.embedMany === "function" ? batchSize : 1;
 
   let checkpoint = savedCheckpoint
     ? validateEmbeddingCheckpoint(savedCheckpoint, canonicalSeed, model, modelVersion)
@@ -306,35 +367,41 @@ export async function runEmbeddingIndex({
   const passages = [...canonicalSeed.passages]
     .sort((left, right) => compareText(left.passage_id, right.passage_id))
     .filter((passage) => !existing.has(passage.passage_id));
-  const allowance = Math.min(maxCalls, passages.length);
+  const allowance = Math.min(maxCalls * effectiveBatchSize, passages.length);
   let providerCalls = 0;
   let embeddedThisRun = 0;
   let unsaved = 0;
 
-  for (const passage of passages.slice(0, allowance)) {
+  for (let offset = 0; offset < allowance; offset += effectiveBatchSize) {
+    const batch = passages.slice(offset, Math.min(offset + effectiveBatchSize, allowance));
     providerCalls += 1;
-    let entry;
     try {
-      const result = await provider.embed(passage.content, "passage");
+      const result = typeof provider.embedMany === "function"
+        ? await provider.embedMany(batch.map((passage) => passage.content), "passage")
+        : { ...(await provider.embed(batch[0].content, "passage")), embeddings: [undefined] };
       if (result?.model !== model || result?.modelVersion !== modelVersion) {
         fail("Embedding provider returned a different model or version than configured.");
       }
-      const descriptor = {
-        passageId: passage.passage_id,
-        unitId: passage.unit_id,
-        sourceId: passage.source_id,
-        contentSha256: passage.content_sha256,
-      };
-      entry = normalizeEntry({
-        ...descriptor,
-        model,
-        modelVersion,
-        dimensions: collegeEmbeddingDimensions,
-        embedding: normalizeVector(result.embedding),
-      }, descriptor, model, modelVersion);
-      workingEntries.push(entry);
-      embeddedThisRun += 1;
-      unsaved += 1;
+      const embeddings = typeof provider.embedMany === "function" ? result.embeddings : [result.embedding];
+      if (!Array.isArray(embeddings) || embeddings.length !== batch.length) fail("Embedding provider returned an unexpected batch length.");
+      const validatedEntries = batch.map((passage, index) => {
+        const descriptor = {
+          passageId: passage.passage_id,
+          unitId: passage.unit_id,
+          sourceId: passage.source_id,
+          contentSha256: passage.content_sha256,
+        };
+        return normalizeEntry({
+          ...descriptor,
+          model,
+          modelVersion,
+          dimensions: collegeEmbeddingDimensions,
+          embedding: normalizeVector(embeddings[index]),
+        }, descriptor, model, modelVersion);
+      });
+      workingEntries.push(...validatedEntries);
+      embeddedThisRun += validatedEntries.length;
+      unsaved += validatedEntries.length;
     } catch (error) {
       if (unsaved > 0) {
         checkpoint = sealEmbeddingArtifact({
@@ -351,7 +418,6 @@ export async function runEmbeddingIndex({
         remainingPassages: canonicalSeed.passages.length - workingEntries.length,
       };
     }
-    if (!entry) fail("Embedding provider returned no validated embedding entry.");
     if (unsaved >= checkpointEvery) {
       checkpoint = sealEmbeddingArtifact({
         ...withoutDigest(checkpoint), entries: workingEntries, updatedAt: now(),

@@ -4,20 +4,21 @@ export type NvidiaInputType = "query" | "passage";
 
 export const nvidiaChatModels = [
   "nvidia/nemotron-3.5-lightning-30b-a3b",
-  "nvidia/nemotron-3-nano-30b-a3b",
   "nvidia/nemotron-3-super-120b-a12b",
+  "nvidia/nemotron-3-ultra-550b-a55b",
 ] as const;
 export type NvidiaChatModel = (typeof nvidiaChatModels)[number];
 export const nvidiaEmbeddingModel = "nvidia/nemotron-3-embed-1b" as const;
 export const nvidiaEmbeddingDimensions = 2048;
 export const nvidiaHostedBaseUrl = "https://integrate.api.nvidia.com/v1";
+export const nvidiaEmbeddingBatchLimit = 32;
 
 const maxSystemChars = 20_000;
 const maxInputChars = 48_000;
 const maxChatRequestBytes = 96 * 1024;
 const maxChatResponseBytes = 64 * 1024;
 const maxEmbeddingTextChars = 2_000;
-const maxEmbeddingResponseBytes = 128 * 1024;
+const maxEmbeddingResponseBytes = 2 * 1024 * 1024;
 const maxOutputTokens = 2_048;
 
 export type NvidiaConfig = {
@@ -25,6 +26,7 @@ export type NvidiaConfig = {
   apiKey?: string;
   baseUrl: string;
   chatModel: string;
+  chatFallbackModels: string[];
   embeddingModel: string;
   /** Metadata labels only: NVIDIA's hosted request schema has no model-version field. */
   chatModelVersion: string;
@@ -32,6 +34,9 @@ export type NvidiaConfig = {
   productionAuthorized: boolean;
   timeoutMs: number;
   maxOutputTokens: number;
+  /** Maximum transient-failure attempts for one provider operation; default is one. */
+  maxProviderAttempts: number;
+  retryDelayMs: number;
 };
 
 export type NvidiaUsage = {
@@ -45,6 +50,7 @@ export type NvidiaGeneration = {
   usage: NvidiaUsage;
   model: string;
   modelVersion: string;
+  requestAttempts: number;
 };
 
 export type NvidiaEmbedding = {
@@ -52,6 +58,15 @@ export type NvidiaEmbedding = {
   usage: NvidiaUsage;
   model: string;
   modelVersion: string;
+  requestAttempts: number;
+};
+
+export type NvidiaEmbeddingBatch = {
+  embeddings: number[][];
+  usage: NvidiaUsage;
+  model: string;
+  modelVersion: string;
+  requestAttempts: number;
 };
 
 export type NvidiaProviderErrorCode =
@@ -63,18 +78,33 @@ export type NvidiaProviderErrorCode =
   | "cancelled"
   | "timeout"
   | "http_error"
+  | "request_budget_exhausted"
   | "response_too_large"
   | "invalid_response"
   | "invalid_json";
 
 export class NvidiaProviderError extends Error {
   readonly code: NvidiaProviderErrorCode;
+  readonly httpStatus?: number;
+  readonly requestAttempts?: number;
 
-  constructor(code: NvidiaProviderErrorCode, message: string) {
+  constructor(code: NvidiaProviderErrorCode, message: string, details: { httpStatus?: number; requestAttempts?: number } = {}) {
     super(message);
     this.name = "NvidiaProviderError";
     this.code = code;
+    this.httpStatus = details.httpStatus;
+    this.requestAttempts = details.requestAttempts;
   }
+}
+
+export type NvidiaRequestBudget = { readonly maxRequests: number; usedRequests: number };
+
+/** Share one hard HTTP-call ceiling across retrieval, interpretation and ranking for an adviser turn. */
+export function createNvidiaRequestBudget(maxRequests: number): NvidiaRequestBudget {
+  if (!Number.isSafeInteger(maxRequests) || maxRequests < 1 || maxRequests > 12) {
+    throw configurationError("The NVIDIA turn request budget must be between 1 and 12.");
+  }
+  return { maxRequests, usedRequests: 0 };
 }
 
 export type NvidiaProvider = {
@@ -83,6 +113,7 @@ export type NvidiaProvider = {
   /** Includes token usage for the account-safe usage wrapper and evaluation harness. */
   generateWithUsage(system: string, input: string, signal?: AbortSignal): Promise<NvidiaGeneration>;
   embed(text: string, inputType: NvidiaInputType, signal?: AbortSignal): Promise<NvidiaEmbedding>;
+  embedMany(texts: string[], inputType: NvidiaInputType, signal?: AbortSignal): Promise<NvidiaEmbeddingBatch>;
 };
 
 function configurationError(message: string): NvidiaProviderError {
@@ -97,6 +128,15 @@ function boundedInteger(raw: string | undefined, fallback: number, min: number, 
     throw configurationError(`${name} must be an integer in its allowed range.`);
   }
   return parsed;
+}
+
+function fallbackModels(raw: string | undefined): string[] {
+  if (!raw?.trim()) return [];
+  const values = raw.split(",").map((item) => item.trim());
+  if (values.length > nvidiaChatModels.length - 1 || values.some((item) => !item)) {
+    throw configurationError("NVIDIA_CHAT_FALLBACK_MODELS must contain at most two comma-separated model IDs.");
+  }
+  return values;
 }
 
 function versionLabel(raw: string | undefined, name: string): string {
@@ -118,12 +158,15 @@ export function nvidiaConfigFromEnv(env: Record<string, string | undefined> = pr
     apiKey: env.NVIDIA_API_KEY,
     baseUrl: env.NVIDIA_BASE_URL?.trim() || nvidiaHostedBaseUrl,
     chatModel: env.NVIDIA_CHAT_MODEL?.trim() || nvidiaChatModels[0],
+    chatFallbackModels: fallbackModels(env.NVIDIA_CHAT_FALLBACK_MODELS),
     embeddingModel: env.NVIDIA_EMBEDDING_MODEL?.trim() || nvidiaEmbeddingModel,
     chatModelVersion: versionLabel(env.NVIDIA_CHAT_MODEL_VERSION, "NVIDIA_CHAT_MODEL_VERSION"),
     embeddingModelVersion: versionLabel(env.NVIDIA_EMBEDDING_MODEL_VERSION, "NVIDIA_EMBEDDING_MODEL_VERSION"),
     productionAuthorized: env.NVIDIA_PRODUCTION_AUTHORIZED === "true",
     timeoutMs: boundedInteger(env.NVIDIA_TIMEOUT_MS, 25_000, 100, 60_000, "NVIDIA_TIMEOUT_MS"),
     maxOutputTokens: boundedInteger(env.NVIDIA_MAX_OUTPUT_TOKENS, 1_024, 32, maxOutputTokens, "NVIDIA_MAX_OUTPUT_TOKENS"),
+    maxProviderAttempts: boundedInteger(env.NVIDIA_MAX_PROVIDER_ATTEMPTS, 1, 1, 3, "NVIDIA_MAX_PROVIDER_ATTEMPTS"),
+    retryDelayMs: boundedInteger(env.NVIDIA_RETRY_DELAY_MS, 200, 0, 2_000, "NVIDIA_RETRY_DELAY_MS"),
   };
   validateConfig(config);
   return config;
@@ -149,11 +192,18 @@ function validateConfig(config: NvidiaConfig): void {
   if (!nvidiaChatModels.includes(config.chatModel as NvidiaChatModel)) {
     throw configurationError("NVIDIA_CHAT_MODEL is not an allowlisted candidate.");
   }
+  if (!Array.isArray(config.chatFallbackModels) || config.chatFallbackModels.length > nvidiaChatModels.length - 1 ||
+      config.chatFallbackModels.some((model) => !nvidiaChatModels.includes(model as NvidiaChatModel) || model === config.chatModel) ||
+      new Set(config.chatFallbackModels).size !== config.chatFallbackModels.length) {
+    throw configurationError("NVIDIA_CHAT_FALLBACK_MODELS must be distinct allowlisted alternatives to the primary model.");
+  }
   if (config.embeddingModel !== nvidiaEmbeddingModel) {
     throw configurationError("NVIDIA_EMBEDDING_MODEL is not an allowlisted candidate.");
   }
   if (!Number.isSafeInteger(config.timeoutMs) || config.timeoutMs < 100 || config.timeoutMs > 60_000 ||
-      !Number.isSafeInteger(config.maxOutputTokens) || config.maxOutputTokens < 32 || config.maxOutputTokens > maxOutputTokens) {
+      !Number.isSafeInteger(config.maxOutputTokens) || config.maxOutputTokens < 32 || config.maxOutputTokens > maxOutputTokens ||
+      !Number.isSafeInteger(config.maxProviderAttempts) || config.maxProviderAttempts < 1 || config.maxProviderAttempts > 3 ||
+      !Number.isSafeInteger(config.retryDelayMs) || config.retryDelayMs < 0 || config.retryDelayMs > 2_000) {
     throw configurationError("NVIDIA request limits are invalid.");
   }
   for (const label of [config.chatModelVersion, config.embeddingModelVersion]) {
@@ -259,58 +309,100 @@ async function requestJson(
   config: NvidiaConfig,
   fetcher: typeof fetch,
   route: "/chat/completions" | "/embeddings",
-  payload: Record<string, unknown>,
+  payloads: Record<string, unknown>[],
   maxResponseBytes: number,
   signal?: AbortSignal,
-): Promise<Record<string, unknown>> {
+  budget?: NvidiaRequestBudget,
+  repeatLastPayload = false,
+): Promise<{ value: Record<string, unknown>; requestAttempts: number }> {
   if (config.mode === "disabled") error("disabled", "NVIDIA adviser is disabled.");
   if (config.mode === "production" && config.productionAuthorized !== true) {
     error("production_not_authorized", "NVIDIA production service is not explicitly authorized.");
   }
   const apiKey = config.apiKey?.trim();
   if (!apiKey) error("missing_api_key", "NVIDIA_API_KEY is not configured.");
-  const body = JSON.stringify(payload);
-  if (new TextEncoder().encode(body).byteLength > maxChatRequestBytes) {
-    error("input_too_large", "NVIDIA request exceeded the configured size limit.");
-  }
-  return withinTimeout(signal, config.timeoutMs, async (requestSignal) => {
-    let response: Response;
+  if (!payloads.length) error("invalid_config", "NVIDIA request has no configured payload.");
+  const attemptLimit = repeatLastPayload
+    ? config.maxProviderAttempts
+    : Math.min(config.maxProviderAttempts, payloads.length);
+  let lastFailure: unknown;
+  for (let index = 0; index < attemptLimit; index += 1) {
+    const payload = payloads[Math.min(index, payloads.length - 1)];
+    const body = JSON.stringify(payload);
+    if (new TextEncoder().encode(body).byteLength > maxChatRequestBytes) {
+      error("input_too_large", "NVIDIA request exceeded the configured size limit.");
+    }
+    if (budget && budget.usedRequests >= budget.maxRequests) {
+      error("request_budget_exhausted", "NVIDIA adviser reached its bounded provider request limit.");
+    }
+    if (budget) budget.usedRequests += 1;
     try {
-      response = await fetcher(`${config.baseUrl.replace(/\/$/, "")}${route}`, {
-        method: "POST",
-        headers: {
-          authorization: `Bearer ${apiKey}`,
-          accept: "application/json",
-          "content-type": "application/json",
-        },
-        body,
-        signal: requestSignal,
+      const value = await withinTimeout(signal, config.timeoutMs, async (requestSignal) => {
+        const response = await fetcher(`${config.baseUrl.replace(/\/$/, "")}${route}`, {
+          method: "POST",
+          headers: {
+            authorization: `Bearer ${apiKey}`,
+            accept: "application/json",
+            "content-type": "application/json",
+          },
+          body,
+          signal: requestSignal,
+        });
+        if (response.status !== 200) {
+          await response.body?.cancel().catch(() => undefined);
+          throw new NvidiaProviderError("http_error", `NVIDIA returned HTTP ${response.status}.`, { httpStatus: response.status });
+        }
+        let raw: string;
+        try {
+          raw = await readBoundedBody(response, maxResponseBytes);
+        } catch (cause) {
+          if (cause instanceof NvidiaProviderError) throw cause;
+          error("invalid_response", "NVIDIA returned an unreadable response.");
+        }
+        let parsed: unknown;
+        try {
+          parsed = JSON.parse(raw);
+        } catch {
+          error("invalid_response", "NVIDIA returned an invalid JSON response.");
+        }
+        const object = asObject(parsed);
+        if (!object) error("invalid_response", "NVIDIA returned an unexpected response shape.");
+        return object;
       });
+      return { value, requestAttempts: index + 1 };
     } catch (cause) {
-      if (cause instanceof NvidiaProviderError) throw cause;
-      throw cause;
+      lastFailure = cause;
+      const retryable = cause instanceof NvidiaProviderError &&
+        (cause.code === "timeout" || cause.httpStatus === 429 || cause.httpStatus === 503);
+      if (!retryable || index + 1 >= attemptLimit) {
+        if (cause instanceof NvidiaProviderError) {
+          throw new NvidiaProviderError(cause.code, cause.message, { httpStatus: cause.httpStatus, requestAttempts: index + 1 });
+        }
+        throw cause;
+      }
+      if (config.retryDelayMs > 0) {
+        if (signal?.aborted) error("cancelled", "NVIDIA request was cancelled.");
+        await new Promise<void>((resolve, reject) => {
+          const timer = setTimeout(() => {
+            signal?.removeEventListener("abort", abort);
+            resolve();
+          }, config.retryDelayMs);
+          const abort = () => {
+            clearTimeout(timer);
+            signal?.removeEventListener("abort", abort);
+            reject(new NvidiaProviderError("cancelled", "NVIDIA request was cancelled."));
+          };
+          signal?.addEventListener("abort", abort, { once: true });
+        });
+      }
     }
-    if (response.status !== 200) {
-      await response.body?.cancel().catch(() => undefined);
-      error("http_error", `NVIDIA returned HTTP ${response.status}.`);
-    }
-    let raw: string;
-    try {
-      raw = await readBoundedBody(response, maxResponseBytes);
-    } catch (cause) {
-      if (cause instanceof NvidiaProviderError) throw cause;
-      error("invalid_response", "NVIDIA returned an unreadable response.");
-    }
-    let parsed: unknown;
-    try {
-      parsed = JSON.parse(raw);
-    } catch {
-      error("invalid_response", "NVIDIA returned an invalid JSON response.");
-    }
-    const object = asObject(parsed);
-    if (!object) error("invalid_response", "NVIDIA returned an unexpected response shape.");
-    return object;
-  });
+  }
+  if (lastFailure instanceof NvidiaProviderError) {
+    throw new NvidiaProviderError(lastFailure.code, lastFailure.message, {
+      httpStatus: lastFailure.httpStatus, requestAttempts: attemptLimit,
+    });
+  }
+  error("http_error", "NVIDIA request failed before a response was received.");
 }
 
 function parseStructuredContent(content: unknown): Record<string, unknown> {
@@ -328,8 +420,13 @@ function parseStructuredContent(content: unknown): Record<string, unknown> {
   return object;
 }
 
-export function createNvidiaProvider(config: NvidiaConfig, fetcher: typeof fetch = fetch): NvidiaProvider {
+export function createNvidiaProvider(
+  config: NvidiaConfig,
+  fetcher: typeof fetch = fetch,
+  options: { requestBudget?: NvidiaRequestBudget } = {},
+): NvidiaProvider {
   validateConfig(config);
+  const requestBudget = options.requestBudget;
 
   async function generateWithUsage(system: string, input: string, signal?: AbortSignal): Promise<NvidiaGeneration> {
     if (typeof system !== "string" || system.length === 0 || system.length > maxSystemChars ||
@@ -337,8 +434,9 @@ export function createNvidiaProvider(config: NvidiaConfig, fetcher: typeof fetch
         /[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(system + input)) {
       error("input_too_large", "NVIDIA prompt is empty, malformed, or exceeds its configured size limit.");
     }
-    const response = await requestJson(config, fetcher, "/chat/completions", {
-      model: config.chatModel,
+    const chatModels = [config.chatModel, ...config.chatFallbackModels];
+    const request = await requestJson(config, fetcher, "/chat/completions", chatModels.map((model) => ({
+      model,
       messages: [
         { role: "system", content: system },
         { role: "user", content: input },
@@ -347,7 +445,9 @@ export function createNvidiaProvider(config: NvidiaConfig, fetcher: typeof fetch
       temperature: 0,
       seed: 0,
       stream: false,
-    }, maxChatResponseBytes, signal);
+      ...(model === "nvidia/nemotron-3-super-120b-a12b" ? { reasoning_effort: "none" } : { chat_template_kwargs: { enable_thinking: false } }),
+    })), maxChatResponseBytes, signal, requestBudget);
+    const response = request.value;
     const choices = response.choices;
     if (!Array.isArray(choices) || choices.length !== 1) {
       error("invalid_response", "NVIDIA returned an unexpected chat completion shape.");
@@ -358,8 +458,9 @@ export function createNvidiaProvider(config: NvidiaConfig, fetcher: typeof fetch
     return {
       value: parseStructuredContent(message.content),
       usage: usageFrom(response.usage),
-      model: config.chatModel,
-      modelVersion: config.chatModelVersion,
+      model: typeof response.model === "string" && chatModels.includes(response.model) ? response.model : (request.requestAttempts > 1 ? chatModels[request.requestAttempts - 1] : config.chatModel),
+      modelVersion: request.requestAttempts > 1 ? "unversioned-provider-alias" : config.chatModelVersion,
+      requestAttempts: request.requestAttempts,
     };
   }
 
@@ -367,35 +468,48 @@ export function createNvidiaProvider(config: NvidiaConfig, fetcher: typeof fetch
     return (await generateWithUsage(system, input, signal)).value;
   }
 
-  async function embed(text: string, inputType: NvidiaInputType, signal?: AbortSignal): Promise<NvidiaEmbedding> {
+  async function embedMany(texts: string[], inputType: NvidiaInputType, signal?: AbortSignal): Promise<NvidiaEmbeddingBatch> {
     if (inputType !== "query" && inputType !== "passage") error("invalid_config", "Embedding input type must be query or passage.");
-    if (typeof text !== "string" || !text.trim() || text.length > maxEmbeddingTextChars ||
-        /[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(text)) {
-      error("input_too_large", "Embedding text is empty, malformed, or exceeds its configured size limit.");
+    if (!Array.isArray(texts) || texts.length < 1 || texts.length > nvidiaEmbeddingBatchLimit ||
+        texts.some((text) => typeof text !== "string" || !text.trim() || text.length > maxEmbeddingTextChars ||
+        /[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(text))) {
+      error("input_too_large", `Embedding requests require 1 to ${nvidiaEmbeddingBatchLimit} bounded text inputs.`);
     }
-    const response = await requestJson(config, fetcher, "/embeddings", {
-      input: text,
+    const request = await requestJson(config, fetcher, "/embeddings", [{
+      input: texts,
       model: config.embeddingModel,
       input_type: inputType,
       encoding_format: "float",
-    }, maxEmbeddingResponseBytes, signal);
+    }], maxEmbeddingResponseBytes, signal, requestBudget, true);
+    const response = request.value;
     const data = response.data;
-    if (!Array.isArray(data) || data.length !== 1) error("invalid_response", "NVIDIA returned an unexpected embedding response shape.");
-    const row = asObject(data[0]);
-    if (!row || (row.index !== undefined && row.index !== 0) || !Array.isArray(row.embedding) || row.embedding.length !== nvidiaEmbeddingDimensions) {
-      error("invalid_response", `NVIDIA embeddings must contain exactly ${nvidiaEmbeddingDimensions} dimensions.`);
-    }
-    if (row.embedding.some((value) => typeof value !== "number" || !Number.isFinite(Math.fround(value))) ||
-        !row.embedding.some((value) => Math.fround(value) !== 0)) {
-      error("invalid_response", "NVIDIA returned an invalid embedding vector.");
+    if (!Array.isArray(data) || data.length !== texts.length) error("invalid_response", "NVIDIA returned an unexpected embedding response shape.");
+    const embeddings: number[][] = [];
+    for (let index = 0; index < data.length; index += 1) {
+      const row = asObject(data[index]);
+      if (!row || (row.index !== undefined && row.index !== index) || !Array.isArray(row.embedding) || row.embedding.length !== nvidiaEmbeddingDimensions) {
+        error("invalid_response", `NVIDIA embeddings must contain exactly ${nvidiaEmbeddingDimensions} dimensions per input.`);
+      }
+      if (row.embedding.some((value) => typeof value !== "number" || !Number.isFinite(Math.fround(value))) ||
+          !row.embedding.some((value) => Math.fround(value) !== 0)) {
+        error("invalid_response", "NVIDIA returned an invalid embedding vector.");
+      }
+      embeddings.push((row.embedding as number[]).map(Math.fround));
     }
     return {
-      embedding: (row.embedding as number[]).map(Math.fround),
+      embeddings,
       usage: usageFrom(response.usage),
       model: config.embeddingModel,
       modelVersion: config.embeddingModelVersion,
+      requestAttempts: request.requestAttempts,
     };
   }
 
-  return { generate, generateWithUsage, embed };
+  async function embed(text: string, inputType: NvidiaInputType, signal?: AbortSignal): Promise<NvidiaEmbedding> {
+    const result = await embedMany([text], inputType, signal);
+    return { embedding: result.embeddings[0], usage: result.usage, model: result.model,
+      modelVersion: result.modelVersion, requestAttempts: result.requestAttempts };
+  }
+
+  return { generate, generateWithUsage, embed, embedMany };
 }

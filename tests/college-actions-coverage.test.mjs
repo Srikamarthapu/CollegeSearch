@@ -8,10 +8,10 @@ const expectedOverallVerified = { admissions: 93, deadlines: 87, programs: 95, n
 const catalogById = new Map(catalog.institutions.map((institution) => [institution.unitId, institution]));
 const newUnitIds = new Set(catalog.institutions.filter((institution) => !institution.retainedFromExistingCatalog).map((institution) => institution.unitId));
 
-test("college resources cover the reviewed 100 identities with complete, explicit status rows", () => {
+test("curated resources retain the original 100 reviewed identities with explicit statuses", () => {
   assert.equal(actions.colleges.length, 100);
   assert.equal(new Set(actions.colleges.map((college) => college.unitId)).size, 100);
-  assert.deepEqual(new Set(actions.colleges.map((college) => college.unitId)), new Set(catalogById.keys()));
+  assert.ok(actions.colleges.every(college => catalogById.has(college.unitId)));
 
   const overallVerified = Object.fromEntries(actionTypes.map((type) => [type, 0]));
   const newVerified = Object.fromEntries(actionTypes.map((type) => [type, 0]));

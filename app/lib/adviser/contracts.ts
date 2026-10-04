@@ -1,9 +1,6 @@
+import { broadFieldDefinitions } from "../broad-fields.ts";
 /** Shared, provider-independent contracts. No student data belongs in the public knowledge base. */
-export const adviserFields = [
-  "Biological & Biomedical Sciences", "Business & Marketing", "Computing & Information Sciences",
-  "Education", "Engineering", "English Language & Literature", "Health Professions",
-  "Mathematics & Statistics", "Physical Sciences", "Psychology", "Social Sciences", "Visual & Performing Arts",
-] as const;
+export const adviserFields = broadFieldDefinitions.map(field => field.name);
 
 export type AdviserField = typeof adviserFields[number];
 export type AdviserIntent = "recommend" | "compare" | "personal-chances" | "major-admit-rate" | "financial-aid" | "other";
@@ -15,7 +12,7 @@ export type AdviserPreferences = {
   annualBudget: number | null;
   budgetBasis: "tuition" | "average-net-price" | "total-cost" | null;
   size: "small" | "medium" | "large" | null;
-  ownership: "Public" | "Private nonprofit" | null;
+  ownership: "Public" | "Private nonprofit" | "Private for-profit" | null;
 };
 export type AdviserInterpretation = {
   preferences: AdviserPreferences;
@@ -29,7 +26,7 @@ export const emptyAdviserPreferences: AdviserPreferences = {
   fields: [], states: [], residencyState: null, annualBudget: null,
   budgetBasis: null, size: null, ownership: null,
 };
-export const usStateCodes = new Set("AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY".split(" "));
+export const usStateCodes = new Set("AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY PR GU VI AS MP".split(" "));
 
 function object(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("Invalid adviser response.");
@@ -67,7 +64,7 @@ export function parseAdviserPreferences(input: unknown): AdviserPreferences {
     annualBudget: budget as number | null,
     budgetBasis: basis,
     size: nullableChoice(value.size, ["small", "medium", "large"] as const),
-    ownership: nullableChoice(value.ownership, ["Public", "Private nonprofit"] as const),
+    ownership: nullableChoice(value.ownership, ["Public", "Private nonprofit", "Private for-profit"] as const),
   };
 }
 

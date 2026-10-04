@@ -21,11 +21,11 @@ const facts = compiled.facts.filter((fact) => fact.unit_id === college.unitId &&
 }));
 const record = { unit_id: college.unitId, college_slug: college.slug, college_name: college.name, release_id: releaseId, record_json: college, facts };
 const passage = { ...compiled.passages.find((entry) => entry.unit_id === college.unitId)!, college_name: college.name, college_slug: college.slug };
-const release = { release_id: releaseId, dataset_sha256: releaseId.slice(7), institution_count: 100, embedding_model: null, embedding_version: null };
+const release = { release_id: releaseId, dataset_sha256: releaseId.slice(7), institution_count: dataset.colleges.length, embedding_model: null, embedding_version: null };
 const interpretation = { preferences: { ...emptyAdviserPreferences, states: ["CA"], fields: ["Engineering"] as ["Engineering"] }, intent: "recommend" as const, mentionedUnitIds: [], question: "budget" as const, searchText: "engineering California" };
 
 function rpc(overrides: Record<string, unknown> = {}): KnowledgeRpc {
-  return async (name) => overrides[name] ?? ({ current_college_knowledge_release: [release], filter_college_facts: [record], hybrid_search_college_passages: [passage] }[name]);
+  return async (name, args) => overrides[name] ?? ({ current_college_knowledge_release: [release], filter_college_facts: (args.p_unit_ids as number[] | undefined)?.includes(college.unitId) ? [record] : [], hybrid_search_college_passages: [passage] }[name]);
 }
 test("retrieval retains exact campus and source metadata from the published snapshot", async () => {
   const answer = await createKnowledgeRetriever(dataset, releaseId, rpc())(interpretation);
@@ -51,7 +51,8 @@ test("exact size and tuition constraints go to SQL without treating in-district 
     throw new Error("No vector retrieval when SQL has no candidates");
   });
   await retrieve({ ...interpretation, preferences: { ...interpretation.preferences, residencyState: "CA", annualBudget: 20000, budgetBasis: "tuition", size: "small" } });
-  assert.ok(calls.some((args) => (args.p_filters as Record<string, unknown>).tuitionInState));
+  assert.ok(calls.some((args) => (args.p_filters as Record<string, unknown>).tuitionOutOfState));
+  assert.ok(calls.every((args) => !(args.p_filters as Record<string, unknown>).tuitionInState));
   for (const args of calls) assert.deepEqual((args.p_filters as Record<string, unknown>).undergraduateEnrollment, { max: 4999 });
 });
 test("vector query is used only with a matching indexed model/version and valid dimensions", async () => {

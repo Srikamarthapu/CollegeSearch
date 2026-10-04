@@ -34,6 +34,7 @@ import {
   useEffect,
   useMemo,
   useReducer,
+  useRef,
   useState,
   type ChangeEvent,
   type KeyboardEvent,
@@ -42,12 +43,12 @@ import {
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import { CollegeLogo } from "@/app/components/CollegeLogo";
+import { NegativeNetPriceNote } from "@/app/components/NegativeNetPriceNote";
 import { CampusCarousel } from "@/app/components/CampusCarousel";
 import { useSavedColleges } from "@/app/components/saved/SavedCollegesProvider";
 import {
   compactName,
   formatObservation,
-  isUniversityOfCalifornia,
   majorEvidenceFor,
   observationSourceKind,
   percentFormatter,
@@ -57,39 +58,28 @@ import {
 } from "@/app/lib/college-client-record";
 import {
   filterCollegesByQuery,
-  MAJOR_OPTIONS,
   matchingMajors,
   STATE_NAMES,
 } from "@/app/lib/college-search";
 import {
-  matchesAdvancedExplorerFilters,
-  type EnrollmentBand,
-} from "@/app/lib/explorer-filters";
+  EMPTY_DIRECTORY_FILTERS,
+  DIRECTORY_PAGE_SIZE,
+  parseDirectoryFilters,
+  serializeDirectoryFilters,
+  type DirectoryFilters,
+} from "@/app/lib/college-directory-state";
+import type {
+  CollegeDirectoryPage,
+} from "@/app/lib/college-directory";
 
-type ExplorerState = {
-  query: string;
-  major: string;
-  stateCode: string;
-  ownership: string;
-  band: string;
-  maxPrice: string;
-  maxTuition: string;
-  enrollmentBand: string;
-  minGraduation: string;
-  minEarnings: string;
-  setting: string;
-  ucOnly: boolean;
-  completeOnly: boolean;
-  savedOnly: boolean;
-  sort: string;
-  visibleCount: number;
-};
+type ExplorerState = DirectoryFilters;
 
 type FilterKey =
   | "query"
   | "major"
   | "stateCode"
   | "ownership"
+  | "institutionLevel"
   | "band"
   | "maxPrice"
   | "maxTuition"
@@ -106,83 +96,40 @@ type ExplorerAction =
       key: "ucOnly" | "completeOnly" | "savedOnly";
     }
   | { type: "hydrate"; value: Partial<ExplorerState> }
-  | { type: "showMore" }
   | { type: "clear" };
 
-const defaultExplorerState: ExplorerState = {
-  query: "",
-  major: "",
-  stateCode: "",
-  ownership: "",
-  band: "",
-  maxPrice: "",
-  maxTuition: "",
-  enrollmentBand: "",
-  minGraduation: "",
-  minEarnings: "",
-  setting: "",
-  ucOnly: false,
-  completeOnly: false,
-  savedOnly: false,
-  sort: "name",
-  visibleCount: 12,
-};
+const defaultExplorerState: ExplorerState = EMPTY_DIRECTORY_FILTERS;
+const noSavedIds: number[] = [];
+
+function directoryRequestKey(
+  filters: DirectoryFilters,
+  savedIds: number[],
+  selectedIds: number[],
+) {
+  return JSON.stringify({ filters, savedIds: [...savedIds].sort((a, b) => a - b), selectedIds });
+}
 
 const stateNames = STATE_NAMES;
-const majorOptions = MAJOR_OPTIONS;
 function explorerReducer(
   state: ExplorerState,
   action: ExplorerAction,
 ): ExplorerState {
   if (action.type === "set") {
-    return { ...state, [action.key]: action.value, ...(action.key === "major" && !action.value && state.sort === "major" ? { sort: "name" } : {}), visibleCount: 12 };
+    return { ...state, [action.key]: action.value, ...(action.key === "major" && !action.value && state.sort === "major" ? { sort: "name" } : {}) } as ExplorerState;
   }
   if (action.type === "toggle") {
     return {
       ...state,
       [action.key]: !state[action.key],
-      visibleCount: 12,
     };
   }
   if (action.type === "hydrate") {
-    return { ...state, ...action.value, visibleCount: 12 };
-  }
-  if (action.type === "showMore") {
-    return { ...state, visibleCount: state.visibleCount + 12 };
+    return { ...state, ...action.value };
   }
   if (action.type === "clear") {
     return { ...defaultExplorerState };
   }
   return state;
-}
-
-function matchesBand(rate: number | null, band: string) {
-  if (!band) return true;
-  if (rate === null) return false;
-  if (band === "very-high-reach") return rate <= 0.1;
-  if (band === "reach") return rate > 0.1 && rate <= 0.25;
-  if (band === "competitive") return rate > 0.25 && rate <= 0.5;
-  return rate > 0.5;
-}
-
-function compareNullable(
-  left: number | null,
-  right: number | null,
-  direction: "asc" | "desc" = "asc",
-) {
-  if (left === null && right === null) return 0;
-  if (left === null) return 1;
-  if (right === null) return -1;
-  return direction === "asc" ? left - right : right - left;
-}
-
-function hasCompleteCoreData(college: ClientCollege) {
-  return [
-    college.observations.admitRate,
-    college.observations.averageNetPrice,
-    college.observations.graduationRate,
-    college.observations.undergraduateEnrollment,
-  ].every((observation) => observation.value !== null);
 }
 
 function SourceBadge({ observation }: { observation: ClientObservation }) {
@@ -227,14 +174,15 @@ const CollegeCard = memo(function CollegeCard({ college, selectedMajor, isSelect
         {isSaved ? <BookmarkCheck size={20} aria-hidden="true" /> : <Bookmark size={20} aria-hidden="true" />}
       </button>
     </div>
-    <div className="college-character"><span>{college.ownership === "Private nonprofit" ? "Private nonprofit" : "Public university"}</span><span>{college.setting} campus</span><span title={`${college.observations.undergraduateEnrollment.periodLabel} · ${college.observations.undergraduateEnrollment.publisher}`}>{formatObservation(college.observations.undergraduateEnrollment)} undergrads</span></div>
+    <div className="college-character"><span>{college.ownership}</span><span>{college.institutionLevel}</span><span>{college.setting} campus</span><span title={`${college.observations.undergraduateEnrollment.periodLabel} · ${college.observations.undergraduateEnrollment.publisher}`}>{formatObservation(college.observations.undergraduateEnrollment)} undergrads</span></div>
     <div className="metric-ledger">
       <MetricStamp label="Avg. net price / year" observation={college.observations.averageNetPrice} emphasis />
       <MetricStamp label="Overall admit rate" observation={admitRate} />
       <MetricStamp label={observationSourceKind(college.observations.graduationRate).isFederal ? "Completion rate" : "6-year graduation"} observation={college.observations.graduationRate} />
     </div>
+    {college.observations.averageNetPrice.value !== null && college.observations.averageNetPrice.value < 0 ? <div className="card-price-note"><NegativeNetPriceNote value={college.observations.averageNetPrice.value} /></div> : null}
     <div className="card-field-line"><GraduationCap size={16} aria-hidden="true" />
-      {selectedMajor && majorEvidence ? <span><strong>{selectedMajor}</strong> · {percentFormatter.format(majorEvidence.share)} of all awards</span> : <span>{college.majors.length} broad fields reported <span className="field-dot">·</span> <Link href={`/colleges/${college.slug}#majors-heading`}>Explore fields</Link></span>}
+      {selectedMajor && majorEvidence ? <span><strong>{selectedMajor}</strong> · {percentFormatter.format(majorEvidence.share)} of all awards</span> : <span>{college.majors.length} broad {college.majors.length === 1 ? "field" : "fields"} reported <span className="field-dot">·</span> <Link href={`/colleges/${college.slug}#majors-heading`}>Explore fields</Link></span>}
     </div>
     {selectedMajor ? <p className="rate-clarifier"><Info size={14} aria-hidden="true" />{formatObservation(admitRate)} is college-wide, not a {selectedMajor} admission rate.</p> : null}
     <details className="card-source-details">
@@ -270,7 +218,7 @@ function SelectField({
     <label className="filter-field" htmlFor={id}>
       <span>{label}</span>
       <div className="select-wrap">
-        <select id={id} value={value} onChange={onChange}>
+        <select id={id} aria-label={label} value={value} onChange={onChange}>
           {children}
         </select>
         <ChevronDown size={16} aria-hidden="true" />
@@ -285,12 +233,16 @@ function FilterControls({
   savedCount,
   idPrefix,
   stateOptions,
+  ownershipOptions,
+  majorOptions,
 }: {
   state: ExplorerState;
   dispatch: (action: ExplorerAction) => void;
   savedCount: number;
   idPrefix: string;
   stateOptions: string[];
+  ownershipOptions: string[];
+  majorOptions: string[];
 }) {
   const advancedFilterCount = [
     state.maxTuition,
@@ -306,6 +258,45 @@ function FilterControls({
   return (
     <div className="filter-controls">
       <SelectField
+        id={`${idPrefix}-institution-level-filter`}
+        label="Institution level"
+        value={state.institutionLevel}
+        onChange={(event) =>
+          dispatch({
+            type: "set",
+            key: "institutionLevel",
+            value: event.target.value,
+          })
+        }
+      >
+        <option value="">All levels</option>
+        <option value="Four-year">Four-year</option>
+        <option value="Two-year">Two-year</option>
+      </SelectField>
+
+      <fieldset className="filter-group">
+        <legend>College type</legend>
+        {["", ...ownershipOptions].map((option) => (
+          <label key={option || "all-types"}>
+            <input
+              type="radio"
+              name={`${idPrefix}-college-type`}
+              value={option}
+              checked={state.ownership === option}
+              onChange={(event) =>
+                dispatch({
+                  type: "set",
+                  key: "ownership",
+                  value: event.target.value,
+                })
+              }
+            />
+            <span>{option || "All types"}</span>
+          </label>
+        ))}
+      </fieldset>
+
+      <SelectField
         id={`${idPrefix}-major-filter`}
         label="Field of study"
         value={state.major}
@@ -313,7 +304,7 @@ function FilterControls({
           dispatch({ type: "set", key: "major", value: event.target.value })
         }
       >
-        <option value="">All broad fields</option>
+        <option value="">All reported fields</option>
         {majorOptions.map((option) => (
           <option value={option} key={option}>
             {option}
@@ -333,35 +324,13 @@ function FilterControls({
           })
         }
       >
-        <option value="">All states</option>
+        <option value="">All locations</option>
         {stateOptions.map((option) => (
           <option value={option} key={option}>
             {stateNames[option] || option}
           </option>
         ))}
       </SelectField>
-
-      <fieldset className="filter-group">
-        <legend>College type</legend>
-        {["", "Public", "Private nonprofit"].map((option) => (
-          <label key={option || "all-types"}>
-            <input
-              type="radio"
-              name={`${idPrefix}-college-type`}
-              value={option}
-              checked={state.ownership === option}
-              onChange={(event) =>
-                dispatch({
-                  type: "set",
-                  key: "ownership",
-                  value: event.target.value,
-                })
-              }
-            />
-            <span>{option || "All types"}</span>
-          </label>
-        ))}
-      </fieldset>
 
       <SelectField
         id={`${idPrefix}-admit-band-filter`}
@@ -424,6 +393,7 @@ function FilterControls({
             <option value="City">City</option>
             <option value="Suburb">Suburb</option>
             <option value="Town">Town</option>
+            <option value="Rural">Rural</option>
           </SelectField>
 
           <SelectField
@@ -547,6 +517,7 @@ type AutocompleteItem =
 
 function SearchBox({
   colleges,
+  majorOptions,
   value,
   onChange,
   onMajor,
@@ -555,6 +526,7 @@ function SearchBox({
   size = "large",
 }: {
   colleges: ClientCollege[];
+  majorOptions: string[];
   value: string;
   onChange: (value: string) => void;
   onMajor: (major: string) => void;
@@ -569,10 +541,10 @@ function SearchBox({
 
   const items = useMemo<AutocompleteItem[]>(() => {
     if (normalized.length < 2) return [];
-    const majorMatches = matchingMajors(normalized)
+    const majorMatches = matchingMajors(normalized, majorOptions)
       .slice(0, 3)
       .map((major) => ({ kind: "major" as const, major, label: major }));
-    const collegeMatches = filterCollegesByQuery(colleges, normalized)
+    const collegeMatches = filterCollegesByQuery(colleges, normalized, majorOptions)
       .slice(0, majorMatches.length ? 3 : 5)
       .map((college) => ({
         kind: "college" as const,
@@ -580,7 +552,7 @@ function SearchBox({
         label: compactName(college),
       }));
     return [...majorMatches, ...collegeMatches];
-  }, [colleges, normalized]);
+  }, [colleges, majorOptions, normalized]);
 
   const open = focused && items.length > 0;
 
@@ -629,7 +601,7 @@ function SearchBox({
       <div className="search-input-shell">
         <Search size={20} aria-hidden="true" />
         <label className="sr-only" htmlFor={`college-search-${size}`}>
-          Search colleges, broad fields, cities, or states
+          Search colleges, broad fields, or places
         </label>
         <input
           id={`college-search-${size}`}
@@ -677,7 +649,7 @@ function SearchBox({
             aria-label="Search suggestions"
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
+            exit={{ opacity: 0, y: -4, pointerEvents: "none" }}
           >
             {items.map((item, index) => (
               <button
@@ -737,14 +709,51 @@ function SearchBox({
   );
 }
 
+async function requestDirectoryPage({
+  filters,
+  savedIds,
+  selectedIds,
+  offset,
+  signal,
+}: {
+  filters: DirectoryFilters;
+  savedIds: number[];
+  selectedIds: number[];
+  offset: number;
+  signal?: AbortSignal;
+}): Promise<CollegeDirectoryPage> {
+  const limit = DIRECTORY_PAGE_SIZE;
+  if (filters.savedOnly) {
+    const response = await fetch("/api/colleges", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ filters, savedIds, selectedIds, offset, limit }),
+      signal,
+    });
+    if (!response.ok) throw new Error("The college list could not be searched.");
+    return response.json() as Promise<CollegeDirectoryPage>;
+  }
+  const params = serializeDirectoryFilters(filters, selectedIds);
+  params.set("offset", String(offset));
+  params.set("limit", String(limit));
+  const response = await fetch(`/api/colleges?${params}`, { signal });
+  if (!response.ok) throw new Error("The college list could not be searched.");
+  return response.json() as Promise<CollegeDirectoryPage>;
+}
+
 export function CollegeSearchApp({
-  colleges,
+  initialPage,
+  initialFilters,
   mode = "home",
 }: {
-  colleges: ClientCollege[];
+  initialPage: CollegeDirectoryPage;
+  initialFilters: DirectoryFilters;
   mode?: "home" | "explore";
 }) {
-  const [state, dispatch] = useReducer(explorerReducer, defaultExplorerState);
+  const [state, dispatch] = useReducer(
+    explorerReducer,
+    { ...defaultExplorerState, ...initialFilters },
+  );
   const {
     canMutate: canMutateSavedColleges,
     hydrated: savedListHydrated,
@@ -753,134 +762,68 @@ export function CollegeSearchApp({
     syncPhase: savedSyncPhase,
     toggleSaved: toggleSavedId,
   } = useSavedColleges();
-  const [selected, setSelected] = useState<number[]>([]);
+  const [selected, setSelected] = useState<number[]>(() =>
+    initialPage.selectedItems.map((college) => college.unitId),
+  );
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [view, setView] = useState<"grid" | "list">("grid");
   const [shareUrl, setShareUrl] = useState("");
   const [status, setStatus] = useState("");
   const [hydrated, setHydrated] = useState(false);
+  const [directoryPage, setDirectoryPage] = useState(initialPage);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [pageRequestStatus, setPageRequestStatus] = useState(() => ({
+    key: directoryRequestKey(
+      initialFilters,
+      noSavedIds,
+      initialPage.selectedItems.map((college) => college.unitId),
+    ),
+    error: "",
+  }));
+  const requestSequence = useRef(0);
   const deferredQuery = useDeferredValue(state.query);
   const lenis = useLenis();
-  const stateOptions = useMemo(
-    () => Array.from(new Set(colleges.map((college) => college.state))).sort(),
-    [colleges],
+  const stableFacets = initialPage.facets;
+  const stateOptions = stableFacets.states;
+  const ownershipOptions = stableFacets.ownerships;
+  const majorOptions = stableFacets.majorOptions;
+  const evidenceCounts = stableFacets.evidenceCounts;
+  const catalogSize = stableFacets.totalInstitutions;
+  const colleges = directoryPage.items;
+  const resultCount = directoryPage.total;
+  const requestFilters = useMemo(
+    () => ({ ...state, query: deferredQuery }),
+    [deferredQuery, state],
   );
-  const collegeIds = useMemo(
-    () => new Set(colleges.map((college) => college.unitId)),
-    [colleges],
+  const savedIdsForRequest = requestFilters.savedOnly ? saved : noSavedIds;
+  const currentDirectoryRequestKey = directoryRequestKey(
+    requestFilters,
+    savedIdsForRequest,
+    selected,
   );
-  const evidenceCounts = useMemo(() => {
-    const ucAdmissions = colleges.filter((college) =>
-      college.observations.admitRate.sourceId.startsWith("uc-"),
-    ).length;
-    const federalAdmissions = colleges.filter(
-      (college) =>
-        observationSourceKind(college.observations.admitRate).isFederal,
-    ).length;
-    const reviewedInstitutionRecords = colleges.filter((college) =>
-      Object.values(college.observations).some(
-        (observation) =>
-          !observation.sourceId.startsWith("uc-") &&
-          !observationSourceKind(observation).isFederal,
-      ),
-    ).length;
-    return {
-      firstPartyAdmissions: colleges.length - federalAdmissions,
-      reviewedCollegeAdmissions:
-        colleges.length - federalAdmissions - ucAdmissions,
-      reviewedInstitutionRecords,
-    };
-  }, [colleges]);
+  const loadingPage = hydrated && pageRequestStatus.key !== currentDirectoryRequestKey;
+  const directoryError = pageRequestStatus.key === currentDirectoryRequestKey
+    ? pageRequestStatus.error
+    : "";
 
   useEffect(() => {
     let cancelled = false;
     const restore = () => {
-    if (!["/", "/explore"].includes(window.location.pathname)) return;
-    const params = new URLSearchParams(window.location.search);
-    const allowedBands = new Set([
-      "",
-      "very-high-reach",
-      "reach",
-      "competitive",
-      "accessible",
-    ]);
-    const allowedSorts = new Set([
-      "name",
-      "major",
-      "admit-low",
-      "admit-high",
-      "price",
-      "graduation",
-      "enrollment",
-      "earnings",
-    ]);
-    const allowedPrices = new Set(["", "15000", "20000", "30000", "40000"]);
-    const allowedTuition = new Set([
-      "",
-      "30000",
-      "50000",
-      "70000",
-      "90000",
-    ]);
-    const allowedEnrollmentBands = new Set(["", "small", "medium", "large"]);
-    const allowedGraduationRates = new Set(["", "0.6", "0.75", "0.9"]);
-    const allowedEarnings = new Set(["", "75000", "100000", "125000"]);
-    const allowedSettings = new Set(["", "City", "Suburb", "Town"]);
-    const hydratedState: Partial<ExplorerState> = {
-      query: (params.get("q") ?? "").slice(0, 120),
-      major: majorOptions.includes(params.get("major") ?? "")
-        ? params.get("major") ?? ""
-        : "",
-      stateCode: stateOptions.includes(params.get("state") ?? "")
-        ? params.get("state") ?? ""
-        : "",
-      ownership: ["", "Public", "Private nonprofit"].includes(
-        params.get("type") ?? "",
-      )
-        ? params.get("type") ?? ""
-        : "",
-      band: allowedBands.has(params.get("band") ?? "")
-        ? params.get("band") ?? ""
-        : "",
-      maxPrice: allowedPrices.has(params.get("price") ?? "")
-        ? params.get("price") ?? ""
-        : "",
-      maxTuition: allowedTuition.has(params.get("tuition") ?? "")
-        ? params.get("tuition") ?? ""
-        : "",
-      enrollmentBand: allowedEnrollmentBands.has(params.get("size") ?? "")
-        ? params.get("size") ?? ""
-        : "",
-      minGraduation: allowedGraduationRates.has(params.get("grad") ?? "")
-        ? params.get("grad") ?? ""
-        : "",
-      minEarnings: allowedEarnings.has(params.get("earnings") ?? "")
-        ? params.get("earnings") ?? ""
-        : "",
-      setting: allowedSettings.has(params.get("setting") ?? "")
-        ? params.get("setting") ?? ""
-        : "",
-      sort: allowedSorts.has(params.get("sort") ?? "")
-        ? params.get("sort") ?? "name"
-        : "name",
-      ucOnly: params.get("uc") === "1",
-      completeOnly: params.get("complete") === "1",
-      savedOnly: params.get("saved") === "1",
-    };
-
-    const comparison = (params.get("compare") ?? "")
-      .split(",")
-      .map(Number)
-      .filter((unitId) => collegeIds.has(unitId))
-      .slice(0, 4);
-    const hydratedComparison = Array.from(new Set(comparison));
-    if (hydratedState.sort === "major" && !hydratedState.major) hydratedState.sort = "name";
-    queueMicrotask(() => {
-      if (cancelled || !["/", "/explore"].includes(window.location.pathname)) return;
-      dispatch({ type: "hydrate", value: hydratedState });
-      setSelected(hydratedComparison);
-      setHydrated(true);
-    });
+      if (!["/", "/explore"].includes(window.location.pathname)) return;
+      const params = new URLSearchParams(window.location.search);
+      const restoredState = parseDirectoryFilters(params, stableFacets);
+      const restoredComparison = [...new Set(
+        (params.get("compare") ?? "")
+          .split(",")
+          .map(Number)
+          .filter((unitId) => Number.isSafeInteger(unitId) && unitId > 0),
+      )].slice(0, 4);
+      queueMicrotask(() => {
+        if (cancelled || !["/", "/explore"].includes(window.location.pathname)) return;
+        dispatch({ type: "hydrate", value: restoredState });
+        setSelected(restoredComparison);
+        setHydrated(true);
+      });
     };
     restore();
     window.addEventListener("popstate", restore);
@@ -888,27 +831,11 @@ export function CollegeSearchApp({
       cancelled = true;
       window.removeEventListener("popstate", restore);
     };
-  }, [collegeIds, stateOptions]);
+  }, [stableFacets]);
 
   useEffect(() => {
     if (!hydrated || !["/", "/explore"].includes(window.location.pathname)) return;
-    const params = new URLSearchParams();
-    if (state.query) params.set("q", state.query);
-    if (state.major) params.set("major", state.major);
-    if (state.stateCode) params.set("state", state.stateCode);
-    if (state.ownership) params.set("type", state.ownership);
-    if (state.band) params.set("band", state.band);
-    if (state.maxPrice) params.set("price", state.maxPrice);
-    if (state.maxTuition) params.set("tuition", state.maxTuition);
-    if (state.enrollmentBand) params.set("size", state.enrollmentBand);
-    if (state.minGraduation) params.set("grad", state.minGraduation);
-    if (state.minEarnings) params.set("earnings", state.minEarnings);
-    if (state.setting) params.set("setting", state.setting);
-    if (state.sort !== "name") params.set("sort", state.sort);
-    if (state.ucOnly) params.set("uc", "1");
-    if (state.completeOnly) params.set("complete", "1");
-    if (state.savedOnly) params.set("saved", "1");
-    if (selected.length) params.set("compare", selected.join(","));
+    const params = serializeDirectoryFilters(state, selected);
     const query = params.toString();
     window.history.replaceState(
       window.history.state,
@@ -918,117 +845,78 @@ export function CollegeSearchApp({
   }, [hydrated, selected, state]);
 
   useEffect(() => {
+    if (!hydrated || !["/", "/explore"].includes(window.location.pathname)) return;
+    const controller = new AbortController();
+    const requestId = ++requestSequence.current;
+    void requestDirectoryPage({
+      filters: requestFilters,
+      savedIds: savedIdsForRequest,
+      selectedIds: selected,
+      offset: 0,
+      signal: controller.signal,
+    })
+      .then((page) => {
+        if (requestSequence.current === requestId) {
+          setDirectoryPage(page);
+          setPageRequestStatus({ key: currentDirectoryRequestKey, error: "" });
+        }
+      })
+      .catch((error) => {
+        if (controller.signal.aborted || requestSequence.current !== requestId) return;
+        setPageRequestStatus({
+          key: currentDirectoryRequestKey,
+          error: error instanceof Error ? error.message : "The college list could not be searched.",
+        });
+      });
+    return () => controller.abort();
+  }, [currentDirectoryRequestKey, hydrated, requestFilters, savedIdsForRequest, selected]);
+
+  useEffect(() => {
     if (!status) return;
     const timeout = window.setTimeout(() => setStatus(""), 2600);
     return () => window.clearTimeout(timeout);
   }, [status]);
 
-  const results = useMemo(() => {
-    const queryMatches = new Set(
-      filterCollegesByQuery(colleges, deferredQuery).map(
-        (college) => college.unitId,
-      ),
-    );
-    const maxPrice = Number(state.maxPrice) || null;
-    const maxTuition = Number(state.maxTuition) || null;
-    const minGraduation = Number(state.minGraduation) || null;
-    const minEarnings = Number(state.minEarnings) || null;
+  const results = directoryPage.items;
+  const availableCollegeById = useMemo(
+    () => new Map(
+      [...directoryPage.items, ...directoryPage.selectedItems].map((college) => [college.unitId, college]),
+    ),
+    [directoryPage.items, directoryPage.selectedItems],
+  );
+  const selectedColleges = selected.flatMap((unitId) => {
+    const college = availableCollegeById.get(unitId);
+    return college ? [college] : [];
+  });
 
-    const filtered = colleges.filter((college) => {
-      const admitRate = college.observations.admitRate.value;
-      const netPrice = college.observations.averageNetPrice.value;
-      return (
-          queryMatches.has(college.unitId) &&
-          (!state.major || Boolean(majorEvidenceFor(college, state.major))) &&
-          (!state.stateCode || college.state === state.stateCode) &&
-          (!state.ownership || college.ownership === state.ownership) &&
-          matchesBand(admitRate, state.band) &&
-          (!maxPrice || (netPrice !== null && netPrice <= maxPrice)) &&
-          matchesAdvancedExplorerFilters(college, {
-            maxTuition,
-            enrollmentBand: state.enrollmentBand as EnrollmentBand,
-            minGraduation,
-            minEarnings,
-            setting: state.setting,
-          }) &&
-          (!state.ucOnly || isUniversityOfCalifornia(college)) &&
-          (!state.completeOnly || hasCompleteCoreData(college)) &&
-          (!state.savedOnly || saved.includes(college.unitId))
-      );
-    });
-
-    return filtered.sort((left, right) => {
-      if (state.sort === "major" && state.major) {
-        return (
-          (majorEvidenceFor(right, state.major)?.share ?? -1) -
-          (majorEvidenceFor(left, state.major)?.share ?? -1)
-        );
+  async function loadMore() {
+    if (directoryPage.nextOffset === null || loadingMore) return;
+    const requestId = ++requestSequence.current;
+    setLoadingMore(true);
+    try {
+      const page = await requestDirectoryPage({
+        filters: requestFilters,
+        savedIds: savedIdsForRequest,
+        selectedIds: selected,
+        offset: directoryPage.nextOffset,
+      });
+      if (requestSequence.current !== requestId) return;
+      setDirectoryPage((current) => ({
+        ...page,
+        items: [...current.items, ...page.items],
+      }));
+      setPageRequestStatus({ key: currentDirectoryRequestKey, error: "" });
+    } catch (error) {
+      if (requestSequence.current === requestId) {
+        setPageRequestStatus({
+          key: currentDirectoryRequestKey,
+          error: error instanceof Error ? error.message : "More colleges could not be loaded.",
+        });
       }
-      if (state.sort === "admit-low") {
-        return compareNullable(
-          left.observations.admitRate.value,
-          right.observations.admitRate.value,
-        );
-      }
-      if (state.sort === "admit-high") {
-        return compareNullable(
-          left.observations.admitRate.value,
-          right.observations.admitRate.value,
-          "desc",
-        );
-      }
-      if (state.sort === "price") {
-        return compareNullable(
-          left.observations.averageNetPrice.value,
-          right.observations.averageNetPrice.value,
-        );
-      }
-      if (state.sort === "graduation") {
-        return compareNullable(
-          left.observations.graduationRate.value,
-          right.observations.graduationRate.value,
-          "desc",
-        );
-      }
-      if (state.sort === "enrollment") {
-        return compareNullable(
-          left.observations.undergraduateEnrollment.value,
-          right.observations.undergraduateEnrollment.value,
-          "desc",
-        );
-      }
-      if (state.sort === "earnings") {
-        return compareNullable(
-          left.observations.medianEarnings.value,
-          right.observations.medianEarnings.value,
-          "desc",
-        );
-      }
-      return left.name.localeCompare(right.name);
-    });
-  }, [
-    deferredQuery,
-    saved,
-    state.band,
-    state.completeOnly,
-    state.enrollmentBand,
-    state.major,
-    state.maxTuition,
-    state.maxPrice,
-    state.minEarnings,
-    state.minGraduation,
-    state.ownership,
-    state.savedOnly,
-    state.setting,
-    state.sort,
-    state.stateCode,
-    state.ucOnly,
-    colleges,
-  ]);
-
-  const selectedColleges = selected
-    .map((unitId) => colleges.find((college) => college.unitId === unitId))
-    .filter(Boolean) as ClientCollege[];
+    } finally {
+      if (requestSequence.current === requestId) setLoadingMore(false);
+    }
+  }
 
   function toggleSaved(college: ClientCollege) {
     toggleSavedId(college.unitId);
@@ -1113,6 +1001,13 @@ export function CollegeSearchApp({
           label: state.ownership,
           clear: () =>
             dispatch({ type: "set", key: "ownership", value: "" }),
+        }
+      : null,
+    state.institutionLevel
+      ? {
+          label: state.institutionLevel,
+          clear: () =>
+            dispatch({ type: "set", key: "institutionLevel", value: "" }),
         }
       : null,
     state.band
@@ -1215,7 +1110,7 @@ export function CollegeSearchApp({
           <div className="discovery-intro">
             <span className="discovery-eyebrow"><span /> Your college search, all together</span>
             <h1 id="discovery-title"><span>Find your</span><em>starting point.</em></h1>
-            <p>Compare costs, explore fields of study, and build a shortlist across {colleges.length} U.S. colleges.</p>
+            <p>Compare costs, explore fields of study, and build a shortlist across {catalogSize.toLocaleString()} U.S. colleges.</p>
             <div className="discovery-actions">
               <button type="button" onClick={() => {
                 scrollToExplore();
@@ -1229,7 +1124,7 @@ export function CollegeSearchApp({
 
         <section className="explore-section research-explorer" id="explore" aria-label="Explore colleges">
           <div className="research-section-heading">
-            <div><h2>Explore colleges</h2><span>{colleges.length} in this collection</span></div>
+            <div><h2>Explore colleges</h2><span>{catalogSize.toLocaleString()} in this collection</span></div>
             <div className="research-heading-links"><Link href="/match"><SlidersHorizontal size={17} aria-hidden="true" /> Find my fit</Link></div>
           </div>
         <div className="explorer-shell">
@@ -1248,14 +1143,17 @@ export function CollegeSearchApp({
               savedCount={saved.length}
               idPrefix="sidebar"
               stateOptions={stateOptions}
+              ownershipOptions={ownershipOptions}
+              majorOptions={majorOptions}
             />
-            <div className="filter-help"><Info size={17} aria-hidden="true" /><p>Explore {colleges.length} colleges across the U.S. <Link href="/data-sources">See coverage & sources</Link></p></div>
+            <div className="filter-help"><Info size={17} aria-hidden="true" /><p>Explore {catalogSize.toLocaleString()} colleges across the U.S. <Link href="/data-sources">See coverage & sources</Link></p></div>
           </aside>
 
           <div className="results-panel">
             <div className="results-search-dock">
               <SearchBox
                 colleges={colleges}
+                majorOptions={majorOptions}
                 size="compact"
                 value={state.query}
                 onChange={(value) =>
@@ -1305,6 +1203,8 @@ export function CollegeSearchApp({
                         savedCount={saved.length}
                         idPrefix="dialog"
                         stateOptions={stateOptions}
+                        ownershipOptions={ownershipOptions}
+                        majorOptions={majorOptions}
                       />
                       <Dialog.Close asChild>
                         <button className="apply-filters-button" type="button">
@@ -1312,7 +1212,7 @@ export function CollegeSearchApp({
                             ? savedListFailed
                               ? "Saved list unavailable"
                               : "Checking saved list"
-                            : `Show ${results.length} colleges`}
+                            : `Show ${resultCount.toLocaleString()} colleges`}
                         </button>
                       </Dialog.Close>
                     </Dialog.Content>
@@ -1333,8 +1233,9 @@ export function CollegeSearchApp({
                     )
                   ) : (
                     <>
-                      <strong>{results.length}</strong>{" "}
-                      {results.length === 1 ? "college" : "colleges"}
+                      <strong>{resultCount.toLocaleString()}</strong>{" "}
+                      {resultCount === 1 ? "college" : "colleges"}
+                      {results.length < resultCount ? <span> · {results.length.toLocaleString()} loaded</span> : null}
                     </>
                   )}
                 </p>
@@ -1378,6 +1279,13 @@ export function CollegeSearchApp({
             </div>
             {shareUrl ? <label className="share-fallback">Copy this search link<input readOnly value={shareUrl} onFocus={(event) => event.target.select()} /></label> : null}
 
+            {directoryError ? (
+              <div className="empty-state" role="alert">
+                <CircleAlert size={24} aria-hidden="true" />
+                <p>{directoryError}</p>
+              </div>
+            ) : null}
+
             {activeFilters.length ? (
               <div className="filter-chips" aria-label="Applied filters">
                 {activeFilters.map((filter) => (
@@ -1407,7 +1315,7 @@ export function CollegeSearchApp({
                 <p>
                   <strong>
                     This filter shows colleges with recent federal evidence of
-                    a bachelor&apos;s program in this broad field.
+                    a bachelor&apos;s- or associate-level program in this broad field.
                   </strong>{" "}
                   It is not a live major catalog, and acceptance rates are for
                   the whole college—not this field.
@@ -1419,10 +1327,10 @@ export function CollegeSearchApp({
             <div
               className={`results-list research-results is-${view}`}
               id="results-list"
-              aria-busy={state.query !== deferredQuery || savedListUnavailable}
+              aria-busy={loadingPage || loadingMore || state.query !== deferredQuery || savedListUnavailable}
             >
               {!savedListUnavailable
-                ? results.slice(0, state.visibleCount).map((college) => (
+                ? results.map((college) => (
                 <CollegeCard
                   key={college.unitId}
                   college={college}
@@ -1456,7 +1364,7 @@ export function CollegeSearchApp({
                   </button>
                 ) : null}
               </div>
-            ) : !results.length ? (
+            ) : resultCount === 0 ? (
               <div className="empty-state">
                 <CircleAlert size={29} aria-hidden="true" />
                 <h3>No college meets every active filter.</h3>
@@ -1470,13 +1378,14 @@ export function CollegeSearchApp({
               </div>
             ) : null}
 
-            {state.visibleCount < results.length ? (
+            {directoryPage.nextOffset !== null ? (
               <button
                 className="load-more"
                 type="button"
-                onClick={() => dispatch({ type: "showMore" })}
+                onClick={() => void loadMore()}
+                disabled={loadingMore}
               >
-                Show {Math.min(12, results.length - state.visibleCount)} more colleges
+                {loadingMore ? "Loading colleges…" : `Show ${Math.min(DIRECTORY_PAGE_SIZE, resultCount - results.length)} more colleges`}
                 <ArrowDown size={16} aria-hidden="true" />
               </button>
             ) : null}

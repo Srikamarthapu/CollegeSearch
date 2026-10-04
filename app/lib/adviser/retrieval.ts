@@ -3,7 +3,7 @@ import { buildCollegeKnowledge } from "../../../scripts/lib/college-knowledge.mj
 import type { College, CollegeDataset } from "../college-data";
 import type { AdviserInterpretation } from "./contracts.ts";
 import type { AdviserEvidence } from "./engine.ts";
-import { publicCollegeCandidates } from "./evidence.ts";
+import { publicCollegeCandidates, adviserNetPriceApplies, adviserTuition, usableAdviserObservation } from "./evidence.ts";
 
 type Row = Record<string, unknown>;
 export type KnowledgeRpc = (name: string, parameters: Record<string, unknown>, signal?: AbortSignal) => Promise<unknown>;
@@ -85,12 +85,25 @@ export function createKnowledgeRetriever(dataset: CollegeDataset, releaseId: str
     requireEqual(release.dataset_sha256, releaseId.replace("sha256:", ""));
     requireEqual(release.institution_count, dataset.colleges.length);
     const preferences = interpretation.preferences;
-    const initial = publicCollegeCandidates(dataset.colleges, preferences, interpretation.mentionedUnitIds);
+    // Narrow from the exact versioned artifact before sending a bounded set to SQL.
+    // SQL still applies every numeric constraint and checks source/residency semantics.
+    const eligible = publicCollegeCandidates(dataset.colleges, preferences, interpretation.mentionedUnitIds).filter(college => {
+      const enrollment = college.observations.undergraduateEnrollment;
+      if (preferences.size && (!usableAdviserObservation(enrollment) ||
+        (preferences.size === "small" ? enrollment.value >= 5000 : preferences.size === "medium" ? enrollment.value < 5000 || enrollment.value > 15000 : enrollment.value <= 15000))) return false;
+      if (preferences.annualBudget !== null && preferences.budgetBasis !== "total-cost") {
+        const amount = preferences.budgetBasis === "tuition" ? adviserTuition(college, preferences)?.observation :
+          preferences.budgetBasis === "average-net-price" && adviserNetPriceApplies(college, preferences) ? college.observations.averageNetPrice : null;
+        if (preferences.budgetBasis && (!usableAdviserObservation(amount) || amount.value > preferences.annualBudget)) return false;
+      }
+      return true;
+    });
+    const initial = eligible.length > 100 ? diverseCandidates(eligible, interpretation.mentionedUnitIds, 100) : eligible;
     if (!initial.length) return { colleges: [], passages: [], mode: "keyword", notices: [] };
     const bounds: Record<string, { min?: number; max?: number }> = {};
     if (preferences.size) bounds.undergraduateEnrollment = preferences.size === "small" ? { max: 4999 } : preferences.size === "medium" ? { min: 5000, max: 15000 } : { min: 15001 };
     const groups: Array<{ ids: number[]; filters: typeof bounds }> = [];
-    const notices: string[] = [];
+    const notices: string[] = eligible.length > 100 ? ["This reply checks a balanced sample of 100 colleges matching these filters. Narrow your preferences to explore more of the catalog."] : [];
     if (preferences.annualBudget !== null && preferences.budgetBasis === "tuition") {
       const resident = initial.filter((college) => college.ownership === "Public" && college.state === preferences.residencyState);
       const other = initial.filter((college) => !resident.includes(college));
@@ -104,9 +117,13 @@ export function createKnowledgeRetriever(dataset: CollegeDataset, releaseId: str
       } else if (preferences.annualBudget !== null) notices.push("A comparable total cost of attendance is not verified across this collection, so your full-cost budget has not been applied as a price filter. Check official cost pages and net price calculators.");
       groups.push({ ids: initial.map((college) => college.unitId), filters: bounds });
     }
-    const factResults = await Promise.all(groups.map(async (group) => {
+    // Each result includes the complete source evidence for its campuses. Keep
+    // individual responses small as the field catalog grows, at most six calls.
+    const evidenceBatches = groups.flatMap((group) => Array.from({ length: Math.ceil(group.ids.length / 20) }, (_, index) =>
+      ({ ...group, ids: group.ids.slice(index * 20, (index + 1) * 20) })));
+    const factResults = await Promise.all(evidenceBatches.map(async (group) => {
       const result = rows(await rpc("filter_college_facts", { p_filters: group.filters, p_residency_state: preferences.residencyState,
-        p_limit: 100, p_offset: 0, p_unit_ids: group.ids, p_expected_release_id: releaseId }, signal));
+        p_limit: 20, p_offset: 0, p_unit_ids: group.ids, p_expected_release_id: releaseId }, signal));
       return result.map((row) => validateCollege(row, new Set(group.ids)));
     }));
     const filtered = factResults.flat();
@@ -139,6 +156,7 @@ export function createKnowledgeRetriever(dataset: CollegeDataset, releaseId: str
       requireEqual(row.college_slug, college.slug);
       requireEqual(row.college_name, college.name);
       return { unitId: college.unitId, passageId: row.passage_id as string, content: row.content as string, sourceId: row.source_id as string,
+        sourceField: row.source_field as string, fieldLocator: row.field_locator as string,
         sourceUrl: row.source_url as string, reportingYear: row.reporting_year as number | null, periodLabel: row.period_label as string, cohort: row.cohort as string };
     });
     if (!passages.length) notices.push("No verified descriptive passage matched this topic. These results use only the structured facts shown; unverified campus or program details are unknown.");

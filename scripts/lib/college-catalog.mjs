@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { collegeCatalogCategories } from "../../app/lib/catalog-categories.ts";
-import { censusRegionForState, usCensusRegionCodes } from "./us-census-regions.mjs";
+import { geographyForJurisdiction, supportedUsJurisdictionCodes } from "./us-census-regions.mjs";
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const manifestPath = resolve(repositoryRoot, "data/college-catalog.json");
@@ -10,7 +10,7 @@ const rawManifest = JSON.parse(await readFile(manifestPath, "utf8"));
 
 function assertManifest(manifest) {
   if (
-    manifest?.schemaVersion !== 1 ||
+    manifest?.schemaVersion !== 2 ||
     !Array.isArray(manifest.institutions) ||
     manifest.institutions.length < 100 ||
     !manifest.source?.artifactUrl ||
@@ -26,9 +26,8 @@ function assertManifest(manifest) {
 
   const unitIds = new Set();
   const slugs = new Set();
-  const names = new Set();
   const categories = new Set(collegeCatalogCategories);
-  const supportedStates = new Set(usCensusRegionCodes);
+  const supportedStates = new Set(supportedUsJurisdictionCodes);
   for (const institution of manifest.institutions) {
     if (
       !Number.isInteger(institution.unitId) ||
@@ -47,18 +46,23 @@ function assertManifest(manifest) {
     }
     slugs.add(institution.slug);
 
-    if (!institution.expectedName || names.has(institution.expectedName)) {
+    if (!institution.expectedName || !institution.city) {
       throw new Error(`College catalog has a duplicate or missing name ${institution.expectedName}.`);
     }
-    names.add(institution.expectedName);
 
     if (!supportedStates.has(institution.state)) {
-      throw new Error(`${institution.expectedName} is outside the reviewed states-plus-DC scope.`);
+      throw new Error(`${institution.expectedName} is outside the reviewed U.S. jurisdiction scope.`);
     }
-    censusRegionForState(institution.state);
+    geographyForJurisdiction(institution.state);
 
-    if (![1, 2].includes(institution.scorecardControl)) {
+    if (![1, 2, 3].includes(institution.scorecardControl)) {
       throw new Error(`${institution.expectedName} has an unsupported Scorecard ownership code.`);
+    }
+    if (![0, 1].includes(institution.scorecardMain) || ![1, 2].includes(institution.scorecardLevel) ||
+        ![1, 2, 3].includes(institution.scorecardPredominantDegree) ||
+        ![0, 1, 2, 3, 4].includes(institution.scorecardHighestDegree) ||
+        !/^[a-f0-9]{64}$/.test(institution.identitySha256 ?? "")) {
+      throw new Error(`${institution.expectedName} is missing its reviewed source identity attributes.`);
     }
     if (
       !Array.isArray(institution.aliases) ||
@@ -108,11 +112,16 @@ export function assertScorecardRowMatchesCatalog(row) {
     !manifestEntry ||
     row.INSTNM !== manifestEntry.expectedName ||
     row.STABBR !== manifestEntry.state ||
+    row.CITY !== manifestEntry.city ||
+    Number(row.ICLEVEL) !== manifestEntry.scorecardLevel ||
+    Number(row.PREDDEG) !== manifestEntry.scorecardPredominantDegree ||
     ownership !== manifestEntry.scorecardControl ||
-    ![1, 2].includes(ownership) ||
-    Number(row.MAIN) !== 1 ||
+    ![1, 2, 3].includes(ownership) ||
+    Number(row.MAIN) !== manifestEntry.scorecardMain ||
     Number(row.CURROPER) !== 1 ||
-    ![3, 4].includes(highestDegree) ||
+    highestDegree !== manifestEntry.scorecardHighestDegree ||
+    ![1, 2].includes(Number(row.ICLEVEL)) ||
+    ![1, 2, 3].includes(Number(row.PREDDEG)) ||
     !Number.isInteger(Number(row.NUMBRANCH)) ||
     Number(row.NUMBRANCH) < 1
   ) {
@@ -120,7 +129,7 @@ export function assertScorecardRowMatchesCatalog(row) {
       `College Scorecard identity or eligibility changed for UNITID ${unitId}; review the catalog manifest before refreshing.`,
     );
   }
-  censusRegionForState(row.STABBR);
+  geographyForJurisdiction(row.STABBR);
   return manifestEntry;
 }
 
@@ -131,7 +140,7 @@ export function assertCollegeMatchesCatalog(college) {
     college.name !== manifestEntry.expectedName ||
     college.slug !== manifestEntry.slug ||
     college.state !== manifestEntry.state ||
-    college.ownership !== (manifestEntry.scorecardControl === 1 ? "Public" : "Private nonprofit") ||
+    college.ownership !== ({ 1: "Public", 2: "Private nonprofit", 3: "Private for-profit" }[manifestEntry.scorecardControl]) ||
     college.catalogCategory !== manifestEntry.catalogCategory ||
     college.inclusionReason !== manifestEntry.inclusionReason ||
     !Array.isArray(college.aliases) ||

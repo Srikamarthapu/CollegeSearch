@@ -5,10 +5,8 @@ import { ArrowLeft } from "lucide-react";
 import { FitNavigation } from "@/app/components/FitNavigation";
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
-import { colleges } from "@/app/lib/college-data";
+import { directoryFacets } from "@/app/lib/college-directory";
 import { MatchTool } from "./MatchTool";
-import type { MatchCollege } from "./scoring";
-import { toMatchCollege } from "./college-record";
 import styles from "./match.module.css";
 
 export const metadata: Metadata = {
@@ -17,10 +15,7 @@ export const metadata: Metadata = {
     "Build an explainable college shortlist from your preferences without confusing fit with admission likelihood.",
 };
 
-const matchColleges: MatchCollege[] = colleges.map(toMatchCollege);
-
-const majorOptions = [...new Set(colleges.flatMap((college) => college.majors.map((major) => major.name)))].sort();
-const stateOptions = [...new Set(colleges.map((college) => college.state))].sort();
+const { majorOptions, states: stateOptions, ownerships: ownershipOptions } = directoryFacets();
 
 export default function MatchPage() {
   return (
@@ -37,9 +32,9 @@ export default function MatchPage() {
         </nav>
         <FitNavigation active="preferences" />
         <MatchTool
-          colleges={matchColleges}
           majorOptions={majorOptions}
           stateOptions={stateOptions}
+          ownershipOptions={ownershipOptions}
         />
       </main>
       <SiteFooter />

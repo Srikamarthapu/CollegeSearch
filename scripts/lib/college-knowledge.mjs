@@ -5,6 +5,7 @@ const validReleaseId = /^sha256:[a-f0-9]{64}$/;
 const ownershipCodes = new Map([
   ["Public", 1],
   ["Private nonprofit", 2],
+  ["Private for-profit", 3],
 ]);
 
 function sha256(value) {
@@ -194,8 +195,8 @@ export function buildCollegeKnowledge(dataset, releaseId) {
       throw new Error(`Duplicate or invalid UNITID ${college.unitId}.`);
     }
     if (seenSlugs.has(college.slug)) throw new Error(`Duplicate college slug ${college.slug}.`);
-    if (!["West", "Midwest", "South", "Northeast"].includes(college.region)) {
-      throw new Error(`${college.name} has an invalid Census region.`);
+    if (!["West", "Midwest", "South", "Northeast", "U.S. territories"].includes(college.region)) {
+      throw new Error(`${college.name} has an invalid geographic grouping.`);
     }
     const ownershipCode = ownershipCodes.get(college.ownership);
     if (!ownershipCode) throw new Error(`${college.name} has an unsupported ownership classification.`);
@@ -256,18 +257,19 @@ export function buildCollegeKnowledge(dataset, releaseId) {
       slug: college.slug,
       source: scorecardSource,
       sourceUrl: scorecardSource.sourceUrl,
-      sourceField: "UNITID, INSTNM, CITY, STABBR, CONTROL, MAIN, CURROPER, HIGHDEG",
+      sourceField: "UNITID, INSTNM, CITY, STABBR, CONTROL, MAIN, CURROPER, HIGHDEG, ICLEVEL, PREDDEG",
       reportingYear: null,
       periodLabel: `College Scorecard institution release dated ${dataset.release.federalReleaseDate}`,
       cohort: "Current College Scorecard institution-level identity record.",
       definition: "Institution name, location, federal ownership code, main-campus status, operating status, degree level, and UNITID are copied from the matched institution-level record.",
       title: college.name,
-      content: `${college.name} (UNITID ${college.unitId}) is a currently operating main-campus ${college.ownership.toLowerCase()} institution in ${college.city}, ${college.state}.`,
+      content: `${college.name} (UNITID ${college.unitId}) is a federally classified ${college.institutionLevel.toLowerCase()} ${college.ownership.toLowerCase()} institution in ${college.city}, ${college.state}. It is identified as a ${college.mainCampus ? "main" : "branch"} campus and reported operating in PEPS as of April 30, 2026. The source assigns an undergraduate award classification; current programs and operating status should be rechecked with the institution. ${/^\d{6}$/.test(college.opeId6) ? `Federal outcomes may be reported across campuses sharing OPEID6 ${college.opeId6}.` : "The federal OPEID6 reporting-group identifier is unavailable in this record; campus-specific outcome coverage is not established."}`,
     }));
 
+    const programPassageGroups = new Map();
     for (const major of college.majors) {
       const source = sourcesById.get(major.sourceId);
-      const cip = major.sourceField.match(/^PCIP(\d{2}) \+ CIP\d{2}BACHL$/)?.[1];
+      const cip = major.sourceField.match(/^PCIP(\d{2}) \+ CIP\d{2}(?:BACHL|ASSOC)(?: \+ CIP\d{2}ASSOC)?$/)?.[1];
       if (!source || !cip) throw new Error(`${college.name} has malformed broad-field evidence.`);
       referencedSourceIds.add(source.id);
       const majorFacts = [
@@ -300,7 +302,7 @@ export function buildCollegeKnowledge(dataset, releaseId) {
           factKey: `majorAvailable:${cip}`,
           metricKey: "majorAvailable",
           dimensionKey: cip,
-          valueBoolean: major.bachelorsAvailable,
+          valueBoolean: major.bachelorsAvailable || major.associatesAvailable === true,
           unit: "boolean",
           reportingYear: major.reportingYear,
           periodLabel: major.periodLabel,
@@ -309,7 +311,7 @@ export function buildCollegeKnowledge(dataset, releaseId) {
           status: "reported",
           finality: major.finality,
           accessedOn: source.accessedOn,
-          comparabilityKey: "program-availability.bachelors.broad-cip",
+          comparabilityKey: `program-availability.${major.degreeLevel ?? "bachelors"}.broad-cip`,
         }),
         makeFact({
           releaseId,
@@ -334,23 +336,47 @@ export function buildCollegeKnowledge(dataset, releaseId) {
       ];
       facts.push(...majorFacts);
 
-      const delivery = major.deliveryMode === "includes-distance-program"
-        ? "At least one bachelor's program in this broad field is identified as available through distance education; this indicator does not establish whether on-campus options are also available."
-        : "The source does not specify the delivery mode for this broad field.";
-      const awardShare = `${(major.share * 100).toFixed(2)}% of institution-wide awards in ${major.periodLabel}`;
-      passages.push(makePassage({
+      const degreeLabel = major.degreeLevel === "bachelors-and-associate" ? "bachelor's and associate" : major.degreeLevel === "associate" ? "associate" : "bachelor's";
+      // Exact numeric award shares remain in college_facts. Group short program
+      // descriptions by identical provenance so the vector index stays small,
+      // without crossing an institution, source, reporting period, or cohort.
+      const groupKey = JSON.stringify([major.sourceId, major.reportingYear, major.periodLabel, major.cohort]);
+      const group = programPassageGroups.get(groupKey) ?? { source, major, entries: [] };
+      group.entries.push({
+        text: `${major.name} (${degreeLabel}${major.deliveryMode === "includes-distance-program" ? "; a distance option is reported" : ""})`,
+        sourceField: major.sourceField.split(" + ").filter((field) => !field.startsWith("PCIP")).join(" + "),
+      });
+      programPassageGroups.set(groupKey, group);
+    }
+    for (const { source, major, entries } of programPassageGroups.values()) {
+      const prefix = `${college.name} reports these broad federal fields in ${major.periodLabel}: `;
+      const suffix = ". These are broad degree-level indicators, not individual majors or current program guarantees. A distance indicator does not establish whether on-campus options also exist. This evidence is not a major-specific admission or completion rate.";
+      const chunks = [];
+      let chunk = [];
+      let length = prefix.length + suffix.length;
+      for (const entry of entries) {
+        if (chunk.length && length + entry.text.length + 2 > 1_900) {
+          chunks.push(chunk);
+          chunk = [];
+          length = prefix.length + suffix.length;
+        }
+        chunk.push(entry);
+        length += entry.text.length + 2;
+      }
+      if (chunk.length) chunks.push(chunk);
+      for (const entries of chunks) passages.push(makePassage({
         releaseId,
         unitId: college.unitId,
         slug: college.slug,
         source,
         sourceUrl: source.sourceUrl,
-        sourceField: major.sourceField,
+        sourceField: entries.map((entry) => entry.sourceField).join(", "),
         reportingYear: major.reportingYear,
         periodLabel: major.periodLabel,
         cohort: major.cohort,
-        definition: major.definition,
-        title: `${college.name}: ${major.name}`,
-        content: `${college.name} reports at least one bachelor's program in broad federal field ${major.name}. The field represents ${awardShare}; this is an institution-wide awards share, not a major-specific admission or completion rate. ${delivery}`,
+        definition: "Reported degree-level availability in broad CIP families. Individual program names, current offerings, admissions, and major-level outcomes are not established by these indicators; numeric institution-wide award shares are stored as separate structured facts.",
+        title: `${college.name}: fields of study`,
+        content: prefix + entries.map((entry) => entry.text).join("; ") + suffix,
       }));
     }
 
@@ -380,4 +406,3 @@ export function buildCollegeKnowledge(dataset, releaseId) {
     passages,
   };
 }
-

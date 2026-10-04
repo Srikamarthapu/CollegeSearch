@@ -13,6 +13,9 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Each build worker loads the nationwide source artifact. Bound parallelism
+  // so static rendering also fits the existing deployment's memory budget.
+  experimental: { cpus: 2 },
   async headers() {
     // Reject a malformed browser auth origin during build/startup instead of
     // interpolating an untrusted value into the per-request CSP.

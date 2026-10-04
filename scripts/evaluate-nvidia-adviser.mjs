@@ -4,9 +4,11 @@ import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { runAdviserTurn } from "../app/lib/adviser/engine.ts";
 import {
+  adviserFields,
   adviserQuestions,
   emptyAdviserPreferences,
   parseAdviserInterpretation,
+  usStateCodes,
 } from "../app/lib/adviser/contracts.ts";
 import {
   createNvidiaProvider,
@@ -44,7 +46,7 @@ const caseSpecs = [
 ];
 
 const caseCount = 24;
-const reportPath = resolve("work/nvidia-adviser-evaluation.json");
+let reportPath = resolve("work/nvidia-adviser-evaluation.json");
 const dataPath = resolve("data/colleges.json");
 const maxCandidates = 16;
 const maxTokensPerCall = 1_024;
@@ -54,12 +56,36 @@ function fail(message) {
 }
 
 function parseArgs(args) {
-  const options = { evaluate: false, help: false };
-  for (const arg of args) {
+  const options = { evaluate: false, help: false, models: [...nvidiaChatModels], caseIds: caseSpecs.map((item) => item.id), maxApiCalls: null, tag: null };
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
     if (arg === "--evaluate") options.evaluate = true;
     else if (arg === "--help" || arg === "-h") options.help = true;
-    else fail(`Unknown option: ${arg}`);
+    else if (arg === "--models" || arg === "--cases" || arg === "--max-api-calls" || arg === "--tag") {
+      const value = args[index + 1];
+      if (!value || value.startsWith("--")) fail(`${arg} requires a value.`);
+      index += 1;
+      if (arg === "--models") {
+        options.models = value.split(",").map((item) => item.trim());
+        if (!options.models.length || options.models.some((model) => !nvidiaChatModels.includes(model)) || new Set(options.models).size !== options.models.length) {
+          fail("--models must be distinct allowlisted NVIDIA chat model IDs.");
+        }
+      } else if (arg === "--cases") {
+        options.caseIds = value.split(",").map((item) => item.trim());
+        const known = new Set(caseSpecs.map((item) => item.id));
+        if (!options.caseIds.length || options.caseIds.some((id) => !known.has(id)) || new Set(options.caseIds).size !== options.caseIds.length) {
+          fail("--cases must be distinct IDs from the reviewed 24-case matrix.");
+        }
+      } else if (arg === "--tag") {
+        if (!/^[a-z0-9-]{1,40}$/.test(value)) fail("--tag must contain 1 to 40 lowercase letters, digits, or hyphens.");
+        options.tag = value;
+      } else {
+        if (!/^\d+$/.test(value) || Number(value) < 1 || Number(value) > 144) fail("--max-api-calls must be an integer from 1 to 144.");
+        options.maxApiCalls = Number(value);
+      }
+    } else fail(`Unknown option: ${arg}`);
   }
+  if (options.evaluate && options.maxApiCalls === null) fail("Live evaluation requires --max-api-calls to set a hard HTTP-call ceiling.");
   return options;
 }
 
@@ -71,6 +97,21 @@ function percentile(values, fraction) {
 
 function errorCode(cause) {
   if (cause instanceof NvidiaProviderError) return cause.code;
+  if (cause instanceof Error) {
+    const safeContractCodes = new Map([
+      ["Invalid adviser response.", "invalid_contract_object"],
+      ["Unexpected adviser field.", "unexpected_contract_field"],
+      ["Invalid adviser choice.", "invalid_contract_choice"],
+      ["Invalid adviser choices.", "invalid_contract_choices"],
+      ["Duplicate adviser choices.", "duplicate_contract_choices"],
+      ["Invalid annual budget.", "invalid_contract_budget"],
+      ["Unknown or duplicate college identity.", "invalid_college_identity"],
+      ["Invalid evidence query.", "invalid_evidence_query"],
+      ["Recommendations must use distinct retrieved colleges.", "invalid_recommendation_ids"],
+      ["Write a message between 1 and 2,000 characters.", "invalid_evaluation_message"],
+    ]);
+    return safeContractCodes.get(cause.message) ?? "adviser_contract_or_runtime_error";
+  }
   return "adviser_contract_or_runtime_error";
 }
 
@@ -78,6 +119,40 @@ function containsDirectIdentifier(value) {
   return /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i.test(value) ||
     /\b\d{3}-\d{2}-\d{4}\b/.test(value) ||
     /(?:\+?1[-.\s]?)?(?:\(\d{3}\)|\b\d{3})[-.\s]\d{3}[-.\s]\d{4}\b/.test(value);
+}
+
+function safeResponseShape(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return { responseType: Array.isArray(value) ? "array" : typeof value };
+  const safeKeys = (item) => Object.keys(item).slice(0, 32).map((key) => /^[A-Za-z][A-Za-z0-9_]{0,39}$/.test(key) ? key : "<other>").sort();
+  const shape = { topLevelKeys: safeKeys(value) };
+  const preferences = value.preferences;
+  const invalidChoices = [];
+  const oneOf = (key, choices) => {
+    if (value[key] !== undefined && !choices.includes(value[key])) invalidChoices.push(key);
+  };
+  oneOf("intent", ["recommend", "compare", "personal-chances", "major-admit-rate", "financial-aid", "other"]);
+  oneOf("question", ["field", "location", "budget", "residency", "size", "budget-basis", "none"]);
+  if (preferences && typeof preferences === "object" && !Array.isArray(preferences)) {
+    shape.preferenceKeys = safeKeys(preferences);
+    const allowedLists = { fields: adviserFields, states: [...usStateCodes] };
+    for (const [key, choices] of Object.entries(allowedLists)) {
+      if (preferences[key] !== undefined && (!Array.isArray(preferences[key]) || preferences[key].some((item) => !choices.includes(item)))) invalidChoices.push(`preferences.${key}`);
+    }
+    for (const [key, choices] of Object.entries({
+      residencyState: [...usStateCodes],
+      budgetBasis: ["tuition", "average-net-price", "total-cost"],
+      size: ["small", "medium", "large"],
+      ownership: ["Public", "Private nonprofit", "Private for-profit"],
+    })) {
+      if (preferences[key] !== undefined && preferences[key] !== null && !choices.includes(preferences[key])) invalidChoices.push(`preferences.${key}`);
+    }
+  }
+  if (invalidChoices.length) shape.invalidEnumPaths = invalidChoices;
+  const mentioned = value.mentionedUnitIds;
+  if (Array.isArray(mentioned)) shape.mentionedUnitIdCount = Math.min(mentioned.length, 100);
+  const ids = value.unitIds;
+  if (Array.isArray(ids)) shape.rankedUnitIdCount = Math.min(ids.length, 100);
+  return shape;
 }
 
 function citationAudit(answer, dataset, retrievedIds) {
@@ -112,7 +187,13 @@ function prepareCases(dataset) {
       fields: spec.expectedFields ?? [],
       states: spec.expectedStates ?? [],
     };
-    const selected = publicCollegeCandidates(dataset.colleges, retrievalPreferences).slice(0, maxCandidates);
+    const explicitColleges = (spec.expectedMentionedUnitIds ?? [])
+      .flatMap((unitId) => dataset.colleges.find((college) => college.unitId === unitId) ?? []);
+    const explicitIds = new Set(explicitColleges.map((college) => college.unitId));
+    const selected = [
+      ...explicitColleges,
+      ...publicCollegeCandidates(dataset.colleges, retrievalPreferences).filter((college) => !explicitIds.has(college.unitId)),
+    ].slice(0, maxCandidates);
     if (!selected.length) fail(`Evaluation corpus has no fixed local candidates for case ${spec.id}.`);
     const passages = selected.slice(0, 8).map((college) => {
       const major = college.majors[0];
@@ -150,6 +231,59 @@ function prepareCases(dataset) {
   });
 }
 
+function reviewableAnswer(answer, privateMarkers = []) {
+  const review = {
+    message: answer.message,
+    question: answer.question,
+    preferences: answer.preferences,
+    retrievalMode: answer.retrievalMode,
+    notices: [...answer.notices],
+    recommendations: answer.recommendations.map((recommendation) => ({
+      unitId: recommendation.unitId,
+      name: recommendation.name,
+      city: recommendation.city,
+      state: recommendation.state,
+      ownership: recommendation.ownership,
+      reasons: [...recommendation.reasons],
+      tradeoffs: [...recommendation.tradeoffs],
+      facts: recommendation.facts.map((fact) => ({
+        key: fact.key,
+        label: fact.label,
+        display: fact.display,
+        citation: {
+          sourceId: fact.citation.sourceId,
+          name: fact.citation.name,
+          publisher: fact.citation.publisher,
+          url: fact.citation.url,
+          year: fact.citation.year,
+          period: fact.citation.period,
+          cohort: fact.citation.cohort,
+          field: fact.citation.field,
+        },
+      })),
+      fields: recommendation.fields.map((field) => ({
+        name: field.name,
+        qualification: field.qualification,
+        citation: {
+          sourceId: field.citation.sourceId,
+          name: field.citation.name,
+          publisher: field.citation.publisher,
+          url: field.citation.url,
+          year: field.citation.year,
+          period: field.citation.period,
+          cohort: field.citation.cohort,
+          field: field.citation.field,
+        },
+      })),
+    })),
+  };
+  const serialized = JSON.stringify(review);
+  if (privateMarkers.some((marker) => marker && serialized.includes(marker))) {
+    throw new Error("The sanitized review answer contains a synthetic private marker.");
+  }
+  return review;
+}
+
 function addNullable(target, key, value) {
   if (value === null || value === undefined) return;
   target[key] += value;
@@ -165,24 +299,27 @@ async function writeReport(report) {
 
 async function main() {
   const options = parseArgs(process.argv.slice(2));
+  const reportModels = options.models.map((model) => model.replace(/^nvidia\//, "").replace(/[^a-zA-Z0-9-]+/g, "-")).join("-and-");
+  reportPath = resolve(`work/nvidia-adviser-evaluation-${reportModels || "matrix"}${options.tag ? `-${options.tag}` : ""}.json`);
   if (options.help) {
-    process.stdout.write("Usage: node scripts/evaluate-nvidia-adviser.mjs [--evaluate]\n\nWithout --evaluate, this prints a dry-run plan and makes zero provider calls. Live evaluation requires NVIDIA_MODE=evaluation and NVIDIA_API_KEY. It uses 24 synthetic prompts and fixed local public-data candidates.\n");
+    process.stdout.write("Usage: node scripts/evaluate-nvidia-adviser.mjs [--models <id,id>] [--cases <id,id>] [--tag <slug>] [--evaluate --max-api-calls <1..144>]\n\nWithout --evaluate, this prints a dry-run plan and makes zero provider calls. Live evaluation requires NVIDIA_MODE=evaluation, NVIDIA_API_KEY, and an explicit global HTTP-call ceiling. The 24-case matrix uses synthetic prompts and fixed local public-data candidates. Live runs disable fallback/retries for fair model comparison; fallback behavior is covered by mock tests.\n");
     return;
   }
-  if (caseSpecs.length !== caseCount || nvidiaChatModels.length !== 3) fail("The reviewed evaluation matrix must contain 24 cases and three candidates.");
+  if (caseSpecs.length !== caseCount || nvidiaChatModels.length < 2) fail("The reviewed evaluation matrix must contain 24 cases and at least two candidates.");
   const dataset = JSON.parse(await readFile(dataPath, "utf8"));
   const knownCollegeIds = new Set(dataset.colleges.map((college) => college.unitId));
-  const preparedCases = prepareCases(dataset);
+  const preparedCases = prepareCases(dataset).filter((item) => options.caseIds.includes(item.id));
   if (!options.evaluate) {
     process.stdout.write(`${JSON.stringify({
       status: "dry-run",
-      models: nvidiaChatModels,
-      cases: caseCount,
+      models: options.models,
+      cases: preparedCases.map((item) => item.id),
       fixedEvidenceCandidateRange: [Math.min(...preparedCases.map((item) => item.retrievalIds.length)), Math.max(...preparedCases.map((item) => item.retrievalIds.length))],
       corpusAccessedOn: dataset.release.accessedOn,
       institutionCount: dataset.release.institutionCount,
       liveProviderCalls: 0,
-      notes: ["Pass --evaluate explicitly to run the fixed synthetic matrix.", "No prompts, credentials, or model outputs are logged."],
+      maxApiCalls: options.maxApiCalls,
+      notes: ["Pass --evaluate and an explicit --max-api-calls ceiling to run these fixed synthetic cases.", "No prompts, credentials, or model outputs are logged."],
     }, null, 2)}\n`);
     return;
   }
@@ -191,15 +328,28 @@ async function main() {
   const config = nvidiaConfigFromEnv();
   if (config.mode !== "evaluation") fail("Live adviser evaluation requires NVIDIA_MODE=evaluation; public production mode is not accepted by this harness.");
   if (!config.apiKey?.trim()) {
-    process.stdout.write(`${JSON.stringify({ status: "pending-key", models: nvidiaChatModels, cases: caseCount, liveProviderCalls: 0 }, null, 2)}\n`);
+    process.stdout.write(`${JSON.stringify({ status: "pending-key", models: options.models, cases: preparedCases.map((item) => item.id), liveProviderCalls: 0 }, null, 2)}\n`);
     return;
   }
+
+  let liveApiCalls = 0;
+  let currentCaseApiCalls = 0;
+  const budgetedFetch = async (input, init) => {
+    if (liveApiCalls >= options.maxApiCalls) {
+      throw new NvidiaProviderError("request_budget_exhausted", "Evaluation reached its explicit HTTP-call ceiling.");
+    }
+    liveApiCalls += 1;
+    currentCaseApiCalls += 1;
+    return fetch(input, init);
+  };
 
   const report = {
     schemaVersion: 1,
     status: "completed",
     evaluatedAt: new Date().toISOString(),
-    matrix: { caseCount, models: nvidiaChatModels, maxCandidates, maxTokensPerCall, syntheticPromptsOnly: true },
+    matrix: { caseCount: preparedCases.length, models: options.models, maxCandidates, maxTokensPerCall,
+      maxHttpCalls: options.maxApiCalls, maxProviderAttemptsPerOperation: 1, fallbackDisabledForComparison: true, syntheticPromptsOnly: true,
+      tag: options.tag },
     method: {
       retrieval: "Fixed deterministic local candidates and evidence passages per case; no Supabase/vector calls.",
       privacy: "Engine minimization is active; the harness stores no prompts or generated text.",
@@ -209,9 +359,10 @@ async function main() {
     models: [],
   };
 
-  for (const model of nvidiaChatModels) {
-    const modelConfig = { ...config, chatModel: model, maxOutputTokens: Math.min(config.maxOutputTokens, maxTokensPerCall) };
-    const provider = createNvidiaProvider(modelConfig);
+  modelLoop: for (const model of options.models) {
+    const modelConfig = { ...config, chatModel: model, chatFallbackModels: [], maxProviderAttempts: 1,
+      maxOutputTokens: Math.min(config.maxOutputTokens, maxTokensPerCall) };
+    const provider = createNvidiaProvider(modelConfig, budgetedFetch);
     const latencySamples = [];
     const turnSamples = [];
     const totals = { promptTokens: 0, completionTokens: 0, totalTokens: 0 };
@@ -232,8 +383,11 @@ async function main() {
     const errors = [];
 
     for (const spec of preparedCases) {
+      if (liveApiCalls >= options.maxApiCalls) break;
       let interpretation = null;
-      let providerCalls = 0;
+      let providerOperations = 0;
+      let lastOutputShape = null;
+      currentCaseApiCalls = 0;
       let identifierSanitization = true;
       const turnStarted = performance.now();
       const usageForTurn = { promptTokens: 0, completionTokens: 0, totalTokens: 0 };
@@ -242,7 +396,7 @@ async function main() {
         const answer = await runAdviserTurn(spec.message, spec.previousPreferences ?? emptyAdviserPreferences, {
           dataset,
           generate: async (system, input, signal) => {
-            providerCalls += 1;
+            providerOperations += 1;
             if (spec.privateMarkers?.some((marker) => input.includes(marker)) || containsDirectIdentifier(input)) identifierSanitization = false;
             const started = performance.now();
             let result;
@@ -253,6 +407,7 @@ async function main() {
               throw cause;
             }
             latencySamples.push(Math.round(performance.now() - started));
+            lastOutputShape = safeResponseShape(result.value);
             addNullable(usageForTurn, "promptTokens", result.usage.promptTokens);
             addNullable(usageForTurn, "completionTokens", result.usage.completionTokens);
             addNullable(usageForTurn, "totalTokens", result.usage.totalTokens);
@@ -311,7 +466,8 @@ async function main() {
           id: spec.id,
           status: "completed",
           humanReview: "pending",
-          providerCalls,
+          providerCalls: currentCaseApiCalls,
+          providerOperations,
           promptTokens: knownUsageForTurn.promptTokens ? usageForTurn.promptTokens : null,
           completionTokens: knownUsageForTurn.completionTokens ? usageForTurn.completionTokens : null,
           totalTokens: knownUsageForTurn.totalTokens ? usageForTurn.totalTokens : null,
@@ -319,6 +475,7 @@ async function main() {
           questionMatch: spec.expectedQuestion === undefined ? null : answer.question === (spec.expectedQuestion ? adviserQuestions[spec.expectedQuestion] : null),
           recommendationCount: answer.recommendations.length,
           validatedInterpretation: interpretation,
+          validatedAnswer: reviewableAnswer(answer, spec.privateMarkers ?? []),
           selectedUnitIds: answer.recommendations.map((recommendation) => recommendation.unitId),
           citationCount: audit.count,
           verifiedCitationCount: audit.verified,
@@ -329,7 +486,10 @@ async function main() {
         turnSamples.push(Math.round(performance.now() - turnStarted));
         const code = errorCode(cause);
         errors.push({ caseId: spec.id, code });
-        caseResults.push({ id: spec.id, status: "failed", humanReview: "pending", providerCalls, errorCode: code });
+        caseResults.push({ id: spec.id, status: "failed", humanReview: "pending", providerCalls: currentCaseApiCalls, providerOperations, errorCode: code,
+          ...(cause instanceof NvidiaProviderError && cause.httpStatus ? { httpStatus: cause.httpStatus } : {}),
+          ...(cause instanceof NvidiaProviderError && cause.requestAttempts ? { requestAttempts: cause.requestAttempts } : {}),
+          ...(lastOutputShape ? { responseShape: lastOutputShape } : {}) });
       }
       totals.promptTokens += usageForTurn.promptTokens;
       totals.completionTokens += usageForTurn.completionTokens;
@@ -359,16 +519,19 @@ async function main() {
       rubric,
       errors,
       cases: caseResults,
+      unrunCases: Math.max(0, preparedCases.length - caseResults.length),
     });
+    if (liveApiCalls >= options.maxApiCalls) break modelLoop;
   }
 
-  report.status = report.models.some((model) => model.failedTurns > 0) ? "partial" : "completed";
+  report.status = report.models.some((model) => model.failedTurns > 0 || model.unrunCases > 0) || report.models.length !== options.models.length ? "partial" : "completed";
   await writeReport(report);
   process.stdout.write(`${JSON.stringify({
     status: report.status,
     reportPath,
-    liveProviderCalls: report.models.reduce((sum, model) => sum + model.providerCalls, 0),
-    models: report.models.map(({ model, completedTurns, failedTurns, providerCalls, tokenUsage, latencyMs, rubric }) => ({ model, completedTurns, failedTurns, providerCalls, tokenUsage, latencyMs, rubric })),
+    liveProviderCalls: liveApiCalls,
+    maxApiCalls: options.maxApiCalls,
+    models: report.models.map(({ model, completedTurns, failedTurns, providerCalls, unrunCases, tokenUsage, latencyMs, rubric }) => ({ model, completedTurns, failedTurns, providerCalls, unrunCases, tokenUsage, latencyMs, rubric })),
     note: "Automated rubric counts do not replace human review of relevance and source support.",
   }, null, 2)}\n`);
 }

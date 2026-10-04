@@ -102,7 +102,7 @@ test("every published profile, broad field, and internal app link resolves", asy
 
   assert.ok(profileRoutes.length >= 100, "at least 100 verified college profiles are published");
   assert.equal(profileRoutes.length, dataset.release.institutionCount);
-  assert.equal(fieldRoutes.length, 12);
+  assert.equal(fieldRoutes.length, 38);
   assert.ok(internalLinks.size >= 70, "the crawl covers the app's linked routes");
 });
 

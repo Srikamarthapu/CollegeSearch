@@ -21,7 +21,7 @@ type MajorsPageProps = {
 export const metadata: Metadata = {
   title: "Broad fields of study · CollegeSearch",
   description:
-    "Browse clearly labeled federal bachelor's-program and award-share evidence across the CollegeSearch cohort.",
+    "Browse clearly labeled federal bachelor's or associate program and award-share evidence across the CollegeSearch cohort.",
 };
 
 function firstValue(value: string | string[] | undefined) {
@@ -61,7 +61,7 @@ export default async function MajorsPage({ searchParams }: MajorsPageProps) {
             </span>
             <h1>What would you like to study?</h1>
             <p>
-              Follow a subject you enjoy. Find colleges with reported bachelor&apos;s
+              Follow a subject you enjoy. Find colleges with reported bachelor&apos;s or associate
               programs in that broad field, then explore the details.
             </p>
           </div>
@@ -122,7 +122,7 @@ export default async function MajorsPage({ searchParams }: MajorsPageProps) {
                       <strong>{field.name}</strong>
                       <small>
                         {field.records.length} of {colleges.length} colleges have a
-                        bachelor&apos;s indicator in this field
+                        bachelor&apos;s or associate indicator in this field
                       </small>
                       <span>{field.periodLabels.join(" · ")}</span>
                     </span>
@@ -155,7 +155,7 @@ export default async function MajorsPage({ searchParams }: MajorsPageProps) {
             <p>
               A reported 0% is a source value rounded to the available
               precision. No field record means the release did not meet the
-              bachelor&apos;s-indicator rule; it does not prove that no related
+              degree-availability indicator rule; it does not prove that no related
               program exists.
             </p>
           </div>

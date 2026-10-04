@@ -33,7 +33,7 @@ test("hosted SQL export is ordered, credential-free, hash-addressed, and bounded
   assert.ok(sqlNames.some((name) => name.startsWith("040-facts")));
   assert.ok(sqlNames.some((name) => name.startsWith("050-passages")));
   assert.ok(sqlNames.at(-1).startsWith("060-verify-and-publish"));
-  assert.equal(manifest.institutions, 100);
+  assert.equal(manifest.institutions, 3912);
   assert.equal(manifest.embeddedPassages, 0);
 
   for (const file of manifest.files) {

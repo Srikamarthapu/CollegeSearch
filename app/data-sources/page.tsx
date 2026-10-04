@@ -274,15 +274,14 @@ export default function DataSourcesPage() {
                 certificate/degree-seeking undergraduates; public-college net
                 price covers first-time, full-time, in-state Title IV
                 recipients; and C150_4 measures degree or certificate
-                completion within 150% of normal time at four-year
-                institutions.
+                completion within 150% of normal time at four-year institutions. C150_L4 covers two-year institutions and has a different entering cohort.
               </p>
             </article>
             <article>
               <span className="sources-status">Program + award evidence</span>
-              <h3>Federal bachelor&apos;s fields</h3>
+              <h3>Federal broad fields</h3>
               <p>
-                Each 2024-2025 broad CIP family requires a bachelor&apos;s-program
+                Each 2024-2025 broad CIP family requires a bachelor&apos;s or associate program
                 indicator. Percentages are still shares of all institutional
                 awards, so CollegeSearch does not present them as an exact
                 major catalog or program-specific acceptance rate.

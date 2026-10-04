@@ -25,10 +25,10 @@ export function CollegeLogo({
   college,
   variant = "card",
 }: {
-  college: Pick<College, "name" | "slug">;
+  college: Pick<College, "name" | "slug" | "unitId">;
   variant?: CollegeLogoVariant;
 }) {
-  const asset = collegeLogoAsset(college.slug);
+  const asset = collegeLogoAsset(college.slug, college.unitId);
 
   return (
     <span className={`college-logo college-logo-${variant}`} aria-hidden="true">

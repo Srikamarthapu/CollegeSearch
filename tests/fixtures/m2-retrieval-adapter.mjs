@@ -16,7 +16,7 @@ const rpc=async(name,parameters)=>{
 };
 const retrieve=createKnowledgeRetriever(dataset,releaseId,rpc);
 const cases=[
- {name:'California engineering',preferences:{fields:['Engineering'],states:['CA']},check:c=>c.state==='CA'&&c.majors.some(m=>m.name==='Engineering'&&m.bachelorsAvailable)},
+ {name:'California engineering',preferences:{fields:['Engineering'],states:['CA']},check:c=>c.state==='CA'&&c.majors.some(m=>m.name==='Engineering'&&(m.bachelorsAvailable||m.associatesAvailable))},
  {name:'Texas resident net price',preferences:{states:['TX'],residencyState:'TX',annualBudget:25000,budgetBasis:'average-net-price'},check:c=>c.state==='TX'&&c.observations.averageNetPrice.value<=25000},
  {name:'Small campuses',preferences:{size:'small'},check:c=>c.observations.undergraduateEnrollment.value<5000},
  {name:'Northeast private tuition',preferences:{states:['NY','MA','CT','PA'],ownership:'Private nonprofit',annualBudget:70000,budgetBasis:'tuition'},check:c=>c.ownership==='Private nonprofit'&&c.observations.tuitionOutOfState.value<=70000},

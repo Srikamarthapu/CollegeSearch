@@ -11,7 +11,7 @@ function request(extra = {}, origin = "https://college.test") {
   return new Request("https://college.test/api/adviser", { method: "POST", headers: { Origin: origin, "Content-Type": "application/json" }, body: JSON.stringify({ requestId, conversationId: null, message: "Engineering in California", consentVersion: adviserConsentVersion, ...extra }) });
 }
 function services(overrides: Partial<AdviserTurnServices> = {}): AdviserTurnServices {
-  return { enabled: true, reserve: async () => ({ status: "reserved", conversationId, leaseId }), preferences: async () => ({}), generate: async () => ({ answer, inputTokens: 30, outputTokens: 20 }), complete: async () => true, release: async () => {}, usage: async () => ({ used: 1, limit: 20, remaining: 19, resetsAt: "2026-11-01T00:00:00.000Z" }), ...overrides };
+  return { enabled: true, reserve: async () => ({ status: "reserved", conversationId, leaseId }), preferences: async () => ({}), previousRecommendationIds: async () => [], generate: async () => ({ answer, inputTokens: 30, outputTokens: 20 }), complete: async () => true, release: async () => {}, usage: async () => ({ used: 1, limit: 20, remaining: 19, resetsAt: "2026-11-01T00:00:00.000Z" }), ...overrides };
 }
 test("adviser API rejects unauthenticated, cross-origin, extra identity and missing consent before provider calls", async () => {
   assert.equal((await handleAdviserTurn(request(), null)).status, 401);
@@ -36,6 +36,15 @@ test("successful response is persisted before returning and uses lease bound to 
   assert.equal(response.status, 200);
   assert.equal(response.headers.get("cache-control"), "no-store");
   assert.deepEqual(steps, ["reserve", "generate", "complete"]);
+});
+test("generation receives only a bounded set of safe prior recommendation IDs", async () => {
+  let received: number[] | undefined;
+  const response = await handleAdviserTurn(request(), services({
+    previousRecommendationIds: async () => [110635, -1, 110644, 110653, 110583, 110635, 4.5, 0],
+    generate: async (_message, _preferences, _signal, ids) => { received = ids; return { answer, inputTokens: 0, outputTokens: 0 }; },
+  }));
+  assert.equal(response.status, 200);
+  assert.deepEqual(received, [110635, 110644, 110653, 110583]);
 });
 test("completed idempotent retry reuses persisted answer without inference or another commit", async () => {
   const response = await handleAdviserTurn(request(), services({ reserve: async () => ({ status: "completed", conversationId, answer }), generate: async () => { throw new Error("No duplicate inference"); }, complete: async () => { throw new Error("No duplicate charge"); } }));

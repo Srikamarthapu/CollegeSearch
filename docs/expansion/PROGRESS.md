@@ -1,5 +1,11 @@
 # CollegeSearch expansion progress
 
+## Current milestone — M7, October 4, 2026
+
+The current live catalog contains **3,912** source-audited institutions, 38 broad fields, and 3,094 sourced college marks. Original 100 identities are preserved. Hosted publication, Vercel promotion, 432 tests, native Next/Vinext builds, type/lint checks, live HTTP smoke, and desktop/mobile browser checks passed. Current evidence and operational notes are in [M7 progress](M7_PROGRESS.md); older sections below are historical milestone snapshots.
+
+The NVIDIA key was supplied and internal synthetic evaluation completed: Super returned valid results for 23/24 cases, and all 9,070 passage vectors were verified locally. Public AI and hosted embeddings remain disabled because NVIDIA's API Catalog trial does not permit production use. Broad semantic/ranking evaluation, hosted account/email checks, production provider permission, and measured public quotas remain open. Stripe remains deferred. Only the user-authorized October 4 reset was applied by the user; other resets were not touched.
+
 ## October 4, 2026 — M0 planning
 
 The M0/M1 sections below preserve their milestone-time notes. The current M1–M4 closeout and remaining release gates are recorded at the end; that closeout supersedes earlier `pending` and `in progress` wording.

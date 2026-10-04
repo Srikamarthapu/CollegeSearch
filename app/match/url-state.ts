@@ -58,7 +58,7 @@ function canActivate(criterion: MatchCriterion, preferences: MatchPreferences) {
 
 export function parseMatchWorksheet(
   search: string,
-  options: { majorOptions: string[]; stateOptions: string[] },
+  options: { majorOptions: string[]; stateOptions: string[]; ownershipOptions?: string[] },
 ): MatchWorksheetState {
   const params = new URLSearchParams(search);
   const result = initialMatchWorksheet();
@@ -68,11 +68,11 @@ export function parseMatchWorksheet(
   if (preferences.major !== "undecided" && params.get("field") === "require") {
     preferences.majorMode = "require";
   }
-  const regions = ["west", "midwest", "northeast", "south", ...options.stateOptions.map((state) => `state:${state}`)];
+  const regions = ["west", "midwest", "northeast", "south", "territories", ...options.stateOptions.map((state) => `state:${state}`)];
   const region = params.get("location") ?? "";
   if (regions.includes(region)) preferences.region = region;
   const ownership = params.get("type") ?? "";
-  if (["Public", "Private nonprofit"].includes(ownership)) preferences.ownership = ownership;
+  if ((options.ownershipOptions ?? ["Public", "Private nonprofit", "Private for-profit"]).includes(ownership)) preferences.ownership = ownership;
   const price = params.get("price") ?? "";
   if (["15000", "20000", "30000", "40000", "60000"].includes(price)) {
     preferences.maxNetPrice = Number(price);
@@ -82,7 +82,7 @@ export function parseMatchWorksheet(
   if ([...RESIDENCY_STATES, "international"].includes(residency)) preferences.residencyState = residency;
   if (["small", "medium", "large"].includes(size)) preferences.size = size;
   const setting = params.get("setting") ?? "";
-  if (setting === "City" || setting === "Suburb" || setting === "Town") preferences.setting = setting;
+  if (setting === "City" || setting === "Suburb" || setting === "Town" || setting === "Rural") preferences.setting = setting;
 
   const weights = (params.get("weights") ?? "").split(",");
   // Weight order is fixed by this URL format. Reject an incomplete/corrupt set

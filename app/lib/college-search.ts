@@ -1,3 +1,4 @@
+import { broadFieldDefinitions } from "./broad-fields.ts";
 import type { ClientCollege } from "@/app/lib/college-client-record";
 
 export type CollegeSearchIdentity = Pick<
@@ -9,6 +10,7 @@ export const STATE_NAMES: Record<string, string> = {
   AL: "Alabama",
   AK: "Alaska",
   AZ: "Arizona",
+  AS: "American Samoa",
   AR: "Arkansas",
   CA: "California",
   CO: "Colorado",
@@ -17,6 +19,7 @@ export const STATE_NAMES: Record<string, string> = {
   DC: "District of Columbia",
   FL: "Florida",
   GA: "Georgia",
+  GU: "Guam",
   HI: "Hawaii",
   ID: "Idaho",
   IL: "Illinois",
@@ -33,6 +36,7 @@ export const STATE_NAMES: Record<string, string> = {
   MS: "Mississippi",
   MO: "Missouri",
   MT: "Montana",
+  MP: "Northern Mariana Islands",
   NE: "Nebraska",
   NV: "Nevada",
   NH: "New Hampshire",
@@ -45,6 +49,7 @@ export const STATE_NAMES: Record<string, string> = {
   OK: "Oklahoma",
   OR: "Oregon",
   PA: "Pennsylvania",
+  PR: "Puerto Rico",
   RI: "Rhode Island",
   SC: "South Carolina",
   SD: "South Dakota",
@@ -52,6 +57,7 @@ export const STATE_NAMES: Record<string, string> = {
   TX: "Texas",
   UT: "Utah",
   VT: "Vermont",
+  VI: "U.S. Virgin Islands",
   VA: "Virginia",
   WA: "Washington",
   WV: "West Virginia",
@@ -84,7 +90,7 @@ export const MAJOR_ALIASES: Record<string, string[]> = {
   "English Language & Literature": ["english", "writing", "literature"],
 };
 
-export const MAJOR_OPTIONS = Object.keys(MAJOR_ALIASES);
+export const MAJOR_OPTIONS: string[] = broadFieldDefinitions.map((field) => field.name).sort((left, right) => left.localeCompare(right));
 
 const ignoredTokens = new Set([
   "at",
@@ -215,20 +221,24 @@ export function filterCollegeIdentitiesByQuery<
   });
 }
 
-function detectedMajor(queryTokens: string[]) {
-  return MAJOR_OPTIONS.find((major) =>
-    [major, ...MAJOR_ALIASES[major]].some((phrase) =>
+function phrasesForMajor(major: string) {
+  return [major, ...(MAJOR_ALIASES[major] ?? [])];
+}
+
+function detectedMajor(queryTokens: string[], majorOptions: string[]) {
+  return majorOptions.find((major) =>
+    phrasesForMajor(major).some((phrase) =>
       phraseMatchesQuery(queryTokens, phrase),
     ),
   );
 }
 
-export function matchingMajors(query: string) {
+export function matchingMajors(query: string, majorOptions = MAJOR_OPTIONS) {
   const normalized = normalizeSearchText(query);
   if (!normalized) return [];
   const queryTokens = words(normalized);
-  return MAJOR_OPTIONS.filter((major) =>
-    [major, ...MAJOR_ALIASES[major]].some((phrase) => {
+  return majorOptions.filter((major) =>
+    phrasesForMajor(major).some((phrase) => {
       const normalizedPhrase = normalizeSearchText(phrase);
       return (
         normalizedPhrase.includes(normalized) ||
@@ -268,6 +278,7 @@ function tokensConsumedByPhrase(queryTokens: string[], phrase: string) {
 export function filterCollegesByQuery(
   allColleges: ClientCollege[],
   query: string,
+  majorOptions = MAJOR_OPTIONS,
 ) {
   const normalized = normalizeSearchText(query);
   if (!normalized) return allColleges;
@@ -278,12 +289,12 @@ export function filterCollegesByQuery(
   if (exactMatches.length > 0) return exactMatches;
 
   const queryTokens = words(normalized).filter((token) => !ignoredTokens.has(token));
-  const major = detectedMajor(queryTokens);
+  const major = detectedMajor(queryTokens, majorOptions);
   const stateCode = detectedState(queryTokens);
   const consumed = new Set<string>();
 
   if (major) {
-    const matchingPhrase = [major, ...MAJOR_ALIASES[major]].find((phrase) =>
+    const matchingPhrase = phrasesForMajor(major).find((phrase) =>
       phraseMatchesQuery(queryTokens, phrase),
     );
     if (matchingPhrase) {

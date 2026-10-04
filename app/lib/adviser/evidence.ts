@@ -26,7 +26,7 @@ export function usableAdviserObservation(value: Observation | null | undefined):
 }
 
 export function adviserTuition(college: College, preferences: AdviserPreferences): { key: "tuitionInState" | "tuitionOutOfState"; observation: Observation; label: string } | null {
-  if (college.ownership === "Private nonprofit") {
+  if (college.ownership !== "Public") {
     const observation = college.observations.tuitionOutOfState;
     return usableAdviserObservation(observation) ? { key: "tuitionOutOfState", observation, label: "Published tuition & required fees / year" } : null;
   }
@@ -40,7 +40,7 @@ export function adviserTuition(college: College, preferences: AdviserPreferences
 export function adviserNetPriceApplies(college: College, preferences: AdviserPreferences): boolean {
   const observation = college.observations.averageNetPrice;
   return usableAdviserObservation(observation) &&
-    (college.ownership === "Private nonprofit" || preferences.residencyState === college.state);
+    (college.ownership !== "Public" || preferences.residencyState === college.state);
 }
 
 export function publicCollegeCandidates(colleges: College[], preferences: AdviserPreferences, explicitIds: number[] = []): College[] {
@@ -48,7 +48,7 @@ export function publicCollegeCandidates(colleges: College[], preferences: Advise
     if (explicitIds.length && !explicitIds.includes(college.unitId)) return false;
     if (preferences.states.length && !preferences.states.includes(college.state)) return false;
     if (preferences.ownership && college.ownership !== preferences.ownership) return false;
-    if (preferences.fields.length && !preferences.fields.every((field) => college.majors.some((major) => major.name === field && major.bachelorsAvailable))) return false;
+    if (preferences.fields.length && !preferences.fields.every((field) => college.majors.some((major) => major.name === field && (major.bachelorsAvailable || major.associatesAvailable === true)))) return false;
     // Numeric campus-size and price constraints are applied by the fact SQL RPC.
     return true;
   });
@@ -72,7 +72,7 @@ export function buildAdviserRecommendation(college: College, preferences: Advise
   const reasons: string[] = [];
   const tradeoffs: string[] = [];
   const selectedFields = college.majors.filter((major) => preferences.fields.includes(major.name as typeof preferences.fields[number]));
-  if (selectedFields.length) reasons.push(`Reports bachelor's-level programs in ${selectedFields.map((major) => major.name).join(" and ")} (broad federal fields).`);
+  if (selectedFields.length) reasons.push(`Reports degree programs in ${selectedFields.map((major) => `${major.name} (${major.degreeLevel === "bachelors-and-associate" ? "bachelor's and associate" : major.degreeLevel === "associate" ? "associate" : "bachelor's"})`).join(" and ")} (broad federal fields).`);
   if (preferences.states.includes(college.state)) reasons.push(`Located in ${college.city}, ${college.state}, within your selected states.`);
   if (preferences.ownership === college.ownership) reasons.push(`Matches your ${college.ownership.toLowerCase()} college preference.`);
   const enrollment = college.observations.undergraduateEnrollment;

@@ -29,10 +29,8 @@ test("M2 migration seeds stable identities before replacing saved-college CHECK"
   const identities = JSON.parse(seed[1].replaceAll("''", "'"));
   assert.equal(identities.length, 100);
   const seeded = new Map(identities.map((row) => [row.unit_id, row.slug]));
-  assert.deepEqual(
-    identities.map((row) => row.unit_id).sort((a, b) => a - b),
-    dataset.colleges.map((college) => college.unitId).sort((a, b) => a - b),
-  );
+  const current = new Map(dataset.colleges.map((college) => [college.unitId, college.slug]));
+  for (const identity of identities) assert.equal(current.get(identity.unit_id), identity.slug);
   for (const identity of original) assert.equal(seeded.get(identity.unitId), identity.slug);
 });
 
@@ -99,7 +97,8 @@ test("staged releases publish only after exact counts, hash, and catalog checks"
 
 test("seeder retries preserve immutable facts and existing passage embeddings", () => {
   assert.match(seeder, /function immutableConflictGuard/);
-  assert.match(seeder, /insert\("college_passages", passageColumns, seed\.passages, "\(passage_id\) do nothing"\)/);
+  assert.match(seeder, /\["college_passages", passageColumns, seed\.passages, \["passage_id"\]\]/);
+  assert.match(seeder, /function\* localSql/);
   assert.doesNotMatch(seeder, /delete from public\.college_passages/);
   assert.match(seeder, /--hosted-project/);
   assert.match(seeder, /resolution=ignore-duplicates,return=minimal/);

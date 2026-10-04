@@ -266,11 +266,9 @@ test("the reviewed institution cohort has 26 artifacts and 19 admission headline
     false,
     "the reviewed Cornell artifact is not published outside the reviewed college catalog",
   );
-  assert.equal(
-    generated.colleges.some((college) => college.unitId === 190415),
-    false,
-    "Cornell is not silently added to the reviewed college release",
-  );
+  const cornell = generated.colleges.find((college) => college.unitId === 190415);
+  assert.ok(cornell, "Cornell is included in the reviewed nationwide federal roster");
+  assert.equal(cornell.observations.admitRate.sourceId, "college-scorecard-institution-2026-06-10", "The unapproved Cornell overlay must not replace the federal evidence");
 });
 
 test("Purdue stays on the federal baseline while its first-party workbook blocks automated verification", async () => {

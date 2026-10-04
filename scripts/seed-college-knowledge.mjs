@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 import { createHash } from "node:crypto";
+import { createWriteStream } from "node:fs";
+import { Readable } from "node:stream";
+import { pipeline } from "node:stream/promises";
 import { spawn } from "node:child_process";
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildCollegeKnowledge } from "./lib/college-knowledge.mjs";
+import { readHostedRows } from "./lib/hosted-knowledge-pages.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
@@ -83,33 +87,6 @@ if (marker.releaseId !== releaseId) {
   throw new Error("Knowledge release marker does not match data/colleges.json; run the builder first.");
 }
 
-const releaseSql = [
-  "insert into public.college_knowledge_releases (",
-  "  release_id, dataset_sha256, cohort_name, institution_count, source_accessed_on,",
-  "  federal_release_date, embedding_model, embedding_version, embedding_dimensions, release_metadata",
-  ") values (",
-  "  " + quote(seed.release.release_id) + ", " + quote(seed.release.dataset_sha256) + ",",
-  "  " + quote(seed.release.cohort_name) + ", " + seed.release.institution_count + ",",
-  "  " + quote(seed.release.source_accessed_on) + "::date, " + quote(seed.release.federal_release_date) + "::date,",
-  "  null, null, 2048, " + jsonInput(seed.release.release_metadata),
-  ")",
-  "on conflict (release_id) do nothing;",
-  "",
-  "do $$ begin",
-  "  if not exists (select 1 from public.college_knowledge_releases as release",
-  "    where release.release_id = " + quote(releaseId) +
-    " and release.dataset_sha256 = " + quote(seed.release.dataset_sha256) +
-    " and release.cohort_name = " + quote(seed.release.cohort_name) +
-    " and release.institution_count = " + seed.release.institution_count +
-    " and release.source_accessed_on = " + quote(seed.release.source_accessed_on) + "::date" +
-    " and release.federal_release_date = " + quote(seed.release.federal_release_date) + "::date" +
-    " and release.embedding_dimensions = 2048 and release.release_metadata = " + jsonInput(seed.release.release_metadata) + ") then",
-  "    raise exception 'Immutable release metadata conflicts with the staged release';",
-  "  end if;",
-  "end; $$;",
-  "",
-].join("\n");
-
 const catalogReleaseColumns = fields([
   ["release_id", "text"], ["unit_id", "bigint"], ["slug", "text"], ["name", "text"],
   ["city", "text"], ["state", "text"], ["census_region", "text"], ["ownership_code", "smallint"],
@@ -138,67 +115,67 @@ const passageColumns = fields([
   ["title", "text"], ["content", "text"], ["content_sha256", "text"],
 ]);
 
-const catalogJson = jsonInput(seed.catalog);
-const slugGuard = [
+// Generate local SQL lazily in bounded batches; a nationwide catalog exceeds
+// V8's single-string limit if the immutable guards and inserts are concatenated.
+function* localSql() {
+  yield "do $$ begin if current_database() not in ('collegesearch_m2_dev', 'collegesearch_m2_verify') then raise exception 'Knowledge seeding requires an isolated local database'; end if; end; $$;\n";
+  yield "select pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtext('college-search-knowledge-seed'));\n";
+const releaseSql = [
+  "insert into public.college_knowledge_releases (",
+  "  release_id, dataset_sha256, cohort_name, institution_count, source_accessed_on,",
+  "  federal_release_date, embedding_model, embedding_version, embedding_dimensions, release_metadata",
+  ") values (",
+  "  " + quote(seed.release.release_id) + ", " + quote(seed.release.dataset_sha256) + ",",
+  "  " + quote(seed.release.cohort_name) + ", " + seed.release.institution_count + ",",
+  "  " + quote(seed.release.source_accessed_on) + "::date, " + quote(seed.release.federal_release_date) + "::date,",
+  "  null, null, 2048, " + jsonInput(seed.release.release_metadata),
+  ")",
+  "on conflict (release_id) do nothing;",
+  "",
   "do $$ begin",
-  "  if exists (",
-  "    select 1 from pg_catalog.jsonb_to_recordset(" + catalogJson + ") as incoming(unit_id bigint, slug text)",
-  "    join public.college_catalog as existing using (unit_id)",
-  "    where existing.slug <> incoming.slug",
-  "  ) then",
-  "    raise exception 'Refusing to rewrite a stable college slug for an existing UNITID';",
+  "  if not exists (select 1 from public.college_knowledge_releases as release",
+  "    where release.release_id = " + quote(releaseId) +
+    " and release.dataset_sha256 = " + quote(seed.release.dataset_sha256) +
+    " and release.cohort_name = " + quote(seed.release.cohort_name) +
+    " and release.institution_count = " + seed.release.institution_count +
+    " and release.source_accessed_on = " + quote(seed.release.source_accessed_on) + "::date" +
+    " and release.federal_release_date = " + quote(seed.release.federal_release_date) + "::date" +
+    " and release.embedding_dimensions = 2048 and release.release_metadata = " + jsonInput(seed.release.release_metadata) + ") then",
+  "    raise exception 'Immutable release metadata conflicts with the staged release';",
   "  end if;",
   "end; $$;",
-  "",
-].join("\n");
-const catalogIdentityInsert = [
-  "insert into public.college_catalog (" + catalogReleaseColumns.map((column) => column.name).join(", ") + ")",
-  "select " + catalogReleaseColumns.map((column) => column.name === "release_id" ? "null::text as release_id" : column.name).join(", "),
-  "from pg_catalog.jsonb_to_recordset(" + catalogJson + ") as input(" +
-    catalogReleaseColumns.map((column) => column.name + " " + column.type).join(", ") + ")",
-  "on conflict (unit_id) do nothing;",
-  "",
-].join("\n");
-const catalogReleaseGuard = immutableConflictGuard(
-  "college_catalog_release_records",
-  catalogReleaseColumns,
-  seed.catalog,
-  ["release_id", "unit_id"],
-);
-const catalogReleaseInsert = [
-  "insert into public.college_catalog_release_records (" + catalogReleaseColumns.map((column) => column.name).join(", ") + ")",
-  "select " + catalogReleaseColumns.map((column) => column.name).join(", "),
-  "from pg_catalog.jsonb_to_recordset(" + catalogJson + ") as input(" +
-    catalogReleaseColumns.map((column) => column.name + " " + column.type).join(", ") + ")",
-  "on conflict (release_id, unit_id) do nothing;",
   "",
 ].join("\n");
 
-const sqlParts = [
-  "do $$ begin",
-  "  if current_database() not in ('collegesearch_m2_dev', 'collegesearch_m2_verify') then",
-  "    raise exception 'Knowledge seeding is restricted to collegesearch_m2_dev or collegesearch_m2_verify';",
-  "  end if;",
-  "end; $$;",
-  "select pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtext('college-search-knowledge-seed'));",
-  releaseSql,
-  slugGuard,
-  catalogIdentityInsert,
-  catalogReleaseGuard,
-  catalogReleaseInsert,
-  immutableConflictGuard("college_sources", sourceColumns, seed.sources, ["release_id", "source_id"]),
-  immutableConflictGuard("college_source_bindings", bindingColumns, seed.bindings, ["release_id", "unit_id", "source_id"]),
-  immutableConflictGuard("college_facts", factColumns, seed.facts, ["fact_id"]),
-  immutableConflictGuard("college_passages", passageColumns, seed.passages, ["passage_id"]),
-  insert("college_sources", sourceColumns, seed.sources, "(release_id, source_id) do nothing"),
-  insert("college_source_bindings", bindingColumns, seed.bindings, "(release_id, unit_id, source_id) do nothing"),
-  insert("college_facts", factColumns, seed.facts, "(fact_id) do nothing"),
-  insert("college_passages", passageColumns, seed.passages, "(passage_id) do nothing"),
-  "select * from public.publish_college_knowledge_release(" + [
+  yield releaseSql;
+  for (const rows of batches(seed.catalog, 25)) {
+    const catalogJson = jsonInput(rows);
+    yield [
+      "do $$ begin if exists (select 1 from pg_catalog.jsonb_to_recordset(" + catalogJson + ") as incoming(unit_id bigint, slug text) join public.college_catalog as existing using (unit_id) where existing.slug <> incoming.slug) then raise exception 'Refusing to rewrite a stable college slug'; end if; end; $$;",
+      "insert into public.college_catalog (" + catalogReleaseColumns.map(({ name }) => name).join(", ") + ")",
+      "select " + catalogReleaseColumns.map(({ name }) => name === "release_id" ? "null::text as release_id" : name).join(", "),
+      "from pg_catalog.jsonb_to_recordset(" + catalogJson + ") as input(" + catalogReleaseColumns.map(({ name, type }) => name + " " + type).join(", ") + ") on conflict (unit_id) do nothing;",
+      immutableConflictGuard("college_catalog_release_records", catalogReleaseColumns, rows, ["release_id", "unit_id"]),
+      insert("college_catalog_release_records", catalogReleaseColumns, rows, "(release_id, unit_id) do nothing"),
+      "",
+    ].join("\n");
+  }
+  for (const [table, columns, rows, keys] of [
+    ["college_sources", sourceColumns, seed.sources, ["release_id", "source_id"]],
+    ["college_source_bindings", bindingColumns, seed.bindings, ["release_id", "unit_id", "source_id"]],
+    ["college_facts", factColumns, seed.facts, ["fact_id"]],
+    ["college_passages", passageColumns, seed.passages, ["passage_id"]],
+  ]) {
+    for (const batch of batches(rows, 250)) {
+      yield immutableConflictGuard(table, columns, batch, keys);
+      yield insert(table, columns, batch, "(" + keys.join(", ") + ") do nothing");
+    }
+  }
+  yield "select * from public.publish_college_knowledge_release(" + [
     quote(releaseId), quote(seed.release.dataset_sha256), seed.catalog.length,
     seed.sources.length, seed.bindings.length, seed.facts.length, seed.passages.length,
-  ].join(", ") + ");",
-].join("\n");
+  ].join(", ") + ");\n";
+}
 const hostedProject = arg("--hosted-project");
 const hostedSqlDirectory = arg("--write-hosted-sql-dir");
 if (hostedSqlDirectory) {
@@ -256,7 +233,7 @@ if (hostedSqlDirectory) {
     let pending = [];
     for (const row of rows) {
       const candidate = [...pending, row];
-      const candidateSql = render(candidate, 1);
+      const candidateSql = render(candidate, String(chunksForTable.length + 1).padStart(6, "0"));
       if (Buffer.byteLength(candidateSql, "utf8") > maxSqlBytes) {
         if (!pending.length) throw new Error(`One ${label} row exceeds the hosted SQL batch limit.`);
         chunksForTable.push(pending);
@@ -267,7 +244,7 @@ if (hostedSqlDirectory) {
     }
     if (pending.length) chunksForTable.push(pending);
     return chunksForTable.map((chunk, index) => {
-      const sequence = String(index + 1).padStart(3, "0");
+      const sequence = String(index + 1).padStart(6, "0");
       const name = `${prefix}-${sequence}.sql`;
       const contents = render(chunk, sequence);
       const sizeBytes = Buffer.byteLength(contents, "utf8");
@@ -548,24 +525,6 @@ if (hostedProject) {
       });
     }
   }
-  async function readRows(table, columns, releaseFilter, orderColumn) {
-    const pageSize = 500;
-    const output = [];
-    for (let offset = 0; ; offset += pageSize) {
-      const query = {
-        select: columns.map((column) => column.name).join(","),
-        order: `${orderColumn}.asc`,
-        limit: String(pageSize),
-        offset: String(offset),
-      };
-      if (releaseFilter) query.release_id = `eq.${releaseFilter}`;
-      const page = await rest(table, { query });
-      if (!Array.isArray(page)) throw new Error(`Hosted Supabase returned an invalid ${table} page.`);
-      output.push(...page);
-      if (page.length < pageSize) break;
-    }
-    return output;
-  }
   function assertRowsEqual(table, expectedRows, actualRows, columns, keyColumns) {
     const expected = new Map(expectedRows.map((row) => [primaryKey(row, keyColumns), comparable(row, columns)]));
     const actual = new Map(actualRows.map((row) => [primaryKey(row, keyColumns), comparable(row, columns)]));
@@ -581,9 +540,9 @@ if (hostedProject) {
 
   const identityColumns = catalogReleaseColumns;
   const identityRows = seed.catalog.map((row) => ({ ...row, release_id: null }));
-  const currentIdentities = await readRows("college_catalog", [
+  const currentIdentities = await readHostedRows(rest, "college_catalog", [
     { name: "unit_id", type: "bigint" }, { name: "slug", type: "text" },
-  ], null, "unit_id");
+  ], null, ["unit_id"]);
   const identitiesById = new Map(currentIdentities.map((row) => [String(row.unit_id), row]));
   for (const row of seed.catalog) {
     const existing = identitiesById.get(String(row.unit_id));
@@ -595,9 +554,9 @@ if (hostedProject) {
   if (missingIdentities.length) {
     await postRows("college_catalog", missingIdentities, ["unit_id"], 25);
   }
-  const identitiesAfterInsert = await readRows("college_catalog", [
+  const identitiesAfterInsert = await readHostedRows(rest, "college_catalog", [
     { name: "unit_id", type: "bigint" }, { name: "slug", type: "text" },
-  ], null, "unit_id");
+  ], null, ["unit_id"]);
   const verifiedIdentities = new Map(identitiesAfterInsert.map((row) => [String(row.unit_id), row.slug]));
   if (seed.catalog.some((row) => verifiedIdentities.get(String(row.unit_id)) !== row.slug)) {
     throw new Error("Hosted stable catalog identities are incomplete or conflict with the reviewed slugs.");
@@ -676,7 +635,7 @@ if (hostedProject) {
     ["college_passages", seed.passages, passageColumns, ["passage_id"]],
   ];
   for (const [table, expectedRows, columns, keys] of tableChecks) {
-    const actualRows = await readRows(table, columns, releaseId, keys.at(-1));
+    const actualRows = await readHostedRows(rest, table, columns, releaseId, keys);
     assertRowsEqual(table, expectedRows, actualRows, columns, keys);
   }
   const publishResult = await rest("rpc/publish_college_knowledge_release", {
@@ -710,7 +669,7 @@ if (hostedProject) {
 const writeSqlPath = arg("--write-sql");
 if (writeSqlPath) {
   const outputPath = path.resolve(root, writeSqlPath);
-  await writeFile(outputPath, sqlParts + "\n");
+  await pipeline(Readable.from(localSql()), createWriteStream(outputPath));
   console.log(JSON.stringify({ releaseId, output: path.relative(root, outputPath), institutions: seed.catalog.length, sources: seed.sources.length, bindings: seed.bindings.length, facts: seed.facts.length, passages: seed.passages.length }));
   process.exit(0);
 }
@@ -753,11 +712,12 @@ let stdout = "";
 let stderr = "";
 child.stdout.setEncoding("utf8").on("data", (chunk) => { stdout += chunk; });
 child.stderr.setEncoding("utf8").on("data", (chunk) => { stderr += chunk; });
-child.stdin.end(sqlParts + "\n");
-const exitCode = await new Promise((resolve, reject) => {
+const completion = new Promise((resolve, reject) => {
   child.once("error", reject);
   child.once("close", resolve);
 });
+await pipeline(Readable.from(localSql()), child.stdin);
+const exitCode = await completion;
 if (exitCode !== 0) {
   process.stderr.write(stderr);
   throw new Error("College knowledge seed failed on " + destination + " (psql exit " + exitCode + ").");

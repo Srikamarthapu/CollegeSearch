@@ -1,9 +1,11 @@
 # CollegeSearch
 
 CollegeSearch is a source-transparent college discovery and comparison site
-for first-year applicants. This starting release turns the product definition
-in `college_compass_prd.md` into a usable, responsive experience with a verified
-50-college cohort.
+for undergraduate college research. The current catalog includes 3,912 federally
+identified two-year and four-year institutions, 38 broad fields of study, and
+source-linked facts with their own reporting periods. See
+[M7 progress](docs/expansion/M7_PROGRESS.md) for release verification and remaining
+public AI gates.
 
 ## What works
 
@@ -97,8 +99,9 @@ importers as one recoverable refresh:
    type, fingerprint, and manual-review checks independently.
 4. `scripts/import-scorecard.mjs` downloads the Department of Education&apos;s
    official [June 2026 Most Recent Institution file](https://ed-public-download.scorecard.network/downloads/Most-Recent-Cohorts-Institution_06102026.zip),
-   records its SHA-256, selects the exact 50 IPEDS UNITIDs, and checks their
-   OPE identity, current operating status, and main-campus status. It applies
+   records its SHA-256, selects the exact reviewed manifest of 3,912 IPEDS UNITIDs,
+   and validates their identities and dated federal classifications. Main and
+   branch UNITIDs remain distinct; missing OPE identifiers remain missing. It applies
    manually reviewed institution observations from `data/institution-overlays.json`
    while retaining replaced federal records as alternates, then stages
    `data/colleges.json`. No API key is required.
@@ -107,7 +110,7 @@ An exclusive `data/.refresh.lock` is held across verification, import, publish,
 and cleanup. Every importer writes into a same-filesystem staging directory,
 and both the verifier and Scorecard importer use the same copied overlay
 manifest. The refresh aborts if the live manifest changes before publication,
-or if the staged JSON does not contain the exact 50 UNITIDs.
+or if the staged JSON does not contain the exact reviewed catalog UNITIDs.
 
 Before publication, the four current files are backed up. Each replacement is
 an individually atomic same-filesystem rename; the multi-file sequence is

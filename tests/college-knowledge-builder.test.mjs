@@ -44,7 +44,25 @@ test("compiled facts and passages have institution-bound registered provenance",
     }
   }
   assert.equal(seed.facts.length, observationCount + majorCount * 3);
-  assert.equal(seed.passages.length, collegeCount + majorCount);
+  assert.ok(seed.passages.length >= collegeCount);
+  assert.ok(seed.passages.length < collegeCount + majorCount);
+  assert.ok(seed.passages.every((passage) => passage.content.length <= 2_000));
+  const passagesByCollege = new Map();
+  for (const passage of seed.passages) {
+    const rows = passagesByCollege.get(passage.unit_id) ?? [];
+    rows.push(passage);
+    passagesByCollege.set(passage.unit_id, rows);
+  }
+  for (const college of dataset.colleges) {
+    for (const major of college.majors) {
+      assert.ok(passagesByCollege.get(college.unitId).some((passage) =>
+        passage.source_id === major.sourceId && passage.cohort === major.cohort &&
+        passage.reporting_year === major.reportingYear && passage.period_label === major.periodLabel &&
+        passage.content.includes(major.name) && major.sourceField.split(" + ")
+          .filter((field) => field.startsWith("CIP")).every((field) => passage.source_field.includes(field))),
+      `${college.name}: every program field retains its own source, year, degree cohort, and locator`);
+    }
+  }
   assert.equal(seed.passages.filter((passage) => passage.embedding !== null).length, 0);
 
   for (const row of [...seed.facts, ...seed.passages]) {

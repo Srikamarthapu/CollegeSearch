@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 import { createHash, randomBytes } from "node:crypto";
-import { chmod, mkdir, open, readFile, rename, stat, unlink, writeFile } from "node:fs/promises";
+import { chmod, mkdir, open, readFile, rename, stat, unlink } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
+import { performance } from "node:perf_hooks";
 import { buildCollegeKnowledge } from "./lib/college-knowledge.mjs";
 import {
   createCompletedEmbeddingArtifact,
   assertExplicitEmbeddingModelVersion,
+  collegeEmbeddingBatchSize,
   runEmbeddingIndex,
   stableJson,
   validateEmbeddingArtifact,
@@ -25,7 +27,7 @@ const markerPath = resolve(root, "data/college-knowledge-release.json");
 const seedPath = resolve(root, "work/college-knowledge-seed.json");
 const defaultMaxCalls = 32;
 const maxCallsPerRun = 64;
-const maxArtifactBytes = 128 * 1024 * 1024;
+const maxArtifactBytes = 512 * 1024 * 1024;
 const maxPassageChars = 2_000;
 
 function fail(message) {
@@ -64,7 +66,7 @@ async function readBoundedJson(path, label) {
     if (error && typeof error === "object" && error.code === "ENOENT") return null;
     fail(`${label} file could not be inspected.`);
   }
-  if (info.size > maxArtifactBytes) fail(`${label} exceeds the 128 MiB safety limit.`);
+  if (info.size > maxArtifactBytes) fail(`${label} exceeds the 512 MiB safety limit.`);
   try {
     return JSON.parse(await readFile(path, "utf8"));
   } catch {
@@ -75,13 +77,80 @@ async function readBoundedJson(path, label) {
 async function writeAtomic(path, value) {
   await mkdir(dirname(path), { recursive: true });
   const tempPath = `${path}.${process.pid}.${randomBytes(6).toString("hex")}.tmp`;
-  const bytes = `${JSON.stringify(value)}\n`;
-  if (Buffer.byteLength(bytes) > maxArtifactBytes) fail("Embedding artifact exceeds the 128 MiB safety limit.");
+  const handle = await open(tempPath, "wx", 0o600);
+  const chunks = [];
+  let bufferedChars = 0;
+  let writtenBytes = 0;
+  async function flush() {
+    if (!chunks.length) return;
+    const text = chunks.join("");
+    chunks.length = 0;
+    bufferedChars = 0;
+    writtenBytes += Buffer.byteLength(text);
+    if (writtenBytes > maxArtifactBytes) fail("Embedding artifact exceeds the 512 MiB safety limit.");
+    const bytes = Buffer.from(text);
+    let offset = 0;
+    while (offset < bytes.length) {
+      const result = await handle.write(bytes, offset, bytes.length - offset, null);
+      if (result.bytesWritten <= 0) fail("Embedding artifact could not be written completely.");
+      offset += result.bytesWritten;
+    }
+  }
+  async function append(text) {
+    chunks.push(text);
+    bufferedChars += text.length;
+    if (bufferedChars >= 64 * 1024) await flush();
+  }
+  async function writeJson(item) {
+    if (item === null || typeof item === "boolean" || typeof item === "string") {
+      await append(JSON.stringify(item));
+      return;
+    }
+    if (typeof item === "number") {
+      if (!Number.isFinite(item)) fail("Embedding artifact cannot contain a non-finite number.");
+      await append(JSON.stringify(item));
+      return;
+    }
+    if (Array.isArray(item)) {
+      await append("[");
+      if (item.every((value) => value === null || typeof value === "boolean" || typeof value === "number" || typeof value === "string")) {
+        await append(item.map((value) => {
+          if (typeof value === "number" && !Number.isFinite(value)) fail("Embedding artifact cannot contain a non-finite number.");
+          return JSON.stringify(value);
+        }).join(","));
+        await append("]");
+        return;
+      }
+      for (let index = 0; index < item.length; index += 1) {
+        if (index) await append(",");
+        await writeJson(item[index]);
+      }
+      await append("]");
+      return;
+    }
+    if (!item || typeof item !== "object" || Object.getPrototypeOf(item) !== Object.prototype) fail("Embedding artifact contains unsupported JSON data.");
+    await append("{");
+    const keys = Object.keys(item);
+    for (let index = 0; index < keys.length; index += 1) {
+      const key = keys[index];
+      if (item[key] === undefined) fail("Embedding artifact cannot contain undefined values.");
+      if (index) await append(",");
+      await append(JSON.stringify(key));
+      await append(":");
+      await writeJson(item[key]);
+    }
+    await append("}");
+  }
   try {
-    await writeFile(tempPath, bytes, { flag: "wx", mode: 0o600 });
+    await writeJson(value);
+    await append("\n");
+    await flush();
+    await handle.sync();
+    await handle.close();
     await chmod(tempPath, 0o600);
     await rename(tempPath, path);
   } catch (error) {
+    await handle.close().catch(() => undefined);
     await unlink(tempPath).catch(() => undefined);
     throw error;
   }
@@ -159,10 +228,32 @@ function print(value) {
   process.stdout.write(`${JSON.stringify(value, null, 2)}\n`);
 }
 
+function percentile(values, ratio) {
+  if (!values.length) return null;
+  const sorted = [...values].sort((left, right) => left - right);
+  return sorted[Math.min(sorted.length - 1, Math.ceil(sorted.length * ratio) - 1)];
+}
+
+function providerMetricsSummary(metrics) {
+  return {
+    httpRequests: metrics.httpRequests,
+    successfulRequests: metrics.successfulRequests,
+    failedRequests: metrics.failedRequests,
+    promptTokenResponses: metrics.promptTokenResponses,
+    totalTokenResponses: metrics.totalTokenResponses,
+    promptTokens: metrics.promptTokens,
+    totalTokens: metrics.totalTokens,
+    latencyMs: {
+      p50: percentile(metrics.latencyMs, 0.5),
+      p95: percentile(metrics.latencyMs, 0.95),
+    },
+  };
+}
+
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   if (options.help) {
-    process.stdout.write("Usage: node scripts/index-college-knowledge.mjs [--max-calls 1..64] [--evaluate]\n\nDry-run is the default and sends no requests. Full indexing requires --evaluate, NVIDIA_MODE=evaluation, and a configured server key. Each run makes at most 64 sequential embedding requests (32 by default); the checksummed checkpoint resumes across runs. A complete canonical-corpus artifact is written locally for separate SQL export. This script does not call Supabase or publish a release.\n");
+    process.stdout.write("Usage: node scripts/index-college-knowledge.mjs [--max-calls 1..64] [--evaluate]\n\nDry-run is the default and sends no requests. Full indexing requires --evaluate, NVIDIA_MODE=evaluation, and a configured server key. Each request embeds at most 32 canonical passages; each run makes at most 64 HTTP calls (32 by default). The checksummed checkpoint resumes across runs. A complete canonical-corpus artifact is written locally for separate SQL export. This script does not call Supabase or publish a release.\n");
     return;
   }
 
@@ -187,13 +278,13 @@ async function main() {
     : null;
   const completed = checkpoint?.completedPassageCount ?? 0;
   const remaining = canonical.passages.length - completed;
-  const plannedCalls = Math.min(options.maxCalls, remaining);
+  const plannedCalls = Math.min(options.maxCalls, Math.ceil(remaining / collegeEmbeddingBatchSize));
 
   if (!options.evaluate) {
     print({ status: "dry-run", releaseId: canonical.release.release_id, model: config.embeddingModel,
       modelVersion: config.embeddingModelVersion, expectedPassages: canonical.passages.length,
       checkpointPassages: completed, remainingPassages: remaining, plannedProviderCalls: plannedCalls,
-      providerCalls: 0, databaseWrites: 0, checkpointPath: paths.checkpointPath,
+      batchSize: collegeEmbeddingBatchSize, providerCalls: 0, databaseWrites: 0, checkpointPath: paths.checkpointPath,
       artifactPath: paths.artifactPath, note: "No provider calls or database writes were made." });
     return;
   }
@@ -203,7 +294,7 @@ async function main() {
     print({ status: "pending-key", releaseId: canonical.release.release_id, model: config.embeddingModel,
       modelVersion: config.embeddingModelVersion, expectedPassages: canonical.passages.length,
       checkpointPassages: completed, remainingPassages: remaining, plannedProviderCalls: plannedCalls,
-      providerCalls: 0, databaseWrites: 0, checkpointPath: paths.checkpointPath });
+      batchSize: collegeEmbeddingBatchSize, providerCalls: 0, databaseWrites: 0, checkpointPath: paths.checkpointPath });
     return;
   }
 
@@ -221,15 +312,44 @@ async function main() {
     const latestCheckpoint = latestCheckpointFile
       ? validateEmbeddingCheckpoint(latestCheckpointFile, canonical, config.embeddingModel, config.embeddingModelVersion)
       : null;
-    const provider = createNvidiaProvider(config);
+    const providerClient = createNvidiaProvider({ ...config, maxProviderAttempts: 1 });
+    const metrics = {
+      httpRequests: 0, successfulRequests: 0, failedRequests: 0,
+      promptTokenResponses: 0, totalTokenResponses: 0, promptTokens: 0, totalTokens: 0, latencyMs: [],
+    };
+    const provider = {
+      async embedMany(texts, inputType, signal) {
+        metrics.httpRequests += 1;
+        const started = performance.now();
+        try {
+          const result = await providerClient.embedMany(texts, inputType, signal);
+          metrics.successfulRequests += 1;
+          if (Number.isSafeInteger(result.usage?.promptTokens)) {
+            metrics.promptTokens += result.usage.promptTokens;
+            metrics.promptTokenResponses += 1;
+          }
+          if (Number.isSafeInteger(result.usage?.totalTokens)) {
+            metrics.totalTokens += result.usage.totalTokens;
+            metrics.totalTokenResponses += 1;
+          }
+          return result;
+        } catch (cause) {
+          metrics.failedRequests += 1;
+          throw cause;
+        } finally {
+          metrics.latencyMs.push(Math.round(performance.now() - started));
+        }
+      },
+    };
     const outcome = await runEmbeddingIndex({
       canonicalSeed: canonical,
       model: config.embeddingModel,
       modelVersion: config.embeddingModelVersion,
       provider,
       maxCalls: options.maxCalls,
+      batchSize: collegeEmbeddingBatchSize,
       checkpoint: latestCheckpoint,
-      checkpointEvery: 32,
+      checkpointEvery: Math.min(512, collegeEmbeddingBatchSize * options.maxCalls),
       onCheckpoint: (value) => writeAtomic(paths.checkpointPath, value),
     });
     if (outcome.status === "complete") {
@@ -238,15 +358,18 @@ async function main() {
       await writeAtomic(paths.artifactPath, validation);
       print({ status: "completed", releaseId: validation.releaseId, model: validation.model,
         modelVersion: validation.modelVersion, passages: validation.completedPassageCount,
+        batchSize: collegeEmbeddingBatchSize,
         providerCalls: outcome.providerCalls, embeddedThisRun: outcome.embeddedThisRun,
         artifactSha256: validation.artifactSha256, provider: "NVIDIA hosted", databaseWrites: 0,
+        providerMetrics: providerMetricsSummary(metrics),
         checkpointPath: paths.checkpointPath, artifactPath: paths.artifactPath });
       return;
     }
     print({ status: "partial", releaseId: canonical.release.release_id, model: config.embeddingModel,
       modelVersion: config.embeddingModelVersion, checkpointPassages: outcome.checkpoint.completedPassageCount,
-      remainingPassages: outcome.remainingPassages, providerCalls: outcome.providerCalls,
+      remainingPassages: outcome.remainingPassages, batchSize: collegeEmbeddingBatchSize, providerCalls: outcome.providerCalls,
       embeddedThisRun: outcome.embeddedThisRun, errorCode: outcome.errorCode ?? null,
+      providerMetrics: providerMetricsSummary(metrics),
       databaseWrites: 0, checkpointPath: paths.checkpointPath,
       note: "Resume with the same source release, model, and version; the per-run request limit still applies." });
     if (outcome.errorCode) process.exitCode = 1;

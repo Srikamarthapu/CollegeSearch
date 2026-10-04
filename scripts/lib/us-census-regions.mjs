@@ -54,6 +54,13 @@ const regionByState = Object.freeze({
 });
 
 export const usCensusRegionCodes = Object.freeze(Object.keys(regionByState));
+export const usTerritoryCodes = Object.freeze(["PR", "GU", "VI", "AS", "MP"]);
+export const supportedUsJurisdictionCodes = Object.freeze([...usCensusRegionCodes, ...usTerritoryCodes]);
+
+// Territories do not belong to the Census Bureau's four states/DC regions.
+export function geographyForJurisdiction(state) {
+  return usTerritoryCodes.includes(state) ? "U.S. territories" : censusRegionForState(state);
+}
 
 export function censusRegionForState(state) {
   const region = regionByState[state];

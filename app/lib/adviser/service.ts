@@ -13,7 +13,8 @@ export type AdviserTurnServices = {
   enabled: boolean;
   reserve(input: { requestId: string; conversationId: string | null; bodyHash: string }): Promise<AdviserReservation>;
   preferences(conversationId: string): Promise<unknown>;
-  generate(message: string, preferences: AdviserPreferences, signal: AbortSignal): Promise<{ answer: AdviserAnswer; inputTokens: number; outputTokens: number }>;
+  previousRecommendationIds(conversationId: string): Promise<number[]>;
+  generate(message: string, preferences: AdviserPreferences, signal: AbortSignal, previousRecommendationIds: number[]): Promise<{ answer: AdviserAnswer; inputTokens: number; outputTokens: number }>;
   complete(input: { requestId: string; leaseId: string; message: string; answer: AdviserAnswer; inputTokens: number; outputTokens: number }): Promise<boolean>;
   release(requestId: string, leaseId: string): Promise<void>;
   usage(): Promise<AdviserUsage>;
@@ -86,8 +87,10 @@ export async function handleAdviserTurn(request: Request, services: AdviserTurnS
     leaseId = reservation.leaseId;
     const storedPreferences = await services.preferences(reservation.conversationId);
     const preferences = storedPreferences && typeof storedPreferences === "object" && Object.keys(storedPreferences).length ? parseAdviserPreferences(storedPreferences) : emptyAdviserPreferences;
+    const previousRecommendationIds = (await services.previousRecommendationIds(reservation.conversationId))
+      .filter((unitId) => Number.isSafeInteger(unitId) && unitId > 0).slice(0, 4);
     const signal = AbortSignal.any([request.signal, AbortSignal.timeout(110_000)]);
-    const generated = await services.generate(body.message, preferences, signal);
+    const generated = await services.generate(body.message, preferences, signal, previousRecommendationIds);
     signal.throwIfAborted();
     const committed = await services.complete({ requestId: body.requestId, leaseId, message: body.message, ...generated });
     if (!committed) throw new Error("The session, conversation or request changed before saving");

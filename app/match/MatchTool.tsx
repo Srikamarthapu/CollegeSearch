@@ -17,15 +17,13 @@ import { CollegeLogo } from "@/app/components/CollegeLogo";
 import { LocalSaveButton } from "@/app/components/LocalSaveButton";
 import { ResearchNotebook } from "@/app/components/ResearchNotebook";
 import {
-  balancedObservedShortlist,
   hasActiveMatchSignal,
   MATCH_CRITERIA,
   RESIDENCY_STATES,
-  rankMatches,
   weightsForActiveCriteria,
-  type MatchCollege,
   type MatchCriterion,
   type MatchPreferences,
+  type MatchResult,
 } from "./scoring";
 import {
   initialMatchWorksheet,
@@ -35,9 +33,18 @@ import {
 import styles from "./match.module.css";
 
 type MatchToolProps = {
-  colleges: MatchCollege[];
   majorOptions: string[];
   stateOptions: string[];
+  ownershipOptions: string[];
+};
+
+type MatchSearchResult = {
+  results: MatchResult[];
+  balancedShortlist: Array<{
+    band: { key: string; label: string; rangeLabel: string };
+    result: MatchResult;
+  }>;
+  releaseId: string;
 };
 
 const currency = new Intl.NumberFormat("en-US", {
@@ -94,21 +101,21 @@ function scoreTone(score: number) {
   return "Some preference alignment";
 }
 
-function strongestReasons(components: ReturnType<typeof rankMatches>[number]["components"]) {
+function strongestReasons(components: MatchResult["components"]) {
   return components
     .filter((component) => component.score !== null && component.score >= 0.75)
     .sort((left, right) => right.weight - left.weight)
     .slice(0, 2);
 }
 
-function importantTradeoff(components: ReturnType<typeof rankMatches>[number]["components"]) {
+function importantTradeoff(components: MatchResult["components"]) {
   return [...components]
     .filter((component) => component.missing || (component.score !== null && component.score < 0.65))
     .sort((left, right) => right.weight - left.weight)[0];
 }
 
 function tradeoffCopy(
-  component: ReturnType<typeof rankMatches>[number]["components"][number] | undefined,
+  component: MatchResult["components"][number] | undefined,
 ) {
   if (!component) return "No clear tradeoff appears in your selected preferences.";
   if (component.missing || component.score === null) return component.note;
@@ -122,9 +129,9 @@ function tradeoffCopy(
 }
 
 export function MatchTool({
-  colleges,
   majorOptions,
   stateOptions,
+  ownershipOptions,
 }: MatchToolProps) {
   const [preferences, setPreferences] =
     useState<MatchPreferences>(() => initialMatchWorksheet().preferences);
@@ -133,13 +140,19 @@ export function MatchTool({
   const [hydrated, setHydrated] = useState(false);
   const [shareStatus, setShareStatus] = useState("");
   const [manualShareLink, setManualShareLink] = useState("");
+  const [matchRequest, setMatchRequest] = useState<{
+    key: string;
+    result: MatchSearchResult | null;
+    error: string;
+  }>({ key: "", result: null, error: "" });
   const manualShareRef = useRef<HTMLInputElement>(null);
+  const matchRequestId = useRef(0);
 
   useEffect(() => {
     let mounted = true;
     const restore = () => {
       if (window.location.pathname !== "/match") return;
-      const restored = parseMatchWorksheet(window.location.search, { majorOptions, stateOptions });
+      const restored = parseMatchWorksheet(window.location.search, { majorOptions, stateOptions, ownershipOptions });
       queueMicrotask(() => {
         if (!mounted || window.location.pathname !== "/match") return;
         setPreferences(restored.preferences);
@@ -156,7 +169,7 @@ export function MatchTool({
       mounted = false;
       window.removeEventListener("popstate", restore);
     };
-  }, [majorOptions, stateOptions]);
+  }, [majorOptions, ownershipOptions, stateOptions]);
 
   useEffect(() => {
     if (!hydrated || window.location.pathname !== "/match") return;
@@ -200,6 +213,15 @@ export function MatchTool({
     [activeCriteria, preferences.weights],
   );
   const hasActiveSignal = hasActiveMatchSignal(effectiveWeights);
+  const matchRequestKey = JSON.stringify({
+    preferences: { ...preferences, weights: effectiveWeights },
+    activeCriteria,
+  });
+  const matchResult = hydrated && hasActiveSignal && matchRequest.key === matchRequestKey
+    ? matchRequest.result
+    : null;
+  const matchLoading = hydrated && hasActiveSignal && matchRequest.key !== matchRequestKey;
+  const matchError = matchRequest.key === matchRequestKey ? matchRequest.error : "";
 
   const setCriterionActive = (criterion: MatchCriterion, active: boolean) => {
     setActiveCriteria((current) => {
@@ -211,21 +233,43 @@ export function MatchTool({
     });
   };
 
-  const allResults = useMemo(
-    () => hasActiveSignal
-      ? rankMatches(
-          colleges,
-          { ...preferences, weights: effectiveWeights },
-          colleges.length,
-        )
-      : [],
-    [colleges, effectiveWeights, hasActiveSignal, preferences],
-  );
-  const results = allResults.slice(0, 10);
-  const balancedShortlist = useMemo(
-    () => balancedObservedShortlist(allResults),
-    [allResults],
-  );
+  useEffect(() => {
+    const requestId = ++matchRequestId.current;
+    if (!hydrated || !hasActiveSignal) return;
+
+    const controller = new AbortController();
+    void fetch("/api/match", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        preferences: { ...preferences, weights: effectiveWeights },
+        activeCriteria,
+      }),
+      signal: controller.signal,
+    })
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Match search is unavailable.");
+        return response.json() as Promise<MatchSearchResult>;
+      })
+      .then((result) => {
+        if (matchRequestId.current === requestId) {
+          setMatchRequest({ key: matchRequestKey, result, error: "" });
+        }
+      })
+      .catch((error) => {
+        if (controller.signal.aborted || matchRequestId.current !== requestId) return;
+        setMatchRequest({
+          key: matchRequestKey,
+          result: null,
+          error: error instanceof Error ? error.message : "Match search is unavailable.",
+        });
+      });
+
+    return () => controller.abort();
+  }, [activeCriteria, effectiveWeights, hasActiveSignal, hydrated, matchRequestKey, preferences]);
+
+  const results = matchResult?.results ?? [];
+  const balancedShortlist = matchResult?.balancedShortlist ?? [];
 
   const updatePreference = <Key extends SelectPreferenceKey>(
     key: Key,
@@ -345,7 +389,7 @@ export function MatchTool({
                   <option value={major} key={major}>{major}</option>
                 ))}
               </select>
-              <small>Broad bachelor&apos;s-field availability, not major admission.</small>
+              <small>Broad bachelor&apos;s-field availability for four-year matches, not major admission.</small>
             </label>
 
             {preferences.major !== "undecided" ? (
@@ -364,9 +408,9 @@ export function MatchTool({
                   <option value="require">Require broad-field evidence</option>
                 </select>
                 <small>
-                  “Require” removes colleges without the selected broad
-                  federal field indicator; it does not confirm a specific
-                  major or concentration.
+                  “Require” removes colleges without the selected bachelor&apos;s-level
+                  federal field indicator; it does not confirm a specific major,
+                  campus offering, or concentration.
                 </small>
               </label>
             ) : null}
@@ -382,7 +426,8 @@ export function MatchTool({
                 <option value="midwest">Midwest</option>
                 <option value="northeast">Northeast</option>
                 <option value="south">South</option>
-                <optgroup label="Specific state">
+                <option value="territories">U.S. territories</option>
+                <optgroup label="Specific location">
                   {stateOptions.map((state) => (
                     <option value={`state:${state}`} key={state}>{state}</option>
                   ))}
@@ -396,9 +441,10 @@ export function MatchTool({
                 value={preferences.ownership}
                 onChange={(event) => updatePreference("ownership", event.target.value)}
               >
-                <option value="any">Public or private nonprofit</option>
+                <option value="any">Any college type</option>
                 <option value="Public">Public only</option>
                 <option value="Private nonprofit">Private nonprofit only</option>
+                <option value="Private for-profit">Private for-profit only</option>
               </select>
               <small>Only the selected college type appears in your results.</small>
             </label>
@@ -460,6 +506,7 @@ export function MatchTool({
                 <option value="City">City</option>
                 <option value="Suburb">Suburb</option>
                 <option value="Town">Town</option>
+                <option value="Rural">Rural</option>
               </select>
             </label>
           </div>
@@ -497,7 +544,9 @@ export function MatchTool({
               <span>Your research list</span>
               <h2 id="match-results-heading">
                 {hasActiveSignal
-                  ? results.length > 0
+                  ? matchLoading
+                    ? "Comparing colleges…"
+                    : results.length > 0
                     ? `${results.length} ${results.length === 1 ? "place" : "places"} to investigate`
                     : "No colleges match those constraints"
                   : hasStudentInput
@@ -507,7 +556,9 @@ export function MatchTool({
             </div>
             <p>
               {hasActiveSignal
-                ? results.length > 0
+                ? matchLoading
+                  ? "Checking the current catalog against your preferences."
+                  : results.length > 0
                   ? "Ordered only by the preferences above. Open a score to see the evidence and importance behind it."
                   : "Required-field and college-type choices stay as hard constraints. Relax one constraint or activate a different preference."
                 : hasStudentInput
@@ -536,6 +587,17 @@ export function MatchTool({
                 narrows an existing list. A zero importance leaves that
                 preference out.
               </p>
+            </div>
+          ) : matchError ? (
+            <div className={styles.emptyState} role="alert">
+              <CircleAlert size={24} aria-hidden="true" />
+              <h3>Your match list is temporarily unavailable.</h3>
+              <p>{matchError} Your preferences are still on this page; try changing a filter or reload.</p>
+            </div>
+          ) : matchLoading || !matchResult ? (
+            <div className={styles.emptyState} role="status">
+              <CircleAlert size={24} aria-hidden="true" />
+              <h3>Checking the current college catalog…</h3>
             </div>
           ) : results.length === 0 ? (
             <div className={styles.emptyState}>

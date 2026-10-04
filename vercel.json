@@ -1,7 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "buildCommand": "npm run build:vercel",
+  "buildCommand": "node scripts/build-vercel.mjs",
   "outputDirectory": ".next",
-  "crons": [{ "path": "/api/internal/adviser-retention", "schedule": "17 4 * * *" }]
+  "crons": [
+    {
+      "path": "/api/internal/adviser-retention",
+      "schedule": "17 4 * * *"
+    }
+  ]
 }

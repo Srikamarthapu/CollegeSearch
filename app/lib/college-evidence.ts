@@ -54,7 +54,7 @@ export function assertCollegeEvidence(dataset: CollegeDataset): void {
         const missing = observation.status === "suppressed" || observation.status === "unavailable";
         const value = observation.value;
         if ((value === null) !== missing || (value !== null &&
-            (!Number.isFinite(value) || value < 0 ||
+            (!Number.isFinite(value) || (value < 0 && metric !== "averageNetPrice") ||
              (observation.unit === "ratio" && value > 1) ||
              (observation.unit === "count" && !Number.isInteger(value))))) {
           throw new Error(`${label} has an invalid value or missing-data status.`);
@@ -73,9 +73,10 @@ export function assertCollegeEvidence(dataset: CollegeDataset): void {
       }
     }
     for (const major of college.majors) {
-      const fields = major.sourceField?.match(/^PCIP(\d{2}) \+ CIP(\d{2})BACHL$/);
+      const fields = major.sourceField?.match(/^PCIP(\d{2}) \+ CIP(\d{2})(BACHL|ASSOC)(?: \+ CIP(\d{2})ASSOC)?$/);
       if (!sources.has(major.sourceId) || !finalities.has(major.finality) ||
-          !fields || fields[1] !== fields[2] ||
+          !fields || fields[1] !== fields[2] || (fields[4] && (fields[1] !== fields[4] || fields[3] !== "BACHL" || !major.associatesAvailable)) ||
+          (fields[3] === "BACHL" ? !major.bachelorsAvailable : !major.associatesAvailable) ||
           !["delivery-not-specified", "includes-distance-program"].includes(major.deliveryMode ?? "")) {
         throw new Error(`${college.name} ${major.name} does not match a registered field source.`);
       }

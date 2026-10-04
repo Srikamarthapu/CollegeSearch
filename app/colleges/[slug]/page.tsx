@@ -140,7 +140,7 @@ function EvidenceNote({
 }
 
 export function generateStaticParams() {
-  return colleges.map((college) => ({ slug: college.slug }));
+  return colleges.filter((college) => college.catalogCategory === "existing-curated").map((college) => ({ slug: college.slug }));
 }
 
 export async function generateMetadata({
@@ -284,7 +284,7 @@ export default async function CollegeProfilePage({
             <CollegeLogo college={college} variant="profile" />
             <span className="page-eyebrow">
               <Landmark size={15} aria-hidden="true" />
-              {college.ownership} · {college.setting}
+              {college.institutionLevel} · {college.ownership} · {college.setting}{!college.mainCampus ? " · Branch campus" : ""}
             </span>
             <h1>{college.name}</h1>
             <p className="profile-location">
@@ -447,6 +447,7 @@ export default async function CollegeProfilePage({
             ))}
           </dl>
           <div className="profile-evidence-notes">
+            {averageNetPrice.value !== null && averageNetPrice.value < 0 ? <p className="profile-cost-note">This reported negative average means grants and scholarships exceeded attendance costs for the source cohort. It is not a promise of free attendance or a payment to you.</p> : null}
             <p className="profile-cost-note">
               Tuition and required fees exclude housing, meals, books and other living costs.
               {college.ownership === "Public" && college.observations.tuitionInState.sourceField === "TUITIONFEE_IN"
@@ -471,7 +472,7 @@ export default async function CollegeProfilePage({
               }
               definition={
                 graduationIsFederal
-                  ? "Completion of a degree or certificate at a four-year institution within 150% of normal time for the reported first-time, full-time degree/certificate-seeking cohort."
+                  ? graduationRate.definition
                   : undefined
               }
             />
@@ -525,14 +526,15 @@ export default async function CollegeProfilePage({
           <div className="page-section-heading">
             <div>
               <span className="page-section-index">03</span>
-              <h2 id="majors-heading">Broad bachelor&apos;s fields</h2>
+              <h2 id="majors-heading">Broad fields of study</h2>
             </div>
             <p>
-              Each field has a federal bachelor&apos;s-program indicator for
+              Each field has a federal bachelor&apos;s or associate program indicator for
               2024-2025. The percentage still covers all awards in that broad
               category, so verify the exact major and campus before applying.
             </p>
           </div>
+          {!orderedMajors.length ? <p className="profile-cost-note">No qualifying bachelor’s or associate field record is available in this release. The college may offer certificates or other programs; check its current program catalog.</p> : null}
           <ol className="profile-major-list">
             {orderedMajors.map((major) => (
               <li key={major.name}>

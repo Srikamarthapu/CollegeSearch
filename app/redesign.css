@@ -150,6 +150,7 @@ button:disabled { cursor: not-allowed; opacity: .6; }
 .research-card .metric-stamp > strong { font-family: var(--font-geist-sans),Arial,sans-serif; font-size: 24px; font-weight: 600; line-height: 1.25; letter-spacing: -.055em; font-variant-numeric: tabular-nums; }
 .research-card .metric-stamp.metric-primary > strong { color: var(--forest); }
 .research-card .metric-stamp > small { font-size: 12px; color: var(--ink-faint); line-height: 1.4; }
+.card-price-note { margin: 0 19px 12px; }
 .card-field-line { display: flex; align-items: center; gap: 7px; padding: 8px 19px 13px; font-size: 12px; color: var(--ink-soft); }
 .card-field-line svg { flex-shrink: 0; color: var(--ink-faint); }
 .card-field-line a { color: var(--forest); font-weight: 500; }
@@ -411,3 +412,10 @@ button:disabled { cursor: not-allowed; opacity: .6; }
   .header-actions > button { min-width: 44px; min-height: 44px; }
 }
 [hidden]:not([hidden="until-found"]) { display: none !important; }
+
+/* Narrow phones need space for honest missing-value labels as well as numbers. */
+@media (max-width: 380px) {
+  .research-card .metric-ledger { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .research-card .metric-stamp:first-child { grid-column: 1 / -1; min-height: 0; padding-bottom: 0; }
+  .research-card .metric-stamp > strong { font-size: 22px; }
+}

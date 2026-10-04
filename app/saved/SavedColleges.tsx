@@ -13,13 +13,14 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { ResearchBackupControls } from "@/app/components/ResearchBackupControls";
 import { readResearchForExport } from "@/app/lib/research-drafts";
 import { ResearchNotebook } from "@/app/components/ResearchNotebook";
 import { CollegeLogo } from "@/app/components/CollegeLogo";
-import { DeadlinePlanner, type DeadlineCollege } from "@/app/components/DeadlinePlanner";
+import { NegativeNetPriceNote } from "@/app/components/NegativeNetPriceNote";
+import { DeadlinePlanner } from "@/app/components/DeadlinePlanner";
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import { useSavedColleges } from "@/app/components/saved/SavedCollegesProvider";
@@ -28,6 +29,7 @@ import {
   observationSourceKind,
   type ClientCollege,
 } from "@/app/lib/college-client-record";
+import type { DirectoryCollegeIdentity } from "@/app/lib/college-directory";
 import {
   type SavedComparisonSelection,
   visibleSavedComparisonIds,
@@ -39,7 +41,7 @@ import {
 } from "@/app/lib/research-notebook";
 import styles from "./saved.module.css";
 
-export function SavedColleges({ colleges, deadlineColleges }: { colleges: ClientCollege[]; deadlineColleges: DeadlineCollege[] }) {
+export function SavedColleges({ collegeIdentities }: { collegeIdentities: DirectoryCollegeIdentity[] }) {
   const [exportStatus, setExportStatus] = useState("");
   const pageRef = useRef<HTMLElement>(null);
   const pendingRemovalFocus = useRef<{
@@ -67,12 +69,75 @@ export function SavedColleges({ colleges, deadlineColleges }: { colleges: Client
     syncPhase,
   } = useSavedColleges();
 
+  const [resolvedColleges, setResolvedColleges] = useState<{
+    scopeKey: string;
+    byId: Map<number, ClientCollege>;
+  }>({ scopeKey: "", byId: new Map() });
+  const [detailsFailure, setDetailsFailure] = useState<{ key: string; message: string } | null>(null);
+  const [detailsRetry, setDetailsRetry] = useState(0);
+  const resolvedById = useMemo(
+    () => resolvedColleges.scopeKey === scopeKey
+      ? resolvedColleges.byId
+      : new Map<number, ClientCollege>(),
+    [resolvedColleges, scopeKey],
+  );
+  const unresolvedIds = savedIds.filter((unitId) => !resolvedById.has(unitId));
+  const unresolvedIdsKey = unresolvedIds.join(",");
+  const recordsReady = unresolvedIdsKey.length === 0;
+  const detailsError = detailsFailure?.key === unresolvedIdsKey ? detailsFailure.message : "";
+
+  useEffect(() => {
+    if (!hydrated || scopeKey === "loading" || !unresolvedIdsKey) return;
+    const controller = new AbortController();
+    const targetScope = scopeKey;
+    const unitIds = unresolvedIdsKey.split(",").map(Number);
+    void (async () => {
+      try {
+        const items: ClientCollege[] = [];
+        let offset = 0;
+        while (offset < unitIds.length) {
+          const response = await fetch("/api/colleges/lookup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ unitIds, offset, limit: 48 }),
+            signal: controller.signal,
+          });
+          if (!response.ok) throw new Error("Saved college details could not be loaded.");
+          const page = await response.json() as {
+            items: ClientCollege[];
+            nextOffset: number | null;
+          };
+          items.push(...page.items);
+          if (page.nextOffset === null) break;
+          offset = page.nextOffset;
+        }
+        if (items.length !== unitIds.length) throw new Error("Some saved college details were unavailable.");
+        setResolvedColleges((current) => {
+          const byId = current.scopeKey === targetScope
+            ? new Map(current.byId)
+            : new Map<number, ClientCollege>();
+          for (const college of items) byId.set(college.unitId, college);
+          return { scopeKey: targetScope, byId };
+        });
+        setDetailsFailure(null);
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          setDetailsFailure({
+            key: unresolvedIdsKey,
+            message: error instanceof Error ? error.message : "Saved college details could not be loaded.",
+          });
+        }
+      }
+    })();
+    return () => controller.abort();
+  }, [detailsRetry, hydrated, scopeKey, unresolvedIdsKey]);
+
   const saved = useMemo(
     () =>
       savedIds
-        .map((unitId) => colleges.find((college) => college.unitId === unitId))
+        .map((unitId) => resolvedById.get(unitId))
         .filter((college): college is ClientCollege => Boolean(college)),
-    [colleges, savedIds],
+    [resolvedById, savedIds],
   );
   const [previousCollection, setPreviousCollection] =
     useState<ResearchCollectionSnapshot<ClientCollege>>({ scopeKey: null, items: [] });
@@ -82,7 +147,7 @@ export function SavedColleges({ colleges, deadlineColleges }: { colleges: Client
     // collection before rendering a different verified account's children.
     setPreviousCollection(collection);
   }
-  const collectionVisible = hydrated && collection.scopeKey === scopeKey;
+  const collectionVisible = hydrated && recordsReady && collection.scopeKey === scopeKey;
   const collectionInteractive = collectionVisible && canMutate;
   const selected = useMemo(
     () => visibleSavedComparisonIds(comparisonSelection, scopeKey, savedIds),
@@ -273,10 +338,11 @@ export function SavedColleges({ colleges, deadlineColleges }: { colleges: Client
               Retry account list
             </button>
           </section>
-        ) : !hydrated ? (
+        ) : !hydrated || !recordsReady ? (
           <section className={styles.empty} aria-live="polite">
             <Database size={27} aria-hidden="true" />
-            <h3>Loading your saved list…</h3>
+            <h3>{detailsError ? "Saved college details could not be loaded." : "Loading your saved list…"}</h3>
+            {detailsError ? <><p>{detailsError}</p><button type="button" onClick={() => setDetailsRetry((current) => current + 1)}>Retry saved colleges</button></> : null}
           </section>
         ) : saved.length === 0 ? (
           <section className={styles.empty}>
@@ -348,6 +414,7 @@ export function SavedColleges({ colleges, deadlineColleges }: { colleges: Client
                           <span>
                             {college.observations.averageNetPrice.periodLabel}
                           </span>
+                          <NegativeNetPriceNote value={college.observations.averageNetPrice.value} />
                         </dd>
                       </div>
                     </dl>
@@ -389,11 +456,11 @@ export function SavedColleges({ colleges, deadlineColleges }: { colleges: Client
             <summary><Download size={16} aria-hidden="true" /> Research export &amp; backup<ChevronDown size={15} aria-hidden="true" /></summary>
             {saved.length > 0 ? <button type="button" className="page-secondary-action" onClick={exportResearch} disabled={!collectionInteractive}><Download size={16} aria-hidden="true" /> Export research CSV</button> : null}
             {exportStatus ? <p className={styles.exportStatus} role="status">{exportStatus}</p> : null}
-            <ResearchBackupControls key={`backup:${collection.scopeKey}`} colleges={colleges} scopeKey={scopeKey} canUse={collectionInteractive} />
+            <ResearchBackupControls key={`backup:${collection.scopeKey}`} colleges={collegeIdentities} scopeKey={scopeKey} canUse={collectionInteractive} />
           </details>
         </section>
         <section id="deadlines" className={styles.deadlinePanel} aria-label="College deadlines">
-          <DeadlinePlanner colleges={deadlineColleges} embedded savedCollegeIds={collectionVisible ? savedIds : []} />
+          <DeadlinePlanner colleges={collegeIdentities} embedded savedCollegeIds={collectionVisible ? savedIds : []} />
         </section>
         </div>
       </main>

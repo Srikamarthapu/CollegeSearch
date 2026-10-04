@@ -34,6 +34,8 @@ export type MajorEvidence = {
   name: string;
   share: number;
   bachelorsAvailable: boolean;
+  associatesAvailable?: boolean;
+  degreeLevel?: "bachelors" | "associate" | "bachelors-and-associate";
   evidence: string;
   reportingYear: number;
   periodLabel: string;
@@ -68,6 +70,10 @@ export type College = {
   mainCampus: boolean;
   branchCount: number;
   currentlyOperating: boolean;
+  institutionLevel: "Four-year" | "Two-year";
+  highestDegree: number;
+  predominantDegree: number;
+  undergraduateOffering: boolean;
   slug: string;
   name: string;
   aliases: string[];
@@ -222,8 +228,10 @@ function validateDataset(value: unknown): CollegeDataset {
     if (
       !college.opeId ||
       !college.opeId6 ||
-      !college.mainCampus ||
+      typeof college.mainCampus !== "boolean" ||
       !college.currentlyOperating ||
+      !college.undergraduateOffering ||
+      !["Four-year", "Two-year"].includes(college.institutionLevel ?? "") ||
       !Number.isInteger(college.branchCount) ||
       college.branchCount < 1
     ) {
@@ -248,7 +256,7 @@ function validateDataset(value: unknown): CollegeDataset {
           !Number.isFinite(major.share) ||
           major.share < 0 ||
           major.share > 1 ||
-          major.bachelorsAvailable !== true,
+          (major.bachelorsAvailable !== true && major.associatesAvailable !== true),
       )
     ) {
       throw new Error(`${college.name} has invalid major evidence.`);
@@ -320,9 +328,13 @@ export function observationSourceKind(observation: Observation) {
 }
 
 export function compactName(college: College) {
+  // Federal aliases include historical institution names and search keywords.
+  // Only the established, curated short names are suitable display labels.
+  if (college.catalogCategory.startsWith("federal-")) return college.name;
+  const aliases = college.aliases.filter((alias) => !/^(?:n\/?a|null|privacysuppressed|unknown)$/i.test(alias.trim()));
   return (
-    college.aliases.find((alias) => alias.startsWith("UC ")) ||
-    college.aliases[0] ||
+    aliases.find((alias) => alias.startsWith("UC ")) ||
+    aliases[0] ||
     college.name
   );
 }

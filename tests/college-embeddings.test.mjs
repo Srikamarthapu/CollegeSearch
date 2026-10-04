@@ -5,8 +5,11 @@ import {
   collegeEmbeddingDimensions,
   createCompletedEmbeddingArtifact,
   createEmbeddingCheckpoint,
+  computeArtifactSha256,
+  collegeEmbeddingBatchSize,
   runEmbeddingIndex,
   sealEmbeddingArtifact,
+  stableJson,
   validateEmbeddingArtifact,
   validateEmbeddingCheckpoint,
 } from "../scripts/lib/college-embeddings.mjs";
@@ -46,6 +49,15 @@ function providerFor(model, modelVersion, calls = []) {
   };
 }
 
+function batchProviderFor(model, modelVersion, calls = []) {
+  return {
+    async embedMany(texts, inputType) {
+      calls.push({ texts: [...texts], inputType });
+      return { model, modelVersion, embeddings: texts.map((_text, index) => vector(0.125 + calls.length / 1000 + index / 10000)) };
+    },
+  };
+}
+
 function fixedTime() {
   let counter = 0;
   return () => `2026-10-04T00:00:${String(counter++).padStart(2, "0")}.000Z`;
@@ -77,6 +89,65 @@ test("full artifact validates against every canonical passage and stores float32
   assert.equal(validated.entries[0].embedding.length, collegeEmbeddingDimensions);
   assert.ok(validated.entries[0].embedding.every((value) => value === Math.fround(value)));
   assert.match(validated.artifactSha256, /^[a-f0-9]{64}$/);
+  const body = { ...validated };
+  delete body.artifactSha256;
+  assert.equal(computeArtifactSha256(validated), sha256(stableJson(body)));
+});
+
+test("full-index batches make exactly one bounded provider call per group and resume by passage count", async () => {
+  const seed = seedWithPassages(65);
+  const model = "nvidia/nemotron-3-embed-1b";
+  const version = "evaluation-alias-v1";
+  const calls = [];
+  let checkpoint = null;
+  const first = await runEmbeddingIndex({
+    canonicalSeed: seed, model, modelVersion: version,
+    provider: batchProviderFor(model, version, calls), maxCalls: 2,
+    batchSize: collegeEmbeddingBatchSize, checkpoint, checkpointEvery: 16,
+    onCheckpoint: async (value) => { checkpoint = value; }, now: fixedTime(),
+  });
+  assert.equal(first.status, "partial");
+  assert.equal(first.providerCalls, 2);
+  assert.equal(first.embeddedThisRun, 64);
+  assert.equal(first.remainingPassages, 1);
+  assert.deepEqual(calls.map((call) => call.texts.length), [32, 32]);
+  assert.ok(calls.every((call) => call.inputType === "passage"));
+
+  const resumeCalls = [];
+  const resumed = await runEmbeddingIndex({
+    canonicalSeed: seed, model, modelVersion: version,
+    provider: batchProviderFor(model, version, resumeCalls), maxCalls: 1,
+    batchSize: collegeEmbeddingBatchSize, checkpoint: first.checkpoint,
+    onCheckpoint: async (value) => { checkpoint = value; }, now: fixedTime(),
+  });
+  assert.equal(resumed.status, "complete");
+  assert.equal(resumed.providerCalls, 1);
+  assert.equal(resumed.embeddedThisRun, 1);
+  assert.equal(resumeCalls[0].texts.length, 1);
+  assert.equal(validateEmbeddingArtifact(createCompletedEmbeddingArtifact(resumed.checkpoint, seed), seed).entries.length, 65);
+});
+
+test("failed embedding batch checkpoints only prior complete batches", async () => {
+  const seed = seedWithPassages(10);
+  const model = "nvidia/nemotron-3-embed-1b";
+  const version = "evaluation-alias-v1";
+  let calls = 0;
+  let saved = null;
+  const outcome = await runEmbeddingIndex({
+    canonicalSeed: seed, model, modelVersion: version, maxCalls: 2, batchSize: 8,
+    provider: { async embedMany(texts) {
+      calls += 1;
+      if (calls === 2) return { model, modelVersion: version, embeddings: [vector()] };
+      return { model, modelVersion: version, embeddings: texts.map((_text, index) => vector(0.2 + index / 100)) };
+    } },
+    onCheckpoint: async (value) => { saved = value; }, now: fixedTime(),
+  });
+  assert.equal(outcome.status, "partial");
+  assert.equal(outcome.errorCode, "embedding_failed");
+  assert.equal(outcome.providerCalls, 2);
+  assert.equal(outcome.embeddedThisRun, 8);
+  assert.equal(saved.completedPassageCount, 8);
+  assert.equal(saved.entries.length, 8);
 });
 
 test("per-run call budget is exact and restart resumes without re-embedding completed passages", async () => {

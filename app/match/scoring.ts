@@ -52,7 +52,7 @@ export type MatchPreferences = {
   maxNetPrice: number | null;
   residencyState: string;
   size: string;
-  setting: "any" | "City" | "Suburb" | "Town";
+  setting: "any" | "City" | "Suburb" | "Town" | "Rural";
   weights: MatchWeights;
 };
 
@@ -154,6 +154,7 @@ const regionStates: Record<string, Set<string>> = {
   midwest: new Set(["IA", "IL", "IN", "KS", "MI", "MN", "MO", "ND", "NE", "OH", "SD", "WI"]),
   northeast: new Set(["CT", "MA", "ME", "NH", "NJ", "NY", "PA", "RI", "VT"]),
   south: new Set(["AL", "AR", "DC", "DE", "FL", "GA", "KY", "LA", "MD", "MS", "NC", "OK", "SC", "TN", "TX", "VA", "WV"]),
+  territories: new Set(["AS", "GU", "MP", "PR", "VI"]),
 };
 
 export const RESIDENCY_STATES = [...new Set(Object.values(regionStates).flatMap((states) => [...states]))].sort();
@@ -240,8 +241,8 @@ export function scoreCollege(
         preferences.weights.major,
         evidence ? 1 : 0,
         evidence
-          ? `${preferences.major} is listed as a broad bachelor's field (${evidence.periodLabel}).`
-          : `${preferences.major} is not listed as an available broad bachelor's field in this release.`,
+          ? `${preferences.major} has a reported bachelor's-level broad-field indicator at this four-year college (${evidence.periodLabel}).`
+          : `${preferences.major} has no reported bachelor's-level broad-field indicator at this college in this release.`,
       ),
     );
   }
