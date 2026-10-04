@@ -6,9 +6,9 @@ Scope: students explore the 100-college collection, inspect evidence, compare op
 
 | ID | Evidence / step | Finding | Disposition |
 | --- | --- | --- | --- |
-| D01 | Step 1, `outputs/m4-audit/01-adviser-default.jpg` | The adviser heading and fit-tool navigation touch the viewport edge; `page-shell` supplies height but no content gutters. | Add a bounded shared navigation container and responsive page gutters; rendered retest pending. |
+| D01 | Step 1, `outputs/m4-audit/01-adviser-default.jpg` | The adviser heading and fit-tool navigation touch the viewport edge; `page-shell` supplies height but no content gutters. | Fixed with bounded containers and responsive gutters; native and deployed desktop/mobile retests passed (steps 8 and 11). |
 | D02 | Step 1, same screenshot | Unavailable state clearly says “In preparation” and offers working preference/search/compare/planner paths. | Keep the honest state; do not imply model evaluation has happened. |
-| D03–D06 | Static integration review, `M3_REVIEW.md` | Provider-off history access, refresh-error classification, draft preservation on deletion, and Strict Mode request lifetime. | Assigned for implementation and focused retest before release. |
+| D03–D06 | Static integration review, `M3_REVIEW.md` | Provider-off history access, refresh-error classification, draft preservation on deletion, and Strict Mode request lifetime. | Implemented and verified with focused tests and the isolated rendered fixture; see M3_REVIEW.md and steps 2–7. |
 
 ## Current-run walkthrough
 
@@ -36,3 +36,5 @@ D01 corrected in CSS; native-app retest still pending the final build. D03–D06
 9. Native explorer: the location filter mixed full state names with newly introduced abbreviations (DC, FL, IA, ID, KS, LA, ME, MN, MO, RI, TN, UT). Completed the shared state-name map so both visible filters and typed state-name searches cover the expanded catalog. Skeleton loading remains clean and the explorer still has only five primary navigation items.
 
 10. Native explorer → comparison → My colleges: found Appalachian State through search, saved it locally, compared it with Boise State, and opened the combined planner. Both new catalog entries show source periods and honest monogram fallbacks. At 390px, the comparison uses readable stacked college summaries, the five-item mobile navigation opens correctly, and the saved college appears beside the Deadlines section (`11-comparison-desktop.jpg`, `12-comparison-390.jpg`, `13-planner-390.jpg`). No horizontal overflow observed. The explorer screenshot `09-explore-desktop.jpg` captures the real skeleton state; `10-explore-loaded-desktop.jpg` captures the requested crossfade mid-transition.
+
+11. Deployed production demo: explorer displays 100 colleges with the existing blue logo and restrained campus carousel (`14-live-explore-desktop.jpg`). Adviser desktop and 390px layouts confirm the final bounded gutters and quiet history sign-in (`15-live-adviser-desktop.jpg`, `16-live-adviser-390.jpg`). At 390px the document width is 375px; no horizontal overflow. The guest state explicitly says In preparation, offers functioning free tools, and makes no claim that the model is live. Browser warning/error log capture returned no entries. All actionable findings in this design ledger are closed; live signed-in/Auth delivery and provider quality are separate outstanding release checks.
