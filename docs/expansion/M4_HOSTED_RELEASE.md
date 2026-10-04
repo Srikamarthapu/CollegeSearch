@@ -42,3 +42,7 @@ These scripts use synthetic student questions and public college evidence. The e
 ## Review cleanup
 
 Stopped the two task-owned local preview servers on ports 4183/4184 and the isolated `collegesearch-goal-db-20261004` container after verification. The database container and its rehearsal data remain available to restart. Other local previews and services were left alone. The live catalog tab is retained for review.
+
+## Subsequent M5 deployment
+
+The tested full embedding pipeline and runtime vector-validation fix were committed as `5db819f` and deployed to the same production demo in READY deployment `dpl_6g3UTYvcdT6C95A3Q1qgSR9zA8dA` (`collegesearch-duntyqrwy-swis-projects-066d8b1d.vercel.app`). Post-deployment explorer/adviser requests returned 200; the unauthenticated adviser API returned 401. AI availability remains disabled, the hosted knowledge release is unchanged, and no real or synthetic vectors were uploaded. See `M5_EMBEDDING_PIPELINE.md` and `M5_SQL_VERIFICATION.md` for the generation/import path and 405-test verification.
