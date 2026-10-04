@@ -385,11 +385,12 @@ export function createNvidiaProvider(config: NvidiaConfig, fetcher: typeof fetch
     if (!row || (row.index !== undefined && row.index !== 0) || !Array.isArray(row.embedding) || row.embedding.length !== nvidiaEmbeddingDimensions) {
       error("invalid_response", `NVIDIA embeddings must contain exactly ${nvidiaEmbeddingDimensions} dimensions.`);
     }
-    if (row.embedding.some((value) => typeof value !== "number" || !Number.isFinite(value))) {
+    if (row.embedding.some((value) => typeof value !== "number" || !Number.isFinite(Math.fround(value))) ||
+        !row.embedding.some((value) => Math.fround(value) !== 0)) {
       error("invalid_response", "NVIDIA returned an invalid embedding vector.");
     }
     return {
-      embedding: row.embedding as number[],
+      embedding: (row.embedding as number[]).map(Math.fround),
       usage: usageFrom(response.usage),
       model: config.embeddingModel,
       modelVersion: config.embeddingModelVersion,

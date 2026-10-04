@@ -177,3 +177,12 @@ test("embedding text and missing keys fail closed without a network request", as
   await assert.rejects(keyed.embed("x".repeat(2_001), "passage"), providerError("input_too_large"));
   assert.equal(calls, 0);
 });
+
+test("embeddings reject vectors that become invalid or zero in PostgreSQL float32 storage", async () => {
+  for (const value of [0, Number.MIN_VALUE, Number.MAX_VALUE]) {
+    const provider = createNvidiaProvider(config(), async () => jsonResponse({ data: [{ index: 0, embedding: Array(2048).fill(value) }] }));
+    await assert.rejects(provider.embed("Public college passage.", "passage"), providerError("invalid_response"));
+  }
+  const provider = createNvidiaProvider(config(), async () => jsonResponse({ data: [{ index: 0, embedding: Array(2048).fill(0.1) }] }));
+  assert.equal((await provider.embed("Public college passage.", "query")).embedding[0], Math.fround(0.1));
+});

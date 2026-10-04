@@ -78,3 +78,11 @@ The 350/351 result was captured before M2 replaced the fixed-ID constraint. It i
 **Remaining external gates:** perform signed-in hosted Auth/email/save/history journeys; observe the scheduled retention job fire; and complete a nonblank NVIDIA-key evaluation covering quality, latency, cost, full embedding/index coverage, a defensible free monthly allowance and provider retention. The local key placeholder is blank and there have been zero NVIDIA calls. Confirm an authorized NVIDIA production route before enabling public AI; the hosted trial restriction remains an activation gate. Stripe/AI Plus is deferred by the user.
 
 Latest account-wide usage snapshot: 23% remaining. No reset has been used.
+
+## October 4 — M5 continuation: full embedding pipeline
+
+The previous goal turn made progress: committed the hosted release/audit evidence and verified live mobile/desktop behavior. A new requirement audit found that only the 24-passage embedding sample existed; full corpus generation/publication was still missing independently of the key.
+
+Implemented restartable full-corpus generation with explicit evaluation opt-in, per-run request caps, exact release/model/version/content binding, checksummed checkpoints and complete-artifact validation. Added offline SQL export plus exact-byte verification, atomic full publication, identical retries and explicit model/version replacement. Twelve real SQL checks passed against all 1,252 synthetic vectors in a disposable local clone, preserving three legacy saves; the clone was removed afterward. No NVIDIA call or hosted vector write was made. Runtime query vectors now reject float32 overflow/underflow and zero vectors with keyword fallback.
+
+All 405 integrated tests, lint and typecheck passed. See `M5_EMBEDDING_PIPELINE.md` and `M5_SQL_VERIFICATION.md`; the native Next production build passed. Isolated real Auth/browser checks are in progress. The user-provided-key dependency and NVIDIA production authorization remain unresolved; public AI remains disabled. Latest observed account-wide usage: 15% remaining; no reset used.

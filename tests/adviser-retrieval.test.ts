@@ -68,3 +68,21 @@ test("embedding failure falls back explicitly to verified keyword and SQL eviden
   assert.equal(result.mode, "keyword");
   assert.ok(result.notices.some((notice) => notice.includes("Semantic search was unavailable")));
 });
+
+test("zero and out-of-range query vectors fall back before calling vector SQL", async () => {
+  for (const value of [0, Number.MIN_VALUE, Number.MAX_VALUE]) {
+    const responses = rpc({ current_college_knowledge_release: [{ ...release, embedding_model: "test-model", embedding_version: "test-v1" }] });
+    let checked = false;
+    const result = await createKnowledgeRetriever(dataset, releaseId, async (name, args, signal) => {
+      if (name === "hybrid_search_college_passages") {
+        checked = true;
+        assert.equal(args.p_query_embedding, null);
+        assert.equal(args.p_embedding_model, null);
+      }
+      return responses(name, args, signal);
+    }, {model: "test-model", modelVersion: "test-v1", query: async () => ({model: "test-model", modelVersion: "test-v1", embedding: Array(2048).fill(value)})})(interpretation);
+    assert.equal(checked, true);
+    assert.equal(result.mode, "keyword");
+    assert.ok(result.notices.some((notice) => notice.includes("Semantic search was unavailable")));
+  }
+});

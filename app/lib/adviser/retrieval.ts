@@ -117,7 +117,9 @@ export function createKnowledgeRetriever(dataset: CollegeDataset, releaseId: str
     if (embedder && release.embedding_model === embedder.model && release.embedding_version === embedder.modelVersion) {
       try {
         embedding = await embedder.query(query, signal);
-        if (embedding.model !== embedder.model || embedding.modelVersion !== embedder.modelVersion || embedding.embedding.length !== 2048 || embedding.embedding.some((value) => !Number.isFinite(value))) throw new Error("Invalid query embedding.");
+        if (embedding.model !== embedder.model || embedding.modelVersion !== embedder.modelVersion || embedding.embedding.length !== 2048 ||
+            embedding.embedding.some((value) => !Number.isFinite(Math.fround(value))) ||
+            !embedding.embedding.some((value) => Math.fround(value) !== 0)) throw new Error("Invalid query embedding.");
       } catch {
         if (signal?.aborted) throw new Error("Retrieval cancelled.");
         notices.push("Semantic search was unavailable for this reply; it uses verified structured facts and keyword evidence.");
