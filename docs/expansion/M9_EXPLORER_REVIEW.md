@@ -1,6 +1,6 @@
 # M9 — explorer filters and adviser visibility
 
-October 4, 2026. Local implementation and verification complete; deployment pending.
+October 4, 2026. Implemented, pushed as `14ae760`, deployed and verified at [CollegeSearch](https://collegesearch-steel.vercel.app/explore). Vercel deployment `dpl_GWXYPKBs43dJj3BNV7ae5C98Ttqw` is READY in production; immutable URL: `https://collegesearch-g1w6fn45v-swis-projects-066d8b1d.vercel.app`.
 
 ## Findings and fixes
 
@@ -18,6 +18,7 @@ October 4, 2026. Local implementation and verification complete; deployment pend
 - Browser checks: combined engineering/California/net-price filters (114 results), grouped-filter synchronization, reset, 10–25% UC filter (Berkeley/UCLA), explicit alphabetical reload, Featured restoration, delayed pagination, injected failure/retry, and keyboard Escape/focus return.
 - Design review: desktop 1440 px, laptop 1024 px, mobile 390 px and 320 px; no horizontal overflow at checked widths. Drawer controls/footer stayed usable. No blocking accessibility finding remained in the focused review. Expected injected 503 was isolated to the local QA proxy.
 - Logs are under ignored `work/m9-*`; screenshots are under `outputs/m9-explorer/`. The local proxy never calls the model or modifies the database.
+- Live HTTP checks passed: featured defaults, named searches, disjoint pagination, exact two-year/for-profit counts, combined filters, fractional admission boundaries, bounded saved-ID lookup, synthetic preference matching, and malformed/oversized payload rejection. Live browser checks passed the three-filter combination (114 results), drawer synchronization, reset to 3,912, Berkeley/UCLA/Stanford ordering, mobile adviser access and keyboard focus return. No browser warnings/errors were observed. Hosted proof: `live-explorer-desktop.png`, `live-filter-drawer.png`, `live-filter-mobile.png`. Temporary viewport overrides were reset and local verification servers stopped.
 
 ## Where the 3,912 records came from
 
