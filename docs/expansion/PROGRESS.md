@@ -1,6 +1,18 @@
 # CollegeSearch expansion progress
 
-## Current milestone — M10, October 4, 2026
+## Release-gate audit — October 4, 2026, 19:32 UTC
+
+Previous goal turn classification: **progress**. M10 changed application state, completed evaluation and deployed verified code. This continuation reread the original objective and current acceptance evidence; billing remains deferred by explicit user direction. No further independent implementation or verification was identified that closes the remaining requirements. Repeating passing tests or adding speculative features would not resolve these gates.
+
+Fresh hosted aggregate readback: **0 accounts, 0 saved colleges, 0 embedded passages**. This is a read-only snapshot; no user rows were created or changed. Hosted signup/confirmation/recovery/save/history/account-deletion testing still needs an approved test inbox/account. Local Auth tests are not being substituted for it.
+
+NVIDIA's current [NIM FAQ](https://docs.api.nvidia.com/nim/docs/product), read again today, distinguishes free developer prototyping/testing from production activity serving real end users, which requires appropriate AI Enterprise access. No production license/endpoint or operating-cost approval is supplied. Public AI remains disabled; no paid service or alternative provider was provisioned.
+
+The nightly retention schedule remains `17 4 * * *` (04:17 UTC; next scheduled time October 5). The Vercel runtime-log query for the production retention path over the preceding 24 hours returned **403 permission denied**, not an empty log result. No scheduled execution is claimed. Human student-pilot evidence and production usage/allowance evidence remain open.
+
+These same external provider/Auth/release blockers were recorded through M8, M9 and M10 and are still present. The goal has reached an impasse without owner input/access or a later scheduled event; it must not be marked complete. The deployed app remains usable for free browsing and research.
+
+## Completed milestone — M10, October 4, 2026
 
 Completed the full actual-runtime 32-case NVIDIA replay and a five-turn refinement/comparison conversation. Repaired generic-source wording falsely treated as an unknown college, and restored an explicitly stated tuition budget basis without inferring residency. Added bound source-file links and UNITID context inside adviser evidence. Original failures and all replay limits are retained in [M10 evaluation](M10_FULL_ADVISER_EVALUATION.md).
 
