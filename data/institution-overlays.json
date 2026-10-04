@@ -320,7 +320,7 @@
       "publicationStatus": "published",
       "revisionStatus": "published revision dated May 18, 2026",
       "cohort": "Fall 2025 admissions and enrollment; Fall 2019 graduation cohort; 2026-2027 tuition",
-      "notes": "Current first-party LMU admission, enrollment, graduation, and undergraduate tuition values are used for the exact cohorts shown. The tuition total uses the undergraduate—not first-year—required-fee column."
+      "notes": "Current first-party LMU admission, enrollment, graduation, and undergraduate tuition values are used for the exact cohorts shown. The tuition total uses the undergraduate\u2014not first-year\u2014required-fee column."
     },
     {
       "id": "sdsu-cds-2025-26",
@@ -561,7 +561,7 @@
     {
       "id": "northwestern-data-book-enrollment-2025",
       "publisher": "Northwestern University",
-      "sourceName": "Northwestern Data Book — Opening Fall Enrollments Summary, 2004-2025",
+      "sourceName": "Northwestern Data Book \u2014 Opening Fall Enrollments Summary, 2004-2025",
       "sourcePage": "https://www.northwestern.edu/provost/about/ir/data-book/",
       "sourceUrl": "https://www.northwestern.edu/provost/about/ir/data-book/v58/t3.01-total_enrollment.pdf",
       "artifactUrl": "https://www.northwestern.edu/provost/about/ir/data-book/v58/t3.01-total_enrollment.pdf",
@@ -587,7 +587,7 @@
     {
       "id": "northwestern-data-book-graduation-2018",
       "publisher": "Northwestern University",
-      "sourceName": "Northwestern Data Book — Graduation Rates for 2009-2018 Freshmen Cohorts",
+      "sourceName": "Northwestern Data Book \u2014 Graduation Rates for 2009-2018 Freshmen Cohorts",
       "sourcePage": "https://www.northwestern.edu/provost/about/ir/data-book/",
       "sourceUrl": "https://www.northwestern.edu/provost/about/ir/data-book/v57/t4.02-graduation-rates.pdf",
       "artifactUrl": "https://www.northwestern.edu/provost/about/ir/data-book/v57/t4.02-graduation-rates.pdf",
@@ -617,7 +617,7 @@
       "sourcePage": "https://registrar.caltech.edu/records/enrollment-statistics",
       "sourceUrl": "https://registrar.caltech.edu/records/enrollment-statistics",
       "artifactUrl": "https://registrar.caltech.edu/records/enrollment-statistics",
-      "artifactSha256": "7b5985302b7530a771cc4ee1916c5b7c88cc32ecf28c5a633ad4beceb153beed",
+      "artifactSha256": "ab5302c31031ef6e6dce17ce8a288fc710e7ad58f8fcd9bae9a5ca505c0cecd0",
       "artifactKind": "html",
       "allowedArtifactHosts": [
         "registrar.caltech.edu"
@@ -629,12 +629,12 @@
       ],
       "review": {
         "status": "approved",
-        "reviewedOn": "2026-09-13",
-        "approvedSha256": "7b5985302b7530a771cc4ee1916c5b7c88cc32ecf28c5a633ad4beceb153beed",
+        "reviewedOn": "2026-10-04",
+        "approvedSha256": "ab5302c31031ef6e6dce17ce8a288fc710e7ad58f8fcd9bae9a5ca505c0cecd0",
         "method": "manual",
-        "notes": "On 2026-09-13 re-read the current official Registrar table and all registered enrollment evidence: Fall Enrollment 2025-26 heading, Undergraduate Total 971, female 445 plus male 526 = 971, and October 24, 2025 page date. Graduate total 1,398 is a separate population. Only the all-undergraduate total is registered. Reviewed the new raw HTML fingerprint; numerical value and cohort are unchanged."
+        "notes": "On 2026-10-04 re-read the official Registrar Fall Enrollment 2025-26 table: undergraduate total 971, with 445 female plus 526 male = 971; graduate total 1,398 is a separate population. The page date remains October 24, 2025. Approved the independently downloaded current raw HTML after checking the registered undergraduate fact and cohort; no numerical change."
       },
-      "accessedOn": "2026-09-13",
+      "accessedOn": "2026-10-04",
       "finality": "snapshot",
       "publicationStatus": "published",
       "revisionStatus": "official Registrar page updated October 24, 2025",
@@ -648,7 +648,7 @@
       "sourcePage": "https://www.finaid.caltech.edu/Costs",
       "sourceUrl": "https://www.finaid.caltech.edu/Costs",
       "artifactUrl": "https://www.finaid.caltech.edu/Costs",
-      "artifactSha256": "a197add41ecd482903c7174051a64564baeab99129aede51a541c192c3f0f3f5",
+      "artifactSha256": "c6cbc3387e3e4f0fd551c466c48d5e8ac7655a0265f6785f846d534685f0aa59",
       "artifactKind": "html",
       "allowedArtifactHosts": [
         "www.finaid.caltech.edu"
@@ -661,12 +661,12 @@
       ],
       "review": {
         "status": "approved",
-        "reviewedOn": "2026-09-13",
-        "approvedSha256": "a197add41ecd482903c7174051a64564baeab99129aede51a541c192c3f0f3f5",
+        "reviewedOn": "2026-10-04",
+        "approvedSha256": "c6cbc3387e3e4f0fd551c466c48d5e8ac7655a0265f6785f846d534685f0aa59",
         "method": "manual",
-        "notes": "On 2026-09-13 re-read the official cost table, full-time undergraduate 2026-27 cohort, and fee footnotes. Tuition 68,574 plus mandatory fees 2,655 = 71,229 for each private-tuition observation. Housing, food, books, personal expenses, travel, optional health insurance and the additional one-time 600 entering-student orientation fee remain excluded. Reviewed the new raw HTML fingerprint; registered annual amounts and population are unchanged."
+        "notes": "On 2026-10-04 re-read the official full-time undergraduate 2026-27 cost table and footnotes. Tuition 68,574 plus generally applicable mandatory fees 2,655 = 71,229 annually. Housing, meals, books, personal costs, travel, optional insurance and the separate one-time 600 entering-student orientation fee remain excluded. Approved the independently downloaded raw HTML; both registered tuition observations and cohort are unchanged."
       },
-      "accessedOn": "2026-09-13",
+      "accessedOn": "2026-10-04",
       "finality": "snapshot",
       "publicationStatus": "published",
       "revisionStatus": "official published 2026-27 undergraduate cost table",
@@ -680,7 +680,7 @@
       "sourcePage": "https://www.pomona.edu/administration/finance-office/student-accounts/tuition-and-costs",
       "sourceUrl": "https://www.pomona.edu/administration/finance-office/student-accounts/tuition-and-costs",
       "artifactUrl": "https://www.pomona.edu/administration/finance-office/student-accounts/tuition-and-costs",
-      "artifactSha256": "02a995ecc74dfc0a5fa3287a05ff1dcf1d6c108cdcdbb4b7acbf2ca136cbb76b",
+      "artifactSha256": "c30784f56e76b398e8d83f3b4da61734430104946dc9fba608b73fef230378b7",
       "artifactKind": "html",
       "allowedArtifactHosts": [
         "www.pomona.edu"
@@ -694,12 +694,12 @@
       ],
       "review": {
         "status": "approved",
-        "reviewedOn": "2026-09-13",
-        "approvedSha256": "02a995ecc74dfc0a5fa3287a05ff1dcf1d6c108cdcdbb4b7acbf2ca136cbb76b",
+        "reviewedOn": "2026-10-04",
+        "approvedSha256": "c30784f56e76b398e8d83f3b4da61734430104946dc9fba608b73fef230378b7",
         "method": "manual",
-        "notes": "On 2026-09-13 re-read the current official 2026-27 semester and annual tables and exclusions. Two semesters of tuition 35,830 and student-body fees 210 give annual tuition 71,660 plus fees 420 = 72,080 for each private-tuition observation. Annual table agrees across housing arrangements. One-time 500 deposit, housing/food, medical insurance, department charges and conditional fees remain excluded. Reviewed the new raw HTML fingerprint; annual amounts and full-time undergraduate cohort are unchanged."
+        "notes": "On 2026-10-04 re-read official 2026-27 semester and annual cost tables. Two semesters of tuition 35,830 and student-body fee 210 give annual 71,660 + 420 = 72,080. The annual table confirms those amounts for all three housing arrangements. The one-time 500 deposit, housing/food, medical insurance, departmental and conditional fees remain excluded. Approved the independently downloaded raw HTML; both registered tuition observations and cohort are unchanged."
       },
-      "accessedOn": "2026-09-13",
+      "accessedOn": "2026-10-04",
       "finality": "snapshot",
       "publicationStatus": "published",
       "revisionStatus": "official published 2026-27 tuition and costs page",

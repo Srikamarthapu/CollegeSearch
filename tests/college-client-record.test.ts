@@ -57,7 +57,7 @@ test("the client projection preserves every explorer evidence field", () => {
 test("the browser projection does not copy profile-only provenance", () => {
   const serialized = JSON.stringify(projected);
 
-  assert.ok(serialized.length < 125_000, "projection stays compact");
+  assert.ok(serialized.length < projected.length * 2_500, "projection stays below the established per-college payload budget");
   assert.doesNotMatch(serialized, /"sourceField"|"definition"|"cohort"/);
   assert.doesNotMatch(serialized, /"alternateObservations"|"release"/);
 });

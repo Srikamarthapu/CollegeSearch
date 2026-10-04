@@ -229,7 +229,7 @@ const CollegeCard = memo(function CollegeCard({ college, selectedMajor, isSelect
     </div>
     <div className="college-character"><span>{college.ownership === "Private nonprofit" ? "Private nonprofit" : "Public university"}</span><span>{college.setting} campus</span><span title={`${college.observations.undergraduateEnrollment.periodLabel} · ${college.observations.undergraduateEnrollment.publisher}`}>{formatObservation(college.observations.undergraduateEnrollment)} undergrads</span></div>
     <div className="metric-ledger">
-      <MetricStamp label="Net price / year" observation={college.observations.averageNetPrice} emphasis />
+      <MetricStamp label="Avg. net price / year" observation={college.observations.averageNetPrice} emphasis />
       <MetricStamp label="Overall admit rate" observation={admitRate} />
       <MetricStamp label={observationSourceKind(college.observations.graduationRate).isFederal ? "Completion rate" : "6-year graduation"} observation={college.observations.graduationRate} />
     </div>
@@ -1249,7 +1249,7 @@ export function CollegeSearchApp({
               idPrefix="sidebar"
               stateOptions={stateOptions}
             />
-            <div className="filter-help"><Info size={17} aria-hidden="true" /><p>Our collection covers 50 colleges, with a focus on California. <Link href="/data-sources">See coverage & sources</Link></p></div>
+            <div className="filter-help"><Info size={17} aria-hidden="true" /><p>Explore {colleges.length} colleges across the U.S. <Link href="/data-sources">See coverage & sources</Link></p></div>
           </aside>
 
           <div className="results-panel">

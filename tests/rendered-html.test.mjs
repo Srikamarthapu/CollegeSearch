@@ -184,7 +184,7 @@ test("server-renders the CollegeSearch product shell", async () => {
   assert.equal(reviewedInstitutionRecords, 24);
   assert.equal(reviewedCollegeAdmissions, 19);
   assert.equal(firstPartyAdmissions, 28);
-  assert.equal(federalAdmissionBaselines, 22);
+  assert.equal(federalAdmissionBaselines, payload.colleges.length - 28);
   assert.match(
     html,
     new RegExp(
@@ -570,13 +570,41 @@ test("the source ledger renders one action per unique source URL", async () => {
   }
 });
 
+test("cost displays distinguish federal district charges, verified resident charges and private tuition", async () => {
+  const cases = [
+    ["california-state-university-bakersfield", "In-district tuition + required fees"],
+    ["arizona-state-university-campus-immersion", "In-state tuition + required fees"],
+    ["california-institute-of-technology", "Published tuition + required fees"],
+  ];
+  for (const [slug, label] of cases) {
+    const response = await render(`/colleges/${slug}`);
+    assert.equal(response.status, 200);
+    const html = await response.text();
+    assert.ok(html.includes(`<dt>${label}</dt>`), `${slug} labels its actual tuition basis`);
+    assert.match(html, /Tuition and required fees exclude housing/);
+    if (slug === "california-institute-of-technology") {
+      assert.ok(!html.includes("<dt>In-state tuition + required fees</dt>"));
+      assert.ok(!html.includes("<dt>Out-of-state tuition + required fees</dt>"));
+    }
+  }
+  const comparison = await (await render("/compare?colleges=110404,166027")).text();
+  assert.match(comparison, /Published tuition \+ fees/);
+  assert.ok(!comparison.includes('<th scope="row">In-district / in-state tuition + fees</th>'));
+});
+
+test("mobile broad-field comparison preserves distance-learning program evidence", async () => {
+  const html = await (await render("/compare?colleges=209542&major=Computing%20%26%20Information%20Sciences")).text();
+  const mobile = html.slice(html.indexOf('class="comparison-mobile-card"'));
+  assert.match(mobile, /includes a distance-learning program/);
+});
+
 test("the published cohort has complete, source-registered observations", async () => {
   const payload = JSON.parse(
     await readFile(new URL("../data/colleges.json", import.meta.url), "utf8"),
   );
 
-  assert.equal(payload.release.institutionCount, 50);
-  assert.equal(payload.colleges.length, 50);
+  assert.ok(payload.release.institutionCount >= 100);
+  assert.equal(payload.colleges.length, payload.release.institutionCount);
   assert.equal(payload.release.publisher, "U.S. Department of Education");
   assert.equal(payload.release.sourceName, "College Scorecard");
   assert.equal(payload.release.institutionMetricsYear, undefined);
@@ -617,7 +645,7 @@ test("the published cohort has complete, source-registered observations", async 
   assert.equal(federalSource.publisher, "U.S. Department of Education");
   assert.equal(
     federalSource.sourceName,
-    "College Scorecard — June 2026 institution release",
+    "College Scorecard — 2026-06-10 institution release",
   );
   assert.equal(federalSource.releaseDate, "2026-06-10");
   assert.equal(federalSource.artifactUrl, federalArtifactUrl);
@@ -630,7 +658,7 @@ test("the published cohort has complete, source-registered observations", async 
   );
 
   const unitIds = payload.colleges.map((college) => college.unitId);
-  assert.equal(new Set(unitIds).size, 50);
+  assert.equal(new Set(unitIds).size, payload.colleges.length);
 
   for (const college of payload.colleges) {
     assert.ok(Number.isInteger(college.unitId), `${college.name} has a UNITID`);
@@ -694,14 +722,14 @@ test("the published cohort has complete, source-registered observations", async 
       const label = `${college.name} ${major.name}`;
       assert.match(
         major.evidence,
-        /^Broad federal bachelor's field(?: · exclusively distance education)?$/,
+        /^Broad federal bachelor's field(?: · includes a distance-learning program)?$/,
         `${label} labels its evidence and delivery modality`,
       );
-      if (major.deliveryMode === "exclusively-distance") {
+      if (major.deliveryMode === "includes-distance-program") {
         assert.match(
           major.evidence,
-          /exclusively distance education/,
-          `${label} discloses distance-only delivery`,
+          /includes a distance-learning program/,
+          `${label} discloses an online offering without calling the whole field online-only`,
         );
       }
       assert.equal(major.reportingYear, 2025, `${label} identifies the federal reporting year`);
@@ -846,7 +874,7 @@ test("all nine UC headlines use Fall 2026 snapshots without mixing Fall 2025 yie
   const nonUcColleges = payload.colleges.filter(
     (college) => !expectedUcFall2026.has(college.unitId),
   );
-  assert.equal(nonUcColleges.length, 41);
+  assert.equal(nonUcColleges.length, payload.colleges.length - expectedUcFall2026.size);
   for (const college of nonUcColleges) {
     for (const key of [
       ...Object.keys(ucHeadlineObservationUnits),
@@ -882,7 +910,7 @@ test("all nine UC headlines use Fall 2026 snapshots without mixing Fall 2025 yie
   assert.deepEqual(partialInstitutionRecords, [
     110404, 121345, 130794, 147767, 198419,
   ]);
-  assert.equal(federalAdmissionBaselines.length, 22);
+  assert.equal(federalAdmissionBaselines.length, payload.colleges.length - 28);
   for (const college of federalAdmissionBaselines) {
     assert.equal(college.observations.admitRate.reportingYear, 2024);
   }

@@ -6,61 +6,17 @@ import { unzipSync } from "fflate";
 import { atomicWriteFile } from "./lib/atomic-write.mjs";
 import { cohortUnitIdSet, cohortUnitIds } from "./lib/college-cohort.mjs";
 import {
+  assertCollegeMatchesCatalog,
+  assertScorecardRowMatchesCatalog,
+  collegeCatalogByUnitId,
+  collegeCatalogSource,
+} from "./lib/college-catalog.mjs";
+import { censusRegionForState } from "./lib/us-census-regions.mjs";
+import {
   resolveInstitutionOverlayObservationSourceId,
   validateInstitutionOverlays,
 } from "./lib/institution-overlays.mjs";
 import { fetchWithTimeout, readResponseBytes } from "./lib/limited-response.mjs";
-
-const aliases = {
-  104151: ["ASU", "Arizona State"],
-  110422: ["Cal Poly", "Cal Poly SLO"],
-  110404: ["Caltech", "California Institute of Technology"],
-  110529: ["Cal Poly Pomona", "CPP"],
-  110565: ["Cal State Fullerton", "CSUF"],
-  110583: ["Cal State Long Beach", "CSULB", "Long Beach State"],
-  110592: ["Cal State LA", "CSULA"],
-  110608: ["Cal State Northridge", "CSUN"],
-  110617: ["Sac State", "Sacramento State"],
-  110635: ["UC Berkeley", "Berkeley", "Cal"],
-  110644: ["UC Davis", "UCD"],
-  110653: ["UC Irvine", "UCI"],
-  110662: ["UCLA", "UC Los Angeles"],
-  110671: ["UC Riverside", "UCR"],
-  110680: ["UC San Diego", "UCSD"],
-  110705: ["UC Santa Barbara", "UCSB"],
-  110714: ["UC Santa Cruz", "UCSC"],
-  110556: ["Fresno State", "CSU Fresno"],
-  111948: ["Chapman"],
-  117946: ["LMU", "Loyola Marymount"],
-  121345: ["Pomona"],
-  122409: ["San Diego State", "SDSU"],
-  122612: ["USF", "University of San Francisco"],
-  122755: ["San Jose State", "SJSU"],
-  122931: ["Santa Clara", "SCU"],
-  123961: ["USC", "Southern California"],
-  139755: ["Georgia Tech", "GT"],
-  145637: ["UIUC", "Illinois"],
-  147767: ["Northwestern"],
-  166027: ["Harvard"],
-  166629: ["UMass Amherst", "Massachusetts Amherst"],
-  166683: ["MIT", "Massachusetts Institute of Technology"],
-  170976: ["Michigan", "UMich"],
-  186131: ["Princeton"],
-  190150: ["Columbia"],
-  193900: ["NYU", "New York University"],
-  198419: ["Duke"],
-  199120: ["UNC", "UNC Chapel Hill"],
-  204796: ["Ohio State", "OSU"],
-  209542: ["Oregon State", "OSU"],
-  228778: ["UT Austin", "Texas"],
-  234076: ["UVA", "Virginia"],
-  236939: ["Washington State", "WSU"],
-  236948: ["UW", "University of Washington"],
-  240444: ["Wisconsin", "UW Madison"],
-  243744: ["Stanford"],
-  243780: ["Purdue"],
-  445188: ["UC Merced", "UCM"],
-};
 
 const programFields = {
   "Computing & Information Sciences": {
@@ -106,10 +62,12 @@ const programFields = {
 
 const scorecardArtifactUrl =
   process.env.SCORECARD_INSTITUTION_ZIP_URL ||
-  "https://ed-public-download.scorecard.network/downloads/Most-Recent-Cohorts-Institution_06102026.zip";
+  collegeCatalogSource.artifactUrl;
 const scorecardLandingUrl = "https://collegescorecard.ed.gov/data/";
 const scorecardDictionaryUrl =
   "https://collegescorecard.ed.gov/files/CollegeScorecardDataDictionary.xlsx";
+const scorecardDocumentationUrl =
+  "https://collegescorecard.ed.gov/files/InstitutionDataDocumentation.pdf";
 
 const federalMetricPeriods = {
   admissions: {
@@ -312,6 +270,11 @@ async function loadScorecardRows() {
   const artifactSha256 = createHash("sha256")
     .update(zipBytes)
     .digest("hex");
+  if (artifactSha256 !== collegeCatalogSource.artifactSha256) {
+    throw new Error(
+      `College Scorecard artifact hash ${artifactSha256} does not match the reviewed manifest hash ${collegeCatalogSource.artifactSha256}; review the release before refreshing.`,
+    );
+  }
   const maximumCsvBytes = 250 * 1024 * 1024;
   let matchingCsvEntries = 0;
   const archive = unzipSync(zipBytes, {
@@ -361,6 +324,7 @@ async function loadScorecardRows() {
     "OPEID",
     "OPEID6",
     "INSTNM",
+    "ALIAS",
     "CITY",
     "STABBR",
     "CONTROL",
@@ -369,6 +333,7 @@ async function loadScorecardRows() {
     "MAIN",
     "NUMBRANCH",
     "CURROPER",
+    "HIGHDEG",
     "ADM_RATE",
     "UGDS",
     "NPT4_PUB",
@@ -423,11 +388,18 @@ async function loadScorecardRows() {
   const unexpectedUnitIds = [...returnedUnitIds].filter(
     (unitId) => !requestedUnitIds.has(unitId),
   );
-  if (missingUnitIds.length || unexpectedUnitIds.length) {
+  if (
+    missingUnitIds.length ||
+    unexpectedUnitIds.length ||
+    rows.length !== cohortUnitIds.length ||
+    returnedUnitIds.size !== rows.length
+  ) {
     throw new Error(
       `College Scorecard identity mismatch. Missing: ${missingUnitIds.join(", ") || "none"}; unexpected: ${unexpectedUnitIds.join(", ") || "none"}.`,
     );
   }
+
+  for (const row of rows) assertScorecardRowMatchesCatalog(row);
 
   return { rows, artifactSha256 };
 }
@@ -454,26 +426,19 @@ function settingLabel(locale) {
   return "Setting unavailable";
 }
 
-function regionLabel(state) {
-  if (["CA", "OR", "WA", "AZ"].includes(state)) return "West";
-  if (["IL", "IN", "MI", "OH", "WI"].includes(state)) return "Midwest";
-  if (["GA", "NC", "TX", "VA"].includes(state)) return "South";
-  return "Northeast";
-}
-
 const scorecardSnapshot = await loadScorecardRows();
 federalSource = {
-  id: "college-scorecard-institution-2026-06-10",
+  id: `college-scorecard-institution-${collegeCatalogSource.releaseDate}`,
   publisher: "U.S. Department of Education",
-  sourceName: "College Scorecard — June 2026 institution release",
+  sourceName: `College Scorecard — ${collegeCatalogSource.releaseDate} institution release`,
   sourceUrl: scorecardLandingUrl,
-  sourceUrls: [scorecardArtifactUrl, scorecardDictionaryUrl],
+  sourceUrls: [scorecardArtifactUrl, scorecardDictionaryUrl, scorecardDocumentationUrl],
   artifactUrl: scorecardArtifactUrl,
   artifactSha256: scorecardSnapshot.artifactSha256,
-  releaseDate: "2026-06-10",
+  releaseDate: collegeCatalogSource.releaseDate,
   accessedOn,
   notes:
-    "This published June 2026 artifact combines metrics with different reporting lags and revision states. IPEDS 2024-2025 admissions, enrollment, tuition, and program fields remain provisional; every observation retains its exact period and revision state.",
+    `This published ${collegeCatalogSource.releaseDate} artifact combines metrics with different reporting lags and revision states. IPEDS 2024-2025 admissions, enrollment, tuition, and program fields remain provisional; every observation retains its exact period and revision state. TUITIONFEE_IN is the federal in-district tuition-and-fees field and may differ from a college's in-state resident price. Institution-level field definitions follow the linked September 2025 technical documentation.`,
   publicationStatus: "published",
   revisionStatus: "mixed",
 };
@@ -481,6 +446,7 @@ federalSource = {
 const colleges = scorecardSnapshot.rows
   .map((row) => {
     const unitId = Number(row.UNITID);
+    const manifestEntry = collegeCatalogByUnitId.get(unitId);
     const ucAdmission = ucHeadlineByUnitId.get(unitId);
     const ucFinalizedAdmission = ucFinalizedByUnitId.get(unitId);
     const ucHeadlineSource = ucAdmission
@@ -518,12 +484,12 @@ const colleges = scorecardSnapshot.rows
     const majors = Object.entries(programFields)
       .map(([name, { shareField, bachelorField }]) => {
         const availabilityCode = numericField(row, bachelorField);
-        const distanceOnly = availabilityCode === 2;
+        const includesDistanceProgram = availabilityCode === 2;
         return {
           name,
           share: numericField(row, shareField),
-          evidence: distanceOnly
-            ? "Broad federal bachelor's field · exclusively distance education"
+          evidence: includesDistanceProgram
+            ? "Broad federal bachelor's field · includes a distance-learning program"
             : "Broad federal bachelor's field",
           reportingYear: federalMetricPeriods.fieldEvidence.reportingYear,
           periodLabel: federalMetricPeriods.fieldEvidence.periodLabel,
@@ -532,11 +498,13 @@ const colleges = scorecardSnapshot.rows
           sourceField: `${shareField} + ${bachelorField}`,
           cohort:
             "IPEDS 2024-2025 awards; bachelor's program availability reported for the broad CIP family",
-          definition: distanceOnly
-            ? "The bachelor's indicator reports this broad field only through exclusively distance-education programs. The percentage is this field's share of all institution-wide awards, not a major-specific admission rate."
-            : "The bachelor's indicator confirms at least one program in this broad field. The percentage is this field's share of all institution-wide awards, not a major-specific admission rate.",
-          bachelorsAvailable: availabilityCode === 1 || distanceOnly,
-          deliveryMode: distanceOnly ? "exclusively-distance" : "campus-or-mixed",
+          definition: includesDistanceProgram
+            ? "The federal indicator confirms at least one bachelor's program in this broad field can be completed through distance education. It does not show that every program in the broad field is online or whether campus options are also available. The percentage is this field's share of all institution-wide awards, not a major-specific admission rate."
+            : "The federal indicator confirms at least one bachelor's program in this broad field. It does not establish delivery mode. The percentage is this field's share of all institution-wide awards, not a major-specific admission rate.",
+          bachelorsAvailable: availabilityCode === 1 || includesDistanceProgram,
+          deliveryMode: includesDistanceProgram
+            ? "includes-distance-program"
+            : "delivery-not-specified",
         };
       })
       .filter(
@@ -553,17 +521,15 @@ const colleges = scorecardSnapshot.rows
       mainCampus: numericField(row, "MAIN") === 1,
       branchCount: numericField(row, "NUMBRANCH"),
       currentlyOperating: numericField(row, "CURROPER") === 1,
-      slug: field(row, "INSTNM")
-        .toLowerCase()
-        .replace(/&/g, "and")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/(^-|-$)/g, ""),
-      name: field(row, "INSTNM"),
-      aliases: aliases[unitId] || [],
+      slug: manifestEntry.slug,
+      name: manifestEntry.expectedName,
+      aliases: [...manifestEntry.aliases],
       city: field(row, "CITY"),
       state: field(row, "STABBR"),
-      region: regionLabel(field(row, "STABBR")),
+      region: censusRegionForState(field(row, "STABBR")),
       ownership: ownershipLabel(numericField(row, "CONTROL")),
+      catalogCategory: manifestEntry.catalogCategory,
+      inclusionReason: manifestEntry.inclusionReason,
       setting: settingLabel(numericField(row, "LOCALE")),
       website: normalizeWebsite(field(row, "INSTURL")),
       observations: {
@@ -696,10 +662,11 @@ const colleges = scorecardSnapshot.rows
           reportingYear: federalMetricPeriods.tuitionAndFees.reportingYear,
           periodLabel: federalMetricPeriods.tuitionAndFees.periodLabel,
           finality: federalMetricPeriods.tuitionAndFees.revisionStatus,
-          comparabilityKey: "tuition-fees.in-state",
+          comparabilityKey: "tuition-fees.in-district",
           sourceField: "TUITIONFEE_IN",
-          cohort: "Academic year 2024-2025 published institutional price",
-          definition: "Published in-state tuition and required fees.",
+          cohort: "Academic year 2024-2025 published in-district tuition and required fees",
+          definition:
+            "Published in-district tuition and required fees. College Scorecard documentation warns that some institutions have a different in-state resident price that this federal field does not reflect.",
         }),
         tuitionOutOfState: observation({
           value: numericField(row, "TUITIONFEE_OUT"),
@@ -758,6 +725,7 @@ const colleges = scorecardSnapshot.rows
   .sort((a, b) => a.name.localeCompare(b.name));
 
 for (const college of colleges) {
+  assertCollegeMatchesCatalog(college);
   if (!college.mainCampus || !college.currentlyOperating) {
     throw new Error(
       `${college.name} is no longer a current main-campus Scorecard record. Review the institution identity before publishing.`,
@@ -778,7 +746,7 @@ const output = {
     cohortName: "CollegeSearch verified starting cohort",
     institutionCount: colleges.length,
     accessedOn,
-    federalReleaseDate: "2026-06-10",
+    federalReleaseDate: collegeCatalogSource.releaseDate,
     metricPeriods: federalMetricPeriods,
     earningsPeriodLabel: federalMetricPeriods.medianEarnings.periodLabel,
     publisher: "U.S. Department of Education",
@@ -789,7 +757,7 @@ const output = {
     ucDisciplineSourceUrl:
       "https://www.universityofcalifornia.edu/about-us/information-center/freshman-admission-discipline",
     notes:
-      "UC headline admit rates use official preliminary Fall 2026 UC Admissions campus snapshots as of June 2026; they may change, and campus rows must not be summed to infer an unduplicated systemwide total. Fall 2025 Accountability data remains the finalized source for enrollees and yield. The federal baseline comes from the published June 2026 College Scorecard artifact; underlying 2024-2025 IPEDS admissions, enrollment, tuition, and program fields remain provisional. Every observation retains its exact reporting period. Verified institution observations retain replaced federal records as alternates. Broad field filters pair a provisional 2024-2025 bachelor's-program indicator with the field's share of all awards; neither is a major-specific admit rate.",
+      "UC headline admit rates use official preliminary Fall 2026 UC Admissions campus snapshots as of June 2026; they may change, and campus rows must not be summed to infer an unduplicated systemwide total. Fall 2025 Accountability data remains the finalized source for enrollees and yield. The federal baseline comes from the published June 2026 College Scorecard artifact; underlying 2024-2025 IPEDS admissions, enrollment, tuition, and program fields remain provisional. Federal TUITIONFEE_IN is in-district tuition and may differ from a college's in-state resident price. Every observation retains its exact reporting period. Verified institution observations retain replaced federal records as alternates. Broad field filters pair a provisional 2024-2025 bachelor's-program indicator with the field's share of all awards; neither is a major-specific admit rate.",
     sources: [
       federalSource,
       ucHeadlineDataset.release,

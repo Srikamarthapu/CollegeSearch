@@ -2,6 +2,7 @@ import { spawn } from "node:child_process";
 import { copyFile, mkdtemp, readFile, rm } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { assertCollegeEvidence } from "../app/lib/college-evidence.ts";
 
 import {
   acquireDataPublicationLock,
@@ -80,6 +81,7 @@ try {
     latestAdmissions,
     generatedColleges,
   });
+  assertCollegeEvidence(generatedColleges);
   await Promise.all(fileNames.map(readJson));
   assertOverlaySnapshotUnchanged(
     overlaySnapshotBytes,

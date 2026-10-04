@@ -341,8 +341,9 @@ export default function DataSourcesPage() {
             <div>
               <h3>For identification, never endorsement.</h3>
               <p>
-                Each result uses a real institutional or athletics identity
+                Where available, results use an institutional or athletics identity
                 mark from an official university source or Wikimedia Commons.
+                Other colleges use a text initial, not an invented mark.
                 Copyright status and trademark permission are different, so
                 the source and usage note stay recorded for every asset.
               </p>

@@ -43,3 +43,20 @@ M0 verification progress:
 - Full disposition: `M0_FOUNDATION_RESULTS.md`; raw logs remain under ignored `work/m0-*`.
 - Remaining issues: unpatched development advisory, external lockfile build warning, unavailable NVIDIA key/live evaluation/production permission. Changes are local, not yet deployed.
 - Next milestone: M1 reviewed 100-college manifest, official import, regional identity fixes, profile/action/brand fallbacks, and data regression checks. Existing IDs/slugs and source semantics must remain stable.
+
+## M1 in progress — catalog and evidence
+
+- Official Scorecard data page still links the June 10, 2026 institution archive; archive hash matches the published release. Resolved 50 additions against actual source rows: 12 CSU, 15 major public, 13 regional public, 10 private nonprofit. All are unique current main-campus U.S. institutions. Candidate evidence is in ignored `work/college-catalog-candidates.json`; reviewed manifest/import in progress.
+- Preserved original 50 UNITID/slug pairs in `tests/fixtures/original-college-identities.json` for a regression boundary independent of the expanding manifest.
+- Generalized app collection copy and route/matching assertions. Runtime evidence checks now reject wrong units/status, invalid dates, unregistered/mismatched source references, negative/out-of-range/fractional-count values and duplicate slugs. Meaningful corruption and honest-missing-data tests pass (4 focused tests).
+- Native Next type generation followed by typecheck passes. Running Vinext after Next replaces generated route declarations, so regenerate native types before standalone Next typechecking; this is a generated-artifact ordering issue, not an app-source failure.
+- New-college official action-link review and sourced-logo fallbacks are in progress. No expanded data has been published to the live app/database.
+
+M1 semantic corrections found during review:
+- Federal `TUITIONFEE_IN` is documented as in-district; institutional resident tuition remains distinct. Private profiles/comparison now use one published standard tuition amount, with direct source links in comparison. Tuition excludes living costs; source-aware labels and visible context preserve that distinction.
+- Scorecard two-digit CIP distance flags aggregate at least one detailed program. Correcting previous copy that incorrectly implied an entire broad field was online-only; preserve online-offering evidence on mobile comparisons without excluding possible campus options.
+- Current usage snapshot: 35% remaining (account-wide; concurrent work can contribute). No reset used.
+
+## M1 data exit — proceed to database integration
+
+Catalog import and source audit complete at 100 institutions. Both builds/typecheck/lint pass; browser core flows and 320/390px checks pass. Full suite: 350/351, with the single expected integration failure at the existing fixed 50-ID database save constraint. `M1_CATALOG_RESULTS.md` records evidence and remaining issues before M2. Resource-link agent is finishing independent official-link verification; unverified destinations remain unavailable. No expanded app deployment before M2 fixes the saved-college constraint and retests it.

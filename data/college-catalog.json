@@ -1,0 +1,1339 @@
+{
+  "schemaVersion": 1,
+  "scope": "United States: 50 states plus the District of Columbia; active main-campus, degree-granting institutions.",
+  "selectionRules": {
+    "sourceIdentity": "Current College Scorecard institution-level record, matched by UNITID, INSTNM, and STABBR.",
+    "mainCampusField": "MAIN = 1",
+    "currentlyOperatingField": "CURROPER = 1",
+    "degreeGrantingField": "HIGHDEG is 3 (bachelor's degree) or 4 (graduate degree)",
+    "ownershipField": "CONTROL = 1 (public) or 2 (private nonprofit)",
+    "identityKey": "UNITID is the stable institution/profile/save identity; OPEID fields remain separate identifiers."
+  },
+  "source": {
+    "publisher": "U.S. Department of Education, College Scorecard",
+    "sourceName": "College Scorecard institution-level data",
+    "dataPage": "https://collegescorecard.ed.gov/data/",
+    "artifactUrl": "https://ed-public-download.scorecard.network/downloads/Most-Recent-Cohorts-Institution_06102026.zip",
+    "artifactName": "Most-Recent-Cohorts-Institution_06102026.zip",
+    "releaseDate": "2026-06-10",
+    "pageLastModified": "2026-09-25",
+    "reviewedOn": "2026-10-04",
+    "artifactSha256": "f56a181b000ca4914e924c16b6b81dcc656e25aeb2ac68ab7d271ac0f29ffd58",
+    "identityFields": [
+      "UNITID",
+      "INSTNM",
+      "STABBR",
+      "CONTROL",
+      "MAIN",
+      "CURROPER",
+      "HIGHDEG",
+      "NUMBRANCH",
+      "INSTURL",
+      "ALIAS"
+    ]
+  },
+  "institutions": [
+    {
+      "unitId": 104151,
+      "expectedName": "Arizona State University Campus Immersion",
+      "state": "AZ",
+      "scorecardControl": 1,
+      "slug": "arizona-state-university-campus-immersion",
+      "aliases": [
+        "ASU",
+        "Arizona State"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in AZ.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 104179,
+      "expectedName": "University of Arizona",
+      "state": "AZ",
+      "scorecardControl": 1,
+      "slug": "university-of-arizona",
+      "aliases": [],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in AZ.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 110404,
+      "expectedName": "California Institute of Technology",
+      "state": "CA",
+      "scorecardControl": 2,
+      "slug": "california-institute-of-technology",
+      "aliases": [
+        "Caltech",
+        "California Institute of Technology"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing private nonprofit option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 110422,
+      "expectedName": "California Polytechnic State University-San Luis Obispo",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-polytechnic-state-university-san-luis-obispo",
+      "aliases": [
+        "Cal Poly",
+        "Cal Poly SLO"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 110486,
+      "expectedName": "California State University-Bakersfield",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-state-university-bakersfield",
+      "aliases": [
+        "CSU Bakersfield"
+      ],
+      "catalogCategory": "csu-campus",
+      "inclusionReason": "Adds the Bakersfield, California CSU campus to widen campus and location choices across the CSU system.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 110495,
+      "expectedName": "California State University-Stanislaus",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-state-university-stanislaus",
+      "aliases": [
+        "Stanislaus State"
+      ],
+      "catalogCategory": "csu-campus",
+      "inclusionReason": "Adds the Turlock, California CSU campus to widen campus and location choices across the CSU system.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 110510,
+      "expectedName": "California State University-San Bernardino",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-state-university-san-bernardino",
+      "aliases": [
+        "Cal State San Bernardino"
+      ],
+      "catalogCategory": "csu-campus",
+      "inclusionReason": "Adds the San Bernardino, California CSU campus to widen campus and location choices across the CSU system.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 110529,
+      "expectedName": "California State Polytechnic University-Pomona",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-state-polytechnic-university-pomona",
+      "aliases": [
+        "Cal Poly Pomona",
+        "CPP"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 110538,
+      "expectedName": "California State University-Chico",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-state-university-chico",
+      "aliases": [],
+      "catalogCategory": "csu-campus",
+      "inclusionReason": "Adds the Chico, California CSU campus to widen campus and location choices across the CSU system.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 110547,
+      "expectedName": "California State University-Dominguez Hills",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-state-university-dominguez-hills",
+      "aliases": [
+        "CSUDH"
+      ],
+      "catalogCategory": "csu-campus",
+      "inclusionReason": "Adds the Carson, California CSU campus to widen campus and location choices across the CSU system.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 110556,
+      "expectedName": "California State University-Fresno",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-state-university-fresno",
+      "aliases": [
+        "Fresno State",
+        "CSU Fresno"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 110565,
+      "expectedName": "California State University-Fullerton",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-state-university-fullerton",
+      "aliases": [
+        "Cal State Fullerton",
+        "CSUF"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 110574,
+      "expectedName": "California State University-East Bay",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-state-university-east-bay",
+      "aliases": [
+        "Cal State East Bay"
+      ],
+      "catalogCategory": "csu-campus",
+      "inclusionReason": "Adds the Hayward, California CSU campus to widen campus and location choices across the CSU system.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 110583,
+      "expectedName": "California State University-Long Beach",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-state-university-long-beach",
+      "aliases": [
+        "Cal State Long Beach",
+        "CSULB",
+        "Long Beach State"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 110592,
+      "expectedName": "California State University-Los Angeles",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-state-university-los-angeles",
+      "aliases": [
+        "Cal State LA",
+        "CSULA"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 110608,
+      "expectedName": "California State University-Northridge",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-state-university-northridge",
+      "aliases": [
+        "Cal State Northridge",
+        "CSUN"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 110617,
+      "expectedName": "California State University-Sacramento",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-state-university-sacramento",
+      "aliases": [
+        "Sac State",
+        "Sacramento State"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 110635,
+      "expectedName": "University of California-Berkeley",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "university-of-california-berkeley",
+      "aliases": [
+        "UC Berkeley",
+        "Berkeley",
+        "Cal"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 110644,
+      "expectedName": "University of California-Davis",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "university-of-california-davis",
+      "aliases": [
+        "UC Davis",
+        "UCD"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 110653,
+      "expectedName": "University of California-Irvine",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "university-of-california-irvine",
+      "aliases": [
+        "UC Irvine",
+        "UCI"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 110662,
+      "expectedName": "University of California-Los Angeles",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "university-of-california-los-angeles",
+      "aliases": [
+        "UCLA",
+        "UC Los Angeles"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 110671,
+      "expectedName": "University of California-Riverside",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "university-of-california-riverside",
+      "aliases": [
+        "UC Riverside",
+        "UCR"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 110680,
+      "expectedName": "University of California-San Diego",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "university-of-california-san-diego",
+      "aliases": [
+        "UC San Diego",
+        "UCSD"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 110705,
+      "expectedName": "University of California-Santa Barbara",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "university-of-california-santa-barbara",
+      "aliases": [
+        "UC Santa Barbara",
+        "UCSB"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 110714,
+      "expectedName": "University of California-Santa Cruz",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "university-of-california-santa-cruz",
+      "aliases": [
+        "UC Santa Cruz",
+        "UCSC"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 111948,
+      "expectedName": "Chapman University",
+      "state": "CA",
+      "scorecardControl": 2,
+      "slug": "chapman-university",
+      "aliases": [
+        "Chapman"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing private nonprofit option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 115755,
+      "expectedName": "California State Polytechnic University-Humboldt",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-state-polytechnic-university-humboldt",
+      "aliases": [
+        "Cal Poly Humboldt"
+      ],
+      "catalogCategory": "csu-campus",
+      "inclusionReason": "Adds the Arcata, California CSU campus to widen campus and location choices across the CSU system.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 117946,
+      "expectedName": "Loyola Marymount University",
+      "state": "CA",
+      "scorecardControl": 2,
+      "slug": "loyola-marymount-university",
+      "aliases": [
+        "LMU",
+        "Loyola Marymount"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing private nonprofit option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 121345,
+      "expectedName": "Pomona College",
+      "state": "CA",
+      "scorecardControl": 2,
+      "slug": "pomona-college",
+      "aliases": [
+        "Pomona"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing private nonprofit option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 122409,
+      "expectedName": "San Diego State University",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "san-diego-state-university",
+      "aliases": [
+        "San Diego State",
+        "SDSU"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 122436,
+      "expectedName": "University of San Diego",
+      "state": "CA",
+      "scorecardControl": 2,
+      "slug": "university-of-san-diego",
+      "aliases": [
+        "USD"
+      ],
+      "catalogCategory": "private-nonprofit",
+      "inclusionReason": "Adds a private nonprofit option in CA to broaden institution-type and regional choices.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 122597,
+      "expectedName": "San Francisco State University",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "san-francisco-state-university",
+      "aliases": [],
+      "catalogCategory": "csu-campus",
+      "inclusionReason": "Adds the San Francisco, California CSU campus to widen campus and location choices across the CSU system.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 122612,
+      "expectedName": "University of San Francisco",
+      "state": "CA",
+      "scorecardControl": 2,
+      "slug": "university-of-san-francisco",
+      "aliases": [
+        "USF",
+        "University of San Francisco"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing private nonprofit option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 122755,
+      "expectedName": "San Jose State University",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "san-jose-state-university",
+      "aliases": [
+        "San Jose State",
+        "SJSU"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 122931,
+      "expectedName": "Santa Clara University",
+      "state": "CA",
+      "scorecardControl": 2,
+      "slug": "santa-clara-university",
+      "aliases": [
+        "Santa Clara",
+        "SCU"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing private nonprofit option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 123572,
+      "expectedName": "Sonoma State University",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "sonoma-state-university",
+      "aliases": [],
+      "catalogCategory": "csu-campus",
+      "inclusionReason": "Adds the Rohnert Park, California CSU campus to widen campus and location choices across the CSU system.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 123961,
+      "expectedName": "University of Southern California",
+      "state": "CA",
+      "scorecardControl": 2,
+      "slug": "university-of-southern-california",
+      "aliases": [
+        "USC",
+        "Southern California"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing private nonprofit option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 129020,
+      "expectedName": "University of Connecticut",
+      "state": "CT",
+      "scorecardControl": 1,
+      "slug": "university-of-connecticut",
+      "aliases": [],
+      "catalogCategory": "major-public",
+      "inclusionReason": "Adds a major public university in CT to broaden regional coverage and public-campus comparisons.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 130794,
+      "expectedName": "Yale University",
+      "state": "CT",
+      "scorecardControl": 2,
+      "slug": "yale-university",
+      "aliases": [],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing private nonprofit option in CT.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 131520,
+      "expectedName": "Howard University",
+      "state": "DC",
+      "scorecardControl": 2,
+      "slug": "howard-university",
+      "aliases": [],
+      "catalogCategory": "private-nonprofit",
+      "inclusionReason": "Adds a private nonprofit option in DC to broaden institution-type and regional choices.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 134097,
+      "expectedName": "Florida State University",
+      "state": "FL",
+      "scorecardControl": 1,
+      "slug": "florida-state-university",
+      "aliases": [
+        "Florida State",
+        "FSU"
+      ],
+      "catalogCategory": "major-public",
+      "inclusionReason": "Adds a major public university in FL to broaden regional coverage and public-campus comparisons.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 134130,
+      "expectedName": "University of Florida",
+      "state": "FL",
+      "scorecardControl": 1,
+      "slug": "university-of-florida",
+      "aliases": [],
+      "catalogCategory": "major-public",
+      "inclusionReason": "Adds a major public university in FL to broaden regional coverage and public-campus comparisons.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 139755,
+      "expectedName": "Georgia Institute of Technology-Main Campus",
+      "state": "GA",
+      "scorecardControl": 1,
+      "slug": "georgia-institute-of-technology-main-campus",
+      "aliases": [
+        "Georgia Tech",
+        "GT"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in GA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 139959,
+      "expectedName": "University of Georgia",
+      "state": "GA",
+      "scorecardControl": 1,
+      "slug": "university-of-georgia",
+      "aliases": [],
+      "catalogCategory": "major-public",
+      "inclusionReason": "Adds a major public university in GA to broaden regional coverage and public-campus comparisons.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 142115,
+      "expectedName": "Boise State University",
+      "state": "ID",
+      "scorecardControl": 1,
+      "slug": "boise-state-university",
+      "aliases": [
+        "Boise State"
+      ],
+      "catalogCategory": "regional-public",
+      "inclusionReason": "Adds a regional public option in ID to broaden location and campus-choice coverage.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 144740,
+      "expectedName": "DePaul University",
+      "state": "IL",
+      "scorecardControl": 2,
+      "slug": "depaul-university",
+      "aliases": [],
+      "catalogCategory": "private-nonprofit",
+      "inclusionReason": "Adds a private nonprofit option in IL to broaden institution-type and regional choices.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 145637,
+      "expectedName": "University of Illinois Urbana-Champaign",
+      "state": "IL",
+      "scorecardControl": 1,
+      "slug": "university-of-illinois-urbana-champaign",
+      "aliases": [
+        "UIUC",
+        "Illinois"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in IL.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 146719,
+      "expectedName": "Loyola University Chicago",
+      "state": "IL",
+      "scorecardControl": 2,
+      "slug": "loyola-university-chicago",
+      "aliases": [],
+      "catalogCategory": "private-nonprofit",
+      "inclusionReason": "Adds a private nonprofit option in IL to broaden institution-type and regional choices.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 147703,
+      "expectedName": "Northern Illinois University",
+      "state": "IL",
+      "scorecardControl": 1,
+      "slug": "northern-illinois-university",
+      "aliases": [],
+      "catalogCategory": "regional-public",
+      "inclusionReason": "Adds a regional public option in IL to broaden location and campus-choice coverage.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 147767,
+      "expectedName": "Northwestern University",
+      "state": "IL",
+      "scorecardControl": 2,
+      "slug": "northwestern-university",
+      "aliases": [
+        "Northwestern"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing private nonprofit option in IL.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 153658,
+      "expectedName": "University of Iowa",
+      "state": "IA",
+      "scorecardControl": 1,
+      "slug": "university-of-iowa",
+      "aliases": [
+        "Iowa"
+      ],
+      "catalogCategory": "major-public",
+      "inclusionReason": "Adds a major public university in IA to broaden regional coverage and public-campus comparisons.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 155399,
+      "expectedName": "Kansas State University",
+      "state": "KS",
+      "scorecardControl": 1,
+      "slug": "kansas-state-university",
+      "aliases": [
+        "K-State"
+      ],
+      "catalogCategory": "major-public",
+      "inclusionReason": "Adds a major public university in KS to broaden regional coverage and public-campus comparisons.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 160755,
+      "expectedName": "Tulane University of Louisiana",
+      "state": "LA",
+      "scorecardControl": 2,
+      "slug": "tulane-university-of-louisiana",
+      "aliases": [
+        "Tulane University"
+      ],
+      "catalogCategory": "private-nonprofit",
+      "inclusionReason": "Adds a private nonprofit option in LA to broaden institution-type and regional choices.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 161253,
+      "expectedName": "University of Maine",
+      "state": "ME",
+      "scorecardControl": 1,
+      "slug": "university-of-maine",
+      "aliases": [],
+      "catalogCategory": "regional-public",
+      "inclusionReason": "Adds a regional public option in ME to broaden location and campus-choice coverage.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 166027,
+      "expectedName": "Harvard University",
+      "state": "MA",
+      "scorecardControl": 2,
+      "slug": "harvard-university",
+      "aliases": [
+        "Harvard"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing private nonprofit option in MA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 166629,
+      "expectedName": "University of Massachusetts-Amherst",
+      "state": "MA",
+      "scorecardControl": 1,
+      "slug": "university-of-massachusetts-amherst",
+      "aliases": [
+        "UMass Amherst",
+        "Massachusetts Amherst"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in MA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 166683,
+      "expectedName": "Massachusetts Institute of Technology",
+      "state": "MA",
+      "scorecardControl": 2,
+      "slug": "massachusetts-institute-of-technology",
+      "aliases": [
+        "MIT",
+        "Massachusetts Institute of Technology"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing private nonprofit option in MA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 170976,
+      "expectedName": "University of Michigan-Ann Arbor",
+      "state": "MI",
+      "scorecardControl": 1,
+      "slug": "university-of-michigan-ann-arbor",
+      "aliases": [
+        "Michigan",
+        "UMich"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in MI.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 174066,
+      "expectedName": "University of Minnesota-Twin Cities",
+      "state": "MN",
+      "scorecardControl": 1,
+      "slug": "university-of-minnesota-twin-cities",
+      "aliases": [],
+      "catalogCategory": "major-public",
+      "inclusionReason": "Adds a major public university in MN to broaden regional coverage and public-campus comparisons.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 178396,
+      "expectedName": "University of Missouri-Columbia",
+      "state": "MO",
+      "scorecardControl": 1,
+      "slug": "university-of-missouri-columbia",
+      "aliases": [],
+      "catalogCategory": "major-public",
+      "inclusionReason": "Adds a major public university in MO to broaden regional coverage and public-campus comparisons.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 185590,
+      "expectedName": "Montclair State University",
+      "state": "NJ",
+      "scorecardControl": 1,
+      "slug": "montclair-state-university",
+      "aliases": [],
+      "catalogCategory": "regional-public",
+      "inclusionReason": "Adds a regional public option in NJ to broaden location and campus-choice coverage.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 186131,
+      "expectedName": "Princeton University",
+      "state": "NJ",
+      "scorecardControl": 2,
+      "slug": "princeton-university",
+      "aliases": [
+        "Princeton"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing private nonprofit option in NJ.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 186380,
+      "expectedName": "Rutgers University-New Brunswick",
+      "state": "NJ",
+      "scorecardControl": 1,
+      "slug": "rutgers-university-new-brunswick",
+      "aliases": [
+        "Rutgers-New Brunswick",
+        "Rutgers"
+      ],
+      "catalogCategory": "major-public",
+      "inclusionReason": "Adds a major public university in NJ to broaden regional coverage and public-campus comparisons.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 190150,
+      "expectedName": "Columbia University in the City of New York",
+      "state": "NY",
+      "scorecardControl": 2,
+      "slug": "columbia-university-in-the-city-of-new-york",
+      "aliases": [
+        "Columbia"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing private nonprofit option in NY.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 193900,
+      "expectedName": "New York University",
+      "state": "NY",
+      "scorecardControl": 2,
+      "slug": "new-york-university",
+      "aliases": [
+        "NYU",
+        "New York University"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing private nonprofit option in NY.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 196088,
+      "expectedName": "University at Buffalo",
+      "state": "NY",
+      "scorecardControl": 1,
+      "slug": "university-at-buffalo",
+      "aliases": [
+        "UB",
+        "SUNY Buffalo"
+      ],
+      "catalogCategory": "major-public",
+      "inclusionReason": "Adds a major public university in NY to broaden regional coverage and public-campus comparisons.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 196413,
+      "expectedName": "Syracuse University",
+      "state": "NY",
+      "scorecardControl": 2,
+      "slug": "syracuse-university",
+      "aliases": [],
+      "catalogCategory": "private-nonprofit",
+      "inclusionReason": "Adds a private nonprofit option in NY to broaden institution-type and regional choices.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 197869,
+      "expectedName": "Appalachian State University",
+      "state": "NC",
+      "scorecardControl": 1,
+      "slug": "appalachian-state-university",
+      "aliases": [],
+      "catalogCategory": "regional-public",
+      "inclusionReason": "Adds a regional public option in NC to broaden location and campus-choice coverage.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 198419,
+      "expectedName": "Duke University",
+      "state": "NC",
+      "scorecardControl": 2,
+      "slug": "duke-university",
+      "aliases": [
+        "Duke"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing private nonprofit option in NC.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 199120,
+      "expectedName": "University of North Carolina at Chapel Hill",
+      "state": "NC",
+      "scorecardControl": 1,
+      "slug": "university-of-north-carolina-at-chapel-hill",
+      "aliases": [
+        "UNC",
+        "UNC Chapel Hill"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in NC.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 200800,
+      "expectedName": "University of Akron Main Campus",
+      "state": "OH",
+      "scorecardControl": 1,
+      "slug": "university-of-akron-main-campus",
+      "aliases": [],
+      "catalogCategory": "regional-public",
+      "inclusionReason": "Adds a regional public option in OH to broaden location and campus-choice coverage.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 204796,
+      "expectedName": "Ohio State University-Main Campus",
+      "state": "OH",
+      "scorecardControl": 1,
+      "slug": "ohio-state-university-main-campus",
+      "aliases": [
+        "Ohio State",
+        "OSU"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in OH.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 206084,
+      "expectedName": "University of Toledo",
+      "state": "OH",
+      "scorecardControl": 1,
+      "slug": "university-of-toledo",
+      "aliases": [],
+      "catalogCategory": "regional-public",
+      "inclusionReason": "Adds a regional public option in OH to broaden location and campus-choice coverage.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 209542,
+      "expectedName": "Oregon State University",
+      "state": "OR",
+      "scorecardControl": 1,
+      "slug": "oregon-state-university",
+      "aliases": [
+        "Oregon State",
+        "OSU"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in OR.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 209551,
+      "expectedName": "University of Oregon",
+      "state": "OR",
+      "scorecardControl": 1,
+      "slug": "university-of-oregon",
+      "aliases": [
+        "UO"
+      ],
+      "catalogCategory": "major-public",
+      "inclusionReason": "Adds a major public university in OR to broaden regional coverage and public-campus comparisons.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 212054,
+      "expectedName": "Drexel University",
+      "state": "PA",
+      "scorecardControl": 2,
+      "slug": "drexel-university",
+      "aliases": [
+        "Drexel"
+      ],
+      "catalogCategory": "private-nonprofit",
+      "inclusionReason": "Adds a private nonprofit option in PA to broaden institution-type and regional choices.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 214777,
+      "expectedName": "Pennsylvania State University-Main Campus",
+      "state": "PA",
+      "scorecardControl": 1,
+      "slug": "pennsylvania-state-university-main-campus",
+      "aliases": [
+        "Penn State"
+      ],
+      "catalogCategory": "major-public",
+      "inclusionReason": "Adds a major public university in PA to broaden regional coverage and public-campus comparisons.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 216339,
+      "expectedName": "Temple University",
+      "state": "PA",
+      "scorecardControl": 1,
+      "slug": "temple-university",
+      "aliases": [
+        "Temple"
+      ],
+      "catalogCategory": "regional-public",
+      "inclusionReason": "Adds a regional public option in PA to broaden location and campus-choice coverage.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 217484,
+      "expectedName": "University of Rhode Island",
+      "state": "RI",
+      "scorecardControl": 1,
+      "slug": "university-of-rhode-island",
+      "aliases": [
+        "URI"
+      ],
+      "catalogCategory": "regional-public",
+      "inclusionReason": "Adds a regional public option in RI to broaden location and campus-choice coverage.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 221759,
+      "expectedName": "The University of Tennessee-Knoxville",
+      "state": "TN",
+      "scorecardControl": 1,
+      "slug": "the-university-of-tennessee-knoxville",
+      "aliases": [],
+      "catalogCategory": "major-public",
+      "inclusionReason": "Adds a major public university in TN to broaden regional coverage and public-campus comparisons.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 223232,
+      "expectedName": "Baylor University",
+      "state": "TX",
+      "scorecardControl": 2,
+      "slug": "baylor-university",
+      "aliases": [],
+      "catalogCategory": "private-nonprofit",
+      "inclusionReason": "Adds a private nonprofit option in TX to broaden institution-type and regional choices.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 227216,
+      "expectedName": "University of North Texas",
+      "state": "TX",
+      "scorecardControl": 1,
+      "slug": "university-of-north-texas",
+      "aliases": [
+        "UNT",
+        "North Texas"
+      ],
+      "catalogCategory": "regional-public",
+      "inclusionReason": "Adds a regional public option in TX to broaden location and campus-choice coverage.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 228459,
+      "expectedName": "Texas State University",
+      "state": "TX",
+      "scorecardControl": 1,
+      "slug": "texas-state-university",
+      "aliases": [
+        "TxSt",
+        "TxState"
+      ],
+      "catalogCategory": "regional-public",
+      "inclusionReason": "Adds a regional public option in TX to broaden location and campus-choice coverage.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 228723,
+      "expectedName": "Texas A&M University-College Station",
+      "state": "TX",
+      "scorecardControl": 1,
+      "slug": "texas-aandm-university-college-station",
+      "aliases": [
+        "Texas A&M University"
+      ],
+      "catalogCategory": "major-public",
+      "inclusionReason": "Adds a major public university in TX to broaden regional coverage and public-campus comparisons.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 228778,
+      "expectedName": "The University of Texas at Austin",
+      "state": "TX",
+      "scorecardControl": 1,
+      "slug": "the-university-of-texas-at-austin",
+      "aliases": [
+        "UT Austin",
+        "Texas"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in TX.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 230764,
+      "expectedName": "University of Utah",
+      "state": "UT",
+      "scorecardControl": 1,
+      "slug": "university-of-utah",
+      "aliases": [
+        "The U"
+      ],
+      "catalogCategory": "major-public",
+      "inclusionReason": "Adds a major public university in UT to broaden regional coverage and public-campus comparisons.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 232982,
+      "expectedName": "Old Dominion University",
+      "state": "VA",
+      "scorecardControl": 1,
+      "slug": "old-dominion-university",
+      "aliases": [
+        "ODU",
+        "Old Dominion"
+      ],
+      "catalogCategory": "regional-public",
+      "inclusionReason": "Adds a regional public option in VA to broaden location and campus-choice coverage.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 234076,
+      "expectedName": "University of Virginia-Main Campus",
+      "state": "VA",
+      "scorecardControl": 1,
+      "slug": "university-of-virginia-main-campus",
+      "aliases": [
+        "UVA",
+        "Virginia"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in VA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 235316,
+      "expectedName": "Gonzaga University",
+      "state": "WA",
+      "scorecardControl": 2,
+      "slug": "gonzaga-university",
+      "aliases": [],
+      "catalogCategory": "private-nonprofit",
+      "inclusionReason": "Adds a private nonprofit option in WA to broaden institution-type and regional choices.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 236939,
+      "expectedName": "Washington State University",
+      "state": "WA",
+      "scorecardControl": 1,
+      "slug": "washington-state-university",
+      "aliases": [
+        "Washington State",
+        "WSU"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in WA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 236948,
+      "expectedName": "University of Washington-Seattle Campus",
+      "state": "WA",
+      "scorecardControl": 1,
+      "slug": "university-of-washington-seattle-campus",
+      "aliases": [
+        "UW",
+        "University of Washington"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in WA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 239105,
+      "expectedName": "Marquette University",
+      "state": "WI",
+      "scorecardControl": 2,
+      "slug": "marquette-university",
+      "aliases": [],
+      "catalogCategory": "private-nonprofit",
+      "inclusionReason": "Adds a private nonprofit option in WI to broaden institution-type and regional choices.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 240444,
+      "expectedName": "University of Wisconsin-Madison",
+      "state": "WI",
+      "scorecardControl": 1,
+      "slug": "university-of-wisconsin-madison",
+      "aliases": [
+        "Wisconsin",
+        "UW Madison"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in WI.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 240453,
+      "expectedName": "University of Wisconsin-Milwaukee",
+      "state": "WI",
+      "scorecardControl": 1,
+      "slug": "university-of-wisconsin-milwaukee",
+      "aliases": [
+        "UWM"
+      ],
+      "catalogCategory": "regional-public",
+      "inclusionReason": "Adds a regional public option in WI to broaden location and campus-choice coverage.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 243744,
+      "expectedName": "Stanford University",
+      "state": "CA",
+      "scorecardControl": 2,
+      "slug": "stanford-university",
+      "aliases": [
+        "Stanford"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing private nonprofit option in CA.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 243780,
+      "expectedName": "Purdue University-Main Campus",
+      "state": "IN",
+      "scorecardControl": 1,
+      "slug": "purdue-university-main-campus",
+      "aliases": [
+        "Purdue"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in IN.",
+      "retainedFromExistingCatalog": true
+    },
+    {
+      "unitId": 366711,
+      "expectedName": "California State University-San Marcos",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-state-university-san-marcos",
+      "aliases": [],
+      "catalogCategory": "csu-campus",
+      "inclusionReason": "Adds the San Marcos, California CSU campus to widen campus and location choices across the CSU system.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 409698,
+      "expectedName": "California State University-Monterey Bay",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-state-university-monterey-bay",
+      "aliases": [
+        "CSUMB"
+      ],
+      "catalogCategory": "csu-campus",
+      "inclusionReason": "Adds the Seaside, California CSU campus to widen campus and location choices across the CSU system.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 441937,
+      "expectedName": "California State University-Channel Islands",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "california-state-university-channel-islands",
+      "aliases": [
+        "CSU Channel Islands"
+      ],
+      "catalogCategory": "csu-campus",
+      "inclusionReason": "Adds the Camarillo, California CSU campus to widen campus and location choices across the CSU system.",
+      "retainedFromExistingCatalog": false
+    },
+    {
+      "unitId": 445188,
+      "expectedName": "University of California-Merced",
+      "state": "CA",
+      "scorecardControl": 1,
+      "slug": "university-of-california-merced",
+      "aliases": [
+        "UC Merced",
+        "UCM"
+      ],
+      "catalogCategory": "existing-curated",
+      "inclusionReason": "Retained from the established catalog to preserve its UNITID, profile route, and saved-college identity; keeps an existing public option in CA.",
+      "retainedFromExistingCatalog": true
+    }
+  ],
+  "geographySource": {
+    "publisher": "U.S. Census Bureau",
+    "sourceName": "Census Regions and Divisions",
+    "sourceUrl": "https://www.census.gov/programs-surveys/economic-census/guidance-geographies/levels.html"
+  }
+}

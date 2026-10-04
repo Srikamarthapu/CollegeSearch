@@ -2529,6 +2529,14 @@ a {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.profile-cost-note {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 .profile-evidence-notes .profile-evidence-note dl {
   grid-template-columns: 1fr;
 }
@@ -2661,6 +2669,11 @@ a {
   margin: 0;
   font-size: 12px;
   line-height: 1.6;
+}
+
+.comparison-value small a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .comparison-field-lens {

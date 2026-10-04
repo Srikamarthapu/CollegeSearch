@@ -264,12 +264,12 @@ test("the reviewed institution cohort has 26 artifacts and 19 admission headline
   assert.equal(
     overlays.sources.some((source) => source.id === "cornell-cds-2025-26"),
     false,
-    "the reviewed Cornell artifact is not published outside the fixed 50-college cohort",
+    "the reviewed Cornell artifact is not published outside the reviewed college catalog",
   );
   assert.equal(
     generated.colleges.some((college) => college.unitId === 190415),
     false,
-    "Cornell is not silently added to the fixed 50-college release",
+    "Cornell is not silently added to the reviewed college release",
   );
 });
 
@@ -447,7 +447,7 @@ test("Caltech and Pomona add only verifier-safe current fields and keep coherent
       "caltech-registrar-enrollment-2025",
       {
         artifactSha256:
-          "7b5985302b7530a771cc4ee1916c5b7c88cc32ecf28c5a633ad4beceb153beed",
+          "ab5302c31031ef6e6dce17ce8a288fc710e7ad58f8fcd9bae9a5ca505c0cecd0",
         artifactUrl:
           "https://registrar.caltech.edu/records/enrollment-statistics",
       },
@@ -456,7 +456,7 @@ test("Caltech and Pomona add only verifier-safe current fields and keep coherent
       "caltech-financial-aid-costs-2026-27",
       {
         artifactSha256:
-          "a197add41ecd482903c7174051a64564baeab99129aede51a541c192c3f0f3f5",
+          "c6cbc3387e3e4f0fd551c466c48d5e8ac7655a0265f6785f846d534685f0aa59",
         artifactUrl: "https://www.finaid.caltech.edu/Costs",
       },
     ],
@@ -464,7 +464,7 @@ test("Caltech and Pomona add only verifier-safe current fields and keep coherent
       "pomona-tuition-costs-2026-27",
       {
         artifactSha256:
-          "02a995ecc74dfc0a5fa3287a05ff1dcf1d6c108cdcdbb4b7acbf2ca136cbb76b",
+          "c30784f56e76b398e8d83f3b4da61734430104946dc9fba608b73fef230378b7",
         artifactUrl:
           "https://www.pomona.edu/administration/finance-office/student-accounts/tuition-and-costs",
       },

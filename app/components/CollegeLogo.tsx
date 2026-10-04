@@ -1,5 +1,10 @@
 import type { College } from "@/app/lib/college-data";
 import Image from "next/image";
+import {
+  collegeLogoAsset,
+  collegeLogoInitials,
+} from "./college-logo-data.mjs";
+import styles from "./CollegeLogo.module.css";
 
 type CollegeLogoVariant =
   | "card"
@@ -8,21 +13,13 @@ type CollegeLogoVariant =
   | "suggestion"
   | "tray";
 
-const rasterLogoExtensions: Record<string, "jpg" | "png"> = {
-  "georgia-institute-of-technology-main-campus": "jpg",
-  "loyola-marymount-university": "png",
-  "massachusetts-institute-of-technology": "png",
-  "new-york-university": "png",
-  "pomona-college": "jpg",
-  "san-diego-state-university": "png",
-  "university-of-virginia-main-campus": "png",
-  "yale-university": "png",
+const fallbackVariantClass: Record<CollegeLogoVariant, string> = {
+  card: "",
+  comparison: styles.comparisonFallback,
+  profile: styles.profileFallback,
+  suggestion: styles.suggestionFallback,
+  tray: styles.trayFallback,
 };
-
-export function collegeLogoAsset(slug: string) {
-  const extension = rasterLogoExtensions[slug] ?? "svg";
-  return `/college-logos/${slug}.${extension}`;
-}
 
 export function CollegeLogo({
   college,
@@ -31,17 +28,25 @@ export function CollegeLogo({
   college: Pick<College, "name" | "slug">;
   variant?: CollegeLogoVariant;
 }) {
+  const asset = collegeLogoAsset(college.slug);
+
   return (
     <span className={`college-logo college-logo-${variant}`} aria-hidden="true">
-      <Image
-        src={collegeLogoAsset(college.slug)}
-        alt=""
-        decoding="async"
-        width={112}
-        height={56}
-        loading={variant === "card" ? "lazy" : "eager"}
-        unoptimized
-      />
+      {asset ? (
+        <Image
+          src={asset}
+          alt=""
+          decoding="async"
+          width={112}
+          height={56}
+          loading={variant === "card" ? "lazy" : "eager"}
+          unoptimized
+        />
+      ) : (
+        <span className={`${styles.fallback} ${fallbackVariantClass[variant]}`}>
+          {collegeLogoInitials(college.name)}
+        </span>
+      )}
     </span>
   );
 }

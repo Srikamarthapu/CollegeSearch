@@ -116,7 +116,7 @@ function tradeoffCopy(
     return "The reported graduation outcome leaves more room for scrutiny; inspect its cohort and definition.";
   }
   if (component.key === "earnings") {
-    return "Reported earnings sit below the upper range in this 50-college release; program mix and cohort still matter.";
+    return "Reported earnings sit below the upper range in the current collection; program mix and cohort still matter.";
   }
   return component.note;
 }
@@ -630,7 +630,7 @@ export function MatchTool({
                       </div>
                       <p>
                         The 0–100 score is a weighted alignment summary within
-                        this 50-college release. It is not a quality grade.
+                        the current collection. It is not a quality grade.
                       </p>
                     </details>
 

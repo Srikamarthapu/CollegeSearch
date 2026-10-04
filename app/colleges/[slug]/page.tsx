@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { tuitionMetrics } from "@/app/lib/tuition-labels";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -259,14 +260,7 @@ export default async function CollegeProfilePage({
       label: "Median earnings",
       observation: college.observations.medianEarnings,
     },
-    {
-      label: "In-state tuition + required fees",
-      observation: college.observations.tuitionInState,
-    },
-    {
-      label: "Out-of-state tuition + required fees",
-      observation: college.observations.tuitionOutOfState,
-    },
+    ...tuitionMetrics(college),
   ];
   const orderedMajors = [...college.majors].sort(
     (left, right) => right.share - left.share,
@@ -443,7 +437,7 @@ export default async function CollegeProfilePage({
             <p>
               Enrollment definitions vary: the federal baseline counts
               certificate/degree-seeking undergraduates, while official
-              records may report total undergraduates. Current tuition and
+              records may report total undergraduates. Published tuition and
               required fees are not the same measure as historical net price.
             </p>
           </div>
@@ -453,6 +447,12 @@ export default async function CollegeProfilePage({
             ))}
           </dl>
           <div className="profile-evidence-notes">
+            <p className="profile-cost-note">
+              Tuition and required fees exclude housing, meals, books and other living costs.
+              {college.ownership === "Public" && college.observations.tuitionInState.sourceField === "TUITIONFEE_IN"
+                ? " The federal in-district baseline can differ from the price for other in-state students; confirm your residency rate with the college."
+                : " Confirm current charges and your full cost of attendance with the college."}
+            </p>
             <EvidenceNote
               observation={averageNetPrice}
               label="Average net price"

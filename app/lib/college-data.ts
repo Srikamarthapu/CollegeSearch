@@ -1,4 +1,6 @@
 import rawDataset from "@/data/colleges.json";
+import { assertCollegeEvidence } from "./college-evidence";
+import type { CollegeCatalogCategory } from "./catalog-categories";
 
 export type ObservationStatus =
   | "reported"
@@ -40,7 +42,7 @@ export type MajorEvidence = {
   sourceField: string;
   cohort: string;
   definition: string;
-  deliveryMode?: "campus-or-mixed" | "exclusively-distance";
+  deliveryMode?: "delivery-not-specified" | "includes-distance-program";
 };
 
 export type CollegeObservations = {
@@ -58,6 +60,8 @@ export type CollegeObservations = {
 };
 
 export type College = {
+  catalogCategory: CollegeCatalogCategory;
+  inclusionReason: string;
   unitId: number;
   opeId: string;
   opeId6: string;
@@ -265,6 +269,7 @@ function validateDataset(value: unknown): CollegeDataset {
     }
   }
 
+  assertCollegeEvidence(dataset as CollegeDataset);
   return dataset as CollegeDataset;
 }
 
