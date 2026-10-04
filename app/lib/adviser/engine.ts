@@ -122,6 +122,9 @@ function hasUnresolvedInstitutionName(message: string, dataset: CollegeDataset, 
       remainder = remainder.replace(new RegExp(`(^| )${entry.phrase}(?= |$)`, "g"), " ");
     }
   }
+  // Evidence-handling language can resemble a name immediately before a type word.
+  // Remove only a clear instruction to consult generic institutional records/data.
+  remainder = remainder.replace(/\b(?:use|rely on|trust|check|review|cite|search|filter|apply|show|select|include)\s+(?:only\s+)?(?:the\s+)?(?:verified|official|reviewed|source backed|source verified)\s+(?:college|university|institution)\s+(?:records?|data|sources?|information)\b/g, " ");
   // Limit detection to explicit singular name forms, leaving general preferences
   // such as "a small private college" and "my budget for college" to interpretation.
   const clauses = remainder.split(/\b(?:about|compare|and|or|versus|vs|at|research|researching|consider|considering|attend|attending|named|called)\b/);
@@ -132,6 +135,18 @@ function hasUnresolvedInstitutionName(message: string, dataset: CollegeDataset, 
   return candidates.some((candidate) => !/\b(?:a|an|any|some)\b/.test(candidate) &&
     candidate.trim().split(/\s+/).some((word) => !generalInstitutionWords.has(word) &&
       !resolvedOrdinalWords.has(word)));
+}
+
+/** Fill a missing basis only when the student directly names a tuition budget. */
+function explicitTuitionBudgetBasis(message: string): AdviserPreferences["budgetBasis"] {
+  const normalized = normalizeCollegePhrase(message);
+  const statesTuitionBudget = /\b(?:tuition(?: and fees| fees)?\s+budget|budget for tuition(?: and fees| fees)?)\b/.test(normalized);
+  if (!statesTuitionBudget) return null;
+
+  const negatesTuition = /\b(?:no|not|never|dont|don t|didnt|didn t|doesnt|doesn t|isnt|isn t|wasnt|wasn t|arent|aren t|werent|weren t|cant|can t|cannot|wont|won t|shouldnt|shouldn t|do not|without|exclude|excluding|except)\b.{0,40}\btuition\b|\btuition\b.{0,40}\b(?:not|never|rather than|instead of|excluding|except)\b/.test(normalized);
+  const mentionsAnotherBasis = /\b(?:total cost|full cost|cost of attendance|average net price|room and board|living expenses?|including housing)\b/.test(normalized);
+  if (negatesTuition || mentionsAnotherBasis) return null;
+  return "tuition";
 }
 
 const ordinalWords = ["first|1st", "second|2nd", "third|3rd", "fourth|4th"];
@@ -220,7 +235,11 @@ export async function runAdviserTurn(message: string, previous: AdviserPreferenc
       searchText: "subject or college keywords",
     },
   }), signal), allowedMentionIds);
+  const explicitBasis = modelInterpretation.preferences.annualBudget !== null && modelInterpretation.preferences.budgetBasis === null
+    ? explicitTuitionBudgetBasis(safeMessage)
+    : null;
   const interpreted = { ...modelInterpretation,
+    preferences: explicitBasis ? { ...modelInterpretation.preferences, budgetBasis: explicitBasis } : modelInterpretation.preferences,
     intent: unresolvedInstitutionName ? "other" as const : modelInterpretation.intent,
     mentionedUnitIds: [...new Set([...resolvedCollegeReferences, ...modelInterpretation.mentionedUnitIds])].slice(0, 8),
   };

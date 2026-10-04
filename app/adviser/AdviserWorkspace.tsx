@@ -56,9 +56,10 @@ export function AdviserRecommendationCard({ college }: { college: AdviserRecomme
     {college.reasons.length > 0 && <ul className={styles.reasons}>{college.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul>}
     <dl className={styles.facts}>{college.facts.map((fact) => <div key={fact.key}><dt>{fact.label}</dt><dd>{fact.display}<small>{fact.citation.period}</small></dd></div>)}</dl>
     <details className={styles.evidence}><summary>Sources &amp; what to verify</summary>
-      {college.fields.map((field) => <p key={field.name}><strong>{field.name}</strong> — {field.qualification}. <a href={field.citation.url} target="_blank" rel="noreferrer">{field.citation.publisher}, {field.citation.period}</a></p>)}
+      <p>Federal institution record: UNITID <code>{college.unitId}</code>.</p>
+      {college.fields.map((field) => <p key={field.name}><strong>{field.name}</strong> — {field.qualification}. <a href={field.citation.url} target="_blank" rel="noreferrer">{field.citation.publisher}, {field.citation.period}</a>{field.citation.artifactUrl && field.citation.artifactUrl !== field.citation.url && <> · <a href={field.citation.artifactUrl} target="_blank" rel="noreferrer">Open source file</a></>}</p>)}
       <ul>{college.tradeoffs.map((tradeoff) => <li key={tradeoff}>{tradeoff}</li>)}</ul>
-      {college.facts.map((fact) => <div className={styles.source} key={fact.key}><strong>{fact.label} · {fact.citation.period}</strong><a href={fact.citation.url} target="_blank" rel="noreferrer">{fact.citation.name} ↗</a><p>{fact.citation.cohort}</p><p>{fact.citation.definition}</p><small>Checked {fact.citation.checkedOn} · {fact.citation.field}</small></div>)}
+      {college.facts.map((fact) => <div className={styles.source} key={fact.key}><strong>{fact.label} · {fact.citation.period}</strong><a href={fact.citation.url} target="_blank" rel="noreferrer">{fact.citation.name} ↗</a>{fact.citation.artifactUrl && fact.citation.artifactUrl !== fact.citation.url && <a href={fact.citation.artifactUrl} target="_blank" rel="noreferrer">Open source file</a>}<p>{fact.citation.cohort}</p><p>{fact.citation.definition}</p><small>UNITID {college.unitId} · Checked {fact.citation.checkedOn} · {fact.citation.field}</small></div>)}
     </details>
     <div className={styles.cardActions}><Link href={`/colleges/${college.slug}`}>Open profile <ArrowRight size={15} aria-hidden="true" /></Link><LocalSaveButton unitId={college.unitId} collegeName={college.name} /></div>
   </article>;

@@ -1,6 +1,14 @@
 # CollegeSearch expansion progress
 
-## Current milestone — M9, October 4, 2026
+## Current milestone — M10, October 4, 2026
+
+Completed the full actual-runtime 32-case NVIDIA replay and a five-turn refinement/comparison conversation. Repaired generic-source wording falsely treated as an unknown college, and restored an explicitly stated tuition budget basis without inferring residency. Added bound source-file links and UNITID context inside adviser evidence. Original failures and all replay limits are retained in [M10 evaluation](M10_FULL_ADVISER_EVALUATION.md).
+
+Final matrix: 32/32 completed, 26/26 follow-ups, 12/12 boundaries and 244/244 bindings. Chained run: 22 preference checks, 15 retention checks, 18 constrained recommendations, both comparison identities and 71 complete evidence bindings passed. Independent agent review found no displayed numeric or hard-filter mismatch; this is not a human pilot. Full suite 488/488, both production builds, TypeScript and ESLint passed; focused desktop/320px source-details UI and keyboard checks passed. Disposable clone cleaned; baseline 3 saves and 0 vectors preserved. M10 deployment pending.
+
+Public AI stays disabled pending a production-permitted route. Hosted email/Auth/deletion journeys, observed scheduled retention, production costs and broader human recommendation review remain open. The app remains free; Stripe is deferred. No further reset credits were used.
+
+## Previous milestone — M9, October 4, 2026
 
 The live catalog retains **3,912** source-audited institutions, 38 broad fields, and 3,094 sourced college marks. Original 100 identities are preserved. M8 was committed/pushed as `0058565` and deployed READY. M9 simplifies filters, defaults to familiar featured colleges, fixes delayed-pagination and failed-search stale-result bugs, and restores a visible adviser entry with honest availability. All 465 tests passed; the final native Next build, TypeScript and ESLint passed after the error-state repair. Local desktop/mobile, delayed-response and failure/retry checks passed. M9 commit `14ae760` is live at the stable alias in READY deployment `dpl_GWXYPKBs43dJj3BNV7ae5C98Ttqw`; hosted HTTP and desktop/mobile browser checks passed. See [M9 explorer review](M9_EXPLORER_REVIEW.md), [M8 adviser validation](M8_ADVISER_VALIDATION.md) and [M7 catalog/release evidence](M7_PROGRESS.md).
 

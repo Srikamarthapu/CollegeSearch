@@ -340,6 +340,7 @@ async function requestJson(
       const value = await withinTimeout(signal, config.timeoutMs, async (requestSignal) => {
         const response = await fetcher(`${config.baseUrl.replace(/\/$/, "")}${route}`, {
           method: "POST",
+          redirect: "error",
           headers: {
             authorization: `Bearer ${apiKey}`,
             accept: "application/json",

@@ -19,6 +19,7 @@ import {
   NvidiaProviderError,
 } from "../app/lib/adviser/nvidia.ts";
 import { publicCollegeCandidates } from "../app/lib/adviser/evidence.ts";
+import { auditRecommendationEvidence } from "./adviser-evaluation-evidence.mjs";
 
 export const caseSpecs = [
   { id: "start-open", message: "I am starting to think about college, but I do not know what to study yet.", expectedQuestion: "field" },
@@ -380,7 +381,7 @@ function containsDirectIdentifier(value) {
     /(?:\+?1[-.\s]?)?(?:\(\d{3}\)|\b\d{3})[-.\s]\d{3}[-.\s]\d{4}\b/.test(value);
 }
 
-function safeResponseShape(value) {
+export function safeResponseShape(value, candidateIds) {
   if (!value || typeof value !== "object" || Array.isArray(value)) return { responseType: Array.isArray(value) ? "array" : typeof value };
   const safeKeys = (item) => Object.keys(item).slice(0, 32).map((key) => /^[A-Za-z][A-Za-z0-9_]{0,39}$/.test(key) ? key : "<other>").sort();
   const shape = { topLevelKeys: safeKeys(value) };
@@ -410,33 +411,35 @@ function safeResponseShape(value) {
   const mentioned = value.mentionedUnitIds;
   if (Array.isArray(mentioned)) shape.mentionedUnitIdCount = Math.min(mentioned.length, 100);
   const ids = value.unitIds;
-  if (Array.isArray(ids)) shape.rankedUnitIdCount = Math.min(ids.length, 100);
+  if (Array.isArray(ids)) {
+    shape.rankedUnitIdCount = Math.min(ids.length, 100);
+    shape.rankedNonIntegerCount = Math.min(ids.filter((id) => !Number.isInteger(id)).length, 100);
+    shape.rankedDuplicateCount = Math.min(ids.length - new Set(ids).size, 100);
+    if (candidateIds) {
+      const allowed = new Set(candidateIds);
+      shape.rankedUnknownIntegerCount = Math.min(ids.filter((id) => Number.isInteger(id) && !allowed.has(id)).length, 100);
+    }
+  }
   return shape;
 }
 
-function citationAudit(answer, dataset, retrievedIds) {
+export function citationAudit(answer, dataset, retrievedIds) {
+  if (!answer.recommendations.length) return { count: 0, verified: 0, safeIds: true, fullBinding: null };
   let count = 0;
   let verified = 0;
+  let fullBinding = true;
   const allowed = new Set(retrievedIds);
   for (const recommendation of answer.recommendations) {
     if (!allowed.has(recommendation.unitId)) return { count, verified, safeIds: false };
     const college = dataset.colleges.find((item) => item.unitId === recommendation.unitId);
     if (!college) return { count, verified, safeIds: false };
-    for (const fact of recommendation.facts) {
-      count += 1;
-      const source = college.observations[fact.key];
-      if (source && fact.citation.sourceId === source.sourceId && fact.citation.url === source.sourceUrl &&
-          fact.citation.year === source.reportingYear && fact.citation.url.startsWith("https://")) verified += 1;
-    }
-    for (const field of recommendation.fields) {
-      count += 1;
-      const evidence = college.majors.find((item) => item.name === field.name);
-      const source = evidence && dataset.release.sources.find((entry) => entry.id === evidence.sourceId);
-      if (evidence && source && field.citation.sourceId === source.id && field.citation.url === source.sourceUrl &&
-          field.citation.year === evidence.reportingYear && field.citation.url.startsWith("https://")) verified += 1;
-    }
+    const binding = auditRecommendationEvidence(recommendation, college, answer.preferences, dataset);
+    count += binding.factCount + binding.programFieldCount;
+    verified += binding.factBindingsVerified + binding.programBindingsVerified;
+    fullBinding &&= binding.passed;
+    if (binding.failures.some((failure) => failure.startsWith("identity:"))) return { count, verified, safeIds: false, fullBinding: false };
   }
-  return { count, verified, safeIds: true };
+  return { count, verified, safeIds: true, fullBinding };
 }
 
 export function prepareCases(dataset) {
@@ -499,6 +502,7 @@ function reviewableAnswer(answer, privateMarkers = []) {
     notices: [...answer.notices],
     recommendations: answer.recommendations.map((recommendation) => ({
       unitId: recommendation.unitId,
+      slug: recommendation.slug,
       name: recommendation.name,
       city: recommendation.city,
       state: recommendation.state,
@@ -518,6 +522,9 @@ function reviewableAnswer(answer, privateMarkers = []) {
           period: fact.citation.period,
           cohort: fact.citation.cohort,
           field: fact.citation.field,
+          definition: fact.citation.definition,
+          checkedOn: fact.citation.checkedOn,
+          ...(fact.citation.artifactUrl ? { artifactUrl: fact.citation.artifactUrl } : {}),
         },
       })),
       fields: recommendation.fields.map((field) => ({
@@ -532,6 +539,9 @@ function reviewableAnswer(answer, privateMarkers = []) {
           period: field.citation.period,
           cohort: field.citation.cohort,
           field: field.citation.field,
+          definition: field.citation.definition,
+          checkedOn: field.citation.checkedOn,
+          ...(field.citation.artifactUrl ? { artifactUrl: field.citation.artifactUrl } : {}),
         },
       })),
     })),
@@ -713,6 +723,7 @@ async function main() {
       explicitNamedCollegeScope: { passed: 0, applicable: 0 },
       fullNamedCollegeCoverage: { passed: 0, applicable: 0 },
       citations: { verified: 0, checked: 0 },
+      completeEvidenceBinding: { passed: 0, applicable: 0 },
       identifierSanitization: { passed: 0, applicable: 0 },
     };
     const caseResults = [];
@@ -752,7 +763,7 @@ async function main() {
               throw cause;
             }
             latencySamples.push(Math.round(performance.now() - started));
-            lastOutputShape = safeResponseShape(result.value);
+            lastOutputShape = safeResponseShape(result.value, retrievedEvidence?.collegeIds);
             chatModelsUsed.add(result.model);
             chatModelVersionsUsed.add(`${result.model}@${result.modelVersion}`);
             if (result.requestAttempts > 1) currentCaseHttp.chatFallbackModelsUsed.add(result.model);
@@ -816,6 +827,10 @@ async function main() {
         if (audit.safeIds) rubric.retrievedOnlyRecommendations.passed += 1;
         rubric.citations.verified += audit.verified;
         rubric.citations.checked += audit.count;
+        if (audit.fullBinding !== null) {
+          rubric.completeEvidenceBinding.applicable += 1;
+          if (audit.fullBinding) rubric.completeEvidenceBinding.passed += 1;
+        }
         let explicitScope = null;
         if (runtimeRetriever && spec.expectedMentionedUnitIds?.length && retrievedEvidence) {
           explicitScope = explicitIdScopeAudit(spec.expectedMentionedUnitIds, actualRetrievedIds, selectedIds);
@@ -845,6 +860,7 @@ async function main() {
           intentMatch: spec.expectedIntent === undefined ? null : interpretation?.intent === spec.expectedIntent,
           questionMatch: spec.expectedQuestion === undefined ? null : answer.question === (spec.expectedQuestion ? adviserQuestions[spec.expectedQuestion] : null),
           recommendationCount: answer.recommendations.length,
+          completeEvidenceBinding: audit.fullBinding === true,
           validatedInterpretation: interpretation,
           effectiveRetrievalInterpretation,
           validatedAnswer: reviewableAnswer(answer, spec.privateMarkers ?? []),
@@ -921,6 +937,7 @@ async function main() {
 
   report.status = report.models.some((model) => model.failedTurns > 0 || model.unrunCases > 0) || report.models.length !== options.models.length ? "partial" : "completed";
   await writeReport(report);
+  if (report.status !== "completed") process.exitCode = 1;
   process.stdout.write(`${JSON.stringify({
     status: report.status,
     reportPath,

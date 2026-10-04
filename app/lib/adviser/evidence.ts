@@ -3,6 +3,7 @@ import type { AdviserPreferences } from "./contracts.ts";
 
 export type AdviserCitation = {
   sourceId: string; name: string; publisher: string; url: string;
+  artifactUrl?: string;
   year: number; period: string; cohort: string; definition: string; checkedOn: string; field: string;
 };
 export type AdviserFact = { key: string; label: string; display: string; citation: AdviserCitation };
@@ -54,17 +55,21 @@ export function publicCollegeCandidates(colleges: College[], preferences: Advise
   });
 }
 
-function citation(observation: Observation): AdviserCitation {
+function citation(observation: Observation, dataset: CollegeDataset): AdviserCitation {
+  const source = dataset.release.sources.find((entry) => entry.id === observation.sourceId &&
+    entry.publisher === observation.publisher && entry.sourceName === observation.sourceName &&
+    [entry.sourceUrl, entry.sourcePage, entry.artifactUrl, ...(entry.sourceUrls ?? [])].includes(observation.sourceUrl));
   return { sourceId: observation.sourceId, name: observation.sourceName, publisher: observation.publisher,
     url: observation.sourceUrl, year: observation.reportingYear, period: observation.periodLabel,
+    ...(source?.artifactUrl ? { artifactUrl: source.artifactUrl } : {}),
     cohort: observation.cohort, definition: observation.definition, checkedOn: observation.accessedOn, field: observation.sourceField };
 }
 
-function fact(key: string, observation: Observation, label = labels[key]): AdviserFact | null {
+function fact(key: string, observation: Observation, dataset: CollegeDataset, label = labels[key]): AdviserFact | null {
   if (!usableAdviserObservation(observation)) return null;
   return { key, label, display: observation.unit === "usd" ? currency.format(observation.value) :
     observation.unit === "ratio" ? percent.format(observation.value) : observation.value.toLocaleString("en-US"),
-  citation: citation(observation) };
+  citation: citation(observation, dataset) };
 }
 
 /** Render factual language from reviewed observations, never from generated prose. */
@@ -83,17 +88,17 @@ export function buildAdviserRecommendation(college: College, preferences: Advise
   const tuition = adviserTuition(college, preferences);
   const facts: AdviserFact[] = [];
   for (const key of ["undergraduateEnrollment", "admitRate", "graduationRate"] as const) {
-    const item = fact(key, college.observations[key]);
+    const item = fact(key, college.observations[key], dataset);
     if (item) facts.push(item);
   }
   if (tuition) {
-    const item = fact(tuition.key, tuition.observation, tuition.label);
+    const item = fact(tuition.key, tuition.observation, dataset, tuition.label);
     if (item) facts.push(item);
   } else if (college.ownership === "Public") {
     tradeoffs.push(preferences.residencyState === college.state ? "A comparable resident tuition figure is not verified here; the federal in-district figure may differ. Check the college's cost page." : "Choose your residency state before comparing public-college tuition.");
   }
   if (adviserNetPriceApplies(college, preferences)) {
-    const item = fact("averageNetPrice", college.observations.averageNetPrice);
+    const item = fact("averageNetPrice", college.observations.averageNetPrice, dataset);
     if (item) facts.push(item);
   } else if (college.ownership === "Public") tradeoffs.push("The federal public-college average net price describes students paying resident tuition; it is not shown as your expected price.");
   if (preferences.annualBudget !== null) {
@@ -108,6 +113,7 @@ export function buildAdviserRecommendation(college: College, preferences: Advise
     if (!source) throw new Error("Unbound program evidence.");
     return { name: major.name, qualification: major.evidence, citation: {
       sourceId: source.id, name: source.sourceName, publisher: source.publisher, url: source.sourceUrl,
+      ...(source.artifactUrl ? { artifactUrl: source.artifactUrl } : {}),
       year: major.reportingYear, period: major.periodLabel, cohort: major.cohort, definition: major.definition,
       checkedOn: source.accessedOn, field: major.sourceField,
     } };

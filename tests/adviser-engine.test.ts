@@ -83,6 +83,27 @@ test("reviewed short names resolve without treating state preferences as college
   }
 });
 
+test("generic verified-college-record wording does not trigger the unresolved-institution guard", async () => {
+  let unresolved = true;
+  let calls = 0;
+  let retrieved = false;
+  const answer = await runAdviserTurn("Find engineering colleges in California and use only the verified college records.", emptyAdviserPreferences, {
+    dataset,
+    generate: async (_system, input) => {
+      if (++calls === 1) {
+        unresolved = JSON.parse(input).unresolvedInstitutionName;
+        return interpretation;
+      }
+      return { unitIds: [candidates[0].unitId] };
+    },
+    retrieve: async () => { retrieved = true; return evidence; },
+  });
+  assert.equal(unresolved, false);
+  assert.equal(retrieved, true);
+  assert.equal(answer.retrievalMode, "keyword");
+  assert.equal(answer.recommendations[0].unitId, candidates[0].unitId);
+});
+
 test("reviewed short names remain unresolved when two colleges share the alias", async () => {
   const ambiguousDataset = { ...dataset, colleges: [...dataset.colleges, {
     ...dataset.colleges.find((college) => college.unitId === 166027)!, unitId: 999999, name: "Example College", aliases: ["Stanford"], catalogCategory: "federal-nonprofit" as const,
@@ -311,6 +332,61 @@ test("ambiguous budgets and unconfirmed residency ask before exact filtering", a
     });
     assert.equal(answer.recommendations.length, 0);
     assert.match(answer.question!, /budget|resident/i);
+  }
+});
+
+test("an explicit tuition-and-fees budget asks for residency instead of repeating the basis question", async () => {
+  const preferencesWithExplicitTuitionBudget = {
+    ...preferences,
+    annualBudget: 18000,
+    budgetBasis: null,
+    ownership: "Public" as const,
+    residencyState: null,
+  };
+  const answer = await runAdviserTurn("I want public engineering colleges in California; my tuition-and-fees budget is $18,000.", emptyAdviserPreferences, {
+    dataset,
+    generate: async () => ({ ...interpretation, preferences: preferencesWithExplicitTuitionBudget }),
+    retrieve: async () => { throw new Error("Residency must be clarified before applying a tuition filter"); },
+  });
+  assert.equal(answer.preferences.budgetBasis, "tuition");
+  assert.equal(answer.preferences.residencyState, null);
+  assert.match(answer.question!, /Which U\.S\. state are you a resident of/);
+  assert.doesNotMatch(answer.question!, /full cost|tuition and fees, or/);
+  assert.equal(answer.retrievalMode, "not-needed");
+});
+
+test("an explicit full-cost model basis is preserved when tuition wording also appears", async () => {
+  const fullCostPreferences = { ...preferences, annualBudget: 18000, budgetBasis: "total-cost" as const };
+  let retrieved = false;
+  const answer = await runAdviserTurn("My tuition-and-fees budget is $18,000, but I mean my full cost of attendance.", emptyAdviserPreferences, {
+    dataset,
+    generate: async () => ({ ...interpretation, preferences: fullCostPreferences }),
+    retrieve: async () => { retrieved = true; return { ...evidence, colleges: [] }; },
+  });
+  assert.equal(answer.preferences.budgetBasis, "total-cost");
+  assert.equal(retrieved, true);
+  assert.doesNotMatch(answer.question ?? "", /resident|tuition and fees, or your full cost/i);
+});
+
+test("ambiguous, negated, conflicting and full-cost budgets do not get a tuition basis override", async () => {
+  const messages = [
+    "My budget is $20k/year.",
+    "I don't want a tuition-and-fees budget; my budget is $18,000.",
+    "I didn't say tuition budget; my budget is $18,000.",
+    "That isn't a tuition budget; my budget is $18,000.",
+    "My tuition-and-fees budget is $18,000, but use a $25,000 total-cost limit.",
+    "My tuition-and-fees budget is $18,000 including room and board.",
+  ];
+  for (const message of messages) {
+    const unresolvedBasisPreferences = { ...preferences, annualBudget: 18000, budgetBasis: null };
+    const answer = await runAdviserTurn(message, emptyAdviserPreferences, {
+      dataset,
+      generate: async () => ({ ...interpretation, preferences: unresolvedBasisPreferences }),
+      retrieve: async () => { throw new Error("An unresolved/conflicting basis must be clarified before filtering"); },
+    });
+    assert.equal(answer.preferences.budgetBasis, null, message);
+    assert.match(answer.question!, /Does that annual budget cover tuition and fees, or your full cost/, message);
+    assert.equal(answer.retrievalMode, "not-needed", message);
   }
 });
 

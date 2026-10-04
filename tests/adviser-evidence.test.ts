@@ -38,6 +38,42 @@ test("college recommendation values and citations bind to that college's reviewe
   }
 });
 
+test("adviser citations add artifacts from their bound source and preserve the original citation URL", () => {
+  const scorecardSource = dataset.release.sources.find((source) => source.id === "college-scorecard-institution-2026-06-10")!;
+  const scorecardCollege = dataset.colleges.find((college) =>
+    college.observations.admitRate.sourceId === scorecardSource.id &&
+    college.majors.some((major) => major.name === "Engineering" && major.sourceId === scorecardSource.id))!;
+  const scorecardAnswer = buildAdviserRecommendation(scorecardCollege, { ...emptyAdviserPreferences, fields: ["Engineering"] }, dataset);
+  const admission = scorecardAnswer.facts.find((item) => item.key === "admitRate")!;
+  const engineering = scorecardAnswer.fields.find((item) => item.name === "Engineering")!;
+  assert.equal(admission.citation.url, scorecardCollege.observations.admitRate.sourceUrl);
+  assert.equal(admission.citation.url, scorecardSource.sourceUrl);
+  assert.equal(admission.citation.artifactUrl, scorecardSource.artifactUrl);
+  assert.equal(engineering.citation.artifactUrl, scorecardSource.artifactUrl);
+  assert.notEqual(admission.citation.artifactUrl, admission.citation.url);
+
+  const asu = dataset.colleges.find((college) => college.unitId === 104151)!;
+  const asuSource = dataset.release.sources.find((source) => source.id === asu.observations.admitRate.sourceId)!;
+  const asuAdmission = buildAdviserRecommendation(asu, emptyAdviserPreferences, dataset).facts.find((item) => item.key === "admitRate")!;
+  assert.ok([asuSource.sourceUrl, asuSource.sourcePage, asuSource.artifactUrl, ...(asuSource.sourceUrls ?? [])].includes(asuAdmission.citation.url));
+  assert.equal(asuAdmission.citation.url, asu.observations.admitRate.sourceUrl);
+  assert.equal(asuAdmission.citation.artifactUrl, asuSource.artifactUrl);
+});
+
+test("adviser citations never attach an artifact from a mismatched source binding", () => {
+  const copy = structuredClone(dataset);
+  const college = copy.colleges.find((item) => item.unitId === 222178)!;
+  const observation = college.observations.admitRate;
+  const originalUrl = observation.sourceUrl;
+  const otherSource = copy.release.sources.find((source) => source.id !== observation.sourceId && source.artifactUrl)!;
+  observation.sourceId = otherSource.id;
+
+  const answer = buildAdviserRecommendation(college, emptyAdviserPreferences, copy);
+  const admission = answer.facts.find((item) => item.key === "admitRate")!;
+  assert.equal(admission.citation.url, originalUrl);
+  assert.equal(admission.citation.artifactUrl, undefined);
+});
+
 test("catalog narrowing requires every requested broad field without inventing a specific major", () => {
   const preferences = { ...emptyAdviserPreferences, fields: ["Engineering", "Education"] as const, states: ["CA"] };
   const narrowed = publicCollegeCandidates(dataset.colleges, { ...preferences, fields: [...preferences.fields] });

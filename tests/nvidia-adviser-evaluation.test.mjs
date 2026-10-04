@@ -7,6 +7,7 @@ import {
   buildLocalRpcSql,
   caseCount,
   caseSpecs,
+  citationAudit,
   createLocalPsqlRpc,
   emptyHttpCounters,
   estimateRuntimeHttpCalls,
@@ -15,11 +16,45 @@ import {
   parseArgs,
   prepareCases,
   retrievedEvidenceSummary,
+  safeResponseShape,
   sanitizedFailureDiagnostics,
   verifyRuntimeRelease,
 } from "../scripts/evaluate-nvidia-adviser.mjs";
+import { buildAdviserRecommendation } from "../app/lib/adviser/evidence.ts";
+import { emptyAdviserPreferences } from "../app/lib/adviser/contracts.ts";
 
 const dataset = JSON.parse(readFileSync(new URL("../data/colleges.json", import.meta.url), "utf8"));
+
+test("ranking diagnostics distinguish invalid ID shapes without retaining model values", () => {
+  const shape = safeResponseShape({ unitIds: [110635, 110635, 999999, "private@example.org", "110644"] }, [110635, 110644]);
+  assert.deepEqual(shape, {
+    topLevelKeys: ["unitIds"], rankedUnitIdCount: 5, rankedNonIntegerCount: 2,
+    rankedDuplicateCount: 1, rankedUnknownIntegerCount: 1,
+  });
+  assert.equal(JSON.stringify(shape).includes("private@example.org"), false);
+  assert.equal(JSON.stringify(shape).includes("999999"), false);
+  assert.equal(safeResponseShape({ unitIds: [110635] }).rankedUnknownIntegerCount, undefined);
+  assert.equal(safeResponseShape({ unitIds: [] }, []).rankedUnitIdCount, 0);
+});
+
+test("matrix citation audit rejects a wrong cohort and missing facts even when URL and year match", () => {
+  assert.deepEqual(citationAudit({ preferences: emptyAdviserPreferences, recommendations: [] }, dataset, []), {
+    count: 0, verified: 0, safeIds: true, fullBinding: null,
+  });
+  const college = dataset.colleges.find((item) => item.unitId === 110635);
+  const preferences = { ...emptyAdviserPreferences, fields: ["Engineering"] };
+  const card = buildAdviserRecommendation(college, preferences, dataset);
+  const answer = { preferences, recommendations: [card] };
+  assert.equal(citationAudit(answer, dataset, [college.unitId]).fullBinding, true);
+  const altered = structuredClone(answer);
+  altered.recommendations[0].facts[0].citation.cohort = "Wrong population";
+  const result = citationAudit(altered, dataset, [college.unitId]);
+  assert.equal(result.fullBinding, false);
+  assert.ok(result.verified < result.count);
+  const missing = structuredClone(answer);
+  missing.recommendations[0].facts.pop();
+  assert.equal(citationAudit(missing, dataset, [college.unitId]).fullBinding, false);
+});
 
 function rpcParameters(overrides = {}) {
   return {

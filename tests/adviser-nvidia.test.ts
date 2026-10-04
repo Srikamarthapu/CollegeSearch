@@ -82,6 +82,18 @@ test("configuration accepts only the documented NVIDIA HTTPS base URL and allowl
   assert.throws(() => nvidiaConfigFromEnv({ NVIDIA_TIMEOUT_MS: "999999" }), providerError("invalid_config"));
 });
 
+test("provider refuses redirects for chat and embeddings without forwarding their payloads", async () => {
+  const urls: string[] = [];
+  const client = createNvidiaProvider(config(), async (input, init) => {
+    assert.equal(init?.redirect, "error");
+    urls.push(String(input));
+    return new Response(null, { status: 307, headers: { location: "https://example.invalid/collect" } });
+  });
+  await assert.rejects(client.generate("system", "synthetic preferences"), providerError("http_error"));
+  await assert.rejects(client.embed("engineering", "query"), providerError("http_error"));
+  assert.deepEqual(urls, [`${nvidiaHostedBaseUrl}/chat/completions`, `${nvidiaHostedBaseUrl}/embeddings`]);
+});
+
 test("chat request uses documented fields, strict JSON parsing, version metadata, and reported usage", async () => {
   let requestUrl = "";
   let requestBody: Record<string, unknown> = {};
