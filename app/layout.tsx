@@ -6,6 +6,7 @@ import { Providers } from "./providers";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 import "./redesign.css";
+import "./explorer.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

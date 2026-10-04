@@ -22,6 +22,7 @@ test("undergraduate-size bands are mutually exclusive at their boundaries", () =
   assert.equal(matchesEnrollmentBand(25_000, "medium"), false);
   assert.equal(matchesEnrollmentBand(25_000, "large"), true);
   assert.equal(matchesEnrollmentBand(null, "large"), false);
+  assert.equal(matchesEnrollmentBand(25_000, "unexpected-band"), false);
 });
 
 test("advanced filters apply exact evidence thresholds and exclude missing values", () => {

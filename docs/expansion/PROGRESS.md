@@ -1,8 +1,8 @@
 # CollegeSearch expansion progress
 
-## Current milestone — M8, October 4, 2026
+## Current milestone — M9, October 4, 2026
 
-The live catalog retains **3,912** source-audited institutions, 38 broad fields, and 3,094 sourced college marks. Original 100 identities are preserved. M8 fixes adviser unknown-institution boundaries, coordinated ordinal references, reviewed short names and repeated preference questions. All 463 tests, Vinext/native Next builds, TypeScript and ESLint pass; desktop/320px boundary rendering passed. Deployment is pending. See [M8 adviser validation](M8_ADVISER_VALIDATION.md) and [M7 catalog/release evidence](M7_PROGRESS.md).
+The live catalog retains **3,912** source-audited institutions, 38 broad fields, and 3,094 sourced college marks. Original 100 identities are preserved. M8 was committed/pushed as `0058565` and deployed READY. M9 simplifies filters, defaults to familiar featured colleges, fixes delayed-pagination and failed-search stale-result bugs, and restores a visible adviser entry with honest availability. All 465 tests passed; the final native Next build, TypeScript and ESLint passed after the error-state repair. Local desktop/mobile, delayed-response and failure/retry checks passed. M9 deployment is pending. See [M9 explorer review](M9_EXPLORER_REVIEW.md), [M8 adviser validation](M8_ADVISER_VALIDATION.md) and [M7 catalog/release evidence](M7_PROGRESS.md).
 
 M8 evaluated actual runtime retrieval and a predeclared 21-question keyword/vector/hybrid benchmark. Vector/hybrid returned a relevant top-five passage for 17/18 supported questions; that is not answer accuracy. Initial provider runs exposed real relevance errors; the final focused replay passed all ten selected cases, five unknown/topic boundaries and two complete named comparisons. The full 32-case final matrix was not rerun. The disposable embedded database was removed, preserving the baseline and all hosted records.
 

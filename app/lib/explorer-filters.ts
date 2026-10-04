@@ -20,13 +20,14 @@ function atLeast(value: number | null, minimum: number | null) {
 
 export function matchesEnrollmentBand(
   value: number | null,
-  band: EnrollmentBand,
+  band: string,
 ) {
   if (!band) return true;
   if (value === null) return false;
   if (band === "small") return value < 10_000;
   if (band === "medium") return value >= 10_000 && value < 25_000;
-  return value >= 25_000;
+  if (band === "large") return value >= 25_000;
+  return false;
 }
 
 export function matchesAdvancedExplorerFilters(

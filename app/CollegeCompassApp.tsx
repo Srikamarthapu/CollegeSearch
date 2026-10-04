@@ -15,6 +15,7 @@ import {
   GraduationCap,
   Info,
   MapPin,
+  MessageSquare,
   Search,
   ShieldCheck,
   SlidersHorizontal,
@@ -115,7 +116,7 @@ function explorerReducer(
   action: ExplorerAction,
 ): ExplorerState {
   if (action.type === "set") {
-    return { ...state, [action.key]: action.value, ...(action.key === "major" && !action.value && state.sort === "major" ? { sort: "name" } : {}) } as ExplorerState;
+    return { ...state, [action.key]: action.value, ...(action.key === "major" && !action.value && state.sort === "major" ? { sort: "featured" } : {}) } as ExplorerState;
   }
   if (action.type === "toggle") {
     return {
@@ -227,288 +228,43 @@ function SelectField({
   );
 }
 
-function FilterControls({
-  state,
-  dispatch,
-  savedCount,
-  idPrefix,
-  stateOptions,
-  ownershipOptions,
-  majorOptions,
-}: {
-  state: ExplorerState;
-  dispatch: (action: ExplorerAction) => void;
-  savedCount: number;
-  idPrefix: string;
-  stateOptions: string[];
-  ownershipOptions: string[];
-  majorOptions: string[];
+function FilterControls({ state, dispatch, savedCount, idPrefix, stateOptions, ownershipOptions, majorOptions }: {
+  state: ExplorerState; dispatch: (action: ExplorerAction) => void; savedCount: number; idPrefix: string;
+  stateOptions: string[]; ownershipOptions: string[]; majorOptions: string[];
 }) {
-  const advancedFilterCount = [
-    state.maxTuition,
-    state.enrollmentBand,
-    state.minGraduation,
-    state.minEarnings,
-    state.setting,
-  ].filter(Boolean).length;
-  const [advancedOpen, setAdvancedOpen] = useState(
-    advancedFilterCount > 0,
-  );
-
-  return (
-    <div className="filter-controls">
-      <SelectField
-        id={`${idPrefix}-institution-level-filter`}
-        label="Institution level"
-        value={state.institutionLevel}
-        onChange={(event) =>
-          dispatch({
-            type: "set",
-            key: "institutionLevel",
-            value: event.target.value,
-          })
-        }
-      >
-        <option value="">All levels</option>
-        <option value="Four-year">Four-year</option>
-        <option value="Two-year">Two-year</option>
-      </SelectField>
-
-      <fieldset className="filter-group">
-        <legend>College type</legend>
-        {["", ...ownershipOptions].map((option) => (
-          <label key={option || "all-types"}>
-            <input
-              type="radio"
-              name={`${idPrefix}-college-type`}
-              value={option}
-              checked={state.ownership === option}
-              onChange={(event) =>
-                dispatch({
-                  type: "set",
-                  key: "ownership",
-                  value: event.target.value,
-                })
-              }
-            />
-            <span>{option || "All types"}</span>
-          </label>
-        ))}
-      </fieldset>
-
-      <SelectField
-        id={`${idPrefix}-major-filter`}
-        label="Field of study"
-        value={state.major}
-        onChange={(event) =>
-          dispatch({ type: "set", key: "major", value: event.target.value })
-        }
-      >
-        <option value="">All reported fields</option>
-        {majorOptions.map((option) => (
-          <option value={option} key={option}>
-            {option}
-          </option>
-        ))}
-      </SelectField>
-
-      <SelectField
-        id={`${idPrefix}-state-filter`}
-        label="Location"
-        value={state.stateCode}
-        onChange={(event) =>
-          dispatch({
-            type: "set",
-            key: "stateCode",
-            value: event.target.value,
-          })
-        }
-      >
-        <option value="">All locations</option>
-        {stateOptions.map((option) => (
-          <option value={option} key={option}>
-            {stateNames[option] || option}
-          </option>
-        ))}
-      </SelectField>
-
-      <SelectField
-        id={`${idPrefix}-admit-band-filter`}
-        label="Overall acceptance rate"
-        value={state.band}
-        onChange={(event) =>
-          dispatch({ type: "set", key: "band", value: event.target.value })
-        }
-      >
-        <option value="">Any admit rate</option>
-        <option value="very-high-reach">10% or less</option>
-        <option value="reach">11%–25%</option>
-        <option value="competitive">26%–50%</option>
-        <option value="accessible">More than 50%</option>
-      </SelectField>
-
-      <SelectField
-        id={`${idPrefix}-price-filter`}
-        label="Maximum annual net price"
-        value={state.maxPrice}
-        onChange={(event) =>
-          dispatch({ type: "set", key: "maxPrice", value: event.target.value })
-        }
-      >
-        <option value="">Any net price</option>
-        <option value="15000">$15,000 or less</option>
-        <option value="20000">$20,000 or less</option>
-        <option value="30000">$30,000 or less</option>
-        <option value="40000">$40,000 or less</option>
-      </SelectField>
-
-      <details
-        className="advanced-filters"
-        open={advancedOpen}
-        onToggle={(event) => setAdvancedOpen(event.currentTarget.open)}
-      >
-        <summary>
-          <span>
-            More ways to narrow
-            {advancedFilterCount > 0 ? (
-              <small>{advancedFilterCount} active</small>
-            ) : null}
-          </span>
-          <ChevronDown size={16} aria-hidden="true" />
-        </summary>
-        <div className="advanced-filter-fields">
-          <SelectField
-            id={`${idPrefix}-setting-filter`}
-            label="Campus setting"
-            value={state.setting}
-            onChange={(event) =>
-              dispatch({
-                type: "set",
-                key: "setting",
-                value: event.target.value,
-              })
-            }
-          >
-            <option value="">Any setting</option>
-            <option value="City">City</option>
-            <option value="Suburb">Suburb</option>
-            <option value="Town">Town</option>
-            <option value="Rural">Rural</option>
-          </SelectField>
-
-          <SelectField
-            id={`${idPrefix}-enrollment-filter`}
-            label="Undergraduate size"
-            value={state.enrollmentBand}
-            onChange={(event) =>
-              dispatch({
-                type: "set",
-                key: "enrollmentBand",
-                value: event.target.value,
-              })
-            }
-          >
-            <option value="">Any size</option>
-            <option value="small">Under 10,000 students</option>
-            <option value="medium">10,000–24,999 students</option>
-            <option value="large">25,000+ students</option>
-          </SelectField>
-
-          <SelectField
-            id={`${idPrefix}-graduation-filter`}
-            label="Minimum graduation rate"
-            value={state.minGraduation}
-            onChange={(event) =>
-              dispatch({
-                type: "set",
-                key: "minGraduation",
-                value: event.target.value,
-              })
-            }
-          >
-            <option value="">Any graduation rate</option>
-            <option value="0.6">60% or higher</option>
-            <option value="0.75">75% or higher</option>
-            <option value="0.9">90% or higher</option>
-          </SelectField>
-
-          <SelectField
-            id={`${idPrefix}-earnings-filter`}
-            label="Minimum median earnings"
-            value={state.minEarnings}
-            onChange={(event) =>
-              dispatch({
-                type: "set",
-                key: "minEarnings",
-                value: event.target.value,
-              })
-            }
-          >
-            <option value="">Any earnings level</option>
-            <option value="75000">$75,000 or higher</option>
-            <option value="100000">$100,000 or higher</option>
-            <option value="125000">$125,000 or higher</option>
-          </SelectField>
-
-          <SelectField
-            id={`${idPrefix}-tuition-filter`}
-            label="Maximum out-of-state/private tuition + required fees"
-            value={state.maxTuition}
-            onChange={(event) =>
-              dispatch({
-                type: "set",
-                key: "maxTuition",
-                value: event.target.value,
-              })
-            }
-          >
-            <option value="">Any published tuition</option>
-            <option value="30000">$30,000 or less</option>
-            <option value="50000">$50,000 or less</option>
-            <option value="70000">$70,000 or less</option>
-            <option value="90000">$90,000 or less</option>
-          </SelectField>
-
-          <p className="advanced-filter-note">
-            Tuition is the published sticker price—not your likely cost. Net
-            price accounts for grants and scholarships for the reported
-            federal cohort.
-          </p>
-        </div>
-      </details>
-
-      <div className="filter-toggles">
-        <button
-          type="button"
-          aria-pressed={state.ucOnly}
-          className={state.ucOnly ? "is-active" : ""}
-          onClick={() => dispatch({ type: "toggle", key: "ucOnly" })}
-        >
-          <ShieldCheck size={16} aria-hidden="true" />
-          UC campuses only
-        </button>
-        <button
-          type="button"
-          aria-pressed={state.completeOnly}
-          className={state.completeOnly ? "is-active" : ""}
-          onClick={() => dispatch({ type: "toggle", key: "completeOnly" })}
-        >
-          <Database size={16} aria-hidden="true" />
-          Only colleges with all key metrics
-        </button>
-        <button
-          type="button"
-          aria-pressed={state.savedOnly}
-          className={state.savedOnly ? "is-active" : ""}
-          onClick={() => dispatch({ type: "toggle", key: "savedOnly" })}
-        >
-          <Bookmark size={16} aria-hidden="true" />
-          Saved colleges
-          <span>{savedCount}</span>
-        </button>
-      </div>
-    </div>
-  );
+  const extraCount = [state.band, state.minGraduation, state.minEarnings, state.maxTuition, state.setting].filter(Boolean).length;
+  const field = (key: FilterKey, label: string, options: Array<[string, string]>) => <SelectField
+    id={`${idPrefix}-${key}-filter`} label={label} value={state[key]}
+    onChange={(event) => dispatch({ type: "set", key, value: event.target.value })}>
+    {options.map(([value, text]) => <option value={value} key={value}>{text}</option>)}
+  </SelectField>;
+  return <div className="filter-controls grouped-filters">
+    <fieldset className="filter-section"><legend>Your search</legend><div className="filter-section-grid">
+      {field("major", "Field of study", [["", "Any field"], ...majorOptions.map((value): [string, string] => [value, value])])}
+      {field("stateCode", "Location", [["", "Anywhere in the U.S."], ...stateOptions.map((value): [string, string] => [value, stateNames[value] || value])])}
+      {field("institutionLevel", "College level", [["", "Two- and four-year"], ["Four-year", "Four-year"], ["Two-year", "Two-year"]])}
+      {field("ownership", "College type", [["", "Public & private"], ...ownershipOptions.map((value): [string, string] => [value, value])])}
+    </div></fieldset>
+    <fieldset className="filter-section"><legend>Cost & campus</legend><div className="filter-section-grid">
+      {field("maxPrice", "Annual net price", [["", "Any net price"], ["15000", "$15,000 or less"], ["20000", "$20,000 or less"], ["30000", "$30,000 or less"], ["40000", "$40,000 or less"]])}
+      {field("enrollmentBand", "Undergraduate size", [["", "Any size"], ["small", "Under 10,000"], ["medium", "10,000–24,999"], ["large", "25,000 or more"]])}
+    </div><p className="filter-context">Net price is the reported average after grants, not a quote for your family.</p></fieldset>
+    <details className="advanced-filters filter-section" open={extraCount > 0 || undefined}>
+      <summary><span>Admissions & more{extraCount > 0 && <small>{extraCount} active</small>}</span><ChevronDown size={16} aria-hidden="true" /></summary>
+      <div className="filter-section-grid">
+        {field("band", "Overall acceptance rate", [["", "Any reported rate"], ["very-high-reach", "10% or less"], ["reach", "Over 10% to 25%"], ["competitive", "Over 25% to 50%"], ["accessible", "Over 50%"]])}
+        {field("setting", "Campus setting", [["", "Any setting"], ["City", "City"], ["Suburb", "Suburb"], ["Town", "Town"], ["Rural", "Rural"]])}
+        {field("minGraduation", "Minimum completion rate", [["", "Any reported rate"], ["0.6", "60% or higher"], ["0.75", "75% or higher"], ["0.9", "90% or higher"]])}
+        {field("minEarnings", "Median earnings", [["", "Any reported earnings"], ["75000", "$75,000 or higher"], ["100000", "$100,000 or higher"], ["125000", "$125,000 or higher"]])}
+        {field("maxTuition", "Out-of-state / private tuition", [["", "Any tuition & required fees"], ["30000", "$30,000 or less"], ["50000", "$50,000 or less"], ["70000", "$70,000 or less"], ["90000", "$90,000 or less"]])}
+      </div><p className="filter-context">Rates describe past groups of students. Tuition excludes living costs. Colleges with missing values are excluded only when that metric is filtered.</p>
+    </details>
+    <fieldset className="filter-section"><legend>Collection</legend><div className="filter-checks">
+      {([
+        ["ucOnly", "UC campuses only"], ["savedOnly", `My saved colleges (${savedCount})`], ["completeOnly", "All key metrics reported"],
+      ] as const).map(([key, label]) => <label key={key}><input type="checkbox" checked={state[key]} onChange={() => dispatch({ type: "toggle", key })} /><span>{label}</span></label>)}
+    </div></fieldset>
+  </div>;
 }
 
 type AutocompleteItem =
@@ -745,10 +501,12 @@ export function CollegeSearchApp({
   initialPage,
   initialFilters,
   mode = "home",
+  adviserAvailable = false,
 }: {
   initialPage: CollegeDirectoryPage;
   initialFilters: DirectoryFilters;
   mode?: "home" | "explore";
+  adviserAvailable?: boolean;
 }) {
   const [state, dispatch] = useReducer(
     explorerReducer,
@@ -771,7 +529,8 @@ export function CollegeSearchApp({
   const [status, setStatus] = useState("");
   const [hydrated, setHydrated] = useState(false);
   const [directoryPage, setDirectoryPage] = useState(initialPage);
-  const [loadingMore, setLoadingMore] = useState(false);
+  const [moreRequest, setMoreRequest] = useState<{ id: number; key: string } | null>(null);
+  const [searchAttempt, setSearchAttempt] = useState(0);
   const [pageRequestStatus, setPageRequestStatus] = useState(() => ({
     key: directoryRequestKey(
       initialFilters,
@@ -779,6 +538,7 @@ export function CollegeSearchApp({
       initialPage.selectedItems.map((college) => college.unitId),
     ),
     error: "",
+    failedSearch: false,
   }));
   const requestSequence = useRef(0);
   const deferredQuery = useDeferredValue(state.query);
@@ -801,10 +561,12 @@ export function CollegeSearchApp({
     savedIdsForRequest,
     selected,
   );
+  const loadingMore = moreRequest?.key === currentDirectoryRequestKey;
   const loadingPage = hydrated && pageRequestStatus.key !== currentDirectoryRequestKey;
   const directoryError = pageRequestStatus.key === currentDirectoryRequestKey
     ? pageRequestStatus.error
     : "";
+  const searchFailed = Boolean(directoryError) && pageRequestStatus.failedSearch;
 
   useEffect(() => {
     let cancelled = false;
@@ -858,7 +620,7 @@ export function CollegeSearchApp({
       .then((page) => {
         if (requestSequence.current === requestId) {
           setDirectoryPage(page);
-          setPageRequestStatus({ key: currentDirectoryRequestKey, error: "" });
+          setPageRequestStatus({ key: currentDirectoryRequestKey, error: "", failedSearch: false });
         }
       })
       .catch((error) => {
@@ -866,10 +628,11 @@ export function CollegeSearchApp({
         setPageRequestStatus({
           key: currentDirectoryRequestKey,
           error: error instanceof Error ? error.message : "The college list could not be searched.",
+          failedSearch: true,
         });
       });
     return () => controller.abort();
-  }, [currentDirectoryRequestKey, hydrated, requestFilters, savedIdsForRequest, selected]);
+  }, [currentDirectoryRequestKey, hydrated, requestFilters, savedIdsForRequest, searchAttempt, selected]);
 
   useEffect(() => {
     if (!status) return;
@@ -890,9 +653,9 @@ export function CollegeSearchApp({
   });
 
   async function loadMore() {
-    if (directoryPage.nextOffset === null || loadingMore) return;
+    if (directoryPage.nextOffset === null || loadingMore || loadingPage || searchFailed) return;
     const requestId = ++requestSequence.current;
-    setLoadingMore(true);
+    setMoreRequest({ id: requestId, key: currentDirectoryRequestKey });
     try {
       const page = await requestDirectoryPage({
         filters: requestFilters,
@@ -905,16 +668,17 @@ export function CollegeSearchApp({
         ...page,
         items: [...current.items, ...page.items],
       }));
-      setPageRequestStatus({ key: currentDirectoryRequestKey, error: "" });
+      setPageRequestStatus({ key: currentDirectoryRequestKey, error: "", failedSearch: false });
     } catch (error) {
       if (requestSequence.current === requestId) {
         setPageRequestStatus({
           key: currentDirectoryRequestKey,
           error: error instanceof Error ? error.message : "More colleges could not be loaded.",
+          failedSearch: false,
         });
       }
     } finally {
-      if (requestSequence.current === requestId) setLoadingMore(false);
+      setMoreRequest((current) => current?.id === requestId ? null : current);
     }
   }
 
@@ -1012,7 +776,7 @@ export function CollegeSearchApp({
       : null,
     state.band
       ? {
-          label: "Acceptance-rate range",
+          label: ({ "very-high-reach": "Admit rate ≤ 10%", reach: "Admit rate over 10% to 25%", competitive: "Admit rate over 25% to 50%", accessible: "Admit rate > 50%" } as Record<string, string>)[state.band] || "Acceptance-rate range",
           clear: () =>
             dispatch({ type: "set", key: "band", value: "" }),
         }
@@ -1047,7 +811,7 @@ export function CollegeSearchApp({
       : null,
     state.minGraduation
       ? {
-          label: `Graduation rate ≥ ${Math.round(
+          label: `Completion rate ≥ ${Math.round(
             Number(state.minGraduation) * 100,
           )}%`,
           clear: () =>
@@ -1125,30 +889,9 @@ export function CollegeSearchApp({
         <section className="explore-section research-explorer" id="explore" aria-label="Explore colleges">
           <div className="research-section-heading">
             <div><h2>Explore colleges</h2><span>{catalogSize.toLocaleString()} in this collection</span></div>
-            <div className="research-heading-links"><Link href="/match"><SlidersHorizontal size={17} aria-hidden="true" /> Find my fit</Link></div>
+            <div className="research-heading-links"><Link href="/adviser"><MessageSquare size={17} aria-hidden="true" /><span>AI adviser{!adviserAvailable && <small className="adviser-link-status">In preparation</small>}</span></Link></div>
           </div>
         <div className="explorer-shell">
-          <aside className="filter-panel" aria-label="College filters">
-            <div className="filter-panel-head">
-              <SlidersHorizontal size={17} aria-hidden="true" />
-              <strong>Filters</strong>
-              {activeFilters.length ? (
-                <span>{activeFilters.length} active</span>
-              ) : null}
-            </div>
-            {activeFilters.length ? <button className="sidebar-reset" type="button" onClick={() => dispatch({ type: "clear" })}>Reset filters</button> : null}
-            <FilterControls
-              state={state}
-              dispatch={dispatch}
-              savedCount={saved.length}
-              idPrefix="sidebar"
-              stateOptions={stateOptions}
-              ownershipOptions={ownershipOptions}
-              majorOptions={majorOptions}
-            />
-            <div className="filter-help"><Info size={17} aria-hidden="true" /><p>Explore {catalogSize.toLocaleString()} colleges across the U.S. <Link href="/data-sources">See coverage & sources</Link></p></div>
-          </aside>
-
           <div className="results-panel">
             <div className="results-search-dock">
               <SearchBox
@@ -1163,19 +906,21 @@ export function CollegeSearchApp({
                 onSubmit={submitSearch}
               />
             </div>
-            <div className="discovery-shortcuts" aria-label="Starting points">
-              <button type="button" aria-pressed={state.maxPrice === "20000"} onClick={() => dispatch({type: "set", key: "maxPrice", value: state.maxPrice === "20000" ? "" : "20000"})}>Net price under $20k</button>
-              <button type="button" aria-pressed={state.ucOnly} onClick={() => dispatch({type: "toggle", key: "ucOnly"})}>UC campuses</button>
-              <button type="button" aria-pressed={state.major === "Engineering"} onClick={() => dispatch({type: "set", key: "major", value: state.major === "Engineering" ? "" : "Engineering"})}>Engineering</button>
-              <button type="button" aria-pressed={state.enrollmentBand === "small"} onClick={() => dispatch({type: "set", key: "enrollmentBand", value: state.enrollmentBand === "small" ? "" : "small"})}>Smaller campuses</button>
-            </div>
-            <div className="results-toolbar">
-              <div>
+            <div className="explorer-filter-bar" aria-label="Quick filters">
+              <SelectField id="quick-major" label="Field of study" value={state.major} onChange={(event) => dispatch({ type: "set", key: "major", value: event.target.value })}>
+                <option value="">Any field</option>{majorOptions.map((field) => <option key={field} value={field}>{field}</option>)}
+              </SelectField>
+              <SelectField id="quick-location" label="Location" value={state.stateCode} onChange={(event) => dispatch({ type: "set", key: "stateCode", value: event.target.value })}>
+                <option value="">Anywhere</option>{stateOptions.map((code) => <option key={code} value={code}>{stateNames[code] || code}</option>)}
+              </SelectField>
+              <SelectField id="quick-net-price" label="Annual net price" value={state.maxPrice} onChange={(event) => dispatch({ type: "set", key: "maxPrice", value: event.target.value })}>
+                <option value="">Any price</option><option value="15000">Up to $15,000</option><option value="20000">Up to $20,000</option><option value="30000">Up to $30,000</option><option value="40000">Up to $40,000</option>
+              </SelectField>
                 <Dialog.Root open={filtersOpen} onOpenChange={setFiltersOpen}>
                   <Dialog.Trigger asChild>
-                    <button className="mobile-filter-button" type="button">
+                    <button className="all-filters-button" type="button">
                       <SlidersHorizontal size={17} aria-hidden="true" />
-                      Filters
+                      All filters
                       {activeFilters.length ? (
                         <span>{activeFilters.length}</span>
                       ) : null}
@@ -1183,20 +928,21 @@ export function CollegeSearchApp({
                   </Dialog.Trigger>
                   <Dialog.Portal>
                     <Dialog.Overlay className="filter-dialog-overlay" />
-                    <Dialog.Content className="filter-dialog" data-lenis-prevent>
+                    <Dialog.Content className="filter-dialog explorer-filter-dialog" data-lenis-prevent>
                       <div className="filter-dialog-head">
                         <div>
-                          <Dialog.Title>Filters</Dialog.Title>
+                          <Dialog.Title>Refine your search</Dialog.Title>
                           <Dialog.Description>
-                            Choose what matters to you. Results update as you go.
+                            Choose what matters. Your results update as you go.
                           </Dialog.Description>
                         </div>
                         <Dialog.Close asChild>
                           <button type="button" aria-label="Close filters">
-                            <X size={19} />
+                            <X size={19} aria-hidden="true" />
                           </button>
                         </Dialog.Close>
                       </div>
+                      <div className="filter-dialog-body" data-lenis-prevent>
                       <FilterControls
                         state={state}
                         dispatch={dispatch}
@@ -1206,26 +952,31 @@ export function CollegeSearchApp({
                         ownershipOptions={ownershipOptions}
                         majorOptions={majorOptions}
                       />
+                      </div>
+                      <div className="filter-dialog-footer">
+                      <button className="filter-reset-button" type="button" onClick={() => dispatch({ type: "clear" })}>Reset all</button>
                       <Dialog.Close asChild>
                         <button className="apply-filters-button" type="button">
-                          {savedListUnavailable
+                          {loadingPage ? "Updating results…" : searchFailed ? "Review search error" : savedListUnavailable
                             ? savedListFailed
                               ? "Saved list unavailable"
                               : "Checking saved list"
                             : `Show ${resultCount.toLocaleString()} colleges`}
                         </button>
                       </Dialog.Close>
+                      </div>
                     </Dialog.Content>
                   </Dialog.Portal>
                 </Dialog.Root>
-
+            </div>
+            <div className="results-toolbar"><div>
                 <p
                   className="results-count"
                   id="results-summary"
                   tabIndex={-1}
                   aria-live="polite"
                 >
-                  {savedListUnavailable ? (
+                  {loadingPage ? "Updating colleges…" : searchFailed ? "Search unavailable" : savedListUnavailable ? (
                     savedListFailed ? (
                       "Saved list unavailable"
                     ) : (
@@ -1253,6 +1004,7 @@ export function CollegeSearchApp({
                   })
                 }
               >
+                <option value="featured">Featured colleges</option>
                 <option value="name">College name: A–Z</option>
                 {state.major ? (
                   <option value="major">Field match: strongest first</option>
@@ -1277,12 +1029,17 @@ export function CollegeSearchApp({
                 <button className="share-search" type="button" aria-label="Copy search link" onClick={() => void shareSearch()}><Copy size={17} aria-hidden="true" /></button>
               </div>
             </div>
+            {state.sort === "featured" && !state.query ? <p className="featured-order-note">Familiar starting points, followed by the full collection. Not a ranking.</p> : null}
             {shareUrl ? <label className="share-fallback">Copy this search link<input readOnly value={shareUrl} onFocus={(event) => event.target.select()} /></label> : null}
 
             {directoryError ? (
               <div className="empty-state" role="alert">
                 <CircleAlert size={24} aria-hidden="true" />
                 <p>{directoryError}</p>
+                {searchFailed && <button type="button" onClick={() => {
+                  setPageRequestStatus({ key: "", error: "", failedSearch: false });
+                  setSearchAttempt((attempt) => attempt + 1);
+                }}>Retry search</button>}
               </div>
             ) : null}
 
@@ -1309,27 +1066,19 @@ export function CollegeSearchApp({
               </div>
             ) : null}
 
-            {state.major ? (
-              <div className="major-context-banner">
-                <GraduationCap size={19} aria-hidden="true" />
-                <p>
-                  <strong>
-                    This filter shows colleges with recent federal evidence of
-                    a bachelor&apos;s- or associate-level program in this broad field.
-                  </strong>{" "}
-                  It is not a live major catalog, and acceptance rates are for
-                  the whole college—not this field.
-                </p>
-                <Link href="/methodology#major-data">About field data</Link>
-              </div>
-            ) : null}
+            {state.major ? <details className="field-evidence-note">
+              <summary><GraduationCap size={17} aria-hidden="true" /><span>About these field matches</span><ChevronDown size={15} aria-hidden="true" /></summary>
+              <p>These colleges report a bachelor’s- or associate-level program in this broad field. This is historical federal program data, not a live list of exact majors. Acceptance rates describe the whole college. <Link href="/methodology#major-data">How field data works</Link></p>
+            </details> : null}
 
             <div
               className={`results-list research-results is-${view}`}
               id="results-list"
               aria-busy={loadingPage || loadingMore || state.query !== deferredQuery || savedListUnavailable}
+              inert={loadingPage || savedListUnavailable || undefined}
+              data-updating={loadingPage || undefined}
             >
-              {!savedListUnavailable
+              {!savedListUnavailable && !searchFailed
                 ? results.map((college) => (
                 <CollegeCard
                   key={college.unitId}
@@ -1364,12 +1113,12 @@ export function CollegeSearchApp({
                   </button>
                 ) : null}
               </div>
-            ) : resultCount === 0 ? (
+            ) : !searchFailed && resultCount === 0 ? (
               <div className="empty-state">
                 <CircleAlert size={29} aria-hidden="true" />
                 <h3>No college meets every active filter.</h3>
                 <p>
-                  Remove one filter or reset the cohort. Missing data is never
+                  Try removing a filter or resetting your search. Missing data is never
                   treated as zero to force a match.
                 </p>
                 <button type="button" onClick={() => dispatch({ type: "clear" })}>
@@ -1378,18 +1127,29 @@ export function CollegeSearchApp({
               </div>
             ) : null}
 
-            {directoryPage.nextOffset !== null ? (
+            {!searchFailed && directoryPage.nextOffset !== null ? (
               <button
                 className="load-more"
                 type="button"
                 onClick={() => void loadMore()}
-                disabled={loadingMore}
+                disabled={loadingMore || loadingPage || savedListUnavailable}
               >
                 {loadingMore ? "Loading colleges…" : `Show ${Math.min(DIRECTORY_PAGE_SIZE, resultCount - results.length)} more colleges`}
                 <ArrowDown size={16} aria-hidden="true" />
               </button>
             ) : null}
           </div>
+          <aside className="explorer-support" aria-label="College research help">
+            <section className="explorer-adviser-card" aria-labelledby="explorer-adviser-heading">
+              <span className="explorer-adviser-icon"><MessageSquare size={21} aria-hidden="true" /></span>
+              <h3 id="explorer-adviser-heading">Your college adviser</h3>
+              <p>A place to work through your interests, priorities, and college options.</p>
+              {!adviserAvailable && <div className="adviser-preparation"><span>In preparation</span><p>AI chat isn’t available yet. Preference matching is ready to use.</p></div>}
+              <Link className="adviser-open-link" href={adviserAvailable ? "/adviser" : "/match"}>{adviserAvailable ? "Open AI adviser" : "Find my fit"} <ArrowRight size={16} aria-hidden="true" /></Link>
+              {!adviserAvailable && <Link className="adviser-match-link" href="/adviser">AI adviser status & history</Link>}
+            </section>
+            <section className="explorer-source-card"><ShieldCheck size={20} aria-hidden="true" /><h3>Know where the numbers come from.</h3><p>U.S. Department of Education data and reviewed college records. Check each metric’s source and year.</p><Link href="/data-sources">Sources & coverage <ArrowUpRight size={15} aria-hidden="true" /></Link></section>
+          </aside>
         </div>
       </section>
 

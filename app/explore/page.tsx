@@ -1,3 +1,4 @@
+import { getAdviserPublicStatus } from "@/app/lib/adviser/server";
 import { CollegeSearchApp } from "@/app/CollegeCompassApp";
 import {
   searchCollegeDirectory,
@@ -25,6 +26,7 @@ export default async function ExplorePage({ searchParams }: ExplorePageProps) {
     <CollegeSearchApp
       initialPage={initialPage}
       initialFilters={initialFilters}
+      adviserAvailable={getAdviserPublicStatus().available}
       mode="explore"
     />
   );

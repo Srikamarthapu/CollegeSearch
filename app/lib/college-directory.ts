@@ -11,14 +11,17 @@ import {
 } from "@/app/lib/college-client-record";
 import {
   filterCollegesByQuery,
+  normalizeSearchText,
 } from "@/app/lib/college-search";
 import {
   observationSourceKind,
   isUniversityOfCalifornia,
 } from "@/app/lib/college-data";
+import { matchesEnrollmentBand } from "./explorer-filters";
 import knowledgeRelease from "@/data/college-knowledge-release.json";
 import {
   DIRECTORY_PAGE_SIZE,
+  sortDirectoryColleges,
   type DirectoryFilters,
 } from "./college-directory-state";
 
@@ -117,14 +120,6 @@ function matchesSelectivity(value: number | null, band: string) {
   return value > 0.5;
 }
 
-function matchesEnrollment(value: number | null, band: string) {
-  if (!band) return true;
-  if (value === null) return false;
-  if (band === "small") return value < 10_000;
-  if (band === "medium") return value >= 10_000 && value < 25_000;
-  return value >= 25_000;
-}
-
 function majorForCollege(college: College, name: string) {
   return college.majors.find(
     (major) =>
@@ -142,32 +137,6 @@ function matchesCompleteData(college: College) {
   ].every((observation) => observation.value !== null);
 }
 
-function compareNullable(
-  left: number | null,
-  right: number | null,
-  direction: "asc" | "desc" = "asc",
-) {
-  if (left === null && right === null) return 0;
-  if (left === null) return 1;
-  if (right === null) return -1;
-  return direction === "asc" ? left - right : right - left;
-}
-
-function sortDirectory(rows: College[], sort: string, major: string) {
-  return rows.sort((left, right) => {
-    if (sort === "major" && major) {
-      return (majorForCollege(right, major)?.share ?? -1) - (majorForCollege(left, major)?.share ?? -1);
-    }
-    if (sort === "admit-low") return compareNullable(left.observations.admitRate.value, right.observations.admitRate.value);
-    if (sort === "admit-high") return compareNullable(left.observations.admitRate.value, right.observations.admitRate.value, "desc");
-    if (sort === "price") return compareNullable(left.observations.averageNetPrice.value, right.observations.averageNetPrice.value);
-    if (sort === "graduation") return compareNullable(left.observations.graduationRate.value, right.observations.graduationRate.value, "desc");
-    if (sort === "enrollment") return compareNullable(left.observations.undergraduateEnrollment.value, right.observations.undergraduateEnrollment.value, "desc");
-    if (sort === "earnings") return compareNullable(left.observations.medianEarnings.value, right.observations.medianEarnings.value, "desc");
-    return left.name.localeCompare(right.name);
-  });
-}
-
 export function searchCollegeDirectory({
   filters,
   savedIds = [],
@@ -183,14 +152,18 @@ export function searchCollegeDirectory({
 }): CollegeDirectoryPage {
   const safeOffset = Number.isSafeInteger(offset) ? Math.max(0, Math.min(offset, colleges.length)) : 0;
   const safeLimit = Number.isSafeInteger(limit) ? Math.max(1, Math.min(limit, DIRECTORY_MAX_PAGE_SIZE)) : DIRECTORY_PAGE_SIZE;
-  const queryIds = new Set(filterCollegesByQuery(colleges, filters.query, majorOptions).map((college) => college.unitId));
+  const queryMatches = filterCollegesByQuery(colleges, filters.query, majorOptions);
+  const queryIds = new Set(queryMatches.map((college) => college.unitId));
+  const queryOrder = normalizeSearchText(filters.query)
+    ? new Map(queryMatches.map((college, index) => [college.unitId, index]))
+    : undefined;
   const savedSet = new Set(savedIds);
   const maxPrice = Number(filters.maxPrice) || null;
   const maxTuition = Number(filters.maxTuition) || null;
   const minGraduation = Number(filters.minGraduation) || null;
   const minEarnings = Number(filters.minEarnings) || null;
 
-  const filtered = sortDirectory(
+  const filtered = sortDirectoryColleges(
     colleges.filter((college) => {
       const admitRate = college.observations.admitRate.value;
       const netPrice = college.observations.averageNetPrice.value;
@@ -207,7 +180,7 @@ export function searchCollegeDirectory({
         matchesSelectivity(admitRate, filters.band) &&
         (!maxPrice || (netPrice !== null && netPrice <= maxPrice)) &&
         (!maxTuition || (tuition !== null && tuition <= maxTuition)) &&
-        matchesEnrollment(enrollment, filters.enrollmentBand) &&
+        matchesEnrollmentBand(enrollment, filters.enrollmentBand) &&
         (!minGraduation || (graduation !== null && graduation >= minGraduation)) &&
         (!minEarnings || (earnings !== null && earnings >= minEarnings)) &&
         (!filters.setting || college.setting === filters.setting) &&
@@ -218,6 +191,7 @@ export function searchCollegeDirectory({
     }),
     filters.sort,
     filters.major,
+    queryOrder,
   );
 
   const items = filtered.slice(safeOffset, safeOffset + safeLimit).map(projectCollegeForClient);

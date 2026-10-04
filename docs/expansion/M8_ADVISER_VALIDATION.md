@@ -1,6 +1,6 @@
 # M8 adviser and retrieval validation
 
-Status: local verification complete; deployment pending, October 4, 2026. The preceding M7 turn made concrete progress: the source-audited 3,912-college release was published, deployed, tested, and pushed as `58cafba`. Public AI remains disabled; Stripe is deferred.
+Status: committed as `0058565`, pushed and deployed October 4, 2026. Vercel deployment `dpl_5GbXgEVYftXP4QcoJDDgPGcAky64` was READY on the production alias; the user redirected work to M9 before post-deployment browser verification. The preceding M7 turn published the source-audited 3,912-college release as `58cafba`. Public AI remains disabled; Stripe is deferred.
 
 ## Acceptance for this milestone
 
@@ -36,7 +36,7 @@ Raw report: `work/retrieval-evaluation-29f7d5e5-1791135198227.json`. Reusable qu
 
 ## Verification and release
 
-All 463 tests passed, including the Vinext build, 21 focused engine cases, 11 NVIDIA evaluator checks and nine retrieval-benchmark checks. ESLint, the native Next production build, TypeScript and `git diff --check` passed. Native Next ran after Vinext to restore its generated route types. Its existing warning about ignoring the home-directory lockfile outside this repository remains nonblocking. Logs: `work/m8-full-tests.log`, `m8-lint.log`, `m8-next-build.log`, and `m8-typecheck.log`. Disposable-clone cleanup is complete. Commit, deployment and live verification are pending.
+All 463 tests passed, including the Vinext build, 21 focused engine cases, 11 NVIDIA evaluator checks and nine retrieval-benchmark checks. ESLint, the native Next production build, TypeScript and `git diff --check` passed. Native Next ran after Vinext to restore its generated route types. Its existing warning about ignoring the home-directory lockfile outside this repository remains nonblocking. Logs: `work/m8-full-tests.log`, `m8-lint.log`, `m8-next-build.log`, and `m8-typecheck.log`. Disposable-clone cleanup, commit, push and deployment are complete. Subsequent live explorer verification is recorded in M9; public AI was not enabled.
 
 ## Initial runtime adviser run
 
