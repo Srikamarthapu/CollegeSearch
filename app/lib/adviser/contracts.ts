@@ -113,5 +113,5 @@ export const adviserBoundaries = {
   "personal-chances": "I can help you research an application list, but I cannot calculate your admission odds or label a school a guaranteed safety. Published admission rates describe past groups of applicants, not your personal chance.",
   "major-admit-rate": "This collection does not have verified major-specific admission rates. An overall university rate cannot answer that question. Check the program's official admissions information.",
   "financial-aid": "A historical average net price is not an aid offer or a prediction of your bill. Use each college's official net price calculator and financial aid office to estimate your own costs.",
-  other: "I can help compare colleges in this verified collection by broad fields, location, published costs and campus size. I do not have evidence for every program, campus characteristic or admissions policy.",
+  other: "I do not have verified information for that institution or topic in this collection. Check the college name or its official website. I can help compare listed colleges by broad fields, location, published costs and campus size.",
 } as const;

@@ -1,10 +1,12 @@
 # CollegeSearch expansion progress
 
-## Current milestone — M7, October 4, 2026
+## Current milestone — M8, October 4, 2026
 
-The current live catalog contains **3,912** source-audited institutions, 38 broad fields, and 3,094 sourced college marks. Original 100 identities are preserved. Hosted publication, Vercel promotion, 432 tests, native Next/Vinext builds, type/lint checks, live HTTP smoke, and desktop/mobile browser checks passed. Current evidence and operational notes are in [M7 progress](M7_PROGRESS.md); older sections below are historical milestone snapshots.
+The live catalog retains **3,912** source-audited institutions, 38 broad fields, and 3,094 sourced college marks. Original 100 identities are preserved. M8 fixes adviser unknown-institution boundaries, coordinated ordinal references, reviewed short names and repeated preference questions. All 463 tests, Vinext/native Next builds, TypeScript and ESLint pass; desktop/320px boundary rendering passed. Deployment is pending. See [M8 adviser validation](M8_ADVISER_VALIDATION.md) and [M7 catalog/release evidence](M7_PROGRESS.md).
 
-The NVIDIA key was supplied and internal synthetic evaluation completed: Super returned valid results for 23/24 cases, and all 9,070 passage vectors were verified locally. Public AI and hosted embeddings remain disabled because NVIDIA's API Catalog trial does not permit production use. Broad semantic/ranking evaluation, hosted account/email checks, production provider permission, and measured public quotas remain open. Stripe remains deferred. Only the user-authorized October 4 reset was applied by the user; other resets were not touched.
+M8 evaluated actual runtime retrieval and a predeclared 21-question keyword/vector/hybrid benchmark. Vector/hybrid returned a relevant top-five passage for 17/18 supported questions; that is not answer accuracy. Initial provider runs exposed real relevance errors; the final focused replay passed all ten selected cases, five unknown/topic boundaries and two complete named comparisons. The full 32-case final matrix was not rerun. The disposable embedded database was removed, preserving the baseline and all hosted records.
+
+Public AI and hosted embeddings remain disabled because NVIDIA's API Catalog trial does not permit production use. Production provider permission/allowance, broader human-reviewed quality, hosted account/email journeys and an observed scheduled retention firing remain open. Stripe remains deferred. Only the authorized October 4 reset was applied by the user; other resets were untouched. Older sections below are historical snapshots, including their then-current counts and pending work.
 
 ## October 4, 2026 — M0 planning
 
