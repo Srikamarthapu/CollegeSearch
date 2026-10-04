@@ -2,6 +2,8 @@
 
 ## October 4, 2026 — M0 planning
 
+The M0/M1 sections below preserve their milestone-time notes. The current M1–M4 closeout and remaining release gates are recorded at the end; that closeout supersedes earlier `pending` and `in progress` wording.
+
 Goal: 100+ verified colleges, Supabase structured/hybrid retrieval, a free NVIDIA-hosted NIM conversational adviser, private history, measured usage controls, and final design/release audit. Stripe/AI Plus is deferred by the user's latest instruction.
 
 Active checkout: `/Users/kamarthapusri/Projects/CollegeSearch`, branch `codex/production-foundation`, baseline `dfc4b8a`. External-drive checkout is older and untouched.
@@ -44,7 +46,7 @@ M0 verification progress:
 - Remaining issues: unpatched development advisory, external lockfile build warning, unavailable NVIDIA key/live evaluation/production permission. Changes are local, not yet deployed.
 - Next milestone: M1 reviewed 100-college manifest, official import, regional identity fixes, profile/action/brand fallbacks, and data regression checks. Existing IDs/slugs and source semantics must remain stable.
 
-## M1 in progress — catalog and evidence
+## M1 implementation snapshot — catalog and evidence (historical)
 
 - Official Scorecard data page still links the June 10, 2026 institution archive; archive hash matches the published release. Resolved 50 additions against actual source rows: 12 CSU, 15 major public, 13 regional public, 10 private nonprofit. All are unique current main-campus U.S. institutions. Candidate evidence is in ignored `work/college-catalog-candidates.json`; reviewed manifest/import in progress.
 - Preserved original 50 UNITID/slug pairs in `tests/fixtures/original-college-identities.json` for a regression boundary independent of the expanding manifest.
@@ -55,8 +57,24 @@ M0 verification progress:
 M1 semantic corrections found during review:
 - Federal `TUITIONFEE_IN` is documented as in-district; institutional resident tuition remains distinct. Private profiles/comparison now use one published standard tuition amount, with direct source links in comparison. Tuition excludes living costs; source-aware labels and visible context preserve that distinction.
 - Scorecard two-digit CIP distance flags aggregate at least one detailed program. Correcting previous copy that incorrectly implied an entire broad field was online-only; preserve online-offering evidence on mobile comparisons without excluding possible campus options.
-- Current usage snapshot: 35% remaining (account-wide; concurrent work can contribute). No reset used.
+- At this review, usage was 35% remaining (account-wide; concurrent work can contribute). No reset used; the latest snapshot is recorded in the closeout below.
 
-## M1 data exit — proceed to database integration
+## M1 first exit snapshot — pre-M2 (historical)
 
 Catalog import and source audit complete at 100 institutions. Both builds/typecheck/lint pass; browser core flows and 320/390px checks pass. Full suite: 350/351, with the single expected integration failure at the existing fixed 50-ID database save constraint. `M1_CATALOG_RESULTS.md` records evidence and remaining issues before M2. Resource-link agent is finishing independent official-link verification; unverified destinations remain unavailable. No expanded app deployment before M2 fixes the saved-college constraint and retests it.
+
+The 350/351 result was captured before M2 replaced the fixed-ID constraint. It is superseded by the integrated 393/393 suite and the M2 SQL results below. Official resource review and expanded data verification have since completed; unavailable links remain explicitly unavailable.
+
+## October 4, 2026 — M1–M4 closeout and release status
+
+**M1 — reviewed 100-college catalog.** The release evidence identified as `eff0e19` contains 100 unique current U.S. main-campus institutions, preserves the original 50 UNITIDs/slugs, and includes the reviewed selection manifest and source provenance. The independent federal audit matched all 100 identities, 800 direct Scorecard observations and 1,152 broad CIP pairs with zero mismatches. Live artifact verification passed 26/26 sources. Official admissions/deadline/program/calculator destinations were checked for all institutions; uncertain entries remain unavailable. See `M1_CATALOG_RESULTS.md`, `M1_FEDERAL_VALUE_AUDIT.md`, `M1_RESOURCES.md`, and `M1_SOURCE_REVIEW.md`.
+
+**M2 — knowledge schema and retrieval.** M2 and release-staging migrations are applied to hosted Supabase project `ptdbmseeooboqbpyvcgw`. At pre-migration inspection the hosted project had 0 accounts and 0 saved rows; do not infer a post-seed release from migration application. Hosted catalog/evidence seed and publication are still pending the credential-free SQL export sequence. In the isolated Docker rehearsal, three synthetic legacy saves survived; RLS, active-session boundaries, source binding, exact filters, lexical retrieval, release staging/publication, stale-release guards and transactional rollback passed. Re-seeding preserved an existing synthetic vector/model/version/hash, then cleanup restored the clone to an unembedded current release. See `M2_SQL_VERIFICATION.md`.
+
+**M3 — private adviser schema and integration.** The M3 migration is applied to the same hosted project. Separate local SQL tests passed for owner isolation, session revocation, atomic quota reservation, retries/idempotency, deletion, account cascade, title cleanup and expiry/purge; the concurrent delete/completion race completed without deadlock and erased private content correctly. The application has no deployed hosted-user verification yet. See `M3_SQL_VERIFICATION.md`, `M3_REVIEW.md`, and `M3_PROVIDER.md`.
+
+**M4 — local design and automated checks.** Rendered desktop/mobile review and the adviser fixture passed consent, grounded source cards, retry/draft preservation, quota-disabled send, saved-answer refresh failure, provider-off history/delete, and narrow 320px layout checks. The full suite passed 393/393; Vinext and native Next builds, typecheck and normal lint passed. The native Next build and lint were rerun after the final sign-in panel adjustment. Production-only `npm audit --omit=dev` reported zero vulnerabilities. See `M4_DESIGN_AUDIT.md` and `M4_CHECKS.md`. This is local evidence; the application is not deployed.
+
+**Remaining external gates:** the hosted 100-record seed/publication and hosted retrieval check; final browser/Auth/history/retention verification after deployment; a nonblank NVIDIA key and actual calls; measured model quality, latency, cost, embedding coverage and a defensible free monthly allowance; and verified NVIDIA production-use authorization. The key in ignored `.env.local` is blank and there have been zero NVIDIA calls. The hosted trial restriction remains an activation gate. Stripe/AI Plus is deferred by the user.
+
+Latest account-wide usage snapshot: 23% remaining. No reset has been used.

@@ -37,7 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "CollegeSearch",
     description:
-      "Your college field guide. Explore 50 U.S. colleges, compare dated official records, and build a shortlist with your own research.",
+      `Your college field guide. Explore ${colleges.length} U.S. colleges, compare dated official records, and build a shortlist with your own research.`,
     applicationName: "CollegeSearch",
     keywords: [
       "college search",

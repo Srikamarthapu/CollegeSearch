@@ -1,38 +1,42 @@
 # Expansion acceptance ledger
 
-October 4, 2026. Evidence is required for every row before completion. `pending` means not established, not failed. Stripe/AI Plus was explicitly deferred by the user's later instruction.
+Updated October 4, 2026. `Passed locally` distinguishes reproducible repository/isolated-database evidence from hosted behavior. The M2 and M3 migrations are applied to Supabase project `ptdbmseeooboqbpyvcgw`, but the 100-record hosted seed/publication and app deployment remain pending. Before migration, the hosted project had 0 accounts and 0 saved-college rows. Stripe/AI Plus was explicitly deferred by the user.
 
 | ID | Requirement | Status / evidence |
 |---|---|---|
-| A01 | Inspect current app, database, count, sources, features before changes; plan DB changes, milestones, costs, decisions first | Plan written; initial DB/schema/config and catalog inspection completed. |
-| A02 | Preserve Next.js/Supabase/Vercel, campus-pin identity, responsive search/comparison, existing accounts/saves | Pending regression proof. |
-| C01 | At least 100 unique verified U.S. colleges, correct campuses/stable IDs | Pending import and identity evidence. |
-| C02 | Broad useful mix including UCs, CSUs, flagships, private/regional choices, varied cost/selectivity/geography | Pending manifest distribution report. |
-| C03 | Rationale for each inclusion; repeatable future import/update pipeline | Pending reviewed manifest/import command. |
-| D01 | Important facts have source link, year, population, checked date, verification status | Existing provenance foundation; expanded release pending. |
-| D02 | Source content supports displayed claims; authoritative university/CDS/federal priority | Pending expanded artifact/field evidence. |
-| D03 | Distinguish tuition/COA, resident/nonresident, first-year/transfer; Scorecard field interpretation correct | Pending regression and rendered proof. |
-| D04 | Major acceptance only with explicit reliable evidence; no substituted/estimated rates | Pending expanded regression/AI tests. |
-| D05 | Honest missing/conflicting data; duplicate/suspicious/stale/broken-link checks and corrections process | Existing partial controls; expansion and review workflow pending. |
-| D06 | Source/year visible on profiles and comparisons | Pending expanded rendering checks. |
-| R01 | Exact facts/numeric filters/comparison use structured queries | Pending database query implementation and tests. |
-| R02 | Keyword plus vector retrieval for descriptive/program material; real student retrieval questions | Pending hybrid retrieval and evaluation. |
-| R03 | Retrieve before answers; claims traceable to institution-specific sources/years/populations | Pending response contract and citation evidence. |
-| R04 | Insufficient evidence yields unknown/follow-up; no model-memory college facts | Pending adversarial/unknown evaluations. |
-| R05 | Retrieved documents cannot issue instructions; student data excluded from shared KB | Pending architecture, injection and database tests. |
-| AI01 | Natural preference conversation asks useful major/location/budget/size questions | Pending live model flows. |
-| AI02 | Specific grounded recommendations, trade-offs, refinement, profile/compare/save actions | Pending implementation and browser proof. |
-| AI03 | No personal admission probability or admission/affordability/aid guarantees | Pending evaluation rubric and rendered output audit. |
-| AI04 | Evaluate NVIDIA models for correctness, instruction following, latency and cost; configurable model/provider | Pending key, current candidates and real evaluations. |
-| AI05 | Server-only credentials/calls, timeout/caps/failure states | Pending source, bundle and runtime checks. |
-| AI06 | Verify hosted production permission/operating limits before public AI activation | Unresolved: NVIDIA hosted trial terms restrict production, including free real-user service. |
-| F01 | Browsing/search/filter/profile/compare/sources/ordinary saves stay free and public | Pending regression proof. |
-| F02 | Defined measured free AI allowance, remaining/reset shown, quota preserves work and public tools | Pending measurement, atomic quota and UI tests. |
-| P01 | Verified accounts for personal chats; owner RLS and active-session access | Pending migrations and two-user tests. |
-| P02 | Clear chat/history deletion and retention; account erasure | Pending implementation and tests. |
-| P03 | Explain/minimize provider-bound student information | Pending consent, payload inspection and privacy copy. |
-| Q01 | End each milestone with tests and remaining issues | M0 closed with 336 passing tests, both builds, typecheck/lint and local SQL RLS checks; residual issues in M0_FOUNDATION_RESULTS.md. M1 pending. |
-| Q02 | Final screenshot-first design/UI/UX audit and remediation | Pending after feature integration. |
-| Q03 | Mobile, accessibility, isolation, citations, missing data, usage, hosted end-to-end release audit | Pending. |
-| B01 | $5 AI Plus / Stripe Checkout, portal, entitlements, webhook events, billing tests | Deferred by user October 4; intentionally excluded from this iteration. |
-| U01 | Only October 4 reset may be used, only near 1% remaining; leave other resets untouched | Initial reading 42% remaining; no reset used. Recheck only as needed. |
+| A01 | Inspect app/database/count/sources/features; plan schema, milestones, costs and decisions first | **Passed.** `IMPLEMENTATION_PLAN.md` and the initial inspection preceded implementation. The plan records operating costs, user-data boundaries, milestones and external gates. |
+| A02 | Preserve Next.js/Supabase/Vercel, campus-pin identity, search/comparison, existing accounts/saves | **Passed locally; hosted app rollout pending.** Original 50 UNITIDs/slugs remain stable; saved-college FK/RLS/session tests pass with three synthetic saves. The hosted project had no accounts or saves before migration. No app deployment has occurred. |
+| C01 | At least 100 verified U.S. colleges and correct campuses/stable IDs | **Passed.** M1 release evidence `eff0e19` covers 100 unique current main-campus UNITIDs; all original 50 IDs/slugs are preserved. See `M1_CATALOG_RESULTS.md` and `M1_FEDERAL_VALUE_AUDIT.md`. |
+| C02 | Useful mix across UCs, CSUs, flagships, regional/private choices, cost/selectivity/geography | **Passed for the reviewed cohort.** The catalog has 74 public and 26 private nonprofit institutions across all four Census regions; selection counts and reasons are recorded in M1 results. |
+| C03 | Inclusion rationale and repeatable update/import pipeline | **Passed locally.** The reviewed manifest records rationale/source identities; the refresh is transactional and validates the exact roster. |
+| D01 | Important facts carry source, year, population, check date and status | **Passed for the reviewed release.** Runtime evidence validation requires lineage, registered source binding, valid dates/status/units and value shapes. M1 reports the 100-record artifact and provenance checks. |
+| D02 | Source content supports displayed claims; prefer authoritative university/CDS/federal evidence | **Passed for audited scope.** The pinned Scorecard archive audit matched 100 campus identities, 800 primary/alternate federal observations and 1,152 broad CIP pairs with zero mismatches; live source verification passed 26/26 artifacts. Institution overlays remain separately reviewed. |
+| D03 | Distinguish tuition/COA, resident/nonresident and first-year/transfer semantics | **Passed in the reviewed release and local render.** Scorecard `TUITIONFEE_IN` is labeled in-district; verified institutional in-state data remains distinct; private tuition is shown once; net price, tuition and cost of attendance remain separate. Admissions values are first-time institutional cohorts, not transfer or major rates. |
+| D04 | Show major acceptance only with explicit reliable evidence; never substitute/estimate rates | **Passed for current behavior.** Major evidence means program availability, not admission probability; missing major rates remain unavailable. Broad CIP distance flags say a field includes a distance-only program, not that every program is online. |
+| D05 | Honest missing/conflicting data; duplicate, suspicious, stale and broken-link checks plus correction process | **Passed for this release.** Schema/range/source checks and independent federal comparison pass; changed overlay fingerprints stop publication for review. Failed/uncertain action links stay unavailable. Future source changes still require a fresh content review. |
+| D06 | Source/year visible on profiles and comparisons | **Passed in local rendered checks.** Source-bound values, periods and cost qualifications remained visible in desktop/mobile profile, comparison and adviser fixtures. Hosted render remains pending deployment. |
+| R01 | Exact facts, numeric filters and comparisons use structured queries | **Passed locally; hosted publication pending.** Exact numeric/residency filters and provenance passed isolated SQL/adapter tests. Hosted M2 schema is applied, but has no seeded current release yet. |
+| R02 | Keyword plus vector retrieval for descriptive/program content; test real student questions | **Partially passed.** Lexical retrieval, source binding, vector dimensions/guards and synthetic SQL ranking passed. Real embeddings, full vector population/indexing and semantic relevance evaluation remain pending; synthetic vectors are not model-quality evidence. |
+| R03 | Retrieve before answering; claims trace to institution-specific sources/years/populations | **Implemented and locally tested with synthetic provider fixtures.** Candidate records and source-bound facts are server-validated. Actual generated answers have not been evaluated. |
+| R04 | Insufficient evidence yields unknown/follow-up; no model-memory college facts | **Locally tested in deterministic/adversarial cases.** Live model behavior on unknown or conflicting college facts remains pending NVIDIA evaluation. |
+| R05 | Retrieved text cannot issue instructions; student data excluded from shared KB | **Passed in implementation review and local SQL/API tests.** Public knowledge is read-only to clients; retrieved content is treated as evidence, and private student data is kept outside the shared catalog. Hosted seed/runtime checks remain pending. |
+| AI01 | Natural preference conversation asks useful major/location/budget/size questions | **Implemented; live model behavior pending.** Workspace and deterministic contracts pass local tests; no NVIDIA API call has been made. |
+| AI02 | Grounded recommendations/trade-offs/refinement and profile/compare/save actions | **Implemented and fixture-tested.** Actions bind to reviewed IDs and evidence. Model quality and live end-to-end behavior remain unverified. |
+| AI03 | No personal admission probability or admission/aid/affordability guarantees | **Guardrails and synthetic cases pass.** Human review of real model outputs remains pending. |
+| AI04 | Evaluate NVIDIA models for correctness, instruction following, latency/cost; configurable provider/model | **Pending.** `.env.local` has an empty NVIDIA key; there have been zero provider calls. Candidate model quality, latency, cost, monthly allowance, full embedding coverage and production permission are unmeasured. |
+| AI05 | Server-only credentials/calls, caps/timeouts and failure states | **Implemented and locally tested.** Credentials remain server-side; request limits, failure handling and recoverable drafts are covered by tests/fixtures. Live provider/host verification remains pending. |
+| AI06 | Confirm hosted production permission/limits before public AI activation | **Unresolved external gate.** NVIDIA hosted trial terms prohibit production use, including a free real-user app. Keep public AI disabled until an authorized production route is verified. |
+| F01 | Search/filter/profile/compare/sources/ordinary saves stay free and usable | **Passed in local regression/render checks.** These paths are not paywalled; hosted app deployment and final live verification are pending. |
+| F02 | Measured free AI allowance, visible remaining/reset, preserve work at quota | **Reservation/quota mechanics and quota UI states passed local SQL/API/fixture tests.** A real monthly allowance and cost budget await provider measurements. |
+| P01 | Verified accounts for private chats; owner RLS and active-session access | **M3 schema applied hosted; local isolation passed.** Two-user, revoked-session and anonymous cases passed against synthetic local users. Hosted project had 0 accounts before migration; live account/browser verification is pending. |
+| P02 | Chat/history deletion, retention and account erasure | **Deletion/cascade/tombstone and simulated 90-day expiry passed local SQL tests.** Hosted migration is applied; scheduled retention execution and live account deletion still need host/browser verification. |
+| P03 | Explain/minimize student data sent to NVIDIA | **Consent gate and minimized payload behavior passed local fixture/review.** No provider request has been sent; exact live outbound payload/retention remains unverified. |
+| Q01 | End each milestone with tests and remaining issues | **M0–M4 local evidence recorded.** `M0_FOUNDATION_RESULTS.md`, `M1_CATALOG_RESULTS.md`, `M1_FEDERAL_VALUE_AUDIT.md`, `M2_SQL_VERIFICATION.md`, `M3_SQL_VERIFICATION.md`, `M4_CHECKS.md` and `M4_DESIGN_AUDIT.md` track results and limits. The post-integration suite passed 393/393. |
+| Q02 | Screenshot-first design audit and remediation | **Passed locally.** Rendered desktop/mobile states were reviewed and corrected, including mobile history, unavailable states, source cards, consent, deletion, failure/retry and narrow 320px behavior. Final hosted rendering remains pending. |
+| Q03 | Mobile/accessibility/isolation/citations/missing-data/usage/hosted release audit | **Local checks passed for documented states; hosted release audit pending.** Local SQL/API/fixture/browser checks cover these boundaries, but there is no expanded app deployment or live NIM evaluation yet. |
+| B01 | $5 AI Plus, Stripe checkout/portal/entitlements/webhooks/charges | **Deferred by user October 4.** No billing objects or real charges were created; billing is outside this iteration. |
+| U01 | Only October 4 reset may be used, only near 1% remaining; leave other resets untouched | **No reset used.** Latest available usage snapshot showed 23% remaining; usage is account-wide and can change with concurrent work. |
+
+## Remaining external gates
+
+The reviewed catalog still needs the credential-free hosted seed/export sequence applied and verified against the intended Supabase project. The application has not been deployed. The hosted NVIDIA key is blank and no provider calls occurred, so actual answer quality, latency, cost, free quota sizing, full embedding coverage and provider retention behavior are unknown. Confirm an authorized production-serving route before enabling public adviser answers. Complete browser/Auth/retention checks after deployment. Stripe remains deferred.
