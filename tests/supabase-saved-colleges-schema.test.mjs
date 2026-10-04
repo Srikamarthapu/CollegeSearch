@@ -20,11 +20,14 @@ async function readSavedCollegesMigration() {
   return readFile(path.join(migrationsDirectory, migrationNames[0]), "utf8");
 }
 
-async function reviewedUnitIds() {
-  const release = JSON.parse(
-    await readFile(path.join(process.cwd(), "data", "colleges.json"), "utf8"),
+async function originalSavedUnitIds() {
+  const identities = JSON.parse(
+    await readFile(
+      path.join(process.cwd(), "tests", "fixtures", "original-college-identities.json"),
+      "utf8",
+    ),
   );
-  return release.colleges.map((college) => college.unitId).sort((a, b) => a - b);
+  return identities.map((college) => college.unitId).sort((a, b) => a - b);
 }
 
 function normalizeSql(sql) {
@@ -67,8 +70,8 @@ test("saved_colleges has a constrained user-owned identity", async () => {
     .sort((a, b) => a - b);
   assert.deepEqual(
     constrainedIds,
-    await reviewedUnitIds(),
-    "database UNITID constraint must match the committed reviewed cohort",
+    await originalSavedUnitIds(),
+    "historical migration must retain the original 50 saved UNITIDs",
   );
 });
 
