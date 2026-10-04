@@ -128,7 +128,7 @@ export function SiteHeader() {
         <nav className="desktop-nav" aria-label="Primary navigation">
           {navigation.map(({ href, label, icon: Icon }) => {
             const isActive =
-              href === pathname || (href === "/explore" && pathname === "/") || pathname.startsWith(`${href}/`);
+              href === pathname || (href === "/match" && pathname === "/adviser") || (href === "/explore" && pathname === "/") || pathname.startsWith(`${href}/`);
 
             return (
               <Link
@@ -201,7 +201,7 @@ export function SiteHeader() {
                     href={href}
                     key={href}
                     aria-current={
-                      href === pathname || (href === "/explore" && pathname === "/") || pathname.startsWith(`${href}/`)
+                      href === pathname || (href === "/match" && pathname === "/adviser") || (href === "/explore" && pathname === "/") || pathname.startsWith(`${href}/`)
                         ? "page"
                         : undefined
                     }

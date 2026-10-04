@@ -138,10 +138,19 @@ export default function PrivacyPage() {
           </ul>
         </section>
 
+        <section id="adviser-privacy" className="methodology-section" aria-labelledby="adviser-privacy-heading">
+          <div className="page-section-heading"><div><span className="page-section-index">02</span><h2 id="adviser-privacy-heading">When you use the college adviser</h2></div></div>
+          <ul className="methodology-rule-list">
+            <li><span><ShieldCheck size={19} aria-hidden="true" /></span><div><strong>You choose what to share.</strong><p>The adviser is available only after its provider setup and quality checks are complete. Before sending a message, you agree to share that message, the research preferences from your conversation and relevant public college evidence with NVIDIA for processing. Your email, account identifier, saved list, GPA, activities, research notes and raw conversation history are not automatically included in model requests.</p><p>Leave names, contact details, transcripts and other sensitive information out of your messages. The server removes recognizable email addresses, phone numbers, Social Security number patterns and web links before sending the current message, but this cannot reliably identify every kind of personal information. Your original message is saved privately if the reply completes.</p></div></li>
+            <li><span><Database size={19} aria-hidden="true" /></span><div><strong>History belongs to your account.</strong><p>Supabase stores your adviser messages, replies, research preferences, source references and conversation dates under your account. Ownership rules and active-session checks restrict access. Student messages are never added to the shared college search index. Signing out hides this history; it does not delete it. Unsent adviser drafts stay in the current page&apos;s memory and are not stored on the server.</p></div></li>
+            <li><span><HardDrive size={19} aria-hidden="true" /></span><div><strong>Delete a conversation or all adviser history at any time.</strong><p>The adviser&apos;s history controls remove messages and cached replies from the application database. Deleting your account also removes its adviser history. Conversations become inaccessible 90 days after the last completed reply and are scheduled for deletion by nightly cleanup. Deleting a conversation keeps your saved colleges, browser notes and usage allowance separate.</p><p>Content-free monthly usage counts remain until account deletion so removing a conversation cannot reset the free allowance. Opaque request identifiers, attempt status and token counts support safe retries; deleted conversation content is cleared immediately, and its remaining request records are removed after 90 days. Provider and hosting security logs or backups follow those providers&apos; retention terms and may not disappear immediately when you delete app history. No message bodies or API keys are intentionally written to application logs.</p></div></li>
+          </ul>
+        </section>
+
         <section className="methodology-section methodology-limitations" aria-labelledby="services-heading">
           <div className="page-section-heading">
             <div>
-              <span className="page-section-index">02</span>
+              <span className="page-section-index">03</span>
               <h2 id="services-heading">Services and limits</h2>
             </div>
           </div>
@@ -157,7 +166,7 @@ export default function PrivacyPage() {
             </li>
             <li>
               Account settings includes a confirmed deletion control. When the server
-              is configured, it removes your login and synced shortlist and revokes
+              is configured, it removes your login, synced shortlist and adviser history and revokes
               all account sessions. Your notes, profile and deadline records for that
               account are cleared from accessible browser storage; other open tabs
               clear their local drafts when they resume. Guest data and other

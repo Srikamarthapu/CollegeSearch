@@ -68,7 +68,7 @@ export function DeleteAccountControl() {
   return (
     <section className={styles.deleteAccount} aria-labelledby="delete-account-title">
       <h2 id="delete-account-title">Delete your account</h2>
-      <p>This permanently removes your login and synced shortlist, and revokes all account sessions. It clears this account’s notes, profile, and deadlines from this browser when storage is accessible. Other tabs clear their local drafts when they resume. Download anything you want to keep first.</p>
+      <p>This permanently removes your login, synced shortlist and adviser history, and revokes all account sessions. It clears this account’s notes, profile, and deadlines from this browser when storage is accessible. Other tabs clear their local drafts when they resume. Download anything you want to keep first.</p>
       {user && verification === "verified" ? expanded ? (
         <form onSubmit={(event) => { event.preventDefault(); void remove(); }}>
           <label htmlFor="delete-account-confirmation">Type DELETE to confirm</label>

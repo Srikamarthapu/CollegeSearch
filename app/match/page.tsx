@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
+import { FitNavigation } from "@/app/components/FitNavigation";
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import { colleges } from "@/app/lib/college-data";
@@ -34,6 +35,7 @@ export default function MatchPage() {
           <span aria-hidden="true">/</span>
           <span aria-current="page">Preference match</span>
         </nav>
+        <FitNavigation active="preferences" />
         <MatchTool
           colleges={matchColleges}
           majorOptions={majorOptions}
