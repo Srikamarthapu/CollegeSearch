@@ -1,6 +1,6 @@
 # M10 — full runtime adviser evaluation
 
-October 4, 2026. Local verification complete; deployment pending.
+October 4, 2026. Deployed and verified on the existing production alias.
 
 ## What changed
 
@@ -45,7 +45,9 @@ The final tooling review found that zero-card answers could inflate the evidence
 
 ## Final local verification
 
-- Full suite: **488/488 passed**; Vinext and native Next production builds, TypeScript, ESLint and whitespace checks passed. The first lint pass found one unused evaluation helper, removed before the clean final lint. Final post-review suite/build results are recorded with the release below.
+- Full suite: **488/488 passed**; Vinext and native Next production builds, TypeScript, ESLint and whitespace checks passed. The first lint pass found one unused evaluation helper, removed before the clean final lint. The final post-review suite passed 488/488; both production builds, TypeScript and lint were rerun successfully.
 - Actual adviser card component rendered with a recorded synthetic answer in the existing isolated UI fixture. Expanded evidence passed 1,440px and 320px wrapping checks (no horizontal overflow), keyboard expansion and keyboard focus on the exact source-file link. Screenshots: `outputs/m10-adviser/source-details-desktop.png` and `source-details-mobile.png`. A fixture-only Vite HMR duplicate-root warning was captured after replacing its answer JSON; this is not a production runtime observation. The fixture uses stubbed accounts/history; no hosted-save or real provider/browser claim is inferred.
 - Disposable evaluation database was dropped; both generated SQL exports were removed. Readback confirms the clone is absent and the preserved baseline still has **3 synthetic saves and 0 embedded passages**. Logs and canonical embedding artifacts remain ignored locally.
-- Deployment and hosted smoke verification pending below. No catalog republish or public-provider activation is part of this release.
+- Code commit `ccea75d` is deployed in READY production deployment `dpl_FnzxP5GgbznbDvuu38w6tqYWWHGZ` (`https://collegesearch-ejpjlc0pi-swis-projects-066d8b1d.vercel.app`), aliased to `https://collegesearch-steel.vercel.app`. No catalog republish or public-provider activation occurred.
+- Hosted HTTP regression checks passed name search, 24-record pagination across the 3,912 records, exact institution-level/ownership filters, saved-ID detail lookup, synthetic preference matching, malformed/oversized body rejection, featured defaults, combined filters and fractional admission boundaries. `/adviser` returned 200 and anonymous `/api/adviser` returned 401.
+- Live browser checks verified featured ordering and adviser entry, accurate inactive-provider copy, free navigation paths and no horizontal overflow at 1,440px/390px. No console errors were captured on the production verification tab. The temporary viewport override was reset. Screenshot: `outputs/m10-adviser/live-explorer-desktop.png`. This is hosted browsing/availability evidence, not signed-in Auth or live generation evidence.
