@@ -69,6 +69,15 @@ const expectedUcFall2026 = new Map([
   [445188, { campus: "Merced", applicants: 49426, admits: 46812 }],
 ]);
 
+function hasReviewedInstitutionRecord(college) {
+  return Object.values(college.observations).some(
+    (observation) =>
+      observation &&
+      observation.sourceId !== federalSourceId &&
+      !observation.sourceId.startsWith("uc-"),
+  );
+}
+
 async function render(pathname = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}-${pathname}`);
@@ -132,42 +141,182 @@ function assertObservation({
 
   if (mustHaveValue) {
     assert.notEqual(observation.value, null, `${label} is not silently missing`);
-    assert.ok(Number.isFinite(observation.value), `${label} has a finite value`);
-  } else if (observation.value === null) {
+  }
+
+  if (observation.value === null) {
     assert.ok(
       observation.status === "suppressed" || observation.status === "unavailable",
       `${label} keeps an explicit missing-data status`,
+    );
+  } else {
+    assert.ok(Number.isFinite(observation.value), `${label} has a finite value`);
+    assert.ok(
+      observation.status === "reported" || observation.status === "derived" || observation.status === "stale",
+      `${label} has a status consistent with a reported value`,
     );
   }
 }
 
 test("server-renders the CollegeSearch product shell", async () => {
-  const response = await render();
+  const [response, payload] = await Promise.all([
+    render(),
+    readFile(new URL("../data/colleges.json", import.meta.url), "utf8").then(
+      JSON.parse,
+    ),
+  ]);
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
   assert.match(html, /<title>CollegeSearch<\/title>/i);
-  assert.match(html, /Find a college you can/);
-  assert.match(html, /College discovery, clearly sourced/);
+  assert.match(html, /Find a college(?:<[^>]*>|\s)*that fits you\./);
+  assert.match(html, /YOUR COLLEGE SEARCH/);
   assert.match(html, /UC admissions/);
   assert.match(html, /Fall 2026/);
   assert.match(html, /College Scorecard/);
-  assert.match(html, /Federal baseline \+ fields/);
+  assert.match(html, /Federal baseline metrics use their own dated cohorts/);
+  const firstPartyAdmissions = payload.colleges.filter(
+    (college) => college.observations.admitRate.sourceId !== federalSourceId,
+  ).length;
+  const reviewedCollegeAdmissions = payload.colleges.filter(
+    (college) =>
+      college.observations.admitRate.sourceId !== federalSourceId &&
+      !college.observations.admitRate.sourceId.startsWith("uc-"),
+  ).length;
+  const reviewedInstitutionRecords = payload.colleges.filter(
+    hasReviewedInstitutionRecord,
+  ).length;
+  const federalAdmissionBaselines =
+    payload.colleges.length - firstPartyAdmissions;
+  assert.equal(reviewedInstitutionRecords, 24);
+  assert.equal(reviewedCollegeAdmissions, 19);
+  assert.equal(firstPartyAdmissions, 28);
+  assert.equal(federalAdmissionBaselines, payload.colleges.length - 28);
+  assert.match(
+    html,
+    new RegExp(
+      `${firstPartyAdmissions}(?:<!-- -->)? first-party admission headlines`,
+    ),
+  );
+  assert.match(
+    html,
+    new RegExp(
+      `${reviewedInstitutionRecords}(?:<!-- -->)? reviewed institution records`,
+    ),
+  );
+  assert.match(
+    html,
+    new RegExp(
+      `${reviewedCollegeAdmissions}(?:(?:<!-- -->)|\\s)*college admission headlines`,
+    ),
+  );
   assert.match(html, /http:\/\/localhost\/og\.png/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/i);
   assert.doesNotMatch(html, /react-loading-skeleton/);
 });
 
-test("global responses prevent framing and set conservative browser policies", async () => {
+test("headline costs show Stanford tuition alone and the profile separates the full budget", async () => {
+  const response = await render("/colleges/stanford-university");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  const overview = html.match(/<div class="profile-overview"[\s\S]*?<\/div>\s*<p class="profile-cost-context"/)?.[0];
+  assert.ok(overview, "the profile exposes a distinct cost overview");
+  assert.match(overview, /Published tuition \/ year/);
+  assert.match(overview, /\$67,731/);
+  assert.match(overview, /2026-2027/);
+  assert.doesNotMatch(overview, /\$13,807/);
+  assert.match(html, /Plan for the whole year/);
+  assert.match(html, /\$97,545/);
+  assert.match(html, /Student fees allowance/);
+  assert.match(html, /Historical average net price/);
+  assert.match(html, /\$13,807/);
+});
+
+test("college profiles render their own sourced campus banner with attribution", async () => {
+  const response = await render("/colleges/stanford-university");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  const banner = html.match(/<figure[\s\S]*?<\/figure>/)?.[0];
+  assert.ok(banner, "the profile contains a campus photograph");
+  assert.match(banner, /(?:\/images\/campuses\/|%2Fimages%2Fcampuses%2F)stanford\.jpg/);
+  assert.match(banner, /sizes="/);
+  assert.match(banner, /Stanford&#x27;s sandstone Main Quad|Stanford's sandstone Main Quad/);
+  assert.match(banner, /King of Hearts/);
+  assert.match(banner, /creativecommons\.org\/licenses\/by-sa\/3\.0/);
+  assert.match(banner, /2011/);
+  assert.match(banner, /cropped for display/);
+  assert.doesNotMatch(banner, /campuses\/ucla\.jpg/);
+});
+
+test("profiles without a reviewed photograph offer the college website without a substitute image", async () => {
+  const response = await render("/colleges/atlantic-technical-college");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /Campus photo not yet verified/);
+  assert.match(html, /Visit college website/);
+  assert.doesNotMatch(html, /<figure/);
+  assert.doesNotMatch(html, /src="\/images\/campuses\//);
+});
+
+test("global HTML responses enforce one fresh nonce on every executable block", async () => {
+  const observedNonces = [];
+
   for (const pathname of ["/", "/explore"]) {
     const response = await render(pathname);
+    const html = await response.text();
+    const policy = response.headers.get("content-security-policy") ?? "";
+    const nonceMatch = policy.match(/'nonce-([A-Za-z0-9_-]{16,128})'/);
 
-    assert.equal(
-      response.headers.get("content-security-policy"),
-      "frame-ancestors 'none'",
-      `${pathname} prevents framing with CSP`,
+    assert.ok(nonceMatch, `${pathname} has a URL-safe CSP nonce`);
+    const nonce = nonceMatch[1];
+    observedNonces.push(nonce);
+    assert.match(html, new RegExp(`<meta property="csp-nonce" nonce="${nonce}"`), "Vite dynamic style modules receive the document nonce");
+
+    assert.match(policy, /default-src 'self'/);
+    assert.match(policy, /script-src 'self' 'nonce-/);
+    assert.match(policy, /script-src-elem 'self' 'nonce-/);
+    assert.doesNotMatch(policy, /'strict-dynamic'/);
+    assert.doesNotMatch(policy, /script-src[^;]*'unsafe-inline'/);
+    assert.match(policy, /script-src-attr 'none'/);
+    assert.match(policy, /style-src-attr 'unsafe-inline'/);
+    assert.match(policy, /object-src 'none'/);
+    assert.match(policy, /base-uri 'none'/);
+    assert.match(policy, /form-action 'self'/);
+    assert.match(policy, /frame-src 'none'/);
+    assert.match(policy, /frame-ancestors 'none'/);
+
+    const executableBlocks = [
+      ...html.matchAll(/<(script|style)\b([^>]*)>/gi),
+    ];
+    assert.ok(
+      executableBlocks.some(([, element]) => element.toLowerCase() === "script"),
+      `${pathname} has framework hydration scripts`,
     );
+    for (const [, element, attributes] of executableBlocks) {
+      assert.match(
+        attributes,
+        new RegExp(`\\bnonce=["']${nonce}["']`),
+        `${pathname} ${element} uses its response nonce`,
+      );
+    }
+
+    // React 19/Vinext emits some modulepreload hints without nonce attributes.
+    // Keeping 'self' (and deliberately omitting strict-dynamic) allows only
+    // these local module files while inline executable blocks still need nonce.
+    const modulePreloads = [
+      ...html.matchAll(
+        /<link\b(?=[^>]*\brel=["']modulepreload["'])([^>]*)>/gi,
+      ),
+    ];
+    assert.ok(modulePreloads.length > 0, `${pathname} preloads its module entry`);
+    for (const [, attributes] of modulePreloads) {
+      assert.match(
+        attributes,
+        /\bhref=["']\/(?:assets|_next\/static\/chunks)\/[A-Za-z0-9._-]+\.js["']/,
+        `${pathname} module preload stays on the content-hashed local asset path`,
+      );
+    }
+
     assert.equal(
       response.headers.get("x-frame-options"),
       "DENY",
@@ -185,10 +334,53 @@ test("global responses prevent framing and set conservative browser policies", a
     );
     assert.equal(
       response.headers.get("permissions-policy"),
-      "camera=(), microphone=(), geolocation=()",
+      "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()",
       `${pathname} disables unused sensitive browser features`,
     );
+    assert.equal(
+      response.headers.get("cache-control"),
+      "private, no-cache, no-store, must-revalidate, max-age=0",
+      `${pathname} prevents caching of its request-specific nonce`,
+    );
   }
+
+  assert.notEqual(
+    observedNonces[0],
+    observedNonces[1],
+    "separate document requests never reuse a nonce",
+  );
+});
+
+test("auth redirects inherit CSP and reject an external next destination", async () => {
+  const response = await render(
+    "/auth/callback?code=untrusted&next=https%3A%2F%2Fevil.example%2F",
+  );
+
+  assert.equal(response.status, 307);
+  const target = new URL(response.headers.get("location"));
+  assert.equal(target.origin, "http://localhost");
+  assert.equal(target.pathname, "/auth/auth-code-error");
+  assert.ok(["configuration", "exchange"].includes(target.searchParams.get("reason")));
+  assert.equal(target.searchParams.has("next"), false);
+  assert.match(
+    response.headers.get("content-security-policy") ?? "",
+    /frame-ancestors 'none'/,
+  );
+  assert.equal(response.headers.get("x-frame-options"), "DENY");
+  assert.equal(response.headers.get("x-content-type-options"), "nosniff");
+  assert.equal(
+    response.headers.get("referrer-policy"),
+    "strict-origin-when-cross-origin",
+  );
+  assert.equal(
+    response.headers.get("permissions-policy"),
+    "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()",
+  );
+  assert.deepEqual(
+    response.headers.get("cache-control").split(",").map((part) => part.trim()).sort(),
+    ["private", "no-cache", "no-store", "must-revalidate", "max-age=0"].sort(),
+    "auth redirects cannot be cached with a request-specific nonce",
+  );
 });
 
 test("account copy is student-facing and keeps the local-save boundary explicit", async () => {
@@ -200,13 +392,15 @@ test("account copy is student-facing and keeps the local-save boundary explicit"
   assert.match(source, /Accounts are not available in this preview yet\./);
   assert.match(
     source,
-    /You can still search, compare, and save colleges on this\s+device\./,
+    /You can still search, compare, and save colleges on this\s+browser profile\./,
   );
-  assert.equal(
-    source.match(
-      /Saved colleges stay in this browser and are not synced\./g,
-    )?.length,
-    2,
+  assert.match(
+    source,
+    /Existing browser-only saves remain separate until you explicitly import them\./,
+  );
+  assert.match(
+    source,
+    /Existing browser-only saves are never imported automatically\./,
   );
   assert.doesNotMatch(
     source,
@@ -218,9 +412,23 @@ test("account copy is student-facing and keeps the local-save boundary explicit"
 test("canonical discovery, evidence, comparison, and source routes render HTML", async () => {
   const routeCases = [
     {
+      path: "/compare?colleges=180203,485500&major=Natural%20Resources%20and%20Conservation",
+      markers: [
+        /Aaniiih Nakoda College/,
+        /ABCO Technology/,
+        /Completion \/ graduation rate/,
+        /less-than-four-year institution within 150%/,
+        /Broad federal associate field/,
+      ],
+    },
+    {
+      path: "/majors/natural-resources-and-conservation?state=MT&sort=name",
+      markers: [/Associate indicator present/, /CIP03ASSOC/, /All locations/],
+    },
+    {
       path: "/explore",
       markers: [
-        /Search the evidence, not a ranking\./,
+        /Find a college(?:<[^>]*>|\s)*that fits you\./,
         /Field filters use 2024-2025 federal program and award data\./,
       ],
     },
@@ -229,17 +437,49 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
       markers: [
         /UC Berkeley evidence profile · CollegeSearch/,
         /University of California-Berkeley/,
-        /Official UC admissions record/,
+        /Official UC admission headline/,
         /Why two rates appear/,
       ],
     },
     {
-      path: "/compare?colleges=110635,243744",
+      path: "/colleges/yale-university",
       markers: [
-        /Compare the record, not a ranking\./,
+        /Yale University evidence profile · CollegeSearch/,
+        /Federal admission baseline · reviewed college enrollment and outcomes/,
+        /This admission value remains federal\./,
+        /A complete attendance budget has not been independently reviewed/,
+        /2024-25/,
+      ],
+    },
+    {
+      path: "/colleges/california-institute-of-technology",
+      markers: [
+        /Federal admission baseline · reviewed college enrollment and cost/,
+        /This admission value remains federal\./,
+        /Fall 2025/,
+        /\$63,402/,
+        /2024-25/,
+      ],
+    },
+    {
+      path: "/colleges/pomona-college",
+      markers: [
+        /Federal admission baseline · reviewed college cost/,
+        /This admission value remains federal\./,
+        /\$65,000/,
+        /2024-25/,
+      ],
+    },
+    {
+      path: "/compare?colleges=110635,243744&major=Engineering",
+      markers: [
+        /Your options, side by side\./,
         /UC Berkeley/,
         /Stanford/,
         /different definitions or reporting periods/,
+        /Add a broad field to the table\./,
+        /This shows broad field availability and share of all awards, not a[\s\S]*major-specific admit rate/,
+        /Clear field/,
       ],
     },
     {
@@ -262,7 +502,7 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
       path: "/majors",
       markers: [
         /Broad fields of study · CollegeSearch/,
-        /Start with a field\. Keep the claim honest\./,
+        /What would you like to study\?/,
         /A zero and a missing record mean different things\./,
       ],
     },
@@ -270,7 +510,7 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
       path: "/match",
       markers: [
         /Preference match · CollegeSearch/,
-        /A college list with reasons attached\./,
+        /What matters to you in a college\?/,
         /Fit and admission likelihood are different questions\./,
       ],
     },
@@ -278,20 +518,20 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
       path: "/chances",
       markers: [
         /Admit-rate context · CollegeSearch/,
-        /Read the rate\. Keep its limits in view\./,
-        /No “87% chance\.” No reach, target, or safety labels\./,
+        /Understand admission rates\./,
+        /Past admit rates aren’t personal admission odds\./,
       ],
     },
     {
-      path: "/saved",
-      markers: [/Saved colleges \| CollegeSearch/, /Saved on this device\./],
+      path: "/my-colleges",
+      markers: [/My colleges \| CollegeSearch/, /Saved colleges/, /Deadlines/],
     },
     {
       path: "/account",
       markers: [
         /Account \| CollegeSearch/,
-        /A clear boundary for your account\./,
-        /does not claim to[\s\S]*sync saved colleges/,
+        /Your shortlist, wherever you go\./,
+        /Keep your shortlist across devices[\s\S]*profile, and deadlines stay in this browser/,
       ],
     },
     {
@@ -299,7 +539,8 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
       markers: [
         /Privacy \| CollegeSearch/,
         /Your college list is yours\./,
-        /No academic profile is collected in this release\./,
+        /Your optional application profile stays local\./,
+        /Signing out[\s\S]*does not erase that recovery copy/,
       ],
     },
     {
@@ -307,6 +548,10 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
       markers: [
         /Data health \| CollegeSearch/,
         /What is current—and what is still a baseline\./,
+        /reviewed institutional records/,
+        /Duke University[\s\S]*Northwestern University[\s\S]*Yale University[\s\S]*are partial records/,
+        /total first-party admission headlines/,
+        /federal admission baselines/,
         /Known refresh work is visible, not hidden\./,
       ],
     },
@@ -332,13 +577,102 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
   }
 });
 
+test("comparison field form preserves colleges and renders the selected broad field", async () => {
+  const response = await render(
+    "/compare?colleges=110635,243744&major=Engineering",
+  );
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  const form = html.match(
+    /<form[^>]*class="comparison-field-form"[\s\S]*?<\/form>/,
+  )?.[0];
+  assert.ok(form, "comparison renders the broad-field GET form");
+  assert.match(form, /action="\/compare"/);
+  assert.match(form, /method="get"/);
+  assert.match(
+    form,
+    /<input type="hidden" name="colleges" value="110635,243744"\/?/,
+  );
+  assert.match(form, /<select[^>]*name="major"/);
+  assert.match(
+    form,
+    /<option value="Engineering" selected="">Engineering<\/option>/,
+  );
+  assert.match(
+    form,
+    /href="\/compare\?colleges=110635%2C243744"[^>]*>Clear field<\/a>/,
+  );
+  assert.match(
+    html,
+    /Engineering<small>Degree field · share of all awards<\/small>/,
+  );
+});
+
+test("the source ledger renders one action per unique source URL", async () => {
+  const [response, payload] = await Promise.all([
+    render("/data-sources"),
+    readFile(new URL("../data/colleges.json", import.meta.url), "utf8").then(
+      JSON.parse,
+    ),
+  ]);
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  for (const sourceId of ["yale-cds-2025-26", "mit-cds-2025-26"]) {
+    const source = payload.release.sources.find(
+      (candidate) => candidate.id === sourceId,
+    );
+    assert.ok(source);
+    const uniqueUrls = new Set(
+      [source.sourcePage, source.sourceUrl, source.artifactUrl].filter(Boolean),
+    );
+    for (const url of uniqueUrls) {
+      assert.equal(
+        html.split(`<a href="${url}"`).length - 1,
+        1,
+        `${sourceId} renders one action for ${url}`,
+      );
+    }
+  }
+});
+
+test("cost displays distinguish separate in-state, out-of-state and private tuition", async () => {
+  const cases = [
+    ["california-state-university-bakersfield", "In-state tuition"],
+    ["arizona-state-university-campus-immersion", "In-state tuition"],
+    ["california-institute-of-technology", "Published tuition"],
+  ];
+  for (const [slug, label] of cases) {
+    const response = await render(`/colleges/${slug}`);
+    assert.equal(response.status, 200);
+    const html = await response.text();
+    assert.ok(html.includes(`<dt>${label}</dt>`), `${slug} labels its actual tuition basis`);
+    assert.match(html, /Tuition covers instruction/);
+    assert.match(html, /2024-25/);
+    if (slug === "california-institute-of-technology") {
+      assert.ok(!html.includes("<dt>In-state tuition + required fees</dt>"));
+      assert.ok(!html.includes("<dt>Out-of-state tuition + required fees</dt>"));
+    }
+  }
+  const comparison = await (await render("/compare?colleges=110404,166027")).text();
+  assert.match(comparison, /Published tuition/);
+  assert.match(comparison, /Published required fees/);
+  assert.ok(!comparison.includes('<th scope="row">In-district / in-state tuition + required fees</th>'));
+});
+
+test("mobile broad-field comparison preserves distance-learning program evidence", async () => {
+  const html = await (await render("/compare?colleges=209542&major=Computing%20%26%20Information%20Sciences")).text();
+  const mobile = html.slice(html.indexOf('class="comparison-mobile-card"'));
+  assert.match(mobile, /includes a distance-learning program/);
+});
+
 test("the published cohort has complete, source-registered observations", async () => {
   const payload = JSON.parse(
     await readFile(new URL("../data/colleges.json", import.meta.url), "utf8"),
   );
 
-  assert.equal(payload.release.institutionCount, 50);
-  assert.equal(payload.colleges.length, 50);
+  assert.ok(payload.release.institutionCount >= 100);
+  assert.equal(payload.colleges.length, payload.release.institutionCount);
   assert.equal(payload.release.publisher, "U.S. Department of Education");
   assert.equal(payload.release.sourceName, "College Scorecard");
   assert.equal(payload.release.institutionMetricsYear, undefined);
@@ -363,7 +697,11 @@ test("the published cohort has complete, source-registered observations", async 
   );
   assert.match(
     payload.release.notes,
-    /Broad field filters pair a provisional 2024-2025 bachelor's-program indicator with the field's share of all awards; neither is a major-specific admit rate/i,
+    /Broad field filters pair a provisional 2024-2025 bachelor's or associate program indicator with the field's share of all awards; neither is a major-specific admit rate/i,
+  );
+  assert.match(
+    payload.release.notes,
+    /Operating status is PEPS as of April 30, 2026, not a real-time guarantee/i,
   );
 
   const sourcesById = new Map(
@@ -379,7 +717,7 @@ test("the published cohort has complete, source-registered observations", async 
   assert.equal(federalSource.publisher, "U.S. Department of Education");
   assert.equal(
     federalSource.sourceName,
-    "College Scorecard — June 2026 institution release",
+    "College Scorecard — 2026-06-10 institution release",
   );
   assert.equal(federalSource.releaseDate, "2026-06-10");
   assert.equal(federalSource.artifactUrl, federalArtifactUrl);
@@ -392,25 +730,33 @@ test("the published cohort has complete, source-registered observations", async 
   );
 
   const unitIds = payload.colleges.map((college) => college.unitId);
-  assert.equal(new Set(unitIds).size, 50);
+  assert.equal(new Set(unitIds).size, payload.colleges.length);
 
   for (const college of payload.colleges) {
     assert.ok(Number.isInteger(college.unitId), `${college.name} has a UNITID`);
-    assert.match(college.opeId, /^\d{8}$/, `${college.name} has an eight-digit OPEID`);
-    assert.match(college.opeId6, /^\d{6}$/, `${college.name} has a six-digit OPEID`);
-    assert.ok(
-      college.opeId.startsWith(college.opeId6),
-      `${college.name} OPE identity fields agree`,
-    );
-    assert.equal(college.mainCampus, true, `${college.name} is the main campus record`);
+    assert.match(college.opeId, /^(?:NA|\d{8})$/, `${college.name} retains an eight-digit OPEID or the source missing marker`);
+    assert.match(college.opeId6, /^(?:NA|\d{6})$/, `${college.name} retains a six-digit OPEID or the source missing marker`);
+    assert.equal(typeof college.mainCampus, "boolean", `${college.name} retains its federal main-or-branch designation`);
     assert.equal(
       college.currentlyOperating,
       true,
-      `${college.name} is currently operating`,
+      `${college.name} is marked operating in the April 30, 2026 PEPS snapshot`,
     );
     assert.ok(
       Number.isInteger(college.branchCount) && college.branchCount >= 1,
       `${college.name} retains a valid federal branch count`,
+    );
+    assert.ok(
+      ["Four-year", "Two-year"].includes(college.institutionLevel),
+      `${college.name} has a supported undergraduate institution level`,
+    );
+    assert.ok(
+      ["Public", "Private nonprofit", "Private for-profit"].includes(college.ownership),
+      `${college.name} retains a recognized federal ownership type`,
+    );
+    assert.ok(
+      ["Northeast", "Midwest", "South", "West", "U.S. territories"].includes(college.region),
+      `${college.name} retains its Census region or territory classification`,
     );
     assert.ok(college.slug, `${college.name} has a canonical slug`);
     assert.ok(college.name, "College name is present");
@@ -433,37 +779,43 @@ test("the published cohort has complete, source-registered observations", async 
         expectedUnit,
         label: `${college.name} ${key}`,
         sourcesById,
+        mustHaveValue: false,
       });
     }
 
     const admitRate = college.observations.admitRate.value;
     const graduationRate = college.observations.graduationRate.value;
-    assert.ok(admitRate > 0 && admitRate <= 1, `${college.name} has a valid admit rate`);
-    assert.ok(
-      graduationRate > 0 && graduationRate <= 1,
-      `${college.name} has a valid graduation rate`,
-    );
-    assert.ok(
-      college.observations.averageNetPrice.value >= 0,
-      `${college.name} has a non-negative net price`,
-    );
-    assert.ok(
-      college.observations.undergraduateEnrollment.value > 0,
-      `${college.name} has undergraduate enrollment`,
-    );
-    assert.ok(college.majors.length > 0, `${college.name} has major evidence`);
+    if (admitRate !== null) {
+      assert.ok(admitRate >= 0 && admitRate <= 1, `${college.name} has a valid admit rate`);
+    }
+    if (graduationRate !== null) {
+      assert.ok(
+        graduationRate >= 0 && graduationRate <= 1,
+        `${college.name} has a valid graduation rate`,
+      );
+    }
+    for (const [key, expectedUnit] of Object.entries(coreObservationUnits)) {
+      const value = college.observations[key].value;
+      if (value === null) continue;
+      if (expectedUnit === "count") {
+        assert.ok(Number.isInteger(value) && value >= 0, `${college.name} ${key} is a non-negative count`);
+      } else if (expectedUnit === "usd" && key !== "averageNetPrice") {
+        assert.ok(value >= 0, `${college.name} ${key} is a non-negative published price or earnings value`);
+      }
+    }
+    assert.ok(Array.isArray(college.majors), `${college.name} has an explicit major-evidence collection`);
     for (const major of college.majors) {
       const label = `${college.name} ${major.name}`;
       assert.match(
         major.evidence,
-        /^Broad federal bachelor's field(?: · exclusively distance education)?$/,
+        /^Broad federal (?:associate|bachelor's(?: and associate)?) field(?: · includes a distance-learning program)?$/,
         `${label} labels its evidence and delivery modality`,
       );
-      if (major.deliveryMode === "exclusively-distance") {
+      if (major.deliveryMode === "includes-distance-program") {
         assert.match(
           major.evidence,
-          /exclusively distance education/,
-          `${label} discloses distance-only delivery`,
+          /includes a distance-learning program/,
+          `${label} discloses an online offering without calling the whole field online-only`,
         );
       }
       assert.equal(major.reportingYear, 2025, `${label} identifies the federal reporting year`);
@@ -473,10 +825,27 @@ test("the published cohort has complete, source-registered observations", async 
         `${label} identifies the exact evidence period`,
       );
       assert.equal(major.sourceId, federalSourceId, `${label} uses the registered federal release`);
-      const sourceFields = major.sourceField.match(/^PCIP(\d{2}) \+ CIP(\d{2})BACHL$/);
-      assert.ok(sourceFields, `${label} identifies both award share and bachelor's availability fields`);
+      const sourceFields = major.sourceField.match(
+        /^PCIP(\d{2}) \+ CIP(\d{2})(BACHL|ASSOC)(?: \+ CIP(\d{2})(BACHL|ASSOC))?$/,
+      );
+      assert.ok(sourceFields, `${label} identifies award share and degree-level availability fields`);
       assert.equal(sourceFields[1], sourceFields[2], `${label} source fields use the same CIP family`);
-      assert.equal(major.bachelorsAvailable, true, `${label} is available at the bachelor's level`);
+      if (sourceFields[4]) {
+        assert.equal(sourceFields[1], sourceFields[4], `${label} paired degree fields use the same CIP family`);
+        assert.notEqual(sourceFields[3], sourceFields[5], `${label} pairs associate and bachelor's indicators`);
+      }
+      const degreeLevels = [sourceFields[3], sourceFields[5]].filter(Boolean);
+      assert.equal(major.bachelorsAvailable, degreeLevels.includes("BACHL"), `${label} reports bachelor's availability accurately`);
+      assert.equal(major.associatesAvailable, degreeLevels.includes("ASSOC"), `${label} reports associate availability accurately`);
+      assert.equal(
+        major.degreeLevel,
+        major.bachelorsAvailable && major.associatesAvailable
+          ? "bachelors-and-associate"
+          : major.bachelorsAvailable
+            ? "bachelors"
+            : "associate",
+        `${label} classifies the federal degree-level availability`,
+      );
       assert.ok(
         Number.isFinite(major.share) && major.share >= 0 && major.share <= 1,
         `${label} has a valid award share, including an explicit zero-award value`,
@@ -605,25 +974,59 @@ test("all nine UC headlines use Fall 2026 snapshots without mixing Fall 2025 yie
     assert.equal(college.alternateObservations.admitRate.reportingYear, 2024);
   }
 
-  const firstPartyOverlayUnitIds = new Set([104151, 166683, 243744]);
   const nonUcColleges = payload.colleges.filter(
-    (college) =>
-      !expectedUcFall2026.has(college.unitId) &&
-      !firstPartyOverlayUnitIds.has(college.unitId),
+    (college) => !expectedUcFall2026.has(college.unitId),
   );
-  assert.equal(nonUcColleges.length, 38);
+  assert.equal(nonUcColleges.length, payload.colleges.length - expectedUcFall2026.size);
   for (const college of nonUcColleges) {
-    assert.equal(college.observations.admitRate.sourceId, federalSourceId);
-    assert.equal(college.observations.admitRate.reportingYear, 2024);
     for (const key of [
       ...Object.keys(ucHeadlineObservationUnits),
       ...Object.keys(ucFinalizedObservationUnits),
     ]) {
-      assert.equal(
-        college.observations[key],
-        null,
-        `${college.name} does not receive invented UC ${key} evidence`,
-      );
+      const observation = college.observations[key];
+      if (observation) {
+        assert.ok(
+          !observation.sourceId.startsWith("uc-"),
+          `${college.name} does not receive UC ${key} evidence`,
+        );
+      }
+    }
+  }
+
+  const federalAdmissionBaselines = nonUcColleges.filter(
+    (college) => college.observations.admitRate.sourceId === federalSourceId,
+  );
+  const reviewedInstitutionRecords = nonUcColleges.filter(
+    hasReviewedInstitutionRecord,
+  );
+  const reviewedAdmissionHeadlines = reviewedInstitutionRecords.filter(
+    (college) => college.observations.admitRate.sourceId !== federalSourceId,
+  );
+  const partialInstitutionRecords = reviewedInstitutionRecords
+    .filter(
+      (college) => college.observations.admitRate.sourceId === federalSourceId,
+    )
+    .map((college) => college.unitId)
+    .sort((left, right) => left - right);
+  assert.equal(reviewedInstitutionRecords.length, 24);
+  assert.equal(reviewedAdmissionHeadlines.length, 19);
+  assert.deepEqual(partialInstitutionRecords, [
+    110404, 121345, 130794, 147767, 198419,
+  ]);
+  assert.equal(federalAdmissionBaselines.length, payload.colleges.length - 28);
+  for (const college of federalAdmissionBaselines) {
+    assert.equal(college.observations.admitRate.reportingYear, 2024);
+  }
+
+  for (const unitId of [130794, 166027, 193900]) {
+    const college = payload.colleges.find(
+      (candidate) => candidate.unitId === unitId,
+    );
+    assert.ok(college);
+    for (const metric of ["tuitionInState", "tuitionOutOfState"]) {
+      assert.equal(college.observations[metric].sourceId, federalSourceId);
+      assert.equal(college.observations[metric].reportingYear, 2024);
+      assert.equal(college.observations[metric].periodLabel, "2024-2025");
     }
   }
 });

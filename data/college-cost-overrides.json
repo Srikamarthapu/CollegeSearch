@@ -1,0 +1,219 @@
+{
+  "reviewedOn": "2026-10-08",
+  "method": "Official institution pages checked against named undergraduate cohort and annualized where explicitly semester-based; fee allowances kept distinct from required fees.",
+  "colleges": [
+    {
+      "unitId": 243744,
+      "sourceSha256": "718db23185336121f6d073524db9a2c928329a5d21bf94f6973877ca72ca5d51",
+      "costs": {
+        "feeBasis": "allowance",
+        "tuitionInState": {
+          "value": 67731,
+          "unit": "usd",
+          "reportingYear": 2026,
+          "periodLabel": "2026-2027",
+          "finality": "snapshot",
+          "comparabilityKey": "annual-undergraduate-tuition-only-2026-2027",
+          "sourceId": "stanford-cost-budget-2026-2027",
+          "publisher": "Stanford University",
+          "sourceName": "2026–2027 undergraduate student budget",
+          "sourceUrl": "https://financialaid.stanford.edu/undergrad/budget/index.html",
+          "accessedOn": "2026-10-08",
+          "sourceField": "Tuition",
+          "cohort": "Full-time dependent undergraduate, Autumn, Winter and Spring quarters; residence hall or off-campus.",
+          "definition": "Annual undergraduate tuition for three quarters, before aid. Fees, housing, food and other expenses excluded.",
+          "status": "reported"
+        },
+        "tuitionOutOfState": {
+          "value": 67731,
+          "unit": "usd",
+          "reportingYear": 2026,
+          "periodLabel": "2026-2027",
+          "finality": "snapshot",
+          "comparabilityKey": "annual-undergraduate-tuition-only-2026-2027",
+          "sourceId": "stanford-cost-budget-2026-2027",
+          "publisher": "Stanford University",
+          "sourceName": "2026–2027 undergraduate student budget",
+          "sourceUrl": "https://financialaid.stanford.edu/undergrad/budget/index.html",
+          "accessedOn": "2026-10-08",
+          "sourceField": "Tuition",
+          "cohort": "Full-time dependent undergraduate, Autumn, Winter and Spring quarters; residence hall or off-campus.",
+          "definition": "Annual undergraduate tuition for three quarters, before aid. Fees, housing, food and other expenses excluded.",
+          "status": "reported"
+        },
+        "feesInState": {
+          "value": 2610,
+          "unit": "usd",
+          "reportingYear": 2026,
+          "periodLabel": "2026-2027",
+          "finality": "snapshot",
+          "comparabilityKey": "annual-undergraduate-fees-2026-2027",
+          "sourceId": "stanford-cost-budget-2026-2027",
+          "publisher": "Stanford University",
+          "sourceName": "2026–2027 undergraduate student budget",
+          "sourceUrl": "https://financialaid.stanford.edu/undergrad/budget/index.html",
+          "accessedOn": "2026-10-08",
+          "sourceField": "Student Fees Allowance",
+          "cohort": "Full-time dependent undergraduate, Autumn, Winter and Spring quarters; residence hall or off-campus.",
+          "definition": "Estimated annual Student Fees Allowance, not a fixed mandatory-fee bill. Includes campus health service, student activities, house dues, housing technology and course enrollment fees.",
+          "status": "reported"
+        },
+        "feesOutOfState": {
+          "value": 2610,
+          "unit": "usd",
+          "reportingYear": 2026,
+          "periodLabel": "2026-2027",
+          "finality": "snapshot",
+          "comparabilityKey": "annual-undergraduate-fees-2026-2027",
+          "sourceId": "stanford-cost-budget-2026-2027",
+          "publisher": "Stanford University",
+          "sourceName": "2026–2027 undergraduate student budget",
+          "sourceUrl": "https://financialaid.stanford.edu/undergrad/budget/index.html",
+          "accessedOn": "2026-10-08",
+          "sourceField": "Student Fees Allowance",
+          "cohort": "Full-time dependent undergraduate, Autumn, Winter and Spring quarters; residence hall or off-campus.",
+          "definition": "Estimated annual Student Fees Allowance, not a fixed mandatory-fee bill. Includes campus health service, student activities, house dues, housing technology and course enrollment fees.",
+          "status": "reported"
+        }
+      },
+      "budget": {
+        "title": "Standard undergraduate budget",
+        "rows": [
+          [
+            "Tuition",
+            67731
+          ],
+          [
+            "Student fees allowance",
+            2610
+          ],
+          [
+            "Housing and food",
+            22944
+          ],
+          [
+            "Books and supplies allowance",
+            855
+          ],
+          [
+            "Personal expenses allowance",
+            3405
+          ]
+        ],
+        "total": 97545,
+        "notes": "Travel varies and is additional. New students also pay $775 in one-time orientation and document fees. Health insurance is required; Cardinal Care coverage costs extra unless waived with qualifying insurance. Your aid offer and circumstances determine what you actually pay.",
+        "sourceUrl": "https://financialaid.stanford.edu/undergrad/budget/index.html",
+        "sourceSha256": "718db23185336121f6d073524db9a2c928329a5d21bf94f6973877ca72ca5d51"
+      }
+    },
+    {
+      "unitId": 110635,
+      "sourceSha256": "cf0df624a6ffeb50c844871b6e11065962d70a4da91f3b4d848f08b51e3cbe3a",
+      "costs": {
+        "feeBasis": "required",
+        "tuitionInState": {
+          "value": 14202,
+          "unit": "usd",
+          "reportingYear": 2026,
+          "periodLabel": "2026-2027",
+          "finality": "snapshot",
+          "comparabilityKey": "annual-undergraduate-tuition-only-2026-2027",
+          "sourceId": "berkeley-cost-budget-2026-2027",
+          "publisher": "University of California, Berkeley",
+          "sourceName": "2026–2027 undergraduate fee schedule",
+          "sourceUrl": "https://www.registrar.berkeley.edu/tuition-fees/fee-schedule/",
+          "accessedOn": "2026-10-08",
+          "sourceField": "Tuition × 2 semesters",
+          "cohort": "New 2026–2027 undergraduate entering cohort, fall and spring semesters; residency determines tuition.",
+          "definition": "Annual tuition derived as two semesters of $7,101; nonresidents also pay two semesters of $19,635 supplemental tuition. Fees, health insurance and living costs excluded. Estimates subject to change.",
+          "status": "derived"
+        },
+        "tuitionOutOfState": {
+          "value": 53472,
+          "unit": "usd",
+          "reportingYear": 2026,
+          "periodLabel": "2026-2027",
+          "finality": "snapshot",
+          "comparabilityKey": "annual-undergraduate-tuition-only-2026-2027",
+          "sourceId": "berkeley-cost-budget-2026-2027",
+          "publisher": "University of California, Berkeley",
+          "sourceName": "2026–2027 undergraduate fee schedule",
+          "sourceUrl": "https://www.registrar.berkeley.edu/tuition-fees/fee-schedule/",
+          "accessedOn": "2026-10-08",
+          "sourceField": "Tuition + Nonresident Supplemental Tuition, × 2 semesters",
+          "cohort": "New 2026–2027 undergraduate entering cohort, fall and spring semesters; residency determines tuition.",
+          "definition": "Annual tuition derived as two semesters of $7,101; nonresidents also pay two semesters of $19,635 supplemental tuition. Fees, health insurance and living costs excluded. Estimates subject to change.",
+          "status": "derived"
+        },
+        "feesInState": {
+          "value": 4012,
+          "unit": "usd",
+          "reportingYear": 2026,
+          "periodLabel": "2026-2027",
+          "finality": "snapshot",
+          "comparabilityKey": "annual-undergraduate-fees-2026-2027",
+          "sourceId": "berkeley-cost-budget-2026-2027",
+          "publisher": "University of California, Berkeley",
+          "sourceName": "2026–2027 undergraduate fee schedule",
+          "sourceUrl": "https://www.registrar.berkeley.edu/tuition-fees/fee-schedule/",
+          "accessedOn": "2026-10-08",
+          "sourceField": "Student Services + Campus + Transit + Instructional Resilience fees, × 2 semesters",
+          "cohort": "New 2026–2027 undergraduate entering cohort, fall and spring semesters; residency determines tuition.",
+          "definition": "Annual recurring fees derived as two semesters of student services $693, campus $936, transit $236 and instructional resilience $141. Excludes waivable health insurance, one-time document fee and program-specific charges.",
+          "status": "derived"
+        },
+        "feesOutOfState": {
+          "value": 4012,
+          "unit": "usd",
+          "reportingYear": 2026,
+          "periodLabel": "2026-2027",
+          "finality": "snapshot",
+          "comparabilityKey": "annual-undergraduate-fees-2026-2027",
+          "sourceId": "berkeley-cost-budget-2026-2027",
+          "publisher": "University of California, Berkeley",
+          "sourceName": "2026–2027 undergraduate fee schedule",
+          "sourceUrl": "https://www.registrar.berkeley.edu/tuition-fees/fee-schedule/",
+          "accessedOn": "2026-10-08",
+          "sourceField": "Student Services + Campus + Transit + Instructional Resilience fees, × 2 semesters",
+          "cohort": "New 2026–2027 undergraduate entering cohort, fall and spring semesters; residency determines tuition.",
+          "definition": "Annual recurring fees derived as two semesters of student services $693, campus $936, transit $236 and instructional resilience $141. Excludes waivable health insurance, one-time document fee and program-specific charges.",
+          "status": "derived"
+        }
+      },
+      "budget": {
+        "sourceUrl": "https://financialaid.berkeley.edu/how-aid-works/student-budgets-cost-of-attendance/",
+        "title": "New student · campus residence hall",
+        "rows": [
+          [
+            "In-state tuition",
+            14202
+          ],
+          [
+            "Recurring required fees",
+            4012
+          ],
+          [
+            "Housing",
+            16640
+          ],
+          [
+            "Meal plan",
+            7000
+          ],
+          [
+            "Health insurance (waivable)",
+            5066
+          ],
+          [
+            "Personal expenses, books and transportation",
+            7754
+          ]
+        ],
+        "total": 54674,
+        "nonresidentSupplement": 39270,
+        "notes": "2026–2027 new undergraduate cohort living in a campus residence hall. Nonresidents add $39,270 in supplemental tuition. Health insurance may be waived with equivalent coverage. One-time document fees and individual/program charges may be additional; continuing cohorts and other living arrangements have different budgets. Estimates may change.",
+        "sourceSha256": "cb44de4f8809ccdfde13f4c0684f02eb034772b27bcdf1ad474deb29186868a2"
+      }
+    }
+  ]
+}

@@ -8,102 +8,103 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { getSupabaseBrowserClient } from "@/app/lib/supabase/browser";
+import { isAccountScopeErased, normalizeAccountErasureId } from "@/app/lib/account-browser-erasure";
 import { getSupabasePublicConfig } from "@/app/lib/supabase/config";
+import {
+  createAuthStateCoordinator,
+  type AuthSnapshot,
+  type AuthStateCoordinator,
+  type AuthStatus,
+  type AuthVerification,
+  UNCONFIGURED_AUTH_SNAPSHOT,
+} from "./auth-state-coordinator";
 
-export type AuthStatus =
-  | "loading"
-  | "signed-in"
-  | "signed-out"
-  | "unconfigured";
+export type { AuthStatus, AuthVerification } from "./auth-state-coordinator";
 
 type AuthContextValue = {
   refreshUser(): Promise<void>;
+  invalidateDeletedAccount(scope: string): boolean;
   signOut(): Promise<{ error: string | null }>;
   status: AuthStatus;
   user: User | null;
+  verification: AuthVerification;
+  verificationError: string | null;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const configured = getSupabasePublicConfig().configured;
-  const [status, setStatus] = useState<AuthStatus>(
-    configured ? "loading" : "unconfigured",
+  const [snapshot, setSnapshot] = useState<AuthSnapshot<User>>(
+    configured
+      ? {
+          status: "loading",
+          user: null,
+          verification: "checking",
+          verificationError: null,
+        }
+      : (UNCONFIGURED_AUTH_SNAPSHOT as AuthSnapshot<User>),
   );
-  const [user, setUser] = useState<User | null>(null);
+  const coordinatorRef = useRef<AuthStateCoordinator<User> | null>(null);
 
   const refreshUser = useCallback(async () => {
-    const supabase = getSupabaseBrowserClient();
-    if (!supabase) {
-      setUser(null);
-      setStatus("unconfigured");
-      return;
-    }
-
-    const { data, error } = await supabase.auth.getUser();
-    if (error || !data.user) {
-      setUser(null);
-      setStatus("signed-out");
-      return;
-    }
-
-    setUser(data.user);
-    setStatus("signed-in");
+    await coordinatorRef.current?.refresh();
   }, []);
 
   useEffect(() => {
     const supabase = getSupabaseBrowserClient();
-    if (!supabase) return;
+    if (!supabase) {
+      coordinatorRef.current = null;
+      return;
+    }
 
-    let active = true;
-
-    const initialRefresh = window.setTimeout(() => {
-      if (active) void refreshUser();
-    }, 0);
+    const coordinator = createAuthStateCoordinator<User>({
+      auth: supabase.auth,
+      onChange: setSnapshot,
+      isUserErased: isAccountScopeErased,
+      schedule(callback) {
+        window.setTimeout(callback, 0);
+      },
+    });
+    coordinatorRef.current = coordinator;
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event) => {
-      if (!active) return;
-
-      if (event === "SIGNED_OUT") {
-        setUser(null);
-        setStatus("signed-out");
-        return;
-      }
-
-      // Supabase advises against awaiting another auth call directly inside
-      // onAuthStateChange. Queue the server-verified user refresh instead.
-      window.setTimeout(() => {
-        if (active) void refreshUser();
-      }, 0);
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      coordinator.handleAuthEvent(event, session?.user.id ?? null);
     });
 
     return () => {
-      active = false;
-      window.clearTimeout(initialRefresh);
+      coordinator.dispose();
+      if (coordinatorRef.current === coordinator) coordinatorRef.current = null;
       subscription.unsubscribe();
     };
-  }, [refreshUser]);
+  }, []);
 
   const signOut = useCallback(async () => {
-    const supabase = getSupabaseBrowserClient();
-    if (!supabase) return { error: "Supabase is not configured." };
-
-    const { error } = await supabase.auth.signOut();
-    if (!error) {
-      setUser(null);
-      setStatus("signed-out");
+    const coordinator = coordinatorRef.current;
+    if (!coordinator) {
+      return {
+        error: configured
+          ? "Authentication is still initializing."
+          : "Supabase is not configured.",
+      };
     }
-    return { error: error?.message ?? null };
+    return coordinator.signOut();
+  }, [configured]);
+
+  const invalidateDeletedAccount = useCallback((scope: string) => {
+    const userId = normalizeAccountErasureId(scope);
+    return userId ? coordinatorRef.current?.invalidateDeletedAccount(userId) ?? false : false;
   }, []);
 
   const value = useMemo(
-    () => ({ refreshUser, signOut, status, user }),
-    [refreshUser, signOut, status, user],
+    () => ({ refreshUser, signOut, invalidateDeletedAccount, ...snapshot }),
+    [refreshUser, signOut, invalidateDeletedAccount, snapshot],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,0 +1,80 @@
+{
+  "verifiedOn": "2026-10-01",
+  "sourceCommit": "37c41322498abc4ac1d046bb4c949da6681a6264",
+  "scope": "Simplify campus carousel to campus photo, name, location and previous/next arrows; retain image credits",
+  "timing": {
+    "autoplayMs": 7000,
+    "fadeMs": 800
+  },
+  "build": "Native production build, changed-file ESLint and whitespace checks passed",
+  "deployment": {
+    "id": "dpl_Q9QQg4gidAx2gQhBD4x2vtjhHNib",
+    "url": "https://collegesearch-ircgl31u6-swis-projects-066d8b1d.vercel.app",
+    "productionUrl": "https://collegesearch-steel.vercel.app",
+    "readyState": "READY"
+  },
+  "local": {
+    "url": "http://127.0.0.1:4183",
+    "report": [
+      {
+        "case": "main",
+        "initialPhotoRequests": 3,
+        "campuses": 15,
+        "layouts": [
+          1440,
+          768,
+          390,
+          320
+        ],
+        "autoplayAfterArrow": "passed",
+        "hoverPause": "passed",
+        "wrapAndRapidArrows": "passed"
+      },
+      {
+        "case": "keyboard focus pause and resume",
+        "passed": true
+      },
+      {
+        "case": "reduced motion disables autoplay and fades; arrows work",
+        "passed": true
+      },
+      {
+        "case": "offscreen pause and resume",
+        "passed": true
+      }
+    ],
+    "errors": []
+  },
+  "hosted": {
+    "url": "https://collegesearch-steel.vercel.app",
+    "report": [
+      {
+        "case": "main",
+        "initialPhotoRequests": 3,
+        "campuses": 15,
+        "layouts": [
+          1440,
+          768,
+          390,
+          320
+        ],
+        "autoplayAfterArrow": "passed",
+        "hoverPause": "passed",
+        "wrapAndRapidArrows": "passed"
+      },
+      {
+        "case": "keyboard focus pause and resume",
+        "passed": true
+      },
+      {
+        "case": "reduced motion disables autoplay and fades; arrows work",
+        "passed": true
+      },
+      {
+        "case": "offscreen pause and resume",
+        "passed": true
+      }
+    ],
+    "errors": []
+  }
+}

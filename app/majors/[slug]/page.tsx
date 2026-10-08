@@ -32,6 +32,7 @@ type BroadFieldPageProps = {
   searchParams: Promise<{
     state?: string | string[];
     sort?: string | string[];
+    page?: string | string[];
   }>;
 };
 
@@ -78,6 +79,13 @@ export default async function BroadFieldPage({
           left.college.name.localeCompare(right.college.name),
     );
 
+  const pageSize = 24;
+  const pageCount = Math.max(1, Math.ceil(visibleRecords.length / pageSize));
+  const requestedPage = Number(firstValue(requested.page));
+  const page = Number.isSafeInteger(requestedPage) && requestedPage > 0 ? Math.min(requestedPage, pageCount) : 1;
+  const pageRecords = visibleRecords.slice((page - 1) * pageSize, page * pageSize);
+  const pageHref = (next: number) => `/majors/${field.slug}?${new URLSearchParams({ state, sort, page: String(next) }).toString()}`;
+
   return (
     <>
       <SiteHeader />
@@ -95,11 +103,11 @@ export default async function BroadFieldPage({
           <div>
             <span className="page-eyebrow">
               <BookOpenCheck size={15} aria-hidden="true" />
-              Broad bachelor&apos;s field
+              Broad degree field
             </span>
             <h1>{field.name}</h1>
             <p>
-              Compare the latest available federal bachelor&apos;s-program and
+              Compare the latest available federal bachelor&apos;s or associate program and
               award-share evidence in this cohort. The admission figure beside
               each record is institution-wide and is not a rate for this field.
             </p>
@@ -119,7 +127,7 @@ export default async function BroadFieldPage({
             <strong>
               {field.records.length} <small>of {colleges.length}</small>
             </strong>
-            <p>Bachelor&apos;s indicator present in this release</p>
+            <p>Bachelor&apos;s or associate indicator present in this release</p>
           </div>
           <div>
             <span>Evidence period</span>
@@ -162,9 +170,9 @@ export default async function BroadFieldPage({
           <form className={styles.filterForm} action={`/majors/${field.slug}`} method="get">
             <Filter size={18} aria-hidden="true" />
             <label>
-              <span>State</span>
+              <span>Location</span>
               <select name="state" defaultValue={state}>
-                <option value="">All states</option>
+                <option value="">All locations</option>
                 {availableStates.map((code) => (
                   <option key={code} value={code}>{code}</option>
                 ))}
@@ -183,12 +191,12 @@ export default async function BroadFieldPage({
           <p className={styles.resultSummary} aria-live="polite">
             <strong>{visibleRecords.length}</strong>{" "}
             {visibleRecords.length === 1 ? "college record" : "college records"}
-            {state ? ` in ${state}` : " across all states"}
+            {state ? ` in ${state}` : " across all locations"}
           </p>
 
           {visibleRecords.length ? (
             <div className={styles.collegeGrid}>
-              {visibleRecords.map(({ college, evidence }) => {
+              {pageRecords.map(({ college, evidence }) => {
                 const evidenceSource = sourceForBroadFieldEvidence(evidence);
                 const admission = college.observations.admitRate;
                 const exploreParams = new URLSearchParams({ major: field.name });
@@ -237,7 +245,7 @@ export default async function BroadFieldPage({
                       <dl>
                         <div>
                           <dt>Program evidence</dt>
-                          <dd>Bachelor&apos;s indicator present</dd>
+                          <dd>{evidence.bachelorsAvailable && evidence.associatesAvailable ? "Bachelor’s and associate indicators present" : evidence.associatesAvailable ? "Associate indicator present" : "Bachelor’s indicator present"}</dd>
                         </div>
                         <div>
                           <dt>Source field</dt>
@@ -290,6 +298,12 @@ export default async function BroadFieldPage({
           )}
         </section>
 
+        {pageCount > 1 ? <nav className="page-next-step" aria-label="Field results pages">
+          <p>Page {page} of {pageCount} · {visibleRecords.length.toLocaleString("en-US")} college records</p>
+          <div>{page > 1 ? <Link className="page-secondary-action" href={pageHref(page - 1)}>Previous</Link> : null}
+          {page < pageCount ? <Link className="page-primary-action" href={pageHref(page + 1)}>Next colleges <ArrowRight size={16} aria-hidden="true" /></Link> : null}</div>
+        </nav> : null}
+
         {absentColleges.length ? (
           <section className={styles.missingSection} aria-labelledby="missing-field-heading">
             <div>
@@ -297,13 +311,13 @@ export default async function BroadFieldPage({
               <h2 id="missing-field-heading">No qualifying field record in this release</h2>
               <p>
                 These {absentColleges.length} colleges do not have a record that
-                satisfies the current bachelor&apos;s-indicator rule for this broad
+                satisfies the current degree-availability indicator rule for this broad
                 field. Absence is not converted to zero and does not prove an
-                exact related major is unavailable.
+                exact related major is unavailable. A few examples appear below.
               </p>
             </div>
             <ul>
-              {absentColleges.map((college) => (
+              {absentColleges.slice(0, 12).map((college) => (
                 <li key={college.unitId}>
                   <span>No field record</span>
                   <Link href={`/colleges/${college.slug}`}>{college.name}</Link>

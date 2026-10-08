@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Local audit fixtures and generated diagnostics are not shipped source.
+    "work/**",
+    "outputs/**",
+    "tmp/**",
     "**/._*",
   ]),
 ]);

@@ -1,0 +1,94 @@
+TAP version 13
+# Subtest: student decision surfaces render an explicit browser-local save action
+ok 1 - student decision surfaces render an explicit browser-local save action
+  ---
+  duration_ms: 1978.116208
+  type: 'test'
+  ...
+# Subtest: match results offer local saves once preferences produce a shortlist
+ok 2 - match results offer local saves once preferences produce a shortlist
+  ---
+  duration_ms: 12.306667
+  type: 'test'
+  ...
+# Subtest: account saves are rendered immediately but never sent before the outbox persists
+ok 3 - account saves are rendered immediately but never sent before the outbox persists
+  ---
+  duration_ms: 20.593791
+  type: 'test'
+  ...
+# Subtest: the provider delegates each locked account cycle to the tested sync primitive
+ok 4 - the provider delegates each locked account cycle to the tested sync primitive
+  ---
+  duration_ms: 0.773208
+  type: 'test'
+  ...
+# Subtest: guest save updates use the canonical writer that removes the legacy key
+ok 5 - guest save updates use the canonical writer that removes the legacy key
+  ---
+  duration_ms: 0.48925
+  type: 'test'
+  ...
+# Subtest: only explicit HTTPS origins and loopback HTTP origins are accepted
+ok 6 - only explicit HTTPS origins and loopback HTTP origins are accepted
+  ---
+  duration_ms: 0.532167
+  type: 'test'
+  ...
+# Subtest: published freshness is separate from availability and handles React comment separators
+ok 7 - published freshness is separate from availability and handles React comment separators
+  ---
+  duration_ms: 0.845917
+  type: 'test'
+  ...
+# Subtest: document identity, private caching, and all executable inline nonces are checked
+ok 8 - document identity, private caching, and all executable inline nonces are checked
+  ---
+  duration_ms: 9.326875
+  type: 'test'
+  ...
+# Subtest: callbacks must fail on the expected same-origin path without exchanging an auth code
+ok 9 - callbacks must fail on the expected same-origin path without exchanging an auth code
+  ---
+  duration_ms: 0.208209
+  type: 'test'
+  ...
+# Subtest: smoke records all checked routes, assets, callbacks and freshness without keeping bodies or cookies
+ok 10 - smoke records all checked routes, assets, callbacks and freshness without keeping bodies or cookies
+  ---
+  duration_ms: 2.262958
+  type: 'test'
+  ...
+# Subtest: smoke reports independent endpoint failures instead of stopping at the first
+ok 11 - smoke reports independent endpoint failures instead of stopping at the first
+  ---
+  duration_ms: 0.625416
+  type: 'test'
+  ...
+# Subtest: classroom scenario is capped at thirty students and 120 GET requests
+ok 12 - classroom scenario is capped at thirty students and 120 GET requests
+  ---
+  duration_ms: 4.628916
+  type: 'test'
+  ...
+# Subtest: classroom scenario stops issuing new work after repeated errors
+ok 13 - classroom scenario stops issuing new work after repeated errors
+  ---
+  duration_ms: 0.708792
+  type: 'test'
+  ...
+# Subtest: latency summary uses a real nearest-rank p95 and retains failures
+ok 14 - latency summary uses a real nearest-rank p95 and retains failures
+  ---
+  duration_ms: 0.297834
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2056.512042

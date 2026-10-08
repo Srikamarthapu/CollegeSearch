@@ -1,24 +1,68 @@
+import { broadFieldDefinitions } from "./broad-fields.ts";
 import type { ClientCollege } from "@/app/lib/college-client-record";
 
+export type CollegeSearchIdentity = Pick<
+  ClientCollege,
+  "unitId" | "name" | "aliases" | "city" | "state"
+>;
+
 export const STATE_NAMES: Record<string, string> = {
+  AL: "Alabama",
+  AK: "Alaska",
   AZ: "Arizona",
+  AS: "American Samoa",
+  AR: "Arkansas",
   CA: "California",
+  CO: "Colorado",
   CT: "Connecticut",
+  DE: "Delaware",
+  DC: "District of Columbia",
+  FL: "Florida",
   GA: "Georgia",
+  GU: "Guam",
+  HI: "Hawaii",
+  ID: "Idaho",
   IL: "Illinois",
   IN: "Indiana",
+  IA: "Iowa",
+  KS: "Kansas",
+  KY: "Kentucky",
+  LA: "Louisiana",
+  ME: "Maine",
+  MD: "Maryland",
   MA: "Massachusetts",
   MI: "Michigan",
+  MN: "Minnesota",
+  MS: "Mississippi",
+  MO: "Missouri",
+  MT: "Montana",
+  MP: "Northern Mariana Islands",
+  NE: "Nebraska",
+  NV: "Nevada",
+  NH: "New Hampshire",
   NC: "North Carolina",
+  ND: "North Dakota",
   NJ: "New Jersey",
+  NM: "New Mexico",
   NY: "New York",
   OH: "Ohio",
+  OK: "Oklahoma",
   OR: "Oregon",
   PA: "Pennsylvania",
+  PR: "Puerto Rico",
+  RI: "Rhode Island",
+  SC: "South Carolina",
+  SD: "South Dakota",
+  TN: "Tennessee",
   TX: "Texas",
+  UT: "Utah",
+  VT: "Vermont",
+  VI: "U.S. Virgin Islands",
   VA: "Virginia",
   WA: "Washington",
+  WV: "West Virginia",
   WI: "Wisconsin",
+  WY: "Wyoming",
 };
 
 export const MAJOR_ALIASES: Record<string, string[]> = {
@@ -46,7 +90,7 @@ export const MAJOR_ALIASES: Record<string, string[]> = {
   "English Language & Literature": ["english", "writing", "literature"],
 };
 
-export const MAJOR_OPTIONS = Object.keys(MAJOR_ALIASES);
+export const MAJOR_OPTIONS: string[] = broadFieldDefinitions.map((field) => field.name).sort((left, right) => left.localeCompare(right));
 
 const ignoredTokens = new Set([
   "at",
@@ -109,6 +153,7 @@ function tokenMatches(queryToken: string, candidateToken: string) {
   if (queryToken === candidateToken) return true;
   if (
     queryToken.length >= 4 &&
+    candidateToken.length >= 4 &&
     (candidateToken.startsWith(queryToken) || queryToken.startsWith(candidateToken))
   ) {
     return true;
@@ -127,26 +172,73 @@ function phraseMatchesQuery(queryTokens: string[], phrase: string) {
   );
 }
 
-function exactIdentityMatch(college: ClientCollege, normalizedQuery: string) {
+function exactIdentityMatch(
+  college: CollegeSearchIdentity,
+  normalizedQuery: string,
+) {
   return [college.name, ...college.aliases].some(
     (name) => normalizeSearchText(name) === normalizedQuery,
   );
 }
 
-function detectedMajor(queryTokens: string[]) {
-  return MAJOR_OPTIONS.find((major) =>
-    [major, ...MAJOR_ALIASES[major]].some((phrase) =>
+/**
+ * Filters college-shaped records by institution identity and location only.
+ * This is intentionally separate from `filterCollegesByQuery`, whose query
+ * language also interprets major names. Selectors should not silently turn a
+ * college name into an academic-field filter.
+ */
+export function filterCollegeIdentitiesByQuery<
+  T extends CollegeSearchIdentity,
+>(allColleges: T[], query: string) {
+  const normalized = normalizeSearchText(query);
+  if (!normalized) return allColleges;
+
+  const exactMatches = allColleges.filter((college) =>
+    exactIdentityMatch(college, normalized),
+  );
+  if (exactMatches.length > 0) return exactMatches;
+
+  const queryTokens = words(normalized).filter(
+    (token) => !ignoredTokens.has(token),
+  );
+  if (queryTokens.length === 0) return allColleges;
+
+  return allColleges.filter((college) => {
+    const candidateTokens = words(
+      [
+        college.name,
+        ...college.aliases,
+        college.city,
+        college.state,
+        STATE_NAMES[college.state] ?? "",
+      ].join(" "),
+    );
+    return queryTokens.every((queryToken) =>
+      candidateTokens.some((candidateToken) =>
+        tokenMatches(queryToken, candidateToken),
+      ),
+    );
+  });
+}
+
+function phrasesForMajor(major: string) {
+  return [major, ...(MAJOR_ALIASES[major] ?? [])];
+}
+
+function detectedMajor(queryTokens: string[], majorOptions: string[]) {
+  return majorOptions.find((major) =>
+    phrasesForMajor(major).some((phrase) =>
       phraseMatchesQuery(queryTokens, phrase),
     ),
   );
 }
 
-export function matchingMajors(query: string) {
+export function matchingMajors(query: string, majorOptions = MAJOR_OPTIONS) {
   const normalized = normalizeSearchText(query);
   if (!normalized) return [];
   const queryTokens = words(normalized);
-  return MAJOR_OPTIONS.filter((major) =>
-    [major, ...MAJOR_ALIASES[major]].some((phrase) => {
+  return majorOptions.filter((major) =>
+    phrasesForMajor(major).some((phrase) => {
       const normalizedPhrase = normalizeSearchText(phrase);
       return (
         normalizedPhrase.includes(normalized) ||
@@ -186,6 +278,7 @@ function tokensConsumedByPhrase(queryTokens: string[], phrase: string) {
 export function filterCollegesByQuery(
   allColleges: ClientCollege[],
   query: string,
+  majorOptions = MAJOR_OPTIONS,
 ) {
   const normalized = normalizeSearchText(query);
   if (!normalized) return allColleges;
@@ -196,12 +289,12 @@ export function filterCollegesByQuery(
   if (exactMatches.length > 0) return exactMatches;
 
   const queryTokens = words(normalized).filter((token) => !ignoredTokens.has(token));
-  const major = detectedMajor(queryTokens);
+  const major = detectedMajor(queryTokens, majorOptions);
   const stateCode = detectedState(queryTokens);
   const consumed = new Set<string>();
 
   if (major) {
-    const matchingPhrase = [major, ...MAJOR_ALIASES[major]].find((phrase) =>
+    const matchingPhrase = phrasesForMajor(major).find((phrase) =>
       phraseMatchesQuery(queryTokens, phrase),
     );
     if (matchingPhrase) {

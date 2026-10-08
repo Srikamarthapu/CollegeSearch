@@ -1,0 +1,202 @@
+[
+  {
+    "unitId": 104151,
+    "slug": "arizona-state-university-campus-immersion"
+  },
+  {
+    "unitId": 110404,
+    "slug": "california-institute-of-technology"
+  },
+  {
+    "unitId": 110422,
+    "slug": "california-polytechnic-state-university-san-luis-obispo"
+  },
+  {
+    "unitId": 110529,
+    "slug": "california-state-polytechnic-university-pomona"
+  },
+  {
+    "unitId": 110556,
+    "slug": "california-state-university-fresno"
+  },
+  {
+    "unitId": 110565,
+    "slug": "california-state-university-fullerton"
+  },
+  {
+    "unitId": 110583,
+    "slug": "california-state-university-long-beach"
+  },
+  {
+    "unitId": 110592,
+    "slug": "california-state-university-los-angeles"
+  },
+  {
+    "unitId": 110608,
+    "slug": "california-state-university-northridge"
+  },
+  {
+    "unitId": 110617,
+    "slug": "california-state-university-sacramento"
+  },
+  {
+    "unitId": 111948,
+    "slug": "chapman-university"
+  },
+  {
+    "unitId": 190150,
+    "slug": "columbia-university-in-the-city-of-new-york"
+  },
+  {
+    "unitId": 198419,
+    "slug": "duke-university"
+  },
+  {
+    "unitId": 139755,
+    "slug": "georgia-institute-of-technology-main-campus"
+  },
+  {
+    "unitId": 166027,
+    "slug": "harvard-university"
+  },
+  {
+    "unitId": 117946,
+    "slug": "loyola-marymount-university"
+  },
+  {
+    "unitId": 166683,
+    "slug": "massachusetts-institute-of-technology"
+  },
+  {
+    "unitId": 193900,
+    "slug": "new-york-university"
+  },
+  {
+    "unitId": 147767,
+    "slug": "northwestern-university"
+  },
+  {
+    "unitId": 204796,
+    "slug": "ohio-state-university-main-campus"
+  },
+  {
+    "unitId": 209542,
+    "slug": "oregon-state-university"
+  },
+  {
+    "unitId": 121345,
+    "slug": "pomona-college"
+  },
+  {
+    "unitId": 186131,
+    "slug": "princeton-university"
+  },
+  {
+    "unitId": 243780,
+    "slug": "purdue-university-main-campus"
+  },
+  {
+    "unitId": 122409,
+    "slug": "san-diego-state-university"
+  },
+  {
+    "unitId": 122755,
+    "slug": "san-jose-state-university"
+  },
+  {
+    "unitId": 122931,
+    "slug": "santa-clara-university"
+  },
+  {
+    "unitId": 243744,
+    "slug": "stanford-university"
+  },
+  {
+    "unitId": 228778,
+    "slug": "the-university-of-texas-at-austin"
+  },
+  {
+    "unitId": 104179,
+    "slug": "university-of-arizona"
+  },
+  {
+    "unitId": 110635,
+    "slug": "university-of-california-berkeley"
+  },
+  {
+    "unitId": 110644,
+    "slug": "university-of-california-davis"
+  },
+  {
+    "unitId": 110653,
+    "slug": "university-of-california-irvine"
+  },
+  {
+    "unitId": 110662,
+    "slug": "university-of-california-los-angeles"
+  },
+  {
+    "unitId": 445188,
+    "slug": "university-of-california-merced"
+  },
+  {
+    "unitId": 110671,
+    "slug": "university-of-california-riverside"
+  },
+  {
+    "unitId": 110680,
+    "slug": "university-of-california-san-diego"
+  },
+  {
+    "unitId": 110705,
+    "slug": "university-of-california-santa-barbara"
+  },
+  {
+    "unitId": 110714,
+    "slug": "university-of-california-santa-cruz"
+  },
+  {
+    "unitId": 145637,
+    "slug": "university-of-illinois-urbana-champaign"
+  },
+  {
+    "unitId": 166629,
+    "slug": "university-of-massachusetts-amherst"
+  },
+  {
+    "unitId": 170976,
+    "slug": "university-of-michigan-ann-arbor"
+  },
+  {
+    "unitId": 199120,
+    "slug": "university-of-north-carolina-at-chapel-hill"
+  },
+  {
+    "unitId": 122612,
+    "slug": "university-of-san-francisco"
+  },
+  {
+    "unitId": 123961,
+    "slug": "university-of-southern-california"
+  },
+  {
+    "unitId": 234076,
+    "slug": "university-of-virginia-main-campus"
+  },
+  {
+    "unitId": 236948,
+    "slug": "university-of-washington-seattle-campus"
+  },
+  {
+    "unitId": 240444,
+    "slug": "university-of-wisconsin-madison"
+  },
+  {
+    "unitId": 236939,
+    "slug": "washington-state-university"
+  },
+  {
+    "unitId": 130794,
+    "slug": "yale-university"
+  }
+]

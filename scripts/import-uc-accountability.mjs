@@ -257,7 +257,10 @@ const output = {
 };
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
-const outputPath = resolve(scriptDirectory, "../data/uc-admissions-2025.json");
+const dataOutputDirectory = process.env.DATA_OUTPUT_DIR
+  ? resolve(process.env.DATA_OUTPUT_DIR)
+  : resolve(scriptDirectory, "../data");
+const outputPath = resolve(dataOutputDirectory, "uc-admissions-2025.json");
 await mkdir(dirname(outputPath), { recursive: true });
 await atomicWriteFile(outputPath, `${JSON.stringify(output, null, 2)}\n`);
 

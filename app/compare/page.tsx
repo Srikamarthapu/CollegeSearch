@@ -1,10 +1,19 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ExternalLink, Scale } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ChevronDown,
+  ExternalLink,
+  GraduationCap,
+  Info,
+  Scale,
+} from "lucide-react";
 
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import { CollegeLogo } from "@/app/components/CollegeLogo";
+import { NegativeNetPriceNote } from "@/app/components/NegativeNetPriceNote";
 import {
   collegesByUnitIds,
   compactName,
@@ -27,50 +36,57 @@ type ComparePageProps = {
 type ComparisonRow = {
   label: string;
   observation: (college: College) => Observation | null;
+  publicOnly?: boolean;
+  privateLabel?: string;
+  mixedLabel?: string;
+  costKind?: "fees";
 };
 
 const comparisonRows: ComparisonRow[] = [
-  {
-    label: "Headline admit rate",
-    observation: (college) => college.observations.admitRate,
-  },
-  {
-    label: "Applicants",
-    observation: (college) => college.observations.applicants,
-  },
-  {
-    label: "Admitted",
-    observation: (college) => college.observations.admits,
-  },
-  {
-    label: "Enrolled",
-    observation: (college) => college.observations.enrollees,
-  },
-  {
-    label: "Undergraduate enrollment",
-    observation: (college) => college.observations.undergraduateEnrollment,
-  },
-  {
-    label: "Average net price",
-    observation: (college) => college.observations.averageNetPrice,
-  },
-  {
-    label: "Graduation rate",
-    observation: (college) => college.observations.graduationRate,
-  },
-  {
-    label: "Median earnings",
-    observation: (college) => college.observations.medianEarnings,
-  },
-  {
-    label: "In-state tuition",
-    observation: (college) => college.observations.tuitionInState,
-  },
-  {
-    label: "Out-of-state tuition",
-    observation: (college) => college.observations.tuitionOutOfState,
-  },
+  { label: "Resident tuition", publicOnly: true, observation: (college) => college.costs.tuitionInState },
+  { label: "Out-of-state tuition", privateLabel: "Published tuition", mixedLabel: "Out-of-state / published tuition", observation: (college) => college.costs.tuitionOutOfState },
+  { label: "Resident fees", publicOnly: true, costKind: "fees", observation: (college) => college.costs.feesInState },
+  { label: "Out-of-state fees", privateLabel: "Published fees", mixedLabel: "Out-of-state / published fees", costKind: "fees", observation: (college) => college.costs.feesOutOfState },
+  { label: "Historical average net price (federal aid cohort)", observation: (college) => college.observations.averageNetPrice },
+  { label: "Headline admit rate", observation: (college) => college.observations.admitRate },
+  { label: "Completion / graduation rate", observation: (college) => college.observations.graduationRate },
+  { label: "Median earnings", observation: (college) => college.observations.medianEarnings },
+  { label: "Undergraduate enrollment", observation: (college) => college.observations.undergraduateEnrollment },
+  { label: "Applicants", observation: (college) => college.observations.applicants },
+  { label: "Admitted", observation: (college) => college.observations.admits },
+  { label: "Enrolled", observation: (college) => college.observations.enrollees },
 ];
+
+function comparisonLabel(row: ComparisonRow, selected: College[]) {
+  if (row.label === "Resident tuition") {
+    const labels = new Set(selected
+      .filter((college) => college.ownership === "Public")
+      .map((college) => college.costs.tuitionInState.sourceField === "TUITIONFEE_IN" && college.costs.tuitionInState.publisher === "U.S. Department of Education"
+        ? "In-district tuition"
+        : "In-state tuition"));
+    return labels.size === 1 ? [...labels][0] : "Resident tuition (basis varies)";
+  }
+  if (row.costKind === "fees") {
+    const applicable = row.publicOnly
+      ? selected.filter((college) => college.ownership === "Public")
+      : selected;
+    const bases = new Set(applicable.map((college) => college.costs.feeBasis));
+    const basisLabel = bases.size !== 1
+      ? "fees / allowances (basis varies)"
+      : [...bases][0] === "allowance" ? "fee allowance" : "required fees";
+    const scope = row.label === "Resident fees"
+      ? "Resident"
+      : selected.every((college) => college.ownership !== "Public")
+        ? "Published"
+        : selected.some((college) => college.ownership !== "Public")
+          ? "Out-of-state / published"
+          : "Out-of-state";
+    return `${scope} ${basisLabel}`;
+  }
+  if (row.privateLabel && selected.every((college) => college.ownership !== "Public")) return row.privateLabel;
+  if (row.mixedLabel && selected.some((college) => college.ownership !== "Public")) return row.mixedLabel;
+  return row.label;
+}
 
 function first(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
@@ -135,8 +151,12 @@ function mixedEvidenceRows(colleges: College[]) {
 
 function ObservationValue({
   observation,
+  showDefinition = false,
+  sourceDetail,
 }: {
   observation: Observation | null;
+  showDefinition?: boolean;
+  sourceDetail?: string;
 }) {
   if (!observation) {
     return (
@@ -150,8 +170,10 @@ function ObservationValue({
   return (
     <span className="comparison-value">
       <strong>{formatObservation(observation)}</strong>
+      {showDefinition ? <small>{observation.definition}</small> : null}
+      {sourceDetail ? <small>{sourceDetail} · source field {observation.sourceField}</small> : null}
       <small>
-        {observation.periodLabel} · {observation.publisher}
+        {observation.periodLabel} · <a href={observation.sourceUrl} target="_blank" rel="noreferrer">{observation.publisher}</a>
       </small>
     </span>
   );
@@ -200,12 +222,12 @@ export default async function ComparePage({
           <div>
             <span className="page-eyebrow">
               <Scale size={15} aria-hidden="true" />
-              Evidence table
+              Your comparison
             </span>
-            <h1>Compare the record, not a ranking.</h1>
+            <h1>Your options, side by side.</h1>
             <p>
-              Place up to four colleges side by side. Every cell carries its
-              own reporting period and publisher so unlike cohorts stay visible.
+              Compare costs, admissions, and outcomes for up to four colleges.
+              Check the reporting years as you go; they can differ between schools.
             </p>
           </div>
           <Link
@@ -248,6 +270,84 @@ export default async function ComparePage({
               </ComparisonNotice>
             ) : null}
 
+            <details className="comparison-field-disclosure" open={Boolean(selectedMajor)}>
+              <summary><GraduationCap size={18} aria-hidden="true" />{selectedMajor ? `Field: ${selectedMajor}` : "Add a field of study to your comparison"}<ChevronDown size={17} aria-hidden="true" /></summary>
+            <section
+              className="comparison-field-lens"
+              aria-labelledby="comparison-field-heading"
+            >
+              <div className="comparison-field-intro">
+                <span className="page-evidence-label">
+                  <GraduationCap size={15} aria-hidden="true" />
+                  Optional field lens
+                </span>
+                <h2 id="comparison-field-heading">
+                  Add a broad field to the table.
+                </h2>
+                <p id="comparison-field-help">
+                  Choose one field to compare its bachelor&apos;s or associate program evidence
+                  across the colleges already selected.
+                </p>
+              </div>
+
+              <form
+                className="comparison-field-form"
+                action="/compare"
+                method="get"
+              >
+                <input
+                  type="hidden"
+                  name="colleges"
+                  value={selected.map((college) => college.unitId).join(",")}
+                />
+                <label className="filter-field" htmlFor="comparison-major">
+                  <span>Broad degree field</span>
+                  <div className="select-wrap">
+                    <select
+                      id="comparison-major"
+                      name="major"
+                      defaultValue={selectedMajor ?? ""}
+                      aria-describedby="comparison-field-help comparison-field-boundary"
+                    >
+                      <option value="">No field selected</option>
+                      {MAJOR_OPTIONS.map((major) => (
+                        <option value={major} key={major}>
+                          {major}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown size={15} aria-hidden="true" />
+                  </div>
+                </label>
+                <div className="comparison-field-actions">
+                  <button className="page-primary-action" type="submit">
+                    Apply field
+                  </button>
+                  {selectedMajor ? (
+                    <Link
+                      className="page-secondary-action"
+                      href={comparisonHref(selected, undefined)}
+                    >
+                      Clear field
+                    </Link>
+                  ) : null}
+                </div>
+              </form>
+
+              <p
+                className="comparison-field-boundary"
+                id="comparison-field-boundary"
+              >
+                <Info size={16} aria-hidden="true" />
+                <span>
+                  This shows broad field availability and share of all awards, not a
+                  major-specific admit rate or an applicant&apos;s chance of
+                  admission.
+                </span>
+              </p>
+            </section>
+            </details>
+
             <section
               className="comparison-table-section"
               aria-labelledby="comparison-heading"
@@ -280,6 +380,7 @@ export default async function ComparePage({
                           <small>
                             {college.city}, {college.state}
                           </small>
+                          <small>{college.ownership} · {college.institutionLevel}</small>
                           <Link
                             className="comparison-remove"
                             href={comparisonHref(
@@ -297,23 +398,28 @@ export default async function ComparePage({
                     </tr>
                   </thead>
                   <tbody>
-                    {comparisonRows.map((row) => (
+                    {comparisonRows.filter((row) => !row.publicOnly || selected.some((college) => college.ownership === "Public")).map((row) => (
                       <tr key={row.label}>
-                        <th scope="row">{row.label}</th>
-                        {selected.map((college) => (
-                          <td key={college.unitId}>
-                            <ObservationValue
-                              observation={row.observation(college)}
-                            />
-                          </td>
-                        ))}
+                        <th scope="row">{comparisonLabel(row, selected)}</th>
+                        {selected.map((college) => {
+                          const observation = row.observation(college);
+                          const sourceDetail = row.costKind === "fees" && observation
+                            ? college.costs.feeBasis === "allowance" ? "Cost-of-attendance fee allowance (budget estimate)" : "Reported required fees"
+                            : undefined;
+                          return <td key={college.unitId}>
+                            {row.publicOnly && college.ownership !== "Public" ? <span className="comparison-missing">See published {row.costKind === "fees" ? "fees" : "tuition"} below</span> : <>
+                              <ObservationValue observation={observation} showDefinition={row.label === "Completion / graduation rate"} sourceDetail={sourceDetail} />
+                              {row.label.startsWith("Historical average net price") ? <NegativeNetPriceNote value={college.observations.averageNetPrice.value} /> : null}
+                            </>}
+                          </td>;
+                        })}
                       </tr>
                     ))}
                     {selectedMajor ? (
                       <tr>
                         <th scope="row">
                           {selectedMajor}
-                          <small>Bachelor&apos;s field · share of all awards</small>
+                          <small>Degree field · share of all awards</small>
                         </th>
                         {selected.map((college) => {
                           const evidence = majorEvidenceFor(
@@ -335,7 +441,7 @@ export default async function ComparePage({
                                 <span className="comparison-missing">
                                   Not listed
                                   <small>
-                                    No bachelor&apos;s-field indicator in this set
+                                    No bachelor&apos;s or associate field indicator in this set
                                   </small>
                                 </span>
                               )}
@@ -365,6 +471,7 @@ export default async function ComparePage({
                             {compactName(college)}
                           </Link>
                         </h3>
+                        <small>{college.ownership} · {college.institutionLevel}</small>
                       </div>
                       <Link
                         className="comparison-remove"
@@ -380,19 +487,26 @@ export default async function ComparePage({
                       </Link>
                     </header>
                     <dl>
-                      {comparisonRows.map((row) => (
-                        <div key={row.label}>
-                          <dt>{row.label}</dt>
+                      {comparisonRows.filter((row) => !row.publicOnly || college.ownership === "Public").map((row) => {
+                        const observation = row.observation(college);
+                        const sourceDetail = row.costKind === "fees" && observation
+                          ? college.costs.feeBasis === "allowance" ? "Cost-of-attendance fee allowance (budget estimate)" : "Reported required fees"
+                          : undefined;
+                        return <div key={row.label}>
+                          <dt>{comparisonLabel(row, [college])}</dt>
                           <dd>
                             <ObservationValue
-                              observation={row.observation(college)}
+                              observation={observation}
+                              showDefinition={row.label === "Completion / graduation rate"}
+                              sourceDetail={sourceDetail}
                             />
+                            {row.label.startsWith("Historical average net price") ? <NegativeNetPriceNote value={college.observations.averageNetPrice.value} /> : null}
                           </dd>
-                        </div>
-                      ))}
+                        </div>;
+                      })}
                       {selectedMajor ? (
                         <div>
-                          <dt>{selectedMajor} bachelor&apos;s field</dt>
+                          <dt>{selectedMajor} degree field</dt>
                           <dd>
                             {majorEvidenceFor(college, selectedMajor) ? (
                               <span className="comparison-value">
@@ -404,7 +518,7 @@ export default async function ComparePage({
                                 </strong>
                                 <small>
                                   {majorEvidenceFor(college, selectedMajor)!
-                                    .periodLabel} · share of all awards
+                                    .periodLabel} · {majorEvidenceFor(college, selectedMajor)!.evidence} · share of all awards
                                 </small>
                               </span>
                             ) : (
@@ -425,7 +539,9 @@ export default async function ComparePage({
               Admission rates are institutional snapshots, not odds for an
               individual student. Net price applies to the reported federal
               aid cohort; earnings and graduation measures describe still
-              different cohorts.
+              different cohorts.{" "}
+              Tuition and fee values are before aid. A fee row may be a required charge or a campus budget allowance; housing, meals, books and other living costs are separate.
+              Federal in-district tuition can differ from other in-state rates; verify current charges with each college.
             </ComparisonNotice>
 
             <div className="comparison-actions">

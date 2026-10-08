@@ -1,4 +1,9 @@
 import rawDataset from "@/data/colleges.json";
+import tuitionDataset from "@/data/college-tuition.json";
+import costOverrides from "@/data/college-cost-overrides.json";
+import { assertCollegeCosts, type CollegeCosts } from "./college-costs";
+import { assertCollegeEvidence } from "./college-evidence";
+import type { CollegeCatalogCategory } from "./catalog-categories";
 
 export type ObservationStatus =
   | "reported"
@@ -32,6 +37,8 @@ export type MajorEvidence = {
   name: string;
   share: number;
   bachelorsAvailable: boolean;
+  associatesAvailable?: boolean;
+  degreeLevel?: "bachelors" | "associate" | "bachelors-and-associate";
   evidence: string;
   reportingYear: number;
   periodLabel: string;
@@ -40,7 +47,7 @@ export type MajorEvidence = {
   sourceField: string;
   cohort: string;
   definition: string;
-  deliveryMode?: "campus-or-mixed" | "exclusively-distance";
+  deliveryMode?: "delivery-not-specified" | "includes-distance-program";
 };
 
 export type CollegeObservations = {
@@ -58,12 +65,19 @@ export type CollegeObservations = {
 };
 
 export type College = {
+  costs: CollegeCosts;
+  catalogCategory: CollegeCatalogCategory;
+  inclusionReason: string;
   unitId: number;
   opeId: string;
   opeId6: string;
   mainCampus: boolean;
   branchCount: number;
   currentlyOperating: boolean;
+  institutionLevel: "Four-year" | "Two-year";
+  highestDegree: number;
+  predominantDegree: number;
+  undergraduateOffering: boolean;
   slug: string;
   name: string;
   aliases: string[];
@@ -99,7 +113,7 @@ export type SourceRelease = {
   artifactUrl?: string;
   artifactSha256?: string;
   artifactHashMode?: "raw" | "html-without-volatile-assets-and-edge-challenge";
-  artifactKind?: "html" | "pdf";
+  artifactKind?: "html" | "pdf" | "xlsx";
   review?: {
     status: "approved";
     reviewedOn: string;
@@ -218,8 +232,10 @@ function validateDataset(value: unknown): CollegeDataset {
     if (
       !college.opeId ||
       !college.opeId6 ||
-      !college.mainCampus ||
+      typeof college.mainCampus !== "boolean" ||
       !college.currentlyOperating ||
+      !college.undergraduateOffering ||
+      !["Four-year", "Two-year"].includes(college.institutionLevel ?? "") ||
       !Number.isInteger(college.branchCount) ||
       college.branchCount < 1
     ) {
@@ -244,7 +260,7 @@ function validateDataset(value: unknown): CollegeDataset {
           !Number.isFinite(major.share) ||
           major.share < 0 ||
           major.share > 1 ||
-          major.bachelorsAvailable !== true,
+          (major.bachelorsAvailable !== true && major.associatesAvailable !== true),
       )
     ) {
       throw new Error(`${college.name} has invalid major evidence.`);
@@ -265,11 +281,29 @@ function validateDataset(value: unknown): CollegeDataset {
     }
   }
 
+  assertCollegeEvidence(dataset as CollegeDataset);
   return dataset as CollegeDataset;
 }
 
 export const collegeDataset = validateDataset(rawDataset);
-export const colleges = collegeDataset.colleges;
+const tuitionById = new Map(tuitionDataset.colleges.map((row) => [row.unitId, row]));
+const costOverridesById = new Map(costOverrides.colleges.map((row) => [row.unitId, row]));
+if (tuitionById.size !== tuitionDataset.colleges.length || tuitionById.size !== collegeDataset.colleges.length || costOverridesById.size !== costOverrides.colleges.length) {
+  throw new Error("Tuition evidence has duplicate or incomplete catalog identities.");
+}
+export const colleges = collegeDataset.colleges.map((college): College => {
+  const row = tuitionById.get(college.unitId);
+  if (!row) throw new Error(`${college.name}: missing tuition evidence record.`);
+  const costs = (costOverridesById.get(college.unitId)?.costs ?? {
+    tuitionInState: row.tuition.inState,
+    tuitionOutOfState: row.tuition.outOfState,
+    feesInState: row.fees.inState,
+    feesOutOfState: row.fees.outOfState,
+    feeBasis: "required",
+  }) as CollegeCosts;
+  assertCollegeCosts(costs, college.name);
+  return { ...college, costs };
+});
 export const release = collegeDataset.release;
 
 export const currencyFormatter = new Intl.NumberFormat("en-US", {
@@ -315,9 +349,13 @@ export function observationSourceKind(observation: Observation) {
 }
 
 export function compactName(college: College) {
+  // Federal aliases include historical institution names and search keywords.
+  // Only the established, curated short names are suitable display labels.
+  if (college.catalogCategory.startsWith("federal-")) return college.name;
+  const aliases = college.aliases.filter((alias) => !/^(?:n\/?a|null|privacysuppressed|unknown)$/i.test(alias.trim()));
   return (
-    college.aliases.find((alias) => alias.startsWith("UC ")) ||
-    college.aliases[0] ||
+    aliases.find((alias) => alias.startsWith("UC ")) ||
+    aliases[0] ||
     college.name
   );
 }

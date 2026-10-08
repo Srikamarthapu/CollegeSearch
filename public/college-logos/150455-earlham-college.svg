@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 1000px;
+        fill: #7b1e38;
+        font-family: "LTC Goudy Oldstyle Pro";
+      }
+    </style>
+  </defs>
+  <text id="E" class="cls-1" transform="translate(21.617 303.163) scale(0.425)">E</text>
+  <text id="C" class="cls-1" transform="translate(112.544 507.113) scale(0.425)">C</text>
+</svg>

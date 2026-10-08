@@ -1,0 +1,15 @@
+
+> college-search@0.1.0 data:verify-overlays
+> node scripts/verify-institution-overlays.mjs
+
+file:///Volumes/Seagate%20/CollegeSearch/scripts/verify-institution-overlays.mjs:265
+        throw new Error(
+              ^
+
+Error: Source gatech-cds-2025-26 artifact request failed with HTTP 404.
+    at verifyInstitutionOverlays (file:///Volumes/Seagate%20/CollegeSearch/scripts/verify-institution-overlays.mjs:265:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async main (file:///Volumes/Seagate%20/CollegeSearch/scripts/verify-institution-overlays.mjs:298:19)
+    at async file:///Volumes/Seagate%20/CollegeSearch/scripts/verify-institution-overlays.mjs:305:3
+
+Node.js v22.22.3

@@ -1,0 +1,1991 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-08T04:55:47.898Z",
+  "policy": {
+    "runtimeSource": "app/lib/campus-photos.ts plus data/profile-campus-photo-additions.json via app/lib/profile-campus-photos.ts",
+    "statement": "Only entries with status visual-source-reviewed and usableInProfile true may appear on college profiles. Candidate rows are stored separately and never imported by the runtime helper.",
+    "identityGate": "Both UNITID and catalog slug must match. Where a single Wikidata entity has exact P1771 equality, that entity is recorded as additional identity evidence."
+  },
+  "summary": {
+    "catalogColleges": 3912,
+    "approvedAssets": 47,
+    "profileUsableAssets": 47,
+    "collegesWithoutApprovedProfilePhoto": 3865
+  },
+  "approved": [
+    {
+      "unitId": 243744,
+      "slug": "stanford-university",
+      "collegeName": "Stanford University",
+      "city": "Stanford",
+      "state": "CA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q41506",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q41506",
+        "ipedsUnitId": "243744",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q41506#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/stanford.jpg",
+        "sha256": "e42cbb3569ee8a996f0a2846fa6aeb2fcd5912348ab7f23d7ba78d35106ca5a5",
+        "width": 1280,
+        "height": 720
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Stanford_Oval_May_2011_panorama_(long_cropped).jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Stanford_Oval_May_2011_panorama_%28long_cropped%29.jpg/1280px-Stanford_Oval_May_2011_panorama_%28long_cropped%29.jpg?utm_campaign=index&utm_content=thumbnail&utm_source=commons.wikimedia.org",
+        "creator": "King of Hearts",
+        "credit": "King of Hearts / Wikimedia Commons / CC BY-SA 3.0",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "photoDate": "2011-05-07"
+      },
+      "presentation": {
+        "alt": "Stanford's sandstone Main Quad and Memorial Church beyond the green Oval lawn.",
+        "caption": "The Oval · Stanford University",
+        "objectPosition": "50% 56%",
+        "cropNotes": "Source is a panoramic photograph by King of Hearts, cropped horizontally by Wikimedia user Sdkb in 2023; downloaded the Commons 1280px thumbnail unchanged. For a wider carousel window, retain the central church and main facade; note additional cropping for display."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-09-06"
+      }
+    },
+    {
+      "unitId": 110662,
+      "slug": "university-of-california-los-angeles",
+      "collegeName": "University of California-Los Angeles",
+      "city": "Los Angeles",
+      "state": "CA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q174710",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q174710",
+        "ipedsUnitId": "110662",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q174710#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/ucla.jpg",
+        "sha256": "8729325d1954f2e2e3d363f909760457062573321650fc6220e81e9802e809b7",
+        "width": 1280,
+        "height": 960
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:UCLA_Royce_Hall.jpg",
+        "downloadUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1e/UCLA_Royce_Hall.jpg",
+        "creator": "Yanmingzhang",
+        "credit": "Yanmingzhang / Wikimedia Commons / CC BY-SA 3.0",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "photoDate": "2017-06-25"
+      },
+      "presentation": {
+        "alt": "The twin brick towers and arched entrance of Royce Hall at UCLA beside a green lawn.",
+        "caption": "Royce Hall · UCLA",
+        "objectPosition": "50% 10%",
+        "cropNotes": "Downloaded the 1280px original unchanged. Source dates the photo June 25, 2017 according to EXIF. Cropping a wide frame may trim the tower tops; use a less wide aspect ratio or adjust object-position after visual inspection. Note cropping for display."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-09-06"
+      }
+    },
+    {
+      "unitId": 236948,
+      "slug": "university-of-washington-seattle-campus",
+      "collegeName": "University of Washington-Seattle Campus",
+      "city": "Seattle",
+      "state": "WA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q219563",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q219563",
+        "ipedsUnitId": "236948",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q219563#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/washington-drumheller.jpg",
+        "sha256": "2e0b020c59c1c4dddbbbf875017c4f44e9f6a9907a2170ead752d12c95f939b7",
+        "width": 1600,
+        "height": 900
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:MK03244_University_of_Washington_Drumheller_Fountain.jpg",
+        "downloadUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a0/MK03244_University_of_Washington_Drumheller_Fountain.jpg",
+        "creator": "Martin Kraft",
+        "credit": "Martin Kraft / Wikimedia Commons / CC BY-SA 3.0",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "photoDate": "2013-09-24"
+      },
+      "presentation": {
+        "alt": "Drumheller Fountain in front of brick academic buildings on the University of Washington campus.",
+        "caption": "Drumheller Fountain · University of Washington",
+        "objectPosition": "50% 50%",
+        "cropNotes": "Wikidata P18 for the exact IPEDS UNITID 236948. Commons identifies Johnson, Gerberding, Suzzallo, and Mary Gates halls around Drumheller Fountain. Local web asset resized from the original to 1600×900 and encoded as JPEG quality 82; center the fountain and retain the campus buildings in wide crops."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 190150,
+      "slug": "columbia-university-in-the-city-of-new-york",
+      "collegeName": "Columbia University in the City of New York",
+      "city": "New York",
+      "state": "NY",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q49088",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q49088",
+        "ipedsUnitId": "190150",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q49088#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/columbia.jpg",
+        "sha256": "3156a7b1d0bf52c393a5131f1d7a13d1253f256b562f80f243ae1d7b5ea17c14",
+        "width": 1280,
+        "height": 960
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Columbia_University_-_Low_Library.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Columbia_University_-_Low_Library.jpg/1280px-Columbia_University_-_Low_Library.jpg?utm_campaign=index&utm_content=thumbnail&utm_source=commons.wikimedia.org",
+        "creator": "Bitterteayen",
+        "credit": "Bitterteayen / Wikimedia Commons / CC BY-SA 4.0",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "photoDate": "2018-09-01"
+      },
+      "presentation": {
+        "alt": "Columbia University's domed Low Library and broad stone steps beneath blue sky and white clouds.",
+        "caption": "Low Library · Columbia University",
+        "objectPosition": "50% 72%",
+        "cropNotes": "Downloaded the Commons 1280px thumbnail unchanged. Keep the dome and library entrance visible; there is substantial sky in the top half, so bias vertical positioning toward the lower portion. Note cropping for display."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-09-06"
+      }
+    },
+    {
+      "unitId": 110635,
+      "slug": "university-of-california-berkeley",
+      "collegeName": "University of California-Berkeley",
+      "city": "Berkeley",
+      "state": "CA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q168756",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q168756",
+        "ipedsUnitId": "110635",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q168756#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/berkeley.jpg",
+        "sha256": "76b6f8d9e6df23c45078c8ee8d1478cccc476f72fa6dc3a122385ec22c68cd2f",
+        "width": 1280,
+        "height": 853
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:UC_Berkeley_campus_and_surroundings_from_Berkeley_Hills_January_2026.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5f/UC_Berkeley_campus_and_surroundings_from_Berkeley_Hills_January_2026.jpg/1280px-UC_Berkeley_campus_and_surroundings_from_Berkeley_Hills_January_2026.jpg?utm_campaign=index&utm_content=thumbnail&utm_source=commons.wikimedia.org",
+        "creator": "4300streetcar",
+        "credit": "4300streetcar / Wikimedia Commons / CC BY 4.0",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+        "photoDate": "2026-01-30"
+      },
+      "presentation": {
+        "alt": "Sather Tower and the UC Berkeley campus viewed from the Berkeley Hills with San Francisco Bay behind.",
+        "caption": "Sather Tower and campus · UC Berkeley",
+        "objectPosition": "50% 40%",
+        "cropNotes": "Previously sourced and inspected in this task; copied the unchanged 1280px Commons thumbnail into this asset folder. Keep the tower centered. Note cropping for display. Avoid repeating the source caption's compass direction, which appears inconsistent with the visible bay."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-09-06"
+      }
+    },
+    {
+      "unitId": 104151,
+      "slug": "arizona-state-university-campus-immersion",
+      "collegeName": "Arizona State University Campus Immersion",
+      "city": "Tempe",
+      "state": "AZ",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q670897",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q670897",
+        "ipedsUnitId": "104151",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q670897#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/arizona-state.jpg",
+        "sha256": "18ed7f8b86a25f73fefe97a16620815e4ea0a7ab1c60486b53084abc4915bbb5",
+        "width": 1280,
+        "height": 744
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:2021_Arizona_State_University,_Tempe_Campus,_Old_Main.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/02/2021_Arizona_State_University%2C_Tempe_Campus%2C_Old_Main.jpg/1280px-2021_Arizona_State_University%2C_Tempe_Campus%2C_Old_Main.jpg",
+        "creator": "Beyond My Ken",
+        "credit": "Beyond My Ken / Wikimedia Commons / CC BY-SA 4.0",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "photoDate": "2021-06-27"
+      },
+      "presentation": {
+        "alt": "Red-brick Old Main framed by lawns, a front walk, and palms on Arizona State University's Tempe campus.",
+        "caption": "Old Main · ASU",
+        "objectPosition": "50% 50%",
+        "cropNotes": "Downloaded the Commons 1280px thumbnail unchanged. Keep Old Main's roofline and front walk visible; the wide source frame loses little in the desktop crop."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-09-06"
+      }
+    },
+    {
+      "unitId": 110404,
+      "slug": "california-institute-of-technology",
+      "collegeName": "California Institute of Technology",
+      "city": "Pasadena",
+      "state": "CA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q161562",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q161562",
+        "ipedsUnitId": "110404",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q161562#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/caltech-entrance.jpg",
+        "sha256": "a579cd868d076acc816d7e3132d67d7b42e0b044d08f2fc4c188c8604c352799",
+        "width": 1600,
+        "height": 477
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Caltech_Entrance.jpg",
+        "downloadUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Caltech_Entrance.jpg",
+        "creator": "Canon.vs.nikon",
+        "credit": "Canon.vs.nikon / Wikimedia Commons / CC BY-SA 3.0",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "photoDate": "2012-09-28"
+      },
+      "presentation": {
+        "alt": "Caltech's campus entrance between the Norman Bridge physics laboratory and Alfred Sloan mathematics and physics laboratory.",
+        "caption": "Campus entrance · Caltech",
+        "objectPosition": "50% 50%",
+        "cropNotes": "Wikidata P18 for the exact IPEDS UNITID 110404. Commons identifies the two campus laboratories and the East California Boulevard entrance. Local web asset resized from the original to 1600×477 and encoded as JPEG quality 82; its wide frame needs only a shallow vertical crop."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 198419,
+      "slug": "duke-university",
+      "collegeName": "Duke University",
+      "city": "Durham",
+      "state": "NC",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q168751",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q168751",
+        "ipedsUnitId": "198419",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q168751#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/duke.jpg",
+        "sha256": "2062d0c8061d2b01970293b74a7f0261d7f73216e352e24549e6eddb73af7f10",
+        "width": 960,
+        "height": 720
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Duke_University_West_Campus_academic_quad_(351118213).jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/04/Duke_University_West_Campus_academic_quad_%28351118213%29.jpg/960px-Duke_University_West_Campus_academic_quad_%28351118213%29.jpg",
+        "creator": "Brian Carlson from Overland Park, USA",
+        "credit": "Brian Carlson / Wikimedia Commons / CC BY-SA 2.0",
+        "license": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+        "photoDate": "2003-12-31"
+      },
+      "presentation": {
+        "alt": "A tree-lined walk through Duke's West Campus academic quad, with stone academic buildings beside the lawn.",
+        "caption": "West Campus quad · Duke",
+        "objectPosition": "50% 50%",
+        "cropNotes": "Downloaded the Commons 960px thumbnail unchanged. Keep the tree-lined walk and stone facades visible in both desktop and mobile crops."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-09-06"
+      }
+    },
+    {
+      "unitId": 139755,
+      "slug": "georgia-institute-of-technology-main-campus",
+      "collegeName": "Georgia Institute of Technology-Main Campus",
+      "city": "Atlanta",
+      "state": "GA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q864855",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q864855",
+        "ipedsUnitId": "139755",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q864855#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/georgia-tech.jpg",
+        "sha256": "84163ad2bf87f483d85fb90867d84c3dd0c3ed87e7b6c0c5ccc987b7a9f8a56c",
+        "width": 960,
+        "height": 720
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tech_Tower_in_Atlanta.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/Tech_Tower_in_Atlanta.jpg/960px-Tech_Tower_in_Atlanta.jpg",
+        "creator": "Tyler Lahti",
+        "credit": "Tyler Lahti / Wikimedia Commons / CC BY-SA 2.0",
+        "license": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+        "photoDate": "2022-01-29"
+      },
+      "presentation": {
+        "alt": "Georgia Tech's Tech Tower beside a brick campus walk, lawn, flags, and nearby academic buildings.",
+        "caption": "Tech Tower · Georgia Tech",
+        "objectPosition": "50% 42%",
+        "cropNotes": "Downloaded the Commons 960px thumbnail unchanged. Bias the display crop upward slightly to retain the tower's roofline and clock."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-09-06"
+      }
+    },
+    {
+      "unitId": 166027,
+      "slug": "harvard-university",
+      "collegeName": "Harvard University",
+      "city": "Cambridge",
+      "state": "MA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q13371",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q13371",
+        "ipedsUnitId": "166027",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q13371#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/harvard.jpg",
+        "sha256": "b4a5a32e22501ce27127e4d3e258bc95a960f22b51a1cb13e622cd1461378998",
+        "width": 960,
+        "height": 618
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Widener_Library,_Harvard_University.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Widener_Library%2C_Harvard_University.jpg/960px-Widener_Library%2C_Harvard_University.jpg",
+        "creator": "Kenneth C. Zirkel",
+        "credit": "Kenneth C. Zirkel / Wikimedia Commons / CC BY 4.0",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+        "photoDate": "2012-09-01"
+      },
+      "presentation": {
+        "alt": "Widener Library's columned facade across a lawn and walkway in Harvard Yard.",
+        "caption": "Widener Library · Harvard",
+        "objectPosition": "50% 50%",
+        "cropNotes": "Downloaded the Commons 960px thumbnail unchanged. The wide facade anchors the frame; preserve the roofline and front lawn when cropping for display."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-09-06"
+      }
+    },
+    {
+      "unitId": 166683,
+      "slug": "massachusetts-institute-of-technology",
+      "collegeName": "Massachusetts Institute of Technology",
+      "city": "Cambridge",
+      "state": "MA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q49108",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q49108",
+        "ipedsUnitId": "166683",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q49108#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/mit.jpg",
+        "sha256": "4873d1a48f8618299f0aabb43ba49b8c0dca76a79ab63f4189c75f8dd0421ec0",
+        "width": 1280,
+        "height": 733
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Great_dome_of_MIT,_Feb_2021_(2)_(cropped).jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Great_dome_of_MIT%2C_Feb_2021_%282%29_%28cropped%29.jpg/1280px-Great_dome_of_MIT%2C_Feb_2021_%282%29_%28cropped%29.jpg",
+        "creator": "Peacearth",
+        "credit": "Peacearth / Wikimedia Commons / CC BY-SA 4.0",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "photoDate": "2021-02-08"
+      },
+      "presentation": {
+        "alt": "MIT's Great Dome beyond a snow-covered Killian Court framed by bare trees.",
+        "caption": "Killian Court · MIT",
+        "objectPosition": "50% 50%",
+        "cropNotes": "The Commons file is already a losslessly cropped version of the photographer's image. Downloaded its 1280px thumbnail unchanged; keep the dome and open court visible in the display crop."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-09-06"
+      }
+    },
+    {
+      "unitId": 170976,
+      "slug": "university-of-michigan-ann-arbor",
+      "collegeName": "University of Michigan-Ann Arbor",
+      "city": "Ann Arbor",
+      "state": "MI",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q230492",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q230492",
+        "ipedsUnitId": "170976",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q230492#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/michigan.jpg",
+        "sha256": "634728788c0525611b423ebf917905e5607acccd86762966f76728c15ea38582",
+        "width": 960,
+        "height": 720
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Law_Quadrangle,_University_of_Michigan,_University_Avenue_and_State_Street,_Ann_Arbor,_MI.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Law_Quadrangle%2C_University_of_Michigan%2C_University_Avenue_and_State_Street,_Ann_Arbor,_MI.jpg/960px-Law_Quadrangle%2C_University_of_Michigan%2C_University_Avenue_and_State_Street,_Ann_Arbor,_MI.jpg",
+        "creator": "w_lemay",
+        "credit": "w_lemay / Wikimedia Commons / CC BY-SA 2.0",
+        "license": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+        "photoDate": "2024-09-08"
+      },
+      "presentation": {
+        "alt": "The University of Michigan Law Quadrangle's stone facade and lawn beneath a bright blue sky.",
+        "caption": "Law Quadrangle · Michigan",
+        "objectPosition": "50% 28%",
+        "cropNotes": "Downloaded the Commons 960px thumbnail unchanged. Bias the crop upward to keep the full stone roofline above the quad lawn."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-09-06"
+      }
+    },
+    {
+      "unitId": 186131,
+      "slug": "princeton-university",
+      "collegeName": "Princeton University",
+      "city": "Princeton",
+      "state": "NJ",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q21578",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q21578",
+        "ipedsUnitId": "186131",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q21578#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/princeton-nassau.jpg",
+        "sha256": "f5622d94c72c3a39e6e3fa9304325ce375c644b3a09f982d4846dfb1e150ab5e",
+        "width": 1600,
+        "height": 1066
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Nassau_Hall_Princeton.JPG",
+        "downloadUrl": "https://upload.wikimedia.org/wikipedia/commons/0/04/Nassau_Hall_Princeton.JPG",
+        "creator": "Smallbones",
+        "credit": "Smallbones / Wikimedia Commons / CC0",
+        "license": "CC0 1.0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "photoDate": "2012-02-18"
+      },
+      "presentation": {
+        "alt": "Nassau Hall's ivy-covered facade and cupola across a tree-lined lawn at Princeton University.",
+        "caption": "Nassau Hall · Princeton",
+        "objectPosition": "50% 5%",
+        "cropNotes": "Commons explicitly identifies Nassau Hall as Princeton University's original and current administration building. Local web asset resized from the original to 1600×1066 and encoded as JPEG quality 82. Bias the profile crop toward the top to retain the cupola and recognizable upper facade; the full building remains visible at taller aspect ratios."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 228778,
+      "slug": "the-university-of-texas-at-austin",
+      "collegeName": "The University of Texas at Austin",
+      "city": "Austin",
+      "state": "TX",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q49213",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q49213",
+        "ipedsUnitId": "228778",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q49213#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/ut-austin.jpg",
+        "sha256": "28d8a0bed62a7104523476dc282cb55b3c81fa24d26ef6990abd7d12cc3fa610",
+        "width": 1280,
+        "height": 428
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Panorama_of_UT_campus_and_downtown_Austin.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/Panorama_of_UT_campus_and_downtown_Austin.jpg/1280px-Panorama_of_UT_campus_and_downtown_Austin.jpg",
+        "creator": "Spheroidite",
+        "credit": "Spheroidite / Wikimedia Commons / CC BY-SA 4.0",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "photoDate": "2015-04-19"
+      },
+      "presentation": {
+        "alt": "A panoramic southward view across UT Austin's campus and downtown Austin from the Tower observation deck.",
+        "caption": "Campus & downtown · UT Austin",
+        "objectPosition": "50% 50%",
+        "cropNotes": "Downloaded the Commons 1280px thumbnail unchanged. This very wide image looks south from the Tower; center on the campus-to-downtown sweep so the panorama remains legible at 16:9 and 3:2."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-09-06"
+      }
+    },
+    {
+      "unitId": 199120,
+      "slug": "university-of-north-carolina-at-chapel-hill",
+      "collegeName": "University of North Carolina at Chapel Hill",
+      "city": "Chapel Hill",
+      "state": "NC",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q192334",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q192334",
+        "ipedsUnitId": "199120",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q192334#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/unc-chapel-hill.jpg",
+        "sha256": "039e4687444e287e6a495b0cfaedaaa6710ad2c8efa5504ef93202dd23152c9f",
+        "width": 1280,
+        "height": 960
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:UNC_Chapel_Hill_-_Old_Well_with_flowers.jpg",
+        "downloadUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fd/UNC_Chapel_Hill_-_Old_Well_with_flowers.jpg",
+        "creator": "Jack a lanier",
+        "credit": "Jack a lanier / Wikimedia Commons / CC BY-SA 4.0",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "photoDate": "2018-05-11"
+      },
+      "presentation": {
+        "alt": "UNC-Chapel Hill's Old Well set among flower beds and leafy trees, with Old West behind it.",
+        "caption": "The Old Well · UNC",
+        "objectPosition": "50% 48%",
+        "cropNotes": "Downloaded the original 1280px Commons file unchanged. Keep the well's dome above the flowers and retain some of the building behind it in the display crop."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-09-06"
+      }
+    },
+    {
+      "unitId": 110510,
+      "slug": "california-state-university-san-bernardino",
+      "collegeName": "California State University-San Bernardino",
+      "city": "San Bernardino",
+      "state": "CA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q1026944",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q1026944",
+        "ipedsUnitId": "110510",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q1026944#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/cal-state-san-bernardino.jpg",
+        "sha256": "c02c767e11d59e2bda3004ea233e5b69adbb09e9c2a1b0f9b317816ee9211591",
+        "width": 1600,
+        "height": 849
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:University%20Ave%20Entrance%2C%20CSUSB.JPG",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9f/University_Ave_Entrance%2C_CSUSB.JPG/1920px-University_Ave_Entrance%2C_CSUSB.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Amerique",
+        "credit": "Amerique / Wikimedia Commons / CC BY-SA 3.0",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "photoDate": "2009-11-29"
+      },
+      "presentation": {
+        "alt": "University Avenue entrance to California State University, San Bernardino, with campus buildings and mountains behind it.",
+        "caption": "University Avenue entrance · Cal State San Bernardino",
+        "objectPosition": "50% 85%",
+        "cropNotes": "Keep the entrance sign fully visible in the wide profile crop. Local web asset resized from the Commons review image to 1600×849 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 110538,
+      "slug": "california-state-university-chico",
+      "collegeName": "California State University-Chico",
+      "city": "Chico",
+      "state": "CA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q1026912",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q1026912",
+        "ipedsUnitId": "110538",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q1026912#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/chico-state.jpg",
+        "sha256": "516cbce7357eefb96c82c4e52306592c44523d989d25186279f5db3398883d04",
+        "width": 1600,
+        "height": 1067
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:California%20State%20University%2C%20Chico%20-%20panoramio%20(6).jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e3/California_State_University%2C_Chico_-_panoramio_%286%29.jpg/1920px-California_State_University%2C_Chico_-_panoramio_%286%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "MARELBU",
+        "credit": "MARELBU / Wikimedia Commons / CC BY 3.0",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "photoDate": "2015-06-10"
+      },
+      "presentation": {
+        "alt": "Brick campus building framed by trees at California State University, Chico.",
+        "caption": "Campus · Chico State",
+        "objectPosition": "50% 50%",
+        "cropNotes": "The centered crop preserves the building and surrounding trees. Local web asset resized from the Commons review image to 1600×1067 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 110556,
+      "slug": "california-state-university-fresno",
+      "collegeName": "California State University-Fresno",
+      "city": "Fresno",
+      "state": "CA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q1026919",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q1026919",
+        "ipedsUnitId": "110556",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q1026919#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/fresno-state.jpg",
+        "sha256": "f077d33ccad576467744b654bb9a29d12222694d30c1689de7a89416b00e3016",
+        "width": 1600,
+        "height": 1033
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:2009-0725-CA-CSUF-ThomasAdministration.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/25/2009-0725-CA-CSUF-ThomasAdministration.jpg/1920px-2009-0725-CA-CSUF-ThomasAdministration.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Bobak Ha'Eri",
+        "credit": "Bobak Ha'Eri / Wikimedia Commons / CC BY 3.0",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "photoDate": "2009-07-25"
+      },
+      "presentation": {
+        "alt": "Frank W. Thomas Administration Building and lawn at Fresno State.",
+        "caption": "Thomas Administration Building · Fresno State",
+        "objectPosition": "50% 55%",
+        "cropNotes": "The centered crop preserves the facade and lawn. Local web asset resized from the Commons review image to 1600×1033 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 110574,
+      "slug": "california-state-university-east-bay",
+      "collegeName": "California State University-East Bay",
+      "city": "Hayward",
+      "state": "CA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q1026916",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q1026916",
+        "ipedsUnitId": "110574",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q1026916#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/cal-state-east-bay.jpg",
+        "sha256": "085aa3fe543db4d9ff0ec805fe200d30cf86caebe41d7f842ddc49d8f509fa98",
+        "width": 1600,
+        "height": 1043
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Csueb%20view.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/Csueb_view.jpg/1920px-Csueb_view.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Jennifer Williams",
+        "credit": "Jennifer Williams / Wikimedia Commons / CC BY-SA 2.0",
+        "license": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "photoDate": "2007-04-17"
+      },
+      "presentation": {
+        "alt": "California State University, East Bay campus overlooking Hayward.",
+        "caption": "Campus · Cal State East Bay",
+        "objectPosition": "50% 55%",
+        "cropNotes": "Keep the campus buildings along the lower edge of the wide crop. Local web asset resized from the Commons review image to 1600×1043 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 110705,
+      "slug": "university-of-california-santa-barbara",
+      "collegeName": "University of California-Santa Barbara",
+      "city": "Santa Barbara",
+      "state": "CA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q263064",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q263064",
+        "ipedsUnitId": "110705",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q263064#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/uc-santa-barbara.jpg",
+        "sha256": "b2d78ffe34ccc64466865c7755d910f5c85de85c35423ab80d8a279cca271dfc",
+        "width": 1600,
+        "height": 1032
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:UCSB%20University%20Center%20and%20Storke%20Tower.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/UCSB_University_Center_and_Storke_Tower.jpg/1920px-UCSB_University_Center_and_Storke_Tower.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Coolcaesar",
+        "credit": "Coolcaesar / Wikimedia Commons / CC BY-SA 4.0",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "photoDate": "2019-09-08"
+      },
+      "presentation": {
+        "alt": "Storke Tower and the University Center seen across the UCSB Lagoon.",
+        "caption": "Storke Tower and University Center · UC Santa Barbara",
+        "objectPosition": "50% 52%",
+        "cropNotes": "The centered crop preserves the tower, University Center, and lagoon. Local web asset resized from the Commons review image to 1600×1032 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 111948,
+      "slug": "chapman-university",
+      "collegeName": "Chapman University",
+      "city": "Orange",
+      "state": "CA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q1805085",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q1805085",
+        "ipedsUnitId": "111948",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q1805085#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/chapman.jpg",
+        "sha256": "fca2bef98cedb33b929b0103f98e64350c12ee66a51d26e98691bfcbd8208ea9",
+        "width": 1600,
+        "height": 1067
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:2008-0614-LA-OC-005-Chapman.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/2008-0614-LA-OC-005-Chapman.jpg/1920px-2008-0614-LA-OC-005-Chapman.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Bobak Ha'Eri",
+        "credit": "Bobak Ha'Eri / Wikimedia Commons / CC BY 3.0",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "photoDate": "2008-06-14"
+      },
+      "presentation": {
+        "alt": "Williams Mall with Memorial Hall and Smith Hall at Chapman University.",
+        "caption": "Williams Mall · Chapman University",
+        "objectPosition": "50% 50%",
+        "cropNotes": "The wide crop trims the outer building edges while retaining the mall and both halls. Local web asset resized from the Commons review image to 1600×1067 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 115755,
+      "slug": "california-state-polytechnic-university-humboldt",
+      "collegeName": "California State Polytechnic University-Humboldt",
+      "city": "Arcata",
+      "state": "CA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q624560",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q624560",
+        "ipedsUnitId": "115755",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q624560#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/cal-poly-humboldt.jpg",
+        "sha256": "5a83b504973e7afa498a32fac84e38b81afba1f1ce84055556b2cba24457590c",
+        "width": 1600,
+        "height": 1068
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Humboldt%20State%20University%20Founders%20Hall.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cd/Humboldt_State_University_Founders_Hall.jpg/1920px-Humboldt_State_University_Founders_Hall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Jaradpetroske",
+        "credit": "Jaradpetroske / Wikimedia Commons / CC BY-SA 4.0",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "photoDate": "2016-12-01"
+      },
+      "presentation": {
+        "alt": "Founders Hall at Cal Poly Humboldt in warm sunset light.",
+        "caption": "Founders Hall · Cal Poly Humboldt",
+        "objectPosition": "50% 80%",
+        "cropNotes": "Bias the crop downward to retain the hall and reduce empty sky. Local web asset resized from the Commons review image to 1600×1068 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 121345,
+      "slug": "pomona-college",
+      "collegeName": "Pomona College",
+      "city": "Claremont",
+      "state": "CA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q7227384",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q7227384",
+        "ipedsUnitId": "121345",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q7227384#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/pomona-college.jpg",
+        "sha256": "85c8692f713b7bf8bd4771a938d3d330a4ef254aed121e554d1a258725a01c0c",
+        "width": 1200,
+        "height": 798
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Crookshank%20Hall.jpg",
+        "downloadUrl": "https://upload.wikimedia.org/wikipedia/commons/3/35/Crookshank_Hall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+        "creator": "Officialpomonacollege",
+        "credit": "Officialpomonacollege / Wikimedia Commons / CC BY-SA 3.0",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "photoDate": "2014-02-06"
+      },
+      "presentation": {
+        "alt": "Pomona College academic quad with the San Gabriel Mountains in the distance.",
+        "caption": "Academic quad · Pomona College",
+        "objectPosition": "50% 45%",
+        "cropNotes": "The centered crop preserves the quad and mountain backdrop. Local web asset resized from the Commons review image to 1200×798 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 122409,
+      "slug": "san-diego-state-university",
+      "collegeName": "San Diego State University",
+      "city": "San Diego",
+      "state": "CA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q913861",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q913861",
+        "ipedsUnitId": "122409",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q913861#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/san-diego-state.jpg",
+        "sha256": "0845bd0080749adeaf93f35de6d17f059674551b894d4c149b48b1df49ad06c1",
+        "width": 1600,
+        "height": 1184
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sdsumain.jpg",
+        "downloadUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Sdsumain.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+        "creator": "Wikipedia User:Geographer",
+        "credit": "Wikipedia User:Geographer / Wikimedia Commons / CC BY 1.0",
+        "license": "CC BY 1.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/1.0",
+        "photoDate": "2004-04-18"
+      },
+      "presentation": {
+        "alt": "Mission Revival campus building and bell tower at San Diego State University.",
+        "caption": "Historic campus architecture · San Diego State",
+        "objectPosition": "50% 45%",
+        "cropNotes": "The centered crop retains the building and bell tower. Local web asset resized from the Commons review image to 1600×1184 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 122436,
+      "slug": "university-of-san-diego",
+      "collegeName": "University of San Diego",
+      "city": "San Diego",
+      "state": "CA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q262663",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q262663",
+        "ipedsUnitId": "122436",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q262663#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/university-of-san-diego.jpg",
+        "sha256": "57a64d2599acea3159a35c72792e41985add4e7ab4ac71691dc5355dc7568e03",
+        "width": 1600,
+        "height": 1107
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:University%20of%20San%20Diego%20(cropped).jpg",
+        "downloadUrl": "https://upload.wikimedia.org/wikipedia/commons/6/60/University_of_San_Diego_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+        "creator": "Transfeo",
+        "credit": "Transfeo / Wikimedia Commons / CC BY-SA 4.0",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "photoDate": "2019-05-24"
+      },
+      "presentation": {
+        "alt": "White Spanish Renaissance campus buildings and palms at the University of San Diego.",
+        "caption": "Campus · University of San Diego",
+        "objectPosition": "50% 55%",
+        "cropNotes": "The centered crop retains the buildings and palms. Local web asset resized from the Commons review image to 1600×1107 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 129020,
+      "slug": "university-of-connecticut",
+      "collegeName": "University of Connecticut",
+      "city": "Storrs",
+      "state": "CT",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q49206",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q49206",
+        "ipedsUnitId": "129020",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q49206#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/uconn.jpg",
+        "sha256": "65c658c73b719ccde3804b34de22fa3d3901fde77dc44cca15bc6f835f4c88b9",
+        "width": 1600,
+        "height": 1067
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Campus%20view%20-%20University%20of%20Connecticut%20-%20DSC09948.JPG",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Campus_view_-_University_of_Connecticut_-_DSC09948.JPG/1920px-Campus_view_-_University_of_Connecticut_-_DSC09948.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Daderot",
+        "credit": "Daderot / Wikimedia Commons / CC0 1.0",
+        "license": "CC0 1.0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "photoDate": "2013-06-28"
+      },
+      "presentation": {
+        "alt": "Walkways, lawns, and academic buildings on the University of Connecticut campus.",
+        "caption": "Storrs campus · UConn",
+        "objectPosition": "50% 45%",
+        "cropNotes": "The centered crop retains the main walk and academic buildings. Local web asset resized from the Commons review image to 1600×1067 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 131520,
+      "slug": "howard-university",
+      "collegeName": "Howard University",
+      "city": "Washington",
+      "state": "DC",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q1068752",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q1068752",
+        "ipedsUnitId": "131520",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q1068752#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/howard.jpg",
+        "sha256": "10fbb6c8812146c9bda41245dcf24297a7a652dcde3d3d68024fa4d9ae51903a",
+        "width": 1600,
+        "height": 1197
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Howard%20University%20Washington%20DC%20-%20Founders%20Library.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Howard_University_Washington_DC_-_Founders_Library.jpg/1920px-Howard_University_Washington_DC_-_Founders_Library.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Derek E. Morton",
+        "credit": "Derek E. Morton / Wikimedia Commons / CC BY-SA 4.0",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "photoDate": "2017-08-16"
+      },
+      "presentation": {
+        "alt": "Founders Library clock tower and brick facade at Howard University.",
+        "caption": "Founders Library · Howard University",
+        "objectPosition": "50% 65%",
+        "cropNotes": "The wide crop shows the clock and main facade while trimming the tower top. Local web asset resized from the Commons review image to 1600×1197 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 145637,
+      "slug": "university-of-illinois-urbana-champaign",
+      "collegeName": "University of Illinois Urbana-Champaign",
+      "city": "Champaign",
+      "state": "IL",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q457281",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q457281",
+        "ipedsUnitId": "145637",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q457281#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/uiuc-main-quad.jpg",
+        "sha256": "3b4cd2427d3e8b4a4114520f17fbb6b945fafcd05757bd839c32ca5fa9d3c180",
+        "width": 1600,
+        "height": 565
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:UIUC%20Illini%20Union%20and%20Main%20Quad.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6a/UIUC_Illini_Union_and_Main_Quad.jpg/1920px-UIUC_Illini_Union_and_Main_Quad.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Daniel Schwen",
+        "credit": "Daniel Schwen / Wikimedia Commons / CC BY-SA 4.0",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "photoDate": "2007-11-17"
+      },
+      "presentation": {
+        "alt": "Illini Union and the Main Quad at the University of Illinois Urbana-Champaign.",
+        "caption": "Illini Union and Main Quad · Illinois",
+        "objectPosition": "50% 50%",
+        "cropNotes": "The source panorama fits the wide profile crop without losing the principal campus subjects. Local web asset resized from the Commons review image to 1600×565 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 174066,
+      "slug": "university-of-minnesota-twin-cities",
+      "collegeName": "University of Minnesota-Twin Cities",
+      "city": "Minneapolis",
+      "state": "MN",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q238101",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q238101",
+        "ipedsUnitId": "174066",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q238101#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/minnesota-twin-cities.jpg",
+        "sha256": "f281a739c0fd8c94c35107ac2aa47eabcd11431797213845d63dc96577f4eb86",
+        "width": 1600,
+        "height": 1067
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:UMN-NorthrupMall.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4f/UMN-NorthrupMall.jpg/1920px-UMN-NorthrupMall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Ben Franske",
+        "credit": "Ben Franske / Wikimedia Commons / CC BY-SA 4.0",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "photoDate": "2005-10-20"
+      },
+      "presentation": {
+        "alt": "Aerial view of Northrop Mall and surrounding buildings at the University of Minnesota Twin Cities.",
+        "caption": "Northrop Mall · University of Minnesota Twin Cities",
+        "objectPosition": "50% 55%",
+        "cropNotes": "The centered crop preserves Northrop Mall and surrounding campus buildings. Local web asset resized from the Commons review image to 1600×1067 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 206084,
+      "slug": "university-of-toledo",
+      "collegeName": "University of Toledo",
+      "city": "Toledo",
+      "state": "OH",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q2302319",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q2302319",
+        "ipedsUnitId": "206084",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q2302319#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/toledo.jpg",
+        "sha256": "86657539d1fdcd76e50f556e7591bf6f991fe8c306653fbfd48e9fa70b76db19",
+        "width": 1600,
+        "height": 1200
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:University%20of%20Toledo%20University%20Hall%2C%20July%202022.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/University_of_Toledo_University_Hall%2C_July_2022.jpg/1920px-University_of_Toledo_University_Hall%2C_July_2022.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "MrJacon000",
+        "credit": "MrJacon000 / Wikimedia Commons / CC BY-SA 4.0",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "photoDate": "2022-07-05"
+      },
+      "presentation": {
+        "alt": "University Hall and its clock tower at the University of Toledo.",
+        "caption": "University Hall · University of Toledo",
+        "objectPosition": "50% 45%",
+        "cropNotes": "The centered crop retains the building and clock tower. Local web asset resized from the Commons review image to 1600×1200 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 230764,
+      "slug": "university-of-utah",
+      "collegeName": "University of Utah",
+      "city": "Salt Lake City",
+      "state": "UT",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q168515",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q168515",
+        "ipedsUnitId": "230764",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q168515#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/utah.jpg",
+        "sha256": "c943bd1e7bb59c889871983e8c9c6252ff0c1eb2acfe1e3b7c2aafd67b8f0887",
+        "width": 1600,
+        "height": 900
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:The%20Park%20Building%20at%20the%20University%20of%20Utah.jpg",
+        "downloadUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cb/The_Park_Building_at_the_University_of_Utah.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+        "creator": "University of Utah",
+        "credit": "University of Utah / Wikimedia Commons / CC BY 3.0",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "photoDate": "2009-12-13"
+      },
+      "presentation": {
+        "alt": "The Park Building and lawn at the University of Utah.",
+        "caption": "Park Building · University of Utah",
+        "objectPosition": "50% 50%",
+        "cropNotes": "The centered crop preserves the building and lawn. Local web asset resized from the Commons review image to 1600×900 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 235316,
+      "slug": "gonzaga-university",
+      "collegeName": "Gonzaga University",
+      "city": "Spokane",
+      "state": "WA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q1537303",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q1537303",
+        "ipedsUnitId": "235316",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q1537303#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/gonzaga.jpg",
+        "sha256": "969d47f33f7a7abc2c0c694fa286bdcf96076f520a0074dce449e73b372fef76",
+        "width": 1600,
+        "height": 279
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gonzaga%20University%20360.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b4/Gonzaga_University_360.jpg/1920px-Gonzaga_University_360.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Farwestern Photo by Gregg M. Erickson",
+        "credit": "Farwestern Photo by Gregg M. Erickson / Wikimedia Commons / Public domain",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+        "photoDate": "2009-08-01"
+      },
+      "presentation": {
+        "alt": "Church, walkways, trees, and campus buildings in a panoramic view of Gonzaga University.",
+        "caption": "Campus panorama · Gonzaga University",
+        "objectPosition": "22% 50%",
+        "cropNotes": "Use the left portion of the 360-degree panorama, where the church and campus paths are most recognizable. Local web asset resized from the Commons review image to 1600×279 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 243780,
+      "slug": "purdue-university-main-campus",
+      "collegeName": "Purdue University-Main Campus",
+      "city": "West Lafayette",
+      "state": "IN",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q217741",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q217741",
+        "ipedsUnitId": "243780",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q217741#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/purdue.jpg",
+        "sha256": "a6d27575a75b774acdb72b7792e61dc697aa5f35bcdb54ae8d5f187466c8f65b",
+        "width": 1600,
+        "height": 1200
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:2816%20px%20-%20University%20Hall%20Purdue%20University%20Fall%202006.JPG",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cc/2816_px_-_University_Hall_Purdue_University_Fall_2006.JPG/1920px-2816_px_-_University_Hall_Purdue_University_Fall_2006.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Abhijitsathe",
+        "credit": "Abhijitsathe / Wikimedia Commons / CC BY 3.0",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "photoDate": "2009-06-20"
+      },
+      "presentation": {
+        "alt": "University Hall, a brick academic building with a central steeple, at Purdue University.",
+        "caption": "University Hall · Purdue University",
+        "objectPosition": "50% 20%",
+        "cropNotes": "Bias the crop upward; the widest crop may trim the steeple tip but keeps the building identifiable. Local web asset resized from the Commons review image to 1600×1200 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 126614,
+      "slug": "university-of-colorado-boulder",
+      "collegeName": "University of Colorado Boulder",
+      "city": "Boulder",
+      "state": "CO",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q736674",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q736674",
+        "ipedsUnitId": "126614",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q736674#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/colorado-boulder.jpg",
+        "sha256": "d4c9753d9930bc01e6d2b2664e60219e6ab85e687740464e4111d411cbdebe2c",
+        "width": 1500,
+        "height": 1125
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Old%20Main%20-%20Colorado.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/Old_Main_-_Colorado.jpg/1920px-Old_Main_-_Colorado.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "MECU ( MECU ≈ talk )",
+        "credit": "MECU ( MECU ≈ talk ) / Wikimedia Commons / CC BY-SA 3.0",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+        "photoDate": "2007-04-14"
+      },
+      "presentation": {
+        "alt": "Old Main, a red-brick campus building framed by leafless trees at the University of Colorado Boulder.",
+        "caption": "Old Main · University of Colorado Boulder",
+        "objectPosition": "50% 20%",
+        "cropNotes": "The wide crop retains the central tower and upper facade; trees partly obscure the building. Local web asset resized from the Commons review image to 1500×1125 and encoded as JPEG quality 70; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 139658,
+      "slug": "emory-university",
+      "collegeName": "Emory University",
+      "city": "Atlanta",
+      "state": "GA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q621043",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q621043",
+        "ipedsUnitId": "139658",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q621043#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/emory.jpg",
+        "sha256": "ebb3b1851dd7fda025989843efcd26e44631dc6c3dd4e38c057c6cd80161e6aa",
+        "width": 1600,
+        "height": 1200
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Emory%20University%20-%20Administration%20Building.JPG",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4f/Emory_University_-_Administration_Building.JPG/1920px-Emory_University_-_Administration_Building.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Daniel Mayer",
+        "credit": "Daniel Mayer / Wikimedia Commons / CC BY-SA 3.0",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "photoDate": "2011-04-24"
+      },
+      "presentation": {
+        "alt": "Emory University Administration Building, a white stone building shaded by mature trees.",
+        "caption": "Administration Building · Emory University",
+        "objectPosition": "50% 55%",
+        "cropNotes": "The wide crop keeps the entrance and upper facade. Local web asset resized from the Commons review image to 1600×1200 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 139940,
+      "slug": "georgia-state-university",
+      "collegeName": "Georgia State University",
+      "city": "Atlanta",
+      "state": "GA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q1509333",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q1509333",
+        "ipedsUnitId": "139940",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q1509333#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/georgia-state.jpg",
+        "sha256": "e4830d93ac520e16ee9d81f8d8e1c7b02f9eb5cc928cbf8c40292495afdee95d",
+        "width": 1600,
+        "height": 1067
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Georgia%20State%20University%20College%20of%20Law%20Building.jpeg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/76/Georgia_State_University_College_of_Law_Building.jpeg/1920px-Georgia_State_University_College_of_Law_Building.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Jayingram11",
+        "credit": "Jayingram11 / Wikimedia Commons / CC BY-SA 4.0",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "photoDate": "2015-11-04"
+      },
+      "presentation": {
+        "alt": "Glass-fronted College of Law building on Georgia State University's downtown Atlanta campus.",
+        "caption": "College of Law · Georgia State University",
+        "objectPosition": "50% 50%",
+        "cropNotes": "The centered crop retains the glass facade and downtown campus context. Local web asset resized from the Commons review image to 1600×1067 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 147767,
+      "slug": "northwestern-university",
+      "collegeName": "Northwestern University",
+      "city": "Evanston",
+      "state": "IL",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q309350",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q309350",
+        "ipedsUnitId": "147767",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q309350#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/northwestern.jpg",
+        "sha256": "ae76b228c155f0962be5b32681f2e598546ae1dc53d3dfd6d6b5c2f4a8cdeab2",
+        "width": 992,
+        "height": 623
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Northwestern%20Arch.jpg",
+        "downloadUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a8/Northwestern_Arch.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+        "creator": "Rdsmith4",
+        "credit": "Rdsmith4 / Wikimedia Commons / CC BY-SA 2.5",
+        "license": "CC BY-SA 2.5",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+        "photoDate": "2004-10-12"
+      },
+      "presentation": {
+        "alt": "The Northwestern University entrance arch surrounded by autumn trees.",
+        "caption": "The Arch · Northwestern University",
+        "objectPosition": "50% 40%",
+        "cropNotes": "The source is 992 pixels wide and is mildly upscaled in the widest banner; the crop itself is stable. Local web asset resized from the Commons review image to 992×623 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 152080,
+      "slug": "university-of-notre-dame",
+      "collegeName": "University of Notre Dame",
+      "city": "Notre Dame",
+      "state": "IN",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q178848",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q178848",
+        "ipedsUnitId": "152080",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q178848#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/notre-dame.jpg",
+        "sha256": "16eb5b2c4487fdaed65318c3c22c4943e35ce4bb69ec455d479dae20bc51a125",
+        "width": 1600,
+        "height": 513
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:The%20University%20of%20Notre%20Dame%20%22God%20Quad%22.JPG",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/The_University_of_Notre_Dame_%22God_Quad%22.JPG/1920px-The_University_of_Notre_Dame_%22God_Quad%22.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Michael Fernandes",
+        "credit": "Michael Fernandes / Wikimedia Commons / CC BY-SA 3.0",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "photoDate": "2012-05-01"
+      },
+      "presentation": {
+        "alt": "Basilica of the Sacred Heart, Main Building, and Washington Hall around Notre Dame's God Quad.",
+        "caption": "God Quad · University of Notre Dame",
+        "objectPosition": "50% 50%",
+        "cropNotes": "The source panorama fits the wide profile crop without losing the principal campus subjects. Local web asset resized from the Commons review image to 1600×513 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 162928,
+      "slug": "johns-hopkins-university",
+      "collegeName": "Johns Hopkins University",
+      "city": "Baltimore",
+      "state": "MD",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q193727",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q193727",
+        "ipedsUnitId": "162928",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q193727#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/johns-hopkins.jpg",
+        "sha256": "456091661192797503f759d40c905bd1cd92daf9bd9ac82913539d89533047a0",
+        "width": 1600,
+        "height": 1200
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Johns%20Hopkins'%20Historic%20Dome%20-%20panoramio.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/Johns_Hopkins%27_Historic_Dome_-_panoramio.jpg/1920px-Johns_Hopkins%27_Historic_Dome_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Art Anderson",
+        "credit": "Art Anderson / Wikimedia Commons / CC BY-SA 3.0",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "photoDate": "2011-07-20"
+      },
+      "presentation": {
+        "alt": "Historic red-brick Johns Hopkins building with a central dome and cupola.",
+        "caption": "Historic Dome · Johns Hopkins University",
+        "objectPosition": "50% 30%",
+        "cropNotes": "The wide crop emphasizes the dome and upper facade; mobile retains most of the building. Local web asset resized from the Commons review image to 1600×1200 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 168148,
+      "slug": "tufts-university",
+      "collegeName": "Tufts University",
+      "city": "Medford",
+      "state": "MA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q49120",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q49120",
+        "ipedsUnitId": "168148",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q49120#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/tufts.jpg",
+        "sha256": "0538fb3454c3f7436ded5b46dca570f5315de10a4eb54152fab68ee04921f78b",
+        "width": 1600,
+        "height": 1200
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tufts%20Bendetson%20hall.JPG",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/Tufts_Bendetson_hall.JPG/1920px-Tufts_Bendetson_hall.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "HereToHelp",
+        "credit": "HereToHelp / Wikimedia Commons / CC BY-SA 3.0",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "photoDate": "2011-04-17"
+      },
+      "presentation": {
+        "alt": "Bendetson Hall, the undergraduate admissions building at Tufts University.",
+        "caption": "Bendetson Hall · Tufts University",
+        "objectPosition": "50% 45%",
+        "cropNotes": "The centered crop retains the building and approach. Local web asset resized from the Commons review image to 1600×1200 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 182670,
+      "slug": "dartmouth-college",
+      "collegeName": "Dartmouth College",
+      "city": "Hanover",
+      "state": "NH",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q49116",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q49116",
+        "ipedsUnitId": "182670",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q49116#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/dartmouth.jpg",
+        "sha256": "5936252733deab86541ec94c19472afda34698866bbc96c4997d25f1f9b08930",
+        "width": 1600,
+        "height": 1200
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dartmouth%20College%20campus%202007-06-23%20Dartmouth%20Hall%2002.JPG",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/Dartmouth_College_campus_2007-06-23_Dartmouth_Hall_02.JPG/1920px-Dartmouth_College_campus_2007-06-23_Dartmouth_Hall_02.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Kane5187",
+        "credit": "Kane5187 / Wikimedia Commons / Public domain",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+        "photoDate": "2007-06-23"
+      },
+      "presentation": {
+        "alt": "White facade and cupola of Dartmouth Hall on the Dartmouth College campus.",
+        "caption": "Dartmouth Hall · Dartmouth College",
+        "objectPosition": "50% 18%",
+        "cropNotes": "The source already trims the cupola tip; the wide crop keeps the recognizable upper facade. Local web asset resized from the Commons review image to 1600×1200 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 190415,
+      "slug": "cornell-university",
+      "collegeName": "Cornell University",
+      "city": "Ithaca",
+      "state": "NY",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q49115",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q49115",
+        "ipedsUnitId": "190415",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q49115#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/cornell.jpg",
+        "sha256": "ddf4dd74ea91d6791084467a07eed49d1561ad7255edb1bf906edf4ad997d3af",
+        "width": 1500,
+        "height": 1123
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cornell%20University%2C%20Ho%20Plaza%20and%20Sage%20Hall.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/34/Cornell_University%2C_Ho_Plaza_and_Sage_Hall.jpg/1920px-Cornell_University%2C_Ho_Plaza_and_Sage_Hall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "sach1tb",
+        "credit": "sach1tb / Wikimedia Commons / CC BY-SA 2.0",
+        "license": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "photoDate": "2006-06-24"
+      },
+      "presentation": {
+        "alt": "Aerial view of Ho Plaza, Sage Hall, and surrounding buildings at Cornell University.",
+        "caption": "Ho Plaza and Sage Hall · Cornell University",
+        "objectPosition": "50% 50%",
+        "cropNotes": "The centered crop preserves the plaza and surrounding campus buildings. Local web asset resized from the Commons review image to 1500×1123 and encoded as JPEG quality 70; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 196413,
+      "slug": "syracuse-university",
+      "collegeName": "Syracuse University",
+      "city": "Syracuse",
+      "state": "NY",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q617433",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q617433",
+        "ipedsUnitId": "196413",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q617433#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/syracuse.jpg",
+        "sha256": "9f350a344aad7ecb34e86cce7aac53b74d2b7eddbb206747461cd60f4e3eae32",
+        "width": 1600,
+        "height": 1071
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Syracuse%20University%20Aerial%20view.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Syracuse_University_Aerial_view.jpg/1920px-Syracuse_University_Aerial_view.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "John Marino",
+        "credit": "John Marino / Wikimedia Commons / CC BY 2.0",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "photoDate": "2011-11-03"
+      },
+      "presentation": {
+        "alt": "Aerial view of Syracuse University's main campus and the Carrier Dome in autumn.",
+        "caption": "Main campus · Syracuse University",
+        "objectPosition": "50% 45%",
+        "cropNotes": "The wide crop keeps the central campus and part of the dome; mobile shows the broader campus. Local web asset resized from the Commons review image to 1600×1071 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 201645,
+      "slug": "case-western-reserve-university",
+      "collegeName": "Case Western Reserve University",
+      "city": "Cleveland",
+      "state": "OH",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q1047060",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q1047060",
+        "ipedsUnitId": "201645",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q1047060#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/case-western.jpg",
+        "sha256": "414273ef413bbfffbab12e909dcbd38bda794d3cdbdf654cff0df505b899e7d2",
+        "width": 1600,
+        "height": 1065
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Case%20western%20reserve%20campus%202005.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/38/Case_western_reserve_campus_2005.jpg/1920px-Case_western_reserve_campus_2005.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Rdikeman at English Wikipedia",
+        "credit": "Rdikeman at English Wikipedia / Wikimedia Commons / CC BY-SA 3.0",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+        "photoDate": "2005-07"
+      },
+      "presentation": {
+        "alt": "Red-brick academic building and landscaped lawn at Case Western Reserve University.",
+        "caption": "Campus · Case Western Reserve University",
+        "objectPosition": "50% 40%",
+        "cropNotes": "The centered crop retains the building and landscaped lawn. Local web asset resized from the Commons review image to 1600×1065 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 215062,
+      "slug": "university-of-pennsylvania",
+      "collegeName": "University of Pennsylvania",
+      "city": "Philadelphia",
+      "state": "PA",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q49117",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q49117",
+        "ipedsUnitId": "215062",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q49117#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/penn.jpg",
+        "sha256": "dde657f39057e8724394cc8201b2b481d43435444573902610801fe5036e12f1",
+        "width": 1600,
+        "height": 1063
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:College%20Hall%2C%20University%20of%20Pennsylvania.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/College_Hall%2C_University_of_Pennsylvania.jpg/1920px-College_Hall%2C_University_of_Pennsylvania.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Michel Alexandre Salim",
+        "credit": "Michel Alexandre Salim / Wikimedia Commons / CC BY-SA 2.0",
+        "license": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "photoDate": "2011-12-29"
+      },
+      "presentation": {
+        "alt": "Gothic stone facade of College Hall at the University of Pennsylvania.",
+        "caption": "College Hall · University of Pennsylvania",
+        "objectPosition": "50% 55%",
+        "cropNotes": "The wide crop shows the main facade and windows while trimming the roofline. Local web asset resized from the Commons review image to 1600×1063 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 221999,
+      "slug": "vanderbilt-university",
+      "collegeName": "Vanderbilt University",
+      "city": "Nashville",
+      "state": "TN",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q29052",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q29052",
+        "ipedsUnitId": "221999",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q29052#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/vanderbilt.jpg",
+        "sha256": "c89904df4ad2525193e5330c0d43fe86e0c9904107d94e42c6c60d0357892b2d",
+        "width": 1600,
+        "height": 1200
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vanderbilt%20university%20campus%202017.jpg",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/Vanderbilt_university_campus_2017.jpg/1920px-Vanderbilt_university_campus_2017.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Stablenode",
+        "credit": "Stablenode / Wikimedia Commons / CC BY-SA 4.0",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "photoDate": "2017-02-24"
+      },
+      "presentation": {
+        "alt": "Students on a broad lawn beside a red-brick building at Vanderbilt University.",
+        "caption": "Campus · Vanderbilt University",
+        "objectPosition": "50% 60%",
+        "cropNotes": "Bias the crop downward to reduce excess sky and keep the quad; the source is somewhat soft but remains identifiable. Local web asset resized from the Commons review image to 1600×1200 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    },
+    {
+      "unitId": 227757,
+      "slug": "rice-university",
+      "collegeName": "Rice University",
+      "city": "Houston",
+      "state": "TX",
+      "status": "visual-source-reviewed",
+      "usableInProfile": true,
+      "profileExclusionReason": null,
+      "identity": {
+        "method": "wikidata-p1771-exact-unitid",
+        "wikidataEntityId": "Q842909",
+        "wikidataEntityUrl": "http://www.wikidata.org/entity/Q842909",
+        "ipedsUnitId": "227757",
+        "evidenceUrl": "https://www.wikidata.org/wiki/Q842909#P1771"
+      },
+      "asset": {
+        "path": "/images/campuses/rice.jpg",
+        "sha256": "def1a7207322637578abc298ae7c05e37564e3de0db61b772e706569254db896",
+        "width": 1600,
+        "height": 1200
+      },
+      "source": {
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rice%20University%20-%20Sally%20Port.JPG",
+        "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Rice_University_-_Sally_Port.JPG/1920px-Rice_University_-_Sally_Port.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "creator": "Daderot",
+        "credit": "Daderot / Wikimedia Commons / Public domain",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/Template:PD-self",
+        "photoDate": "2008-03-11"
+      },
+      "presentation": {
+        "alt": "Ornate brick-and-stone Sally Port arch at Rice University.",
+        "caption": "Sally Port · Rice University",
+        "objectPosition": "50% 65%",
+        "cropNotes": "The wide crop centers the arch and lower facade; mobile retains the upper building. Local web asset resized from the Commons review image to 1600×1200 and encoded as JPEG quality 82; source page and download URL preserve provenance."
+      },
+      "review": {
+        "method": "pixel-and-primary-source-metadata-review",
+        "reviewedOn": "2026-10-07"
+      }
+    }
+  ]
+}

@@ -1,0 +1,250 @@
+104151 arizona-state-university-campus-immersion
+  admissions verified https://admission.asu.edu/apply/first-year/admission
+  deadlines verified https://admission.asu.edu/apply/first-year/admission
+  programs verified https://degrees.asu.edu/bachelors | Choose an on-campus program; the degree search also includes ASU Online.
+  netPriceCalculator verified https://app.meadowfi.com/asu
+110404 california-institute-of-technology
+  admissions verified https://www.admissions.caltech.edu/apply/first-year-applicants/application-requirements
+  deadlines verified https://www.admissions.caltech.edu/apply/first-year-applicants/deadlines
+  programs verified https://www.admissions.caltech.edu/why-caltech/academics/majors-minors
+  netPriceCalculator verified https://npc.collegeboard.org/app/cit
+110422 california-polytechnic-state-university-san-luis-obispo
+  admissions verified https://www.calpoly.edu/admissions/first-year-student/how-to-apply
+  deadlines verified https://www.calpoly.edu/admissions/first-year-student/dates-and-deadlines
+  programs verified https://catalog.calpoly.edu/programs/
+  netPriceCalculator verified https://www.calpoly.edu/financial-aid/costs-and-affordability/undergraduate-costs-of-attendance/undergraduate-net-price-calculator | The official page says 2026–27 updates are pending and calculator outputs currently use 2025–26 costs.
+110529 california-state-polytechnic-university-pomona
+  admissions verified https://www.cpp.edu/admissions/freshmen/
+  deadlines verified https://www.cpp.edu/admissions/freshmen/
+  programs verified https://www.cpp.edu/programs/index.shtml
+  netPriceCalculator verified https://www.cpp.edu/financial-aid/resources/net-price-calculator.shtml
+110556 california-state-university-fresno
+  admissions verified https://studentaffairs.fresnostate.edu/are/futurestudent/freshmen/requirements.html
+  deadlines verified https://studentaffairs.fresnostate.edu/are/futurestudent/freshmen/index.html
+  programs verified https://catalog.fresnostate.edu/ | Current university catalog landing page verified. The direct degrees-and-programs index returned HTTP 202 during this check.
+  netPriceCalculator verified https://studentaffairs.fresnostate.edu/financialaid/netprice/index.html
+110565 california-state-university-fullerton
+  admissions verified https://admissions.fullerton.edu/prospective-students/first-year.html
+  deadlines verified https://admissions.fullerton.edu/deadlines/
+  programs verified https://www.fullerton.edu/academics/ | The degree directory lists bachelor’s and graduate degrees; use the degree designation when browsing.
+  netPriceCalculator verified https://app.meadowfi.com/fullerton
+110583 california-state-university-long-beach
+  admissions verified https://www.csulb.edu/admissions/first-time-first-year-student-application-process
+  deadlines verified https://www.csulb.edu/enrollment-services/key-dates-and-deadlines
+  programs verified https://www.csulb.edu/academic-advising/major-search
+  netPriceCalculator verified https://app.meadowfi.com/csulb
+110592 california-state-university-los-angeles
+  admissions verified https://www.calstatela.edu/admissions/freshman
+  deadlines verified https://www.calstatela.edu/admissions/deadlines
+  programs verified https://www.calstatela.edu/admissions/undergraduate-programs
+  netPriceCalculator verified https://www.calstatela.edu/financialaid/net-price-calculator
+110608 california-state-university-northridge
+  admissions verified https://www.csun.edu/admissions-financial-aid/how-to-apply/first-time-freshman-admissions/first-time-freshman-requirements
+  deadlines verified https://www.csun.edu/admissions-financial-aid/dates-deadlines
+  programs verified https://www.csun.edu/academics/majors-and-programs?search=&program=Major%3BMinor%3BCertificate%20-%20Undergraduate
+  netPriceCalculator verified https://www.csun.edu/financialaid/financial-aid-basics/cost-attendance/net-price-calculator
+110617 california-state-university-sacramento
+  admissions verified https://www.csus.edu/apply/admissions/application-process/freshman-process.html
+  deadlines verified https://www.csus.edu/apply/admissions/application-process/freshman-process.html
+  programs verified https://catalog.csus.edu/programs/
+  netPriceCalculator verified https://www.csus.edu/administration-business-affairs/bursar/net-price-calculator.html
+111948 chapman-university
+  admissions verified https://www.chapman.edu/admission/undergraduate/how-to-apply/first-year/index.aspx
+  deadlines verified https://www.chapman.edu/admission/undergraduate/how-to-apply/first-year/index.aspx
+  programs verified https://www.chapman.edu/admission/undergraduate/academics/majors-and-minors.aspx
+  netPriceCalculator verified https://www.chapman.edu/admission/undergraduate/financing/net-price-calculator.aspx
+190150 columbia-university-in-the-city-of-new-york
+  admissions verified https://undergrad.admissions.columbia.edu/apply/firstyear
+  deadlines verified https://undergrad.admissions.columbia.edu/apply/firstyear
+  programs verified https://bulletin.columbia.edu/ | Select the Columbia College, Columbia Engineering, or General Studies bulletin for the undergraduate school of interest.
+  netPriceCalculator verified https://cc-seas.financialaid.columbia.edu/estimate-cost
+198419 duke-university
+  admissions verified https://admissions.duke.edu/apply/
+  deadlines verified https://admissions.duke.edu/apply/
+  programs verified https://admissions.duke.edu/academic-possibilities/
+  netPriceCalculator verified https://financialaid.duke.edu/apply-aid/estimate-your-aid/
+139755 georgia-institute-of-technology-main-campus
+  admissions verified https://admission.gatech.edu/first-year/
+  deadlines verified https://admission.gatech.edu/first-year/deadlines
+  programs verified https://www.gatech.edu/academics/all-degree-programs | The official degree directory includes undergraduate and graduate offerings; select the bachelor’s degree.
+  netPriceCalculator verified https://finaid.gatech.edu/costs/net-price-calculator | The official page describes the calculator’s costs as a historical 2023–24 snapshot.
+166027 harvard-university
+  admissions verified https://college.harvard.edu/admissions/apply/first-year-applicants
+  deadlines verified https://college.harvard.edu/admissions/apply/first-year-applicants
+  programs verified https://advising.college.harvard.edu/academic-planning-for-students/concentrations-and-secondaries/
+  netPriceCalculator verified https://college.harvard.edu/financial-aid/net-price-calculator
+117946 loyola-marymount-university
+  admissions verified https://admission.lmu.edu/learnmore/prospectivestudents/first-yearapplicants/
+  deadlines verified https://admission.lmu.edu/learnmore/prospectivestudents/first-yearapplicants/
+  programs verified https://bulletin.lmu.edu/academic-degrees-programs/programs-by-type/ | Use the Bachelor’s Degrees section of this official program directory.
+  netPriceCalculator verified https://financialaid.lmu.edu/prospectivestudents/netpricecalculator/
+166683 massachusetts-institute-of-technology
+  admissions verified https://mitadmissions.org/apply/firstyear/deadlines-requirements/
+  deadlines verified https://mitadmissions.org/apply/firstyear/deadlines-requirements/
+  programs verified https://catalog.mit.edu/mit/undergraduate-education/academic-programs/majors/
+  netPriceCalculator verified https://sfs.mit.edu/undergraduate-students/the-cost-of-attendance/estimate-your-cost/
+193900 new-york-university
+  admissions verified https://www.nyu.edu/admissions/undergraduate-admissions/how-to-apply/all-freshmen-applicants.html | The first-year application page covers New York, Abu Dhabi, and Shanghai; choose New York for this college.
+  deadlines verified https://www.nyu.edu/admissions/undergraduate-admissions/how-to-apply/all-freshmen-applicants.html | The first-year application page covers all three NYU degree-granting campuses; check the New York requirements.
+  programs verified https://bulletins.nyu.edu/undergraduate/ | The undergraduate bulletin directory includes NYU’s global campuses; select a New York school for this college.
+  netPriceCalculator verified https://npc.collegeboard.org/app/nyu
+147767 northwestern-university
+  admissions verified https://admissions.northwestern.edu/apply/
+  deadlines verified https://admissions.northwestern.edu/apply/application-deadlines.html
+  programs verified https://admissions.northwestern.edu/academics/majors-minors/
+  netPriceCalculator verified https://undergradaid.northwestern.edu/how-aid-works/estimate-your-cost-aid/
+204796 ohio-state-university-main-campus
+  admissions verified https://undergrad.osu.edu/apply/freshmen-columbus
+  deadlines verified https://undergrad.osu.edu/apply/freshmen-columbus/apply-step-by-step
+  programs verified https://undergrad.osu.edu/majors-and-academics/majors
+  netPriceCalculator verified https://sfa.osu.edu/incoming-freshmen/about-aid/net-price-calculator
+209542 oregon-state-university
+  admissions verified https://admissions.oregonstate.edu/first-year-students
+  deadlines verified https://admissions.oregonstate.edu/undergraduate-admission-deadlines
+  programs verified https://admissions.oregonstate.edu/find-your-major
+  netPriceCalculator verified https://financialaid.oregonstate.edu/net-price-calculator
+121345 pomona-college
+  admissions verified https://www.pomona.edu/admissions/paths-apply
+  deadlines verified https://www.pomona.edu/admissions/paths-apply
+  programs verified https://catalog.pomona.edu/majorsminors
+  netPriceCalculator verified https://www.pomona.edu/financial-aid/cost-attendance/estimate-your-aid
+186131 princeton-university
+  admissions verified https://admission.princeton.edu/apply/application-checklist
+  deadlines verified https://admission.princeton.edu/apply/first-year-application-dates-deadlines
+  programs verified https://www.princeton.edu/academics/areas-of-study | The directory lists undergraduate and graduate study; use undergraduate degree offerings.
+  netPriceCalculator verified https://admission.princeton.edu/cost-aid/net-price-calculator
+243780 purdue-university-main-campus
+  admissions verified https://admissions.purdue.edu/become-student/first-year-criteria/
+  deadlines verified https://admissions.purdue.edu/deadlines/first-year-college-student/
+  programs verified https://admissions.purdue.edu/academics/majors/
+  netPriceCalculator verified https://www.purdue.edu/dfa/cost/calculator/
+122409 san-diego-state-university
+  admissions verified https://admissions.sdsu.edu/first-years
+  deadlines verified https://admissions.sdsu.edu/first-years
+  programs verified https://www.sdsu.edu/programs
+  netPriceCalculator verified https://sacd.sdsu.edu/financial-aid/financial-aid/eligibility/cost-of-attendance/net-price-calculator
+122755 san-jose-state-university
+  admissions verified https://www.sjsu.edu/admissions/freshman/index.php
+  deadlines verified https://www.sjsu.edu/admissions/deadlines/index.php
+  programs verified https://catalog.sjsu.edu/index.php | Current university catalog landing page verified. The direct academic-programs index returned HTTP 202 during this check.
+  netPriceCalculator verified https://app.meadowfi.com/sjsu
+122931 santa-clara-university
+  admissions verified https://www.scu.edu/admission/undergraduate/first-year-students/
+  deadlines verified https://www.scu.edu/admission/undergraduate/first-year-students/fy-key-deadlines/
+  programs verified https://www.scu.edu/academics/undergraduate-programs/
+  netPriceCalculator verified https://www.scu.edu/financialaid/net-price-calculator/
+243744 stanford-university
+  admissions verified https://admission.stanford.edu/apply/first-year/index.html
+  deadlines verified https://admission.stanford.edu/apply/first-year/index.html
+  programs verified https://majors.stanford.edu/majors
+  netPriceCalculator verified https://financialaid.stanford.edu/undergrad/how/calculator/index.html
+228778 the-university-of-texas-at-austin
+  admissions verified https://admissions.utexas.edu/apply/freshman/
+  deadlines verified https://admissions.utexas.edu/apply/freshman/
+  programs verified https://catalog.utexas.edu/undergraduate/
+  netPriceCalculator verified https://onestop.utexas.edu/managing-costs/cost-tuition-rates/cost-of-attendance/net-price-calculator/ | The official landing page still describes estimates for 2024–25. Current calculator outputs were not tested.
+104179 university-of-arizona
+  admissions verified https://www.arizona.edu/admissions/undergraduate/first-year
+  deadlines verified https://www.arizona.edu/admissions/deadlines
+  programs verified https://www.arizona.edu/degree-search/majors?cat-program=bachelor
+  netPriceCalculator verified https://financialaid.arizona.edu/cost/npc
+110635 university-of-california-berkeley
+  admissions verified https://admissions.berkeley.edu/apply-to-berkeley/first-year-applicants-uc-berkeley/
+  deadlines verified https://admissions.berkeley.edu/apply-to-berkeley/dates-deadlines/
+  programs verified https://admissions.berkeley.edu/academics/academic-programs-majors-uc-berkeley-minors/
+  netPriceCalculator verified https://financialaid.berkeley.edu/how-aid-works/estimate-your-financial-aid/
+110644 university-of-california-davis
+  admissions verified https://www.ucdavis.edu/admissions/undergraduate/first-year
+  deadlines verified https://www.ucdavis.edu/admissions/undergraduate/first-year/timeline
+  programs verified https://www.ucdavis.edu/academics/majors
+  netPriceCalculator verified https://myawards.ucdavis.edu/AidEstimator
+110653 university-of-california-irvine
+  admissions verified https://admissions.uci.edu/apply/first-year-students/index.php
+  deadlines verified https://admissions.uci.edu/dates-deadlines.php
+  programs verified https://admissions.uci.edu/study/majors-minors.php
+  netPriceCalculator verified https://www.ofas.uci.edu/cost/net-price-calculator.php | The official calculator page still identifies its estimates as 2024–25. Current-year estimates were not verified.
+110662 university-of-california-los-angeles
+  admissions verified https://admission.ucla.edu/apply/first-year
+  deadlines verified https://admission.ucla.edu/apply/first-year
+  programs verified https://admission.ucla.edu/apply/majors
+  netPriceCalculator verified https://admission.ucla.edu/tuition-aid/net-price-calculator
+445188 university-of-california-merced
+  admissions unavailable [omitted] | The official first-year application page returned HTTP 403; its live content could not be verified.
+  deadlines unavailable [omitted] | The official dates and deadlines page returned HTTP 403; its live content could not be verified.
+  programs unavailable [omitted] | The official undergraduate majors directory returned HTTP 403; its live content could not be verified.
+  netPriceCalculator unavailable [omitted] | The official financial aid consumer-information page returned HTTP 403; its linked calculator could not be verified.
+110671 university-of-california-riverside
+  admissions verified https://admissions.ucr.edu/firstyear
+  deadlines verified https://admissions.ucr.edu/firstyear
+  programs verified https://admissions.ucr.edu/majors
+  netPriceCalculator verified https://financialaid.ucr.edu/cost | The official cost page links to the UC systemwide financial aid calculator; choose UC Riverside.
+110680 university-of-california-san-diego
+  admissions verified https://admissions.ucsd.edu/first-year/index.html
+  deadlines verified https://admissions.ucsd.edu/first-year/application-timeline.html
+  programs verified https://admissions.ucsd.edu/why/majors/index.html
+  netPriceCalculator verified https://fas.ucsd.edu/resources/helpful-tools/financial-aid-estimator/
+110705 university-of-california-santa-barbara
+  admissions verified https://admissions.sa.ucsb.edu/freshman
+  deadlines verified https://admissions.sa.ucsb.edu/deadlines
+  programs verified https://www.ucsb.edu/academics/undergraduate
+  netPriceCalculator verified https://www.finaid.ucsb.edu/costs-estimated-aid/net-price-calculator
+110714 university-of-california-santa-cruz
+  admissions unavailable [omitted] | The official first-year admissions page returned HTTP 403; page availability and purpose could not be verified live.
+  deadlines unavailable [omitted] | The official admissions dates page returned HTTP 403; its live content could not be verified.
+  programs verified https://catalog.ucsc.edu/en/current/general-catalog/academic-programs/bachelors-degrees/
+  netPriceCalculator verified https://www2.ucsc.edu/finaidcalc/ | This live calculator identifies its estimates as 2023–24. Current-year estimates were not verified.
+145637 university-of-illinois-urbana-champaign
+  admissions unavailable [omitted] | The official undergraduate admissions site returned HTTP 504; first-year instructions could not be verified live.
+  deadlines unavailable [omitted] | The official undergraduate admissions site returned HTTP 504; a current first-year deadline page could not be verified.
+  programs verified https://myillini.illinois.edu/Programs
+  netPriceCalculator verified https://secure.osfa.illinois.edu/NPC/NPC.asp
+166629 university-of-massachusetts-amherst
+  admissions verified https://www.umass.edu/admissions/first-year-students
+  deadlines verified https://www.umass.edu/admissions/important-dates-deadlines
+  programs verified https://www.umass.edu/gateway/academics/explore-our-programs?field_level_of_study=36&field_degree_type=All&field_delivery=All&field_area_of_interest=All&field_school=All&sort_by=title
+  netPriceCalculator verified https://app.meadowfi.com/umass
+170976 university-of-michigan-ann-arbor
+  admissions unavailable [omitted] | The official first-year admissions page returned HTTP 403; its live content could not be verified.
+  deadlines unavailable [omitted] | The official requirements and deadlines page returned HTTP 403; its live content could not be verified.
+  programs unavailable [omitted] | The official majors and degrees directory returned HTTP 403; its live content could not be verified.
+  netPriceCalculator verified https://npc.collegeboard.org/app/umich
+199120 university-of-north-carolina-at-chapel-hill
+  admissions verified https://admissions.unc.edu/apply/types-of-applications/first-year/
+  deadlines verified https://admissions.unc.edu/apply/types-of-applications/first-year/
+  programs verified https://catalog.unc.edu/undergraduate/programs-study/
+  netPriceCalculator verified https://studentaid.unc.edu/net-price-calculator/
+122612 university-of-san-francisco
+  admissions verified https://www.usfca.edu/admission/undergraduate/first-year
+  deadlines verified https://www.usfca.edu/admission/undergraduate/dates-deadlines
+  programs verified https://www.usfca.edu/academics/find-your-program/undergraduate
+  netPriceCalculator verified https://www.usfca.edu/financial-aid/net-price-calculator
+123961 university-of-southern-california
+  admissions verified https://admission.usc.edu/prospective-students/how-to-apply/first-year-students/
+  deadlines verified https://admission.usc.edu/prospective-students/how-to-apply/first-year-students/
+  programs verified https://www.usc.edu/majors-minors/
+  netPriceCalculator verified https://affordability.usc.edu/financial-aid/net-price-calculator/
+234076 university-of-virginia-main-campus
+  admissions unavailable [omitted] | The official admissions instructions page returned HTTP 403; its live content could not be verified.
+  deadlines unavailable [omitted] | The official admissions deadlines page returned HTTP 403; its live content could not be verified.
+  programs verified https://www.virginia.edu/majors-minors/
+  netPriceCalculator unavailable [omitted] | The official cost-estimate page returned HTTP 403; the calculator landing page could not be verified.
+236948 university-of-washington-seattle-campus
+  admissions verified https://admit.washington.edu/apply/first-year/
+  deadlines verified https://admit.washington.edu/apply/dates-deadlines/
+  programs verified https://advising.uw.edu/degree-overview/majors/list-of-undergraduate-majors/
+  netPriceCalculator verified https://www.washington.edu/financialaid/2026/05/10/net-price-calculator/
+240444 university-of-wisconsin-madison
+  admissions verified https://admissions.wisc.edu/apply-as-a-freshman/
+  deadlines verified https://admissions.wisc.edu/deadlines/
+  programs verified https://www.wisc.edu/academics/majors/
+  netPriceCalculator verified https://app.meadowfi.com/wisconsin
+236939 washington-state-university
+  admissions verified https://admission.wsu.edu/apply/first-year-students/
+  deadlines verified https://admission.wsu.edu/apply/admissions-dates-deadlines/
+  programs verified https://degrees.wsu.edu/ | The WSU degree finder spans campuses; select Pullman for this college.
+  netPriceCalculator verified https://financialaid.wsu.edu/price-calculator/ | Select the Pullman campus when the calculator asks for a campus.
+130794 yale-university
+  admissions verified https://admissions.yale.edu/apply
+  deadlines verified https://admissions.yale.edu/timelines
+  programs verified https://admissions.yale.edu/majors
+  netPriceCalculator verified https://finaid.yale.edu/estimate

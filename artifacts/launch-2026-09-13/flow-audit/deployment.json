@@ -1,0 +1,34 @@
+{
+  "sourceCommit": "450f4b2df8ba4d0f9029fea007c6cde009e5be3c",
+  "projectId": "appgprj_6a64f648520081919bb6328932d2ff1c",
+  "version": 4,
+  "versionId": "appgprj_6a64f648520081919bb6328932d2ff1c~appgver_00e2d0defb0c8191a74cb759384740fd",
+  "deploymentId": "appgdep_6aa70506b66481919d5a928732a47a70",
+  "status": "succeeded",
+  "updatedAt": "2026-09-13T20:18:25.932379+00:00",
+  "environmentRevision": 1,
+  "url": "https://college-compass-students.kamarthapusri.chatgpt.site",
+  "archiveHash": "sha256:06202853160e568c5014c65b768020cc1020d584ac405c3ab5519f3c3812725c",
+  "audience": "owner-private",
+  "anonymousHttpStatus": 401,
+  "ci": {
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/Srikamarthapu/CollegeSearch/actions/runs/34780312831"
+  },
+  "hostedChecks": {
+    "menuViewport": [
+      568,
+      320
+    ],
+    "menuBottom": 308,
+    "menuScrollTop": 250,
+    "menuOpensPlanner": true,
+    "discardFocus": "Add a task",
+    "capturedWarningsAndErrors": 0
+  },
+  "limitations": [
+    "Broader hosted account and smoke checks remain recorded for the prior application source. This UI-only follow-up did not rerun database integration or classroom load tests.",
+    "School-wide launch acceptance remains open."
+  ]
+}

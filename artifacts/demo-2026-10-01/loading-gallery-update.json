@@ -1,0 +1,403 @@
+{
+  "verifiedOn": "2026-10-01",
+  "sourceCommit": "a6831f10a9e87f14be76f0e48e51e97042871bbc",
+  "scope": "Campus-pin favicon, 15-campus gallery, and skeleton loading boundary",
+  "photoProvenance": "campus-photo-sources.json; ten added Commons photos with creator, license, date, file dimensions and SHA-256 verified",
+  "build": {
+    "nativeNext": "passed clean build; temporary QA route removed",
+    "vinext": "passed",
+    "lint": "passed for all changed TS/TSX files",
+    "renderedHtmlTests": {
+      "passed": 11,
+      "failed": 0
+    }
+  },
+  "favicon": {
+    "svg": "valid render; site palette",
+    "pngSizes": [
+      32,
+      180
+    ],
+    "legacyPath": "same new campus-pin SVG",
+    "newMetadataPaths": true
+  },
+  "loading": {
+    "checks": [
+      {
+        "width": 1440,
+        "scrollWidth": 1440,
+        "statusCount": 1,
+        "focusable": 0,
+        "animations": [],
+        "hasOldCopy": false,
+        "reducedMotion": "reduce",
+        "resolved": true
+      },
+      {
+        "width": 1440,
+        "scrollWidth": 1440,
+        "statusCount": 1,
+        "focusable": 0,
+        "animations": [
+          {
+            "state": "running",
+            "target": "loading-module__PBh0PW__featureCard"
+          }
+        ],
+        "hasOldCopy": false,
+        "reducedMotion": "no-preference",
+        "resolved": true
+      },
+      {
+        "width": 320,
+        "scrollWidth": 320,
+        "statusCount": 1,
+        "focusable": 0,
+        "animations": [],
+        "hasOldCopy": false,
+        "reducedMotion": "reduce",
+        "resolved": true
+      },
+      {
+        "width": 390,
+        "scrollWidth": 390,
+        "statusCount": 1,
+        "focusable": 0,
+        "animations": [],
+        "hasOldCopy": false,
+        "reducedMotion": "no-preference",
+        "resolved": true
+      }
+    ],
+    "method": "Actual root loading boundary, temporary local delayed route removed before deployment"
+  },
+  "loadingVisual": {
+    "method": "Production-mode preview of Loading component; temporary route removed before deployment",
+    "widths": [
+      1440,
+      390,
+      320
+    ],
+    "logoDecoded": true,
+    "overflow": false,
+    "reducedMotion": "no running animations",
+    "screenshots": "outputs/loading-update/loading-{width}.png (local ignored QA)"
+  },
+  "localGallery": {
+    "url": "http://127.0.0.1:4183",
+    "photoCount": 15,
+    "totalPhotoBytes": 4329294,
+    "sourceContracts": "college identity, source URL, creator, license, date, file dimensions checked",
+    "slideChecks": [
+      {
+        "campus": "Stanford",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "UCLA",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Washington",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Columbia",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Berkeley",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "ASU",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Caltech",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Duke",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Georgia Tech",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Harvard",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "MIT",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Michigan",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Princeton",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "UT Austin",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "UNC",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      }
+    ],
+    "layoutChecks": [
+      {
+        "width": 1440,
+        "overflow": false,
+        "controlsAtLeast44px": true
+      },
+      {
+        "width": 1024,
+        "overflow": false,
+        "controlsAtLeast44px": true
+      },
+      {
+        "width": 768,
+        "overflow": false,
+        "controlsAtLeast44px": true
+      },
+      {
+        "width": 390,
+        "overflow": false,
+        "controlsAtLeast44px": true
+      },
+      {
+        "width": 320,
+        "overflow": false,
+        "controlsAtLeast44px": true
+      }
+    ],
+    "icons": [
+      {
+        "href": "/brand/campus-pin-32.png",
+        "type": "image/png",
+        "sizes": "32x32"
+      },
+      {
+        "href": "/brand/campus-pin-icon.svg",
+        "type": "image/svg+xml",
+        "sizes": "any"
+      }
+    ],
+    "playback": "automatic advance, pause, both wrap directions, and reduced-motion passed",
+    "chancesMetadata": "new favicon inherited",
+    "errors": []
+  },
+  "deployment": {
+    "id": "dpl_AmTd9RxYkAFV6zwEYGcz8uL73m1q",
+    "url": "https://collegesearch-mgik644ov-swis-projects-066d8b1d.vercel.app",
+    "productionUrl": "https://collegesearch-steel.vercel.app",
+    "readyState": "READY"
+  },
+  "hostedGallery": {
+    "url": "https://collegesearch-steel.vercel.app",
+    "photoCount": 15,
+    "totalPhotoBytes": 4329294,
+    "sourceContracts": "college identity, source URL, creator, license, date, file dimensions checked",
+    "slideChecks": [
+      {
+        "campus": "Stanford",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "UCLA",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Washington",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Columbia",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Berkeley",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "ASU",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Caltech",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Duke",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Georgia Tech",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Harvard",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "MIT",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Michigan",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "Princeton",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "UT Austin",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      },
+      {
+        "campus": "UNC",
+        "visible": true,
+        "photoLoaded": true,
+        "profileLink": true,
+        "credit": true
+      }
+    ],
+    "layoutChecks": [
+      {
+        "width": 1440,
+        "overflow": false,
+        "controlsAtLeast44px": true
+      },
+      {
+        "width": 1024,
+        "overflow": false,
+        "controlsAtLeast44px": true
+      },
+      {
+        "width": 768,
+        "overflow": false,
+        "controlsAtLeast44px": true
+      },
+      {
+        "width": 390,
+        "overflow": false,
+        "controlsAtLeast44px": true
+      },
+      {
+        "width": 320,
+        "overflow": false,
+        "controlsAtLeast44px": true
+      }
+    ],
+    "icons": [
+      {
+        "href": "/brand/campus-pin-32.png",
+        "type": "image/png",
+        "sizes": "32x32"
+      },
+      {
+        "href": "/brand/campus-pin-icon.svg",
+        "type": "image/svg+xml",
+        "sizes": "any"
+      }
+    ],
+    "playback": "automatic advance, pause, both wrap directions, and reduced-motion passed",
+    "chancesMetadata": "new favicon inherited",
+    "errors": []
+  },
+  "hostedAssets": "All four live icon files match the reviewed local bytes; temporary QA route returns 404"
+}

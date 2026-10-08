@@ -1,3 +1,4 @@
+import { attachCostEvidence } from "./helpers/college-cost-fixture.ts";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
@@ -9,7 +10,7 @@ import type { College } from "../app/lib/college-data.ts";
 const dataset = JSON.parse(
   await readFile(new URL("../data/colleges.json", import.meta.url), "utf8"),
 ) as { colleges: College[] };
-const clientColleges = projectCollegesForClient(dataset.colleges);
+const clientColleges = projectCollegesForClient(attachCostEvidence(dataset.colleges));
 
 test("exact short aliases take precedence over broad substring matches", () => {
   const matches = filterCollegesByQuery(clientColleges, "Cal");

@@ -18,11 +18,17 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const { error } = await routeClient.client.auth.exchangeCodeForSession(
-    code,
-    flowId ? { flowId } : undefined,
-  );
-  const destination = error
+  let exchangeFailed = false;
+  try {
+    const { error } = await routeClient.client.auth.exchangeCodeForSession(
+      code,
+      flowId ? { flowId } : undefined,
+    );
+    exchangeFailed = Boolean(error);
+  } catch {
+    exchangeFailed = true;
+  }
+  const destination = exchangeFailed
     ? "/auth/auth-code-error?reason=exchange"
     : "/auth/update-password";
   const response = NextResponse.redirect(new URL(destination, request.url));

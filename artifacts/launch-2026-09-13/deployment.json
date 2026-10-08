@@ -1,0 +1,12 @@
+{
+  "sourceCommit": "52c8b25618120d979aeb8785663054457dd7a11e",
+  "versionNumber": 3,
+  "versionId": "appgprj_6a64f648520081919bb6328932d2ff1c~appgver_1b5c1c43322c8191b90db042a5b3b9a0",
+  "archiveSha256": "sha256:6acc1c9960f43a714a4241446a7b8834927ad32ae0a3a313609845aa954854ad",
+  "deploymentId": "appgdep_6aa6ff62e1b481918b64ea0c5a020d6c",
+  "environmentRevision": 1,
+  "deploymentStatus": "succeeded",
+  "url": "https://college-compass-students.kamarthapusri.chatgpt.site",
+  "access": "owner-private",
+  "deployedAt": "2026-09-13T19:54:20.000454+00:00"
+}
