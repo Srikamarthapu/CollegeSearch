@@ -1,5 +1,13 @@
 # CollegeSearch expansion progress
 
+## Completed — M12 tuition evidence, October 7, 2026
+
+Tuition-only discovery, saved cards, profile headlines, comparison and CSV now use separate IPEDS annual tuition fields. New tuition-only filters/sorting match the displayed measure; legacy cost URLs retain explicitly labeled historical semantics. Added official 2026–27 Stanford and Berkeley tuition/fee/attendance-budget breakdowns. The catalog remains 3,912 colleges: 3,384 have sourced annual tuition-only values and 528 remain explicitly unavailable (472 program-priced, 19 unknown, 37 absent from the release). Dates, residency and source links remain visible.
+
+GPT-6 Luna workers implemented the IPEDS import, source audit and scoped UI/filter changes. Federal audit: 31,296 comparisons and zero mismatches across all catalog identities; exact IPEDS regeneration passed. Seventy registered evidence URLs were checked: 68 reachable, two blocked landing pages whose direct artifacts were separately verified. Three prior overlay fingerprints and two current Berkeley HTML fingerprints drift; numeric text still supports the checked values. See [M12 catalog audit](M12_CATALOG_EVIDENCE_AUDIT.md) for exact scope and limitations.
+
+Validation: 514/514 regression tests, 12/12 focused cost checks after final evidence guards, both builds, TypeScript, ESLint, local/live HTTP checks, and desktop/390px/320px UI review passed. Code `9d84eef` is live in READY production deployment `dpl_7vU3FDdaC4VTEr4zVmtoh6vGD2cr` at https://collegesearch-steel.vercel.app. [Implementation and verification](M12_TUITION_IMPLEMENTATION.md). No source hash was silently refreshed, no costs guessed, no provider/database/billing change or reset-credit use. Earlier public-AI/account/pilot release gates remain unchanged.
+
 ## Completed product polish — M11, October 7, 2026
 
 Addressed the user's tuition emphasis, landing/header composition, oversized Admissions warning and combined planner feedback. Tuition plus required fees now leads cost displays with year, residency basis and living-cost exclusions; historical net price remains secondary. My colleges uses accessible Saved colleges / Deadlines tabs with retained drafts. Admissions uses bounded search; the planner identity directory loads on demand. Fixed invalid comparison IDs, complete-data filtering without tuition, and normalized-query loading races. Patched production dependency findings.

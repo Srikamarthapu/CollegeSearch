@@ -291,6 +291,7 @@ async function main() {
       sourceRowsByJurisdiction: {},
     },
     nonScorecardSourceCounts: {},
+    metricChecks: {},
     notDirectFields: [],
     errors: [],
     warnings: [],
@@ -875,9 +876,18 @@ async function main() {
         report.counts.directValueChecks += 1;
         const raw = sourceRow[field];
         const actual = numberFromCsv(raw);
+        const metricCheck = report.metricChecks[metric] || {
+          primaryChecks: 0,
+          alternateChecks: 0,
+          numericMatches: 0,
+          unavailableMatches: 0,
+          mismatches: 0,
+        };
+        metricCheck[collectionName === "observations" ? "primaryChecks" : "alternateChecks"] += 1;
         report.counts[observation.value === null ? "unavailableValueChecks" : "numericValueChecks"] +=
           observation.value === null ? 1 : 0;
         if (!sameNumber(observation.value ?? null, actual)) {
+          metricCheck.mismatches += 1;
           fail(report, "metric-value", {
             unitId,
             collection: collectionName,
@@ -887,7 +897,12 @@ async function main() {
             sourceValue: actual,
             sourceRaw: raw ?? null,
           });
+        } else if (observation.value === null) {
+          metricCheck.unavailableMatches += 1;
+        } else {
+          metricCheck.numericMatches += 1;
         }
+        report.metricChecks[metric] = metricCheck;
       } else if (knownDerivedSourceField(field)) {
         report.counts.notDirectFieldObservations += 1;
         report.notDirectFields.push({
