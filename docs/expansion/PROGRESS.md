@@ -1,10 +1,10 @@
 # CollegeSearch expansion progress
 
-## Publishing — M15 uniform tuition cards, October 7, 2026
+## Released — M15 uniform tuition cards, October 7, 2026
 
 Restored a shared long-form card structure in discovery and saved colleges: tuition above outcome metrics for every college, with one centered price for reliable single-rate colleges. Distinct or incomplete public residency rates remain paired. Discovery grid rows now stretch and retain bottom-aligned footers, removing the short-card gaps without fixed card heights. Data and source disclosures are unchanged.
 
-GPT-5.6-Sol worker implementation and root review completed. Existing tuition tests passed 7/7, targeted ESLint passed, and native Next production build plus TypeScript passed. Desktop rendered review showed matching 525px heights for the first six cards. The 390px mobile single-rate card centered its price with no horizontal overflow; browser console had no warnings/errors. Deployment and hosted confirmation are next. Usage began at 87% used; requested budget is approximately five percentage points account-wide.
+GPT-5.6-Sol worker implementation and root review completed. Existing tuition tests passed 7/7, targeted ESLint passed, and native Next production build plus TypeScript passed. Desktop rendered review showed matching 525px heights for the first six cards. The 390px mobile single-rate card centered its price with no horizontal overflow; browser console had no warnings/errors. Code `438b260` is live in READY production deployment `dpl_AtJxsAt9jmTu1t4mPubmVN8NFvRc` at https://collegesearch-steel.vercel.app. Hosted product smoke checks passed. Live browser readback confirmed equal 525px card heights, centered private tuition, paired Berkeley/UCLA tuition, and no console warnings/errors. Screenshot: `outputs/m15/uniform-cards-live.png`. Account usage snapshots moved from 87% to 89% used (approximately two percentage points, including concurrent activity), within the requested five-point target. No resets were used.
 
 ## Released — M14 compact cards and reviewed campus profile banners, October 7, 2026
 
