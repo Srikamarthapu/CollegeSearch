@@ -1,5 +1,13 @@
 # CollegeSearch expansion progress
 
+## Completed product polish — M11, October 7, 2026
+
+Addressed the user's tuition emphasis, landing/header composition, oversized Admissions warning and combined planner feedback. Tuition plus required fees now leads cost displays with year, residency basis and living-cost exclusions; historical net price remains secondary. My colleges uses accessible Saved colleges / Deadlines tabs with retained drafts. Admissions uses bounded search; the planner identity directory loads on demand. Fixed invalid comparison IDs, complete-data filtering without tuition, and normalized-query loading races. Patched production dependency findings.
+
+GPT-5.6-Sol workers implemented/reviewed scoped changes. **503/503 tests**, both production builds, TypeScript, ESLint, local and hosted HTTP regressions, and desktop/mobile guest browser checks passed. Code `e6a7255` is live in READY deployment `dpl_44AyhczDETfnDLXsf51hhiv99m3Y` at `https://collegesearch-steel.vercel.app`. Source evidence, response-size measurements, screenshots and audit limitations are recorded in [M11 product polish](M11_PRODUCT_POLISH.md).
+
+This completes the current UI/functional polish request. It does not close the earlier blocked launch goal: public AI, hosted account/email journeys, observed retention and student pilot remain open. Eight development-tooling advisory entries remain; the production dependency audit is clean. No provider, billing or database changes and no reset credits were used.
+
 ## Release-gate audit — October 4, 2026, 19:32 UTC
 
 Previous goal turn classification: **progress**. M10 changed application state, completed evaluation and deployed verified code. This continuation reread the original objective and current acceptance evidence; billing remains deferred by explicit user direction. No further independent implementation or verification was identified that closes the remaining requirements. Repeating passing tests or adding speculative features would not resolve these gates.

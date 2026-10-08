@@ -29,7 +29,11 @@ Local browser checks: desktop 1440px and phones 390px/320px; no horizontal overf
 
 Read-only HTTP checks passed for catalog pagination, combined filters, saved detail lookup, preference matching, malformed/oversized request rejection, and the new `scripts/verify-product-polish.mjs` tuition/Admissions/identity boundaries.
 
-Final local verification: **503/503 tests passed**, including the crawl of all 3,912 college profiles and internal links. Both Vinext and native Next production builds, TypeScript, ESLint and diff checks passed. An obsolete comparison-label assertion was updated to require the precise “required fees” wording; the final full run is clean. Logs are in ignored `work/m11-*-final.log`. Hosted release verification is pending.
+Final local verification: **503/503 tests passed**, including the crawl of all 3,912 college profiles and internal links. Both Vinext and native Next production builds, TypeScript, ESLint and diff checks passed. An obsolete comparison-label assertion was updated to require the precise “required fees” wording; the final full run is clean. Logs are in ignored `work/m11-*-final.log`.
+
+Code commit `e6a7255` is deployed to [CollegeSearch](https://collegesearch-steel.vercel.app/explore) in READY production deployment `dpl_44AyhczDETfnDLXsf51hhiv99m3Y`. The Vercel connector's scope request returned 403; the CLI's existing credentials successfully verified the exact project/team and deployed the clean checkout. The stable alias is attached. Build duration was 1m48s; no catalog publication step ran.
+
+Hosted `verify-product-polish.mjs` and the existing full HTTP smoke passed. Browser checks confirmed the new hero, 1440/1024/390/320px layouts, Admissions search/add and source context, Saved/Deadlines tab switching and lazy load, mobile navigation, and Stanford's $68,574 headline with its year and living-cost exclusion. The fresh live browser tab recorded no console warnings or errors. This is guest-flow validation, not signed-in account certification. Screenshots are in ignored `outputs/m11/` (`landing-desktop.png`, `landing-mobile.png`, `admissions-desktop.png`, `admissions-mobile.png`, `my-colleges-desktop.png`).
 
 ## Scope and remaining release gates
 
