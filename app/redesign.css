@@ -28,23 +28,23 @@ button, a, input, select, summary { touch-action: manipulation; }
 summary { cursor: pointer; }
 button, a { transition: color 160ms, background-color 160ms, border-color 160ms, box-shadow 160ms; }
 button:disabled { cursor: not-allowed; opacity: .6; }
-.site-header { min-height: 76px; background: #fff; border-color: var(--line); backdrop-filter: none; }
+.site-header { min-height: 76px; gap: 32px; background: #fff; border-color: var(--line); backdrop-filter: none; }
 .brand { gap: 10px; }
 /* Frame the supplied artwork's transparent margins without changing the asset. */
-.brand-logo { position: relative; display: block; flex: none; width: 246px; aspect-ratio: 2040 / 446; overflow: hidden; }
+.brand-logo { position: relative; display: block; flex: none; width: 220px; aspect-ratio: 2040 / 446; overflow: hidden; }
 .brand-logo img { position: absolute; display: block; width: 106.470588%; max-width: none; height: auto; left: -3.431373%; top: -29.147982%; }
-.desktop-nav { gap: 3px; }
+.desktop-nav { gap: 4px; margin-right: auto; }
 .plan-page { width: min(var(--page-width), calc(100% - 40px)); margin: 0 auto; min-height: 75vh; padding-bottom: 70px; }
 .plan-intro { max-width: 760px; padding: 30px 0 10px; }
 .plan-intro h1 { margin: 14px 0; font: 500 clamp(36px,5vw,58px)/1.03 var(--font-newsreader), Georgia, serif; letter-spacing: -.025em; }
 .plan-intro p { color: var(--ink-soft); }
 .plan-intro > a { display: inline-flex; min-height: 44px; align-items: center; text-decoration: underline; text-underline-offset: 4px; }
-.desktop-nav a { font-size: 14px; border: 0; border-radius: 7px; padding: 10px 12px; font-weight: 550; }
-.desktop-nav a > svg { display: block; }
+.desktop-nav a { gap: 8px; font-size: 14px; border: 0; border-radius: 7px; padding: 10px 12px; font-weight: 550; }
+.desktop-nav a > svg { display: block; width: 18px; height: 18px; flex-shrink: 0; color: var(--forest); }
 .desktop-nav a:hover { background: var(--paper); }
 .desktop-nav a[aria-current="page"] { color: var(--forest); background: var(--forest-pale); }
 .nav-count { background: var(--forest-pale); color: var(--forest); font-size: 12px; }
-.header-actions { gap: 20px; }
+.header-actions { flex: 1; justify-content: flex-end; gap: 20px; }
 .mobile-nav, .menu-button, .mobile-nav-close { border-radius: 10px; }
 .mobile-nav, .mobile-nav-scrim { top: 76px; }
 .mobile-nav { max-height: calc(100vh - 88px); max-height: calc(100dvh - 88px); overflow-y: auto; overscroll-behavior: contain; }
@@ -254,7 +254,6 @@ button:disabled { cursor: not-allowed; opacity: .6; }
 .page-next-step > p { color: #d5dff1; font-size: 15px; }
 @media (max-width: 1380px) {
   .desktop-nav a { padding: 9px 8px; font-size: 13px; }
-  .desktop-nav a > svg { display: none; }
 }
 @media (min-width: 821px) and (max-width: 1120px) {
   .desktop-nav { display: none; }
@@ -263,7 +262,6 @@ button:disabled { cursor: not-allowed; opacity: .6; }
 }
 @media (max-width: 1120px) {
   .desktop-nav a { padding: 9px 8px; font-size: 13px; }
-  .desktop-nav a > svg { display: none; }
   .header-actions { gap: 8px; }
   .discovery-masthead { gap: 32px; }
   .research-explorer .explorer-shell { grid-template-columns: 215px minmax(0,1fr); gap: 20px; }
@@ -294,8 +292,8 @@ button:disabled { cursor: not-allowed; opacity: .6; }
   .footer-links { grid-template-columns: repeat(2,auto); }
 }
 @media (max-width: 620px) {
-  .site-header { min-height: 66px; padding-left: 18px; padding-right: 18px; }
-  .site-header .brand-logo { width: clamp(158px, calc(100vw - 206px), 205px); }
+  .site-header { min-height: 66px; gap: 12px; padding-left: 18px; padding-right: 18px; }
+  .site-header .brand-logo { width: clamp(150px, calc(100vw - 222px), 195px); }
   .site-header .header-actions { flex-shrink: 0; }
   .mobile-nav, .mobile-nav-scrim { top: 66px; }
   .mobile-nav { max-height: calc(100vh - 78px); max-height: calc(100dvh - 78px); }
@@ -419,3 +417,8 @@ button:disabled { cursor: not-allowed; opacity: .6; }
   .research-card .metric-stamp:first-child { grid-column: 1 / -1; min-height: 0; padding-bottom: 0; }
   .research-card .metric-stamp > strong { font-size: 22px; }
 }
+
+/* Price context is supporting copy, not another competing headline metric. */
+.card-cost-context { margin: 0 19px 9px; color: var(--ink-faint); font-size: 11px; line-height: 1.6; }
+.profile-cost-context { margin: -8px 0 24px; color: var(--ink-soft); font-size: 13px; line-height: 1.65; }
+.profile-cost-context a { display: inline-flex; align-items: center; gap: 5px; min-height: 32px; color: var(--forest); text-decoration: underline; text-underline-offset: 3px; }

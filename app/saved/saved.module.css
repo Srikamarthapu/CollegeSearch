@@ -10,13 +10,13 @@
   align-items: center;
   justify-content: space-between;
   gap: 28px;
-  padding: 46px 0 28px;
+  padding: 28px 0 20px;
 }
 
 .eyebrow {
   display: block;
-  margin-bottom: 12px;
-  color: var(--ink-faint);
+  margin-bottom: 8px;
+  color: var(--forest);
   font-size: 12px;
   font-weight: 600;
 }
@@ -32,7 +32,7 @@
 
 .masthead p {
   max-width: 600px;
-  margin: 12px 0 0;
+  margin: 8px 0 0;
   color: var(--ink-soft);
   font-size: 15px;
   line-height: 1.6;
@@ -41,35 +41,46 @@
 .masthead > a { flex-shrink: 0; }
 
 .sectionNav {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 22px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--line);
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--forest-pale);
 }
 
-.sectionNav a {
+.sectionNav button {
   display: inline-flex;
   min-height: 44px;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  color: var(--ink-soft);
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--forest);
+  font: inherit;
   font-size: 14px;
   font-weight: 600;
 }
 
-.sectionNav a:hover { color: var(--forest); }
-.sectionNav span { padding: 1px 7px; border-radius: 6px; background: var(--blue-pale); color: var(--forest); font-size: 12px; }
+.sectionNav button:hover { background: rgb(255 255 255 / 55%); }
+.sectionNav button[aria-selected="true"] {
+  background: var(--forest);
+  box-shadow: 0 2px 8px rgb(53 89 213 / 18%);
+  color: white;
+}
+.sectionNav span { padding: 1px 7px; border-radius: 99px; background: rgb(255 255 255 / 70%); color: var(--forest); font-size: 12px; }
+.sectionNav button[aria-selected="true"] span { background: white; }
 
 .workspace {
-  display: grid;
-  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
-  gap: 28px;
-  align-items: start;
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 .savedPanel, .deadlinePanel { min-width: 0; scroll-margin-top: 100px; }
+.savedPanel[hidden], .deadlinePanel[hidden] { display: none; }
 .page :is([data-saved-remove], [data-saved-empty-explore]) { scroll-margin-block: 100px; }
 
 .collectionHeader {
@@ -77,10 +88,12 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
+  padding: 0 0 14px;
+  border-bottom: 1px solid var(--line);
 }
 
-.collectionHeader h2 { margin: 0; font-size: 25px; font-weight: 650; letter-spacing: -.035em; line-height: 1.2; }
+.collectionHeader h2 { margin: 0; color: var(--forest); font-size: 25px; font-weight: 650; letter-spacing: -.035em; line-height: 1.2; }
 .collectionHeader p { margin: 8px 0 0; color: var(--ink-soft); font-size: 13px; line-height: 1.6; }
 .collectionHeader > span { color: var(--ink-faint); font-size: 12px; white-space: nowrap; }
 
@@ -172,6 +185,7 @@
 .metrics dd { display: grid; margin: 5px 0 0; gap: 4px; }
 .metrics strong { color: var(--ink); font-size: 23px; font-weight: 600; letter-spacing: -.025em; }
 .metrics span { color: var(--ink-faint); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.costContext { margin: 0; padding: 10px 20px; border-bottom: 1px solid var(--line); color: var(--ink-soft); font-size: 12px; line-height: 1.5; }
 .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 12px; gap: 10px; }
 .actions button { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; gap: 7px; padding: 8px; border: 1px solid var(--line); border-radius: 7px; background: transparent; color: var(--ink-soft); font-size: 13px; font-weight: 600; cursor: pointer; }
 .actions button:hover:not(:disabled), .actions .selected { border-color: var(--forest); background: var(--forest-pale); color: var(--forest); }
@@ -181,6 +195,14 @@
 .backupTools > button { margin-top: 12px; }
 .backupTools [aria-label="Research backup and restore"] { margin: 16px 0; padding: 0; border: 0; background: transparent; }
 .exportStatus { font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+.directoryState { margin: 14px 0; padding: 18px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper-bright); color: var(--ink-soft); font-size: 13px; line-height: 1.6; }
+.directoryState h2 { margin: 0 0 7px; color: var(--ink); font-size: 22px; letter-spacing: -.025em; }
+.directoryState p { margin: 0; }
+.directoryState button { min-height: 44px; margin-top: 12px; padding: 9px 13px; border: 1px solid var(--forest); border-radius: 7px; background: var(--forest); color: white; font: inherit; font-size: 13px; font-weight: 650; }
+.directorySkeleton { display: grid; margin-top: 16px; gap: 8px; }
+.directorySkeleton span { display: block; width: min(100%, 620px); height: 14px; border-radius: 4px; background: var(--paper-deep); }
+.directorySkeleton span:nth-child(2) { width: min(78%, 480px); }
+.directorySkeleton span:nth-child(3) { width: min(56%, 340px); }
 
 .compareTray {
   position: sticky;
@@ -206,17 +228,21 @@
 .page :is(a, button, summary):focus-visible, .compareTray a:focus-visible { outline: 3px solid var(--forest); outline-offset: 3px; }
 
 @media (max-width: 1020px) {
-  .workspace { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .workspace { margin-top: 20px; }
 }
 @media (max-width: 620px) {
   .page { width: calc(100% - 36px); }
-  .masthead { align-items: flex-start; flex-direction: column; gap: 20px; padding: 30px 0 22px; }
+  .masthead { align-items: flex-start; flex-direction: column; gap: 16px; padding: 22px 0 16px; }
   .masthead p { font-size: 14px; }
-  .workspace { margin-top: 24px; }
+  .sectionNav { display: flex; width: 100%; }
+  .sectionNav button { flex: 1; padding-inline: 10px; }
+  .workspace { margin-top: 16px; }
+  .collectionHeader { align-items: flex-start; padding: 16px; }
   .identity { padding: 16px; gap: 10px; }
   .identity h3 { font-size: 17px; }
   .metrics > div { padding: 13px; }
   .metrics strong { font-size: 21px; }
+  .costContext { padding: 9px 13px; }
   .empty { padding: 23px; }
   .compareTray { bottom: 10px; margin-bottom: 10px; padding-left: 12px; }
 }

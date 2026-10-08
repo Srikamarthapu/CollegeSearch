@@ -82,7 +82,6 @@ export function CampusCarousel() {
         if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setKeyboardFocused(false);
       }}
     >
-      <div className={styles.heading}>Around campus</div>
       <div className={styles.window} data-active={active}>
         {campusPhotos.map((item, index) => (
           <div

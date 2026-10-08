@@ -1,9 +1,14 @@
 "use client";
 
 import { CalendarDays, ChevronDown, Download, Plus, Upload } from "lucide-react";
-import { useEffect, useId, useLayoutEffect, useRef, useState, useSyncExternalStore, type FormEvent } from "react";
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type FormEvent } from "react";
 import { useSavedColleges } from "@/app/components/saved/SavedCollegesProvider";
 import { getAccountErasureState } from "@/app/lib/account-browser-erasure";
+import {
+  boundedDeadlineCollegeOptions,
+  deadlineCollegeOptionLabel,
+} from "@/app/lib/college-identity-directory";
+import type { DirectoryCollegeIdentity } from "@/app/lib/college-directory";
 import {
   DEADLINE_BACKUP_MAX_BYTES, DEADLINE_LIMIT, DEADLINE_TASKS,
   commitDeadlineEditor, deadlineBackup, deadlineGroups, deadlinePlanKey,
@@ -15,7 +20,7 @@ import {
 import { createDeadlinePlanStore } from "@/app/lib/deadline-plan";
 import styles from "./DeadlinePlanner.module.css";
 
-export type DeadlineCollege = { unitId: number; name: string; deadlineSourceUrl?: string; admissionsSourceUrl?: string };
+export type DeadlineCollege = DirectoryCollegeIdentity;
 type PlannerStore = ReturnType<typeof createDeadlinePlanStore>;
 const stores = new Map<string, PlannerStore>();
 function storeFor(colleges: DeadlineCollege[]) {
@@ -62,15 +67,19 @@ function ScopedDeadlinePlanner({ scope, colleges, savedCollegeIds, embedded, sto
   const [removeId, setRemoveId] = useState("");
   const [restore, setRestore] = useState<DeadlinePlan | null>(null);
   const [backupOpen, setBackupOpen] = useState(false);
+  const [collegeQuery, setCollegeQuery] = useState("");
   const [busy, setBusy] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const plannerRef = useRef<HTMLElement>(null);
   const pendingFocus = useRef<string | null>(null);
   const knownIds = new Set(colleges.map((college) => college.unitId));
-  const savedIdSet = new Set(savedCollegeIds);
-  const savedColleges = colleges.filter((college) => savedIdSet.has(college.unitId));
-  const otherColleges = colleges.filter((college) => !savedIdSet.has(college.unitId));
+  const selectedCollegeId = form.editor?.collegeId ? Number(form.editor.collegeId) : null;
+  const collegeOptions = useMemo(
+    () => boundedDeadlineCollegeOptions(colleges, collegeQuery, embedded ? savedCollegeIds : [], selectedCollegeId),
+    [collegeQuery, colleges, embedded, savedCollegeIds, selectedCollegeId],
+  );
+  const visibleCollegeCount = collegeOptions.saved.length + collegeOptions.other.length;
   const selectedCollege = form.editor ? colleges.find((college) => college.unitId === Number(form.editor?.collegeId)) : undefined;
   const deadlineSource = normalizedSourceUrl(selectedCollege?.deadlineSourceUrl ?? "");
   const admissionsSource = normalizedSourceUrl(selectedCollege?.admissionsSourceUrl ?? "");
@@ -130,12 +139,12 @@ function ScopedDeadlinePlanner({ scope, colleges, savedCollegeIds, embedded, sto
   function openForm(editor: DeadlineEditor) {
     setForm(store.updateEditor(scope, editor)); setErrors({}); setMessage("");
     if (embedded) setFormOpen(true);
-    window.requestAnimationFrame(() => formRef.current?.querySelector<HTMLSelectElement>("select")?.focus());
+    window.requestAnimationFrame(() => formRef.current?.querySelector<HTMLInputElement>("[data-deadline-college-search]")?.focus());
   }
   function resumeForm() {
     if (!form.editor) { openForm(emptyDeadlineEditor()); return; }
     setFormOpen(true); setErrors({}); setMessage("");
-    window.requestAnimationFrame(() => formRef.current?.querySelector<HTMLSelectElement>("select")?.focus());
+    window.requestAnimationFrame(() => formRef.current?.querySelector<HTMLInputElement>("[data-deadline-college-search]")?.focus());
   }
   function patchForm(patch: Partial<DeadlineEditor>) {
     if (!form.editor) return;
@@ -250,7 +259,8 @@ function ScopedDeadlinePlanner({ scope, colleges, savedCollegeIds, embedded, sto
       <p className={styles.formStatus}>{form.persisted ? "Form draft saved in this tab; it survives reload. Add the task below to include it in your tracker and backups." : "Form draft is only in memory in this tab. Add the task before leaving, or copy the text somewhere you can keep it."}</p>
       {Object.keys(errors).length ? <div id={`${id}-errors`} tabIndex={-1} className={styles.errors} role="alert"><p>Review these details:</p><ul>{Object.values(errors).map((error) => <li key={error}>{error}</li>)}</ul></div> : null}
       <fieldset disabled={busy} className={styles.formFields}>
-        <label htmlFor={`${id}-college`}>College<select id={`${id}-college`} value={form.editor.collegeId} onChange={(event) => patchForm({ collegeId: event.target.value })} aria-invalid={Boolean(errors.collegeId)} required><option value="">Choose a college</option>{embedded ? <><optgroup label="Saved colleges">{savedColleges.length ? savedColleges.map((college) => <option key={college.unitId} value={college.unitId}>{college.name}</option>) : <option value="" disabled>No saved colleges yet</option>}</optgroup><optgroup label="Other colleges">{otherColleges.map((college) => <option key={college.unitId} value={college.unitId}>{college.name}</option>)}</optgroup></> : colleges.map((college) => <option key={college.unitId} value={college.unitId}>{college.name}</option>)}</select></label>
+        <label htmlFor={`${id}-college-search`}>Find a college<input data-deadline-college-search id={`${id}-college-search`} type="search" value={collegeQuery} maxLength={100} onChange={(event) => setCollegeQuery(event.target.value.slice(0, 100))} placeholder="Name, alias, city, or state" aria-describedby={`${id}-college-search-help`} /><span className={styles.help} id={`${id}-college-search-help`}>Showing {visibleCollegeCount} choices. Saved and selected colleges stay available while you search.</span></label>
+        <label htmlFor={`${id}-college`}>College<select id={`${id}-college`} value={form.editor.collegeId} onChange={(event) => patchForm({ collegeId: event.target.value })} aria-invalid={Boolean(errors.collegeId)} required><option value="">Choose a college</option>{collegeOptions.saved.length ? <optgroup label="Saved colleges">{collegeOptions.saved.map((college) => <option key={college.unitId} value={college.unitId}>{deadlineCollegeOptionLabel(college)}</option>)}</optgroup> : null}<optgroup label={collegeQuery.trim() ? "Matching colleges" : "Other colleges"}>{collegeOptions.other.map((college) => <option key={college.unitId} value={college.unitId}>{deadlineCollegeOptionLabel(college)}</option>)}</optgroup></select></label>
         <label htmlFor={`${id}-task`}>Task type<select id={`${id}-task`} value={form.editor.task} onChange={(event) => patchForm({ task: event.target.value as DeadlineEditor["task"] })}>{DEADLINE_TASKS.map((task) => <option key={task.value} value={task.value}>{task.label}</option>)}</select></label>
         <label htmlFor={`${id}-title`}>{form.editor.task === "custom" ? "Task name" : "Task name (optional)"}<input id={`${id}-title`} value={form.editor.title} maxLength={100} onChange={(event) => patchForm({ title: event.target.value })} aria-invalid={Boolean(errors.title)} placeholder={form.editor.task === "application" ? "For example, regular decision" : undefined} /></label>
         <label htmlFor={`${id}-date`}>Date from your source or plan<input type="date" id={`${id}-date`} value={form.editor.date} min="1900-01-01" max="9999-12-31" onChange={(event) => patchForm({ date: event.target.value })} aria-invalid={Boolean(errors.date)} required /></label>

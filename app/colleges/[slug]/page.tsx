@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { tuitionMetrics } from "@/app/lib/tuition-labels";
+import { primaryTuitionMetric, tuitionMetrics } from "@/app/lib/tuition-labels";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -241,16 +241,19 @@ export default async function CollegeProfilePage({
     { label: "Enrolled", observation: college.observations.enrollees },
     { label: "Yield", observation: college.observations.yieldRate },
   ];
+  const tuition = tuitionMetrics(college);
+  const headlineTuition = primaryTuitionMetric(college);
   const outcomeMetrics: MetricDefinition[] = [
+    ...tuition,
+    {
+      label: "Historical average net price",
+      observation: averageNetPrice,
+    },
     {
       label: enrollmentIsFederal
         ? "Certificate/degree-seeking undergraduates"
         : "Undergraduate enrollment",
       observation: undergraduateEnrollment,
-    },
-    {
-      label: "Average net price",
-      observation: averageNetPrice,
     },
     {
       label: graduationIsFederal ? "150% completion rate" : "Graduation rate",
@@ -260,7 +263,6 @@ export default async function CollegeProfilePage({
       label: "Median earnings",
       observation: college.observations.medianEarnings,
     },
-    ...tuitionMetrics(college),
   ];
   const orderedMajors = [...college.majors].sort(
     (left, right) => right.share - left.share,
@@ -326,8 +328,14 @@ export default async function CollegeProfilePage({
           <a href="#admissions-heading">Admissions</a><a href="#outcomes-heading">Cost & outcomes</a><a href="#majors-heading">Fields of study</a><a href="#research-notebook">My research</a>
         </nav>
         <div className="profile-overview" aria-label="College at a glance">
-          {[{label: "Average net price / year", observation: averageNetPrice}, {label: "Overall admit rate", observation: admissions}, {label: graduationIsFederal ? "Completion rate" : "6-year graduation rate", observation: graduationRate}, {label: "Undergraduate enrollment", observation: undergraduateEnrollment}].map(({label,observation}) => <div key={label}><span>{label}</span><strong>{formatObservation(observation)}</strong><small>{observation.periodLabel}</small></div>)}
+          {[
+            { label: `${headlineTuition.label} / year`, observation: headlineTuition.observation },
+            { label: "Overall admit rate", observation: admissions },
+            { label: graduationIsFederal ? "Completion rate" : "6-year graduation rate", observation: graduationRate },
+            { label: "Undergraduate enrollment", observation: undergraduateEnrollment },
+          ].map(({ label, observation }) => <div key={label}><span>{label}</span><strong>{formatObservation(observation)}</strong><small>{observation.periodLabel}</small></div>)}
         </div>
+        <p className="profile-cost-context">Tuition and required fees are before aid. Housing, meals, and other living costs are extra. <a href="#outcomes-heading">See costs and historical aid-adjusted averages <ExternalLink size={14} aria-hidden="true" /></a></p>
         <aside
           className="profile-source-banner"
           aria-label="Headline admissions source"
@@ -456,7 +464,7 @@ export default async function CollegeProfilePage({
             </p>
             <EvidenceNote
               observation={averageNetPrice}
-              label="Average net price"
+              label="Historical average net price"
               definition={
                 netPriceIsFederal && college.ownership === "Public"
                   ? "For public colleges, this federal measure is the average annual price after grants and scholarships for first-time, full-time, degree/certificate-seeking undergraduates who pay in-state tuition and receive Title IV aid. It is not a personalized aid estimate."

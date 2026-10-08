@@ -13,13 +13,12 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 
 import { ResearchBackupControls } from "@/app/components/ResearchBackupControls";
 import { readResearchForExport } from "@/app/lib/research-drafts";
 import { ResearchNotebook } from "@/app/components/ResearchNotebook";
 import { CollegeLogo } from "@/app/components/CollegeLogo";
-import { NegativeNetPriceNote } from "@/app/components/NegativeNetPriceNote";
 import { DeadlinePlanner } from "@/app/components/DeadlinePlanner";
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
@@ -30,6 +29,7 @@ import {
   type ClientCollege,
 } from "@/app/lib/college-client-record";
 import type { DirectoryCollegeIdentity } from "@/app/lib/college-directory";
+import { parseCollegeIdentityDirectory } from "@/app/lib/college-identity-directory";
 import {
   type SavedComparisonSelection,
   visibleSavedComparisonIds,
@@ -39,10 +39,27 @@ import {
   retainResearchCollection,
   type ResearchCollectionSnapshot,
 } from "@/app/lib/research-notebook";
+import { primaryTuitionMetric } from "@/app/lib/tuition-labels";
+import {
+  plannerTabFromHash,
+  plannerTabFromKey,
+  type PlannerTab,
+} from "./planner-tabs";
 import styles from "./saved.module.css";
 
-export function SavedColleges({ collegeIdentities }: { collegeIdentities: DirectoryCollegeIdentity[] }) {
+type IdentityDirectoryState =
+  | { status: "idle" | "loading" | "error"; items: null }
+  | { status: "ready"; items: DirectoryCollegeIdentity[] };
+
+export function SavedColleges() {
   const [exportStatus, setExportStatus] = useState("");
+  const [activeTab, setActiveTab] = useState<PlannerTab>("colleges");
+  const [identityDirectory, setIdentityDirectory] = useState<IdentityDirectoryState>({ status: "idle", items: null });
+  const identityRequest = useRef<Promise<void> | null>(null);
+  const tabRefs = useRef<Record<PlannerTab, HTMLButtonElement | null>>({
+    colleges: null,
+    deadlines: null,
+  });
   const pageRef = useRef<HTMLElement>(null);
   const pendingRemovalFocus = useRef<{
     scopeKey: string;
@@ -85,6 +102,46 @@ export function SavedColleges({ collegeIdentities }: { collegeIdentities: Direct
   const unresolvedIdsKey = unresolvedIds.join(",");
   const recordsReady = unresolvedIdsKey.length === 0;
   const detailsError = detailsFailure?.key === unresolvedIdsKey ? detailsFailure.message : "";
+
+  const loadIdentityDirectory = useCallback(() => {
+    if (identityDirectory.status === "ready") return Promise.resolve();
+    if (identityRequest.current) return identityRequest.current;
+    setIdentityDirectory({ status: "loading", items: null });
+    const request = (async () => {
+      try {
+        const response = await fetch("/api/colleges/identities", {
+          headers: { Accept: "application/json" },
+        });
+        if (!response.ok) throw new Error("The college directory could not be loaded.");
+        const payload = parseCollegeIdentityDirectory(await response.json());
+        if (!payload) throw new Error("The college directory response was incomplete.");
+        setIdentityDirectory({ status: "ready", items: payload.items });
+      } catch {
+        setIdentityDirectory({ status: "error", items: null });
+      } finally {
+        identityRequest.current = null;
+      }
+    })();
+    identityRequest.current = request;
+    return request;
+  }, [identityDirectory.status]);
+
+  useLayoutEffect(() => {
+    const activateHashTab = () => setActiveTab(plannerTabFromHash(window.location.hash));
+    activateHashTab();
+    window.addEventListener("hashchange", activateHashTab);
+    window.addEventListener("popstate", activateHashTab);
+    return () => {
+      window.removeEventListener("hashchange", activateHashTab);
+      window.removeEventListener("popstate", activateHashTab);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === "deadlines" && identityDirectory.status === "idle") {
+      void loadIdentityDirectory();
+    }
+  }, [activeTab, identityDirectory.status, loadIdentityDirectory]);
 
   useEffect(() => {
     if (!hydrated || scopeKey === "loading" || !unresolvedIdsKey) return;
@@ -265,6 +322,27 @@ export function SavedColleges({ collegeIdentities }: { collegeIdentities: Direct
 
   const compareHref = `/compare?colleges=${selected.join(",")}`;
 
+  function activateTab(tab: PlannerTab, moveFocus = false) {
+    setActiveTab(tab);
+    if (window.location.hash !== `#${tab}`) {
+      window.history.pushState(
+        window.history.state,
+        "",
+        `${window.location.pathname}${window.location.search}#${tab}`,
+      );
+    }
+    if (moveFocus) {
+      window.requestAnimationFrame(() => tabRefs.current[tab]?.focus());
+    }
+  }
+
+  function handleTabKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+    const nextTab = plannerTabFromKey(activeTab, event.key);
+    if (!nextTab) return;
+    event.preventDefault();
+    activateTab(nextTab, true);
+  }
+
   return (
     <>
       <SiteHeader />
@@ -278,13 +356,44 @@ export function SavedColleges({ collegeIdentities }: { collegeIdentities: Direct
           <Link className="page-primary-action" href="/explore"><Plus size={17} aria-hidden="true" /> Explore colleges</Link>
         </header>
 
-        <nav className={styles.sectionNav} aria-label="My colleges sections">
-          <a href="#colleges">Saved colleges{hydrated ? <span>{saved.length}</span> : null}</a>
-          <a href="#deadlines"><CalendarDays size={16} aria-hidden="true" /> Deadlines</a>
-        </nav>
+        <div className={styles.sectionNav} role="tablist" aria-label="My colleges sections">
+          <button
+            ref={(node) => { tabRefs.current.colleges = node; }}
+            id="colleges-tab"
+            type="button"
+            role="tab"
+            aria-controls="colleges"
+            aria-selected={activeTab === "colleges"}
+            tabIndex={activeTab === "colleges" ? 0 : -1}
+            onClick={() => activateTab("colleges")}
+            onKeyDown={handleTabKeyDown}
+          >
+            Saved colleges{hydrated ? <span>{saved.length}</span> : null}
+          </button>
+          <button
+            ref={(node) => { tabRefs.current.deadlines = node; }}
+            id="deadlines-tab"
+            type="button"
+            role="tab"
+            aria-controls="deadlines"
+            aria-selected={activeTab === "deadlines"}
+            tabIndex={activeTab === "deadlines" ? 0 : -1}
+            onClick={() => activateTab("deadlines")}
+            onKeyDown={handleTabKeyDown}
+          >
+            <CalendarDays size={16} aria-hidden="true" /> Deadlines
+          </button>
+        </div>
 
         <div className={styles.workspace}>
-        <section id="colleges" className={styles.savedPanel} aria-labelledby="saved-heading">
+        <section
+          id="colleges"
+          className={styles.savedPanel}
+          role="tabpanel"
+          aria-labelledby="colleges-tab"
+          hidden={activeTab !== "colleges"}
+          inert={activeTab !== "colleges"}
+        >
           <header className={styles.collectionHeader}>
             <div><h2 id="saved-heading">Saved colleges</h2><p>Your possibilities, ready to revisit.</p></div>
             {saved.length > 0 && collectionVisible ? <span>{saved.length} saved</span> : null}
@@ -374,6 +483,7 @@ export function SavedColleges({ collegeIdentities }: { collegeIdentities: Direct
                 const source = observationSourceKind(
                   college.observations.admitRate,
                 );
+                const tuition = primaryTuitionMetric(college);
                 const isSelected = selected.includes(college.unitId);
                 return (
                   <article className={styles.card} key={college.unitId}>
@@ -393,6 +503,15 @@ export function SavedColleges({ collegeIdentities }: { collegeIdentities: Direct
                     </div>
                     <dl className={styles.metrics}>
                       <div>
+                        <dt>{tuition.label}</dt>
+                        <dd>
+                          <strong>
+                            {formatObservation(tuition.observation)}
+                          </strong>
+                          <span>{tuition.observation.periodLabel}</span>
+                        </dd>
+                      </div>
+                      <div>
                         <dt>Overall admit rate</dt>
                         <dd>
                           <strong>
@@ -403,21 +522,10 @@ export function SavedColleges({ collegeIdentities }: { collegeIdentities: Direct
                           </span>
                         </dd>
                       </div>
-                      <div>
-                        <dt>Average net price</dt>
-                        <dd>
-                          <strong>
-                            {formatObservation(
-                              college.observations.averageNetPrice,
-                            )}
-                          </strong>
-                          <span>
-                            {college.observations.averageNetPrice.periodLabel}
-                          </span>
-                          <NegativeNetPriceNote value={college.observations.averageNetPrice.value} />
-                        </dd>
-                      </div>
                     </dl>
+                    <p className={styles.costContext}>
+                      Before aid · Housing, meals, and other living costs are extra.
+                    </p>
                     <ResearchNotebook unitId={college.unitId} collegeName={college.name} />
                     <div className={styles.actions}>
                       <button
@@ -452,20 +560,60 @@ export function SavedColleges({ collegeIdentities }: { collegeIdentities: Direct
             </div>
           </section>
         ) : null}
-          <details className={styles.backupTools}>
+          <details
+            className={styles.backupTools}
+            onToggle={(event) => {
+              if (event.currentTarget.open && identityDirectory.status === "idle") {
+                void loadIdentityDirectory();
+              }
+            }}
+          >
             <summary><Download size={16} aria-hidden="true" /> Research export &amp; backup<ChevronDown size={15} aria-hidden="true" /></summary>
             {saved.length > 0 ? <button type="button" className="page-secondary-action" onClick={exportResearch} disabled={!collectionInteractive}><Download size={16} aria-hidden="true" /> Export research CSV</button> : null}
             {exportStatus ? <p className={styles.exportStatus} role="status">{exportStatus}</p> : null}
-            <ResearchBackupControls key={`backup:${collection.scopeKey}`} colleges={collegeIdentities} scopeKey={scopeKey} canUse={collectionInteractive} />
+            {identityDirectory.status === "ready" ? (
+              <ResearchBackupControls key={`backup:${collection.scopeKey}`} colleges={identityDirectory.items} scopeKey={scopeKey} canUse={collectionInteractive} />
+            ) : identityDirectory.status === "error" ? (
+              <div className={styles.directoryState} role="alert">
+                <p>The complete college directory could not be loaded. Your notebooks are unchanged, and backup tools remain paused.</p>
+                <button type="button" onClick={() => void loadIdentityDirectory()}>Retry directory</button>
+              </div>
+            ) : (
+              <div className={styles.directoryState} role="status" aria-busy="true">
+                <p>Loading the complete college directory before enabling backup tools…</p>
+                <div className={styles.directorySkeleton} aria-hidden="true"><span /><span /></div>
+              </div>
+            )}
           </details>
         </section>
-        <section id="deadlines" className={styles.deadlinePanel} aria-label="College deadlines">
-          <DeadlinePlanner colleges={collegeIdentities} embedded savedCollegeIds={collectionVisible ? savedIds : []} />
+        <section
+          id="deadlines"
+          className={styles.deadlinePanel}
+          role="tabpanel"
+          aria-labelledby="deadlines-tab"
+          hidden={activeTab !== "deadlines"}
+          inert={activeTab !== "deadlines"}
+        >
+          {identityDirectory.status === "ready" ? (
+            <DeadlinePlanner colleges={identityDirectory.items} embedded savedCollegeIds={collectionVisible ? savedIds : []} />
+          ) : identityDirectory.status === "error" ? (
+            <section className={styles.directoryState} role="alert" aria-labelledby="deadline-directory-error">
+              <h2 id="deadline-directory-error">Deadlines are temporarily paused.</h2>
+              <p>The complete college directory could not be loaded. Existing deadlines and drafts remain unchanged; retry before adding or restoring dates.</p>
+              <button type="button" onClick={() => void loadIdentityDirectory()}>Retry college directory</button>
+            </section>
+          ) : (
+            <section className={styles.directoryState} role="status" aria-busy="true" aria-labelledby="deadline-directory-loading">
+              <h2 id="deadline-directory-loading">Preparing your deadline planner…</h2>
+              <p>Loading the complete college directory so saved dates can be validated safely.</p>
+              <div className={styles.directorySkeleton} aria-hidden="true"><span /><span /><span /></div>
+            </section>
+          )}
         </section>
         </div>
       </main>
 
-      {selected.length > 0 ? (
+      {activeTab === "colleges" && selected.length > 0 ? (
         <aside className={styles.compareTray} aria-label="Saved comparison list">
           <span>
             <strong>{selected.length} of 4</strong> selected

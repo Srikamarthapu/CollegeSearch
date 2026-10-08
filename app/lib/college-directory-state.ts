@@ -91,12 +91,36 @@ export const EMPTY_DIRECTORY_FILTERS: DirectoryFilters = {
   sort: DEFAULT_DIRECTORY_SORT,
 };
 
+export function hasCompleteDirectoryData(college: College) {
+  return [
+    college.observations.admitRate,
+    college.observations.averageNetPrice,
+    college.observations.tuitionOutOfState,
+    college.observations.graduationRate,
+    college.observations.undergraduateEnrollment,
+  ].every((observation) => observation.value !== null);
+}
+
+export function reconcileDirectorySelection(
+  currentIds: number[],
+  requestedIds: readonly number[],
+  returnedIds: readonly number[],
+) {
+  const requested = new Set(requestedIds);
+  const returned = new Set(returnedIds);
+  const reconciled = currentIds.filter(
+    (unitId) => !requested.has(unitId) || returned.has(unitId),
+  );
+  return reconciled.length === currentIds.length ? currentIds : reconciled;
+}
+
 const compareSorts = new Set([
   DEFAULT_DIRECTORY_SORT,
   "name",
   "major",
   "admit-low",
   "admit-high",
+  "tuition",
   "price",
   "graduation",
   "enrollment",
@@ -252,6 +276,11 @@ export function sortDirectoryColleges(
         left.observations.admitRate.value,
         right.observations.admitRate.value,
         "desc",
+      );
+    } else if (sort === "tuition") {
+      comparison = compareNullable(
+        left.observations.tuitionOutOfState.value,
+        right.observations.tuitionOutOfState.value,
       );
     } else if (sort === "price") {
       comparison = compareNullable(

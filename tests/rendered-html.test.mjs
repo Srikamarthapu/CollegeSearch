@@ -169,8 +169,8 @@ test("server-renders the CollegeSearch product shell", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>CollegeSearch<\/title>/i);
-  assert.match(html, /Find your(?:<[^>]*>|\s)*starting point\./);
-  assert.match(html, /Your college search, all together/);
+  assert.match(html, /Find a college(?:<[^>]*>|\s)*that fits you\./);
+  assert.match(html, /YOUR COLLEGE SEARCH/);
   assert.match(html, /UC admissions/);
   assert.match(html, /Fall 2026/);
   assert.match(html, /College Scorecard/);
@@ -213,6 +213,21 @@ test("server-renders the CollegeSearch product shell", async () => {
   assert.match(html, /http:\/\/localhost\/og\.png/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/i);
   assert.doesNotMatch(html, /react-loading-skeleton/);
+});
+
+test("headline costs show Stanford tuition and fees instead of the historical aid-cohort average", async () => {
+  const response = await render("/colleges/stanford-university");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  const overview = html.match(/<div class="profile-overview"[\s\S]*?<\/div>\s*<p class="profile-cost-context"/)?.[0];
+  assert.ok(overview, "the profile exposes a distinct cost overview");
+  assert.match(overview, /Published tuition \+ required fees \/ year/);
+  assert.match(overview, /\$68,574/);
+  assert.match(overview, /2026-2027/);
+  assert.doesNotMatch(overview, /\$13,807/);
+  assert.match(html, /Housing, meals, and other living costs are extra/);
+  assert.match(html, /Historical average net price/);
+  assert.match(html, /\$13,807/);
 });
 
 test("global HTML responses enforce one fresh nonce on every executable block", async () => {
@@ -385,7 +400,7 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
     {
       path: "/explore",
       markers: [
-        /Find your(?:<[^>]*>|\s)*starting point\./,
+        /Find a college(?:<[^>]*>|\s)*that fits you\./,
         /Field filters use 2024-2025 federal program and award data\./,
       ],
     },
@@ -473,13 +488,13 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
       path: "/chances",
       markers: [
         /Admit-rate context · CollegeSearch/,
-        /Put admission rates in perspective\./,
-        /No “87% chance\.” No reach, target, or safety labels\./,
+        /Understand admission rates\./,
+        /Past admit rates aren’t personal admission odds\./,
       ],
     },
     {
       path: "/my-colleges",
-      markers: [/My colleges \| CollegeSearch/, /Saved colleges/, /College deadlines/],
+      markers: [/My colleges \| CollegeSearch/, /Saved colleges/, /Deadlines/],
     },
     {
       path: "/account",
@@ -609,8 +624,8 @@ test("cost displays distinguish federal district charges, verified resident char
     }
   }
   const comparison = await (await render("/compare?colleges=110404,166027")).text();
-  assert.match(comparison, /Published tuition \+ fees/);
-  assert.ok(!comparison.includes('<th scope="row">In-district / in-state tuition + fees</th>'));
+  assert.match(comparison, /Published tuition \+ required fees/);
+  assert.ok(!comparison.includes('<th scope="row">In-district / in-state tuition + required fees</th>'));
 });
 
 test("mobile broad-field comparison preserves distance-learning program evidence", async () => {

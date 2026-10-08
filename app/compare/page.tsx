@@ -24,6 +24,7 @@ import {
   type Observation,
 } from "@/app/lib/college-data";
 import { MAJOR_OPTIONS } from "@/app/lib/college-search";
+import { residentTuitionLabel } from "@/app/lib/tuition-labels";
 
 type ComparePageProps = {
   searchParams: Promise<{
@@ -42,9 +43,9 @@ type ComparisonRow = {
 };
 
 const comparisonRows: ComparisonRow[] = [
-  { label: "Average net price", observation: (college) => college.observations.averageNetPrice },
-  { label: "In-district / in-state tuition + fees", publicOnly: true, observation: (college) => college.ownership === "Public" ? college.observations.tuitionInState : null },
-  { label: "Out-of-state tuition + fees", privateLabel: "Published tuition + fees", mixedLabel: "Out-of-state / private tuition + fees", observation: (college) => college.observations.tuitionOutOfState },
+  { label: "Resident tuition + required fees", publicOnly: true, observation: (college) => college.ownership === "Public" ? college.observations.tuitionInState : null },
+  { label: "Out-of-state tuition + required fees", privateLabel: "Published tuition + required fees", mixedLabel: "Out-of-state / private tuition + required fees", observation: (college) => college.observations.tuitionOutOfState },
+  { label: "Historical average net price (federal aid cohort)", observation: (college) => college.observations.averageNetPrice },
   { label: "Headline admit rate", observation: (college) => college.observations.admitRate },
   { label: "Completion / graduation rate", observation: (college) => college.observations.graduationRate },
   { label: "Median earnings", observation: (college) => college.observations.medianEarnings },
@@ -55,6 +56,16 @@ const comparisonRows: ComparisonRow[] = [
 ];
 
 function comparisonLabel(row: ComparisonRow, selected: College[]) {
+  if (row.label === "Resident tuition + required fees") {
+    const labels = new Set(
+      selected
+        .filter((college) => college.ownership === "Public")
+        .map((college) => residentTuitionLabel(college.observations.tuitionInState)),
+    );
+    return labels.size === 1
+      ? [...labels][0]
+      : "Resident tuition + required fees (basis varies)";
+  }
   if (row.privateLabel && selected.every((college) => college.ownership !== "Public")) return row.privateLabel;
   if (row.mixedLabel && selected.some((college) => college.ownership !== "Public")) return row.mixedLabel;
   return row.label;
@@ -374,7 +385,7 @@ export default async function ComparePage({
                           <td key={college.unitId}>
                             {row.publicOnly && college.ownership !== "Public" ? <span className="comparison-missing">See published tuition below</span> : <>
                               <ObservationValue observation={row.observation(college)} showDefinition={row.label === "Completion / graduation rate"} />
-                              {row.label === "Average net price" ? <NegativeNetPriceNote value={college.observations.averageNetPrice.value} /> : null}
+                              {row.label.startsWith("Historical average net price") ? <NegativeNetPriceNote value={college.observations.averageNetPrice.value} /> : null}
                             </>}
                           </td>
                         ))}
@@ -460,7 +471,7 @@ export default async function ComparePage({
                               observation={row.observation(college)}
                               showDefinition={row.label === "Completion / graduation rate"}
                             />
-                            {row.label === "Average net price" ? <NegativeNetPriceNote value={college.observations.averageNetPrice.value} /> : null}
+                            {row.label.startsWith("Historical average net price") ? <NegativeNetPriceNote value={college.observations.averageNetPrice.value} /> : null}
                           </dd>
                         </div>
                       ))}

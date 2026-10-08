@@ -4,44 +4,30 @@ import Link from "next/link";
 import {
   ArrowRight,
   ExternalLink,
-  FileWarning,
   Info,
   Plus,
   Search,
   ShieldCheck,
   X,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { CollegeLogo } from "@/app/components/CollegeLogo";
 import { LocalSaveButton } from "@/app/components/LocalSaveButton";
-import { availableChancesCollegeOptions } from "./college-options";
+import type { ChancesCollege } from "./admissions-record";
+import {
+  admissionsQueryChanged,
+  normalizeAdmissionsQuery,
+} from "./admissions-query";
 import { historicalAdmitBand } from "./context";
 import styles from "./chances.module.css";
-
-export type ChancesCollege = {
-  unitId: number;
-  slug: string;
-  name: string;
-  aliases: string[];
-  city: string;
-  state: string;
-  ownership: string;
-  rate: number | null;
-  periodLabel: string;
-  finality: string;
-  status: string;
-  publisher: string;
-  sourceName: string;
-  sourceUrl: string;
-  cohort: string;
-  definition: string;
-};
 
 type ChancesToolProps = {
   colleges: ChancesCollege[];
   initialIds: number[];
 };
+
+type SearchPhase = "idle" | "loading" | "ready" | "error";
 
 const percent = new Intl.NumberFormat("en-US", {
   style: "percent",
@@ -63,21 +49,63 @@ export function ChancesTool({ colleges, initialIds }: ChancesToolProps) {
   const [selectedIds, setSelectedIds] = useState(() => initialIds.filter((id) => validIds.has(id)).slice(0, 4));
   const [searchTerm, setSearchTerm] = useState("");
   const [pendingId, setPendingId] = useState<number | "">("");
+  const [knownColleges, setKnownColleges] = useState(colleges);
+  const [searchResults, setSearchResults] = useState(colleges);
+  const [searchPhase, setSearchPhase] = useState<SearchPhase>("ready");
+  const [searchError, setSearchError] = useState("");
+  const [searchAttempt, setSearchAttempt] = useState(0);
+  const searchRequestId = useRef(0);
+  const normalizedSearchTerm = normalizeAdmissionsQuery(searchTerm);
 
   const selected = selectedIds
-    .map((unitId) => colleges.find((college) => college.unitId === unitId))
+    .map((unitId) => knownColleges.find((college) => college.unitId === unitId))
     .filter((college): college is ChancesCollege => Boolean(college));
+  const selectedIdSet = new Set(selectedIds);
+  const available = searchResults.filter((college) => !selectedIdSet.has(college.unitId));
 
-  const available = availableChancesCollegeOptions(
-    colleges,
-    selectedIds,
-    searchTerm,
-  );
+  useEffect(() => {
+    const requestId = ++searchRequestId.current;
+    if (normalizedSearchTerm.length < 2) return;
+
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => {
+      const params = new URLSearchParams({ q: normalizedSearchTerm });
+      void fetch(`/api/colleges/admissions?${params}`, { signal: controller.signal })
+        .then(async (response) => {
+          if (!response.ok) throw new Error("College search is unavailable.");
+          const payload = await response.json() as { items?: ChancesCollege[] };
+          if (!Array.isArray(payload.items)) throw new Error("College search returned an invalid response.");
+          return payload.items;
+        })
+        .then((items) => {
+          if (searchRequestId.current !== requestId) return;
+          setKnownColleges((current) => {
+            const merged = new Map(current.map((college) => [college.unitId, college]));
+            for (const college of items) merged.set(college.unitId, college);
+            return [...merged.values()];
+          });
+          setSearchResults(items);
+          setSearchPhase("ready");
+        })
+        .catch((error) => {
+          if (controller.signal.aborted || searchRequestId.current !== requestId) return;
+          setSearchResults([]);
+          setSearchError(error instanceof Error ? error.message : "College search is unavailable.");
+          setSearchPhase("error");
+        });
+    }, 200);
+
+    return () => {
+      window.clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [colleges, normalizedSearchTerm, searchAttempt]);
 
   useEffect(() => {
     const url = new URL(window.location.href);
     if (selectedIds.length > 0) {
       url.searchParams.set("colleges", selectedIds.join(","));
+      url.searchParams.delete("ids");
     } else {
       url.searchParams.delete("colleges");
       url.searchParams.delete("ids");
@@ -85,16 +113,73 @@ export function ChancesTool({ colleges, initialIds }: ChancesToolProps) {
     window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`);
   }, [selectedIds]);
 
+  const updateSearchTerm = (value: string) => {
+    const next = value.slice(0, 120);
+    const normalized = normalizeAdmissionsQuery(next);
+    const queryChanged = admissionsQueryChanged(searchTerm, next);
+    setSearchTerm(next);
+    if (!queryChanged) return;
+    searchRequestId.current += 1;
+    setPendingId("");
+    setSearchError("");
+    if (!normalized) {
+      setSearchResults(colleges);
+      setSearchPhase("ready");
+    } else if (normalized.length < 2) {
+      setSearchResults([]);
+      setSearchPhase("idle");
+    } else {
+      setSearchResults([]);
+      setSearchPhase("loading");
+    }
+  };
+
   const addCollege = () => {
     if (pendingId === "" || selectedIds.length >= 4) return;
     setSelectedIds((current) => [...current, pendingId]);
     setPendingId("");
-    setSearchTerm("");
+    updateSearchTerm("");
   };
 
   const removeCollege = (unitId: number) => {
     setSelectedIds((current) => current.filter((id) => id !== unitId));
   };
+
+  const retrySearch = () => {
+    setPendingId("");
+    setSearchError("");
+    setSearchPhase("loading");
+    setSearchAttempt((attempt) => attempt + 1);
+  };
+
+  const optionPrompt = selected.length >= 4
+    ? "Four colleges selected"
+    : searchPhase === "loading"
+      ? "Searching colleges…"
+      : searchPhase === "error"
+        ? "Search unavailable"
+        : normalizedSearchTerm.length === 1
+          ? "Type at least 2 characters"
+          : available.length > 0
+            ? "Choose a college"
+            : "No matching colleges";
+  const searchStatus = selected.length >= 4
+    ? "Remove a college before adding another."
+    : searchPhase === "loading"
+      ? `Searching for ${normalizedSearchTerm}.`
+      : searchPhase === "error"
+        ? searchError
+        : normalizedSearchTerm.length === 1
+          ? "Type at least 2 characters to search the full college directory."
+          : normalizedSearchTerm
+            ? `${available.length} ${available.length === 1 ? "college" : "colleges"} found.`
+            : `Showing ${available.length} starting colleges. Search by college, city, state, or abbreviation.`;
+  const selectionUnavailable =
+    selected.length >= 4 ||
+    searchPhase === "loading" ||
+    searchPhase === "error" ||
+    normalizedSearchTerm.length === 1 ||
+    available.length === 0;
 
   return (
     <>
@@ -104,34 +189,26 @@ export function ChancesTool({ colleges, initialIds }: ChancesToolProps) {
             <ShieldCheck size={15} aria-hidden="true" />
             Understand admissions
           </span>
-          <h1>Put admission rates in perspective.</h1>
-          <p>
-            Compare up to four colleges using their reported overall first-year
-            admit rates. We describe the observed cohort; we do not turn it
-            into a personalized probability.
-          </p>
+          <h1>Understand admission rates.</h1>
+          <p>Compare reported first-year admit rates for up to four colleges.</p>
         </div>
-        <div className={styles.boundaryCard}>
-          <span>What this tool will not claim</span>
-          <strong>No “87% chance.” No reach, target, or safety labels.</strong>
-          <p>
-            An institution-wide historical rate cannot account for your
-            program, residency, achievements, or the next applicant pool.
-          </p>
-        </div>
+        <aside className={styles.contextNote} aria-label="How to interpret admission rates">
+          <Info size={18} aria-hidden="true" />
+          <div>
+            <strong>Past admit rates aren’t personal admission odds.</strong>
+            <details>
+              <summary>How to read these rates</summary>
+              <p>
+                A reported institution-wide rate describes a past applicant
+                cohort. CollegeSearch does not estimate your probability or
+                assign reach, target, or safety labels because the rate cannot
+                account for your program, residency, achievements, or the next
+                applicant pool.
+              </p>
+            </details>
+          </div>
+        </aside>
       </header>
-
-      <section className={styles.deferredNotice} aria-labelledby="model-boundary-heading">
-        <FileWarning size={22} aria-hidden="true" />
-        <div>
-          <h2 id="model-boundary-heading">What an admit rate can tell you.</h2>
-          <p>
-            It shows the share of applicants admitted in a past cycle. It cannot
-            predict your result. This collection does not include verified,
-            comparable GPA and test-score ranges.
-          </p>
-        </div>
-      </section>
 
       <div className={styles.workspace}>
         <section className={styles.selector} aria-labelledby="college-selector-heading">
@@ -151,23 +228,26 @@ export function ChancesTool({ colleges, initialIds }: ChancesToolProps) {
                 value={searchTerm}
                 maxLength={120}
                 placeholder="Try UCLA, Stanford, or Arizona"
-                onChange={(event) => {
-                  setSearchTerm(event.target.value.slice(0, 120));
-                  setPendingId("");
-                }}
+                aria-describedby="admissions-search-help admissions-search-status"
+                aria-controls="admissions-college-options"
+                aria-busy={searchPhase === "loading"}
+                onChange={(event) => updateSearchTerm(event.target.value)}
               />
+              <small id="admissions-search-help">Enter at least 2 characters to search all colleges.</small>
             </label>
             <label>
               <span>Available colleges</span>
               <select
+                id="admissions-college-options"
                 value={pendingId}
-                disabled={selected.length >= 4}
+                disabled={selectionUnavailable}
+                aria-describedby="admissions-search-status"
                 onChange={(event) => setPendingId(event.target.value ? Number(event.target.value) : "")}
               >
-                <option value="">{available.length > 0 ? "Choose a college" : "No matching colleges"}</option>
+                <option value="">{optionPrompt}</option>
                 {available.map((college) => (
                   <option value={college.unitId} key={college.unitId}>
-                    {college.name} · {college.state}
+                    {college.name} · {college.city}, {college.state}
                   </option>
                 ))}
               </select>
@@ -176,6 +256,14 @@ export function ChancesTool({ colleges, initialIds }: ChancesToolProps) {
               <Plus size={16} aria-hidden="true" />
               Add college
             </button>
+            <div className={styles.searchFeedback}>
+              <p id="admissions-search-status" role={searchPhase === "error" ? "alert" : "status"} aria-live="polite">{searchStatus}</p>
+              {searchPhase === "error" ? (
+                <button type="button" onClick={retrySearch}>
+                  Retry search
+                </button>
+              ) : null}
+            </div>
           </div>
 
           {selected.length > 0 ? (

@@ -2,7 +2,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import type { College } from "../app/lib/college-data";
-import { tuitionMetrics } from "../app/lib/tuition-labels.ts";
+import {
+  primaryTuitionMetric,
+  tuitionMetrics,
+} from "../app/lib/tuition-labels.ts";
 
 const colleges = JSON.parse(readFileSync(new URL("../data/colleges.json", import.meta.url), "utf8")).colleges as College[];
 
@@ -22,5 +25,18 @@ test("federal in-district charges are not relabeled as verified in-state charges
     const federal = college.observations.tuitionInState.sourceField === "TUITIONFEE_IN" && college.observations.tuitionInState.publisher === "U.S. Department of Education";
     assert.equal(metrics[0].label, federal ? "In-district tuition + required fees" : "In-state tuition + required fees");
     assert.equal(metrics[1].label, "Out-of-state tuition + required fees");
+  }
+});
+
+test("the default card tuition metric states the public residency basis", () => {
+  for (const college of colleges) {
+    const metric = primaryTuitionMetric(college);
+    assert.equal(metric.observation, college.observations.tuitionOutOfState);
+    assert.equal(
+      metric.label,
+      college.ownership === "Public"
+        ? "Out-of-state tuition + required fees"
+        : "Published tuition + required fees",
+    );
   }
 });

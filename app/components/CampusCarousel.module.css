@@ -3,16 +3,9 @@
   margin: 0;
 }
 
-.heading {
-  margin: 0 0 12px;
-  color: var(--ink-soft);
-  font-size: 13px;
-  font-weight: 600;
-}
-
 .window {
   position: relative;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 2 / 1;
   overflow: hidden;
   isolation: isolate;
   border-radius: 12px;
@@ -116,12 +109,8 @@
     margin-top: 2px;
   }
 
-  .heading {
-    margin-bottom: 9px;
-  }
-
   .window {
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 16 / 9;
   }
 
   .caption {

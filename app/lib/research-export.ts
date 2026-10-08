@@ -11,7 +11,7 @@ export function researchCsv(colleges: ClientCollege[], notebooks: Record<number,
   const origin = new URL(siteOrigin);
   if (!["https:", "http:"].includes(origin.protocol)) throw new Error("A full website origin is required for portable profile links.");
   const metricKeys = ["averageNetPrice", "admitRate", "graduationRate", "undergraduateEnrollment", "medianEarnings", "tuitionOutOfState"] as const;
-  const labels = ["Average annual net price (USD)", "Overall admit rate (fraction)", "Completion rate (fraction; definitions differ)", "Undergraduate enrollment", "Median earnings (USD)", "Out-of-state tuition + required fees (USD)"];
+  const labels = ["Historical average net price (USD; reported federal aid cohort)", "Overall admit rate (fraction)", "Completion rate (fraction; definitions differ)", "Undergraduate enrollment", "Median earnings (USD)", "Out-of-state / private tuition + required fees (USD)"];
   const header = ["College", "City", "State", "College profile", ...labels.flatMap((label) => [label, `${label}: period`, `${label}: source`]), "Research notes (browser only)", "Research steps checked", "List category (student assigned, not an admissions estimate)"];
   const rows = colleges.map((college) => [college.name, college.city, college.state, new URL(`/colleges/${college.slug}`, origin.origin).href,
     ...metricKeys.flatMap((key) => {

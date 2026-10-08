@@ -21,6 +21,7 @@ import { matchesEnrollmentBand } from "./explorer-filters";
 import knowledgeRelease from "@/data/college-knowledge-release.json";
 import {
   DIRECTORY_PAGE_SIZE,
+  hasCompleteDirectoryData,
   sortDirectoryColleges,
   type DirectoryFilters,
 } from "./college-directory-state";
@@ -36,7 +37,7 @@ export type { DirectoryFilters } from "./college-directory-state";
 
 export type DirectoryCollegeIdentity = Pick<
   ClientCollege,
-  "unitId" | "slug" | "name"
+  "unitId" | "name" | "aliases" | "city" | "state"
 > & {
   deadlineSourceUrl?: string;
   admissionsSourceUrl?: string;
@@ -128,15 +129,6 @@ function majorForCollege(college: College, name: string) {
   );
 }
 
-function matchesCompleteData(college: College) {
-  return [
-    college.observations.admitRate,
-    college.observations.averageNetPrice,
-    college.observations.graduationRate,
-    college.observations.undergraduateEnrollment,
-  ].every((observation) => observation.value !== null);
-}
-
 export function searchCollegeDirectory({
   filters,
   savedIds = [],
@@ -185,7 +177,7 @@ export function searchCollegeDirectory({
         (!minEarnings || (earnings !== null && earnings >= minEarnings)) &&
         (!filters.setting || college.setting === filters.setting) &&
         (!filters.ucOnly || isUniversityOfCalifornia(college)) &&
-        (!filters.completeOnly || matchesCompleteData(college)) &&
+        (!filters.completeOnly || hasCompleteDirectoryData(college)) &&
         (!filters.savedOnly || savedSet.has(college.unitId))
       );
     }),
@@ -256,10 +248,21 @@ export function directoryCollegeIdentities(): DirectoryCollegeIdentity[] {
     const actions = collegeActions(college.unitId);
     return {
       unitId: college.unitId,
-      slug: college.slug,
       name: college.name,
+      aliases: college.aliases,
+      city: college.city,
+      state: college.state,
       deadlineSourceUrl: actions?.deadlines.status === "verified" ? actions.deadlines.url : undefined,
       admissionsSourceUrl: actions?.admissions.status === "verified" ? actions.admissions.url : undefined,
     };
   });
+}
+
+export function directoryCollegeIdentityPayload() {
+  const items = directoryCollegeIdentities();
+  return {
+    items,
+    total: items.length,
+    releaseId: knowledgeRelease.releaseId,
+  };
 }

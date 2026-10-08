@@ -4,8 +4,8 @@ import { ArrowLeft } from "lucide-react";
 
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
-import { colleges } from "@/app/lib/college-data";
-import { ChancesTool, type ChancesCollege } from "./ChancesTool";
+import { initialAdmissionsDirectory } from "./admissions-directory";
+import { ChancesTool } from "./ChancesTool";
 import styles from "./chances.module.css";
 
 export const metadata: Metadata = {
@@ -38,31 +38,12 @@ function parseUnitIds(value: string | undefined) {
   return parsed;
 }
 
-const chancesColleges: ChancesCollege[] = colleges.map((college) => {
-  const observation = college.observations.admitRate;
-  return {
-    unitId: college.unitId,
-    slug: college.slug,
-    name: college.name,
-    aliases: college.aliases,
-    city: college.city,
-    state: college.state,
-    ownership: college.ownership,
-    rate: observation.value,
-    periodLabel: observation.periodLabel,
-    finality: observation.finality,
-    status: observation.status,
-    publisher: observation.publisher,
-    sourceName: observation.sourceName,
-    sourceUrl: observation.sourceUrl,
-    cohort: observation.cohort,
-    definition: observation.definition,
-  };
-});
-
 export default async function ChancesPage({ searchParams }: ChancesPageProps) {
   const query = await searchParams;
   const initialIds = parseUnitIds(first(query.colleges) ?? first(query.ids));
+  const initialColleges = initialAdmissionsDirectory(initialIds);
+  const availableIds = new Set(initialColleges.map((college) => college.unitId));
+  const validInitialIds = initialIds.filter((unitId) => availableIds.has(unitId));
 
   return (
     <>
@@ -76,7 +57,7 @@ export default async function ChancesPage({ searchParams }: ChancesPageProps) {
           <span aria-hidden="true">/</span>
           <span aria-current="page">Admit-rate context</span>
         </nav>
-        <ChancesTool colleges={chancesColleges} initialIds={initialIds} />
+        <ChancesTool colleges={initialColleges} initialIds={validInitialIds} />
       </main>
       <SiteFooter />
     </>

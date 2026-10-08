@@ -7,7 +7,9 @@ import {
   DEFAULT_DIRECTORY_SORT,
   EMPTY_DIRECTORY_FILTERS,
   FEATURED_DIRECTORY_UNIT_IDS,
+  hasCompleteDirectoryData,
   parseDirectoryFilters,
+  reconcileDirectorySelection,
   sortDirectoryColleges,
   serializeDirectoryFilters,
 } from "../app/lib/college-directory-state.ts";
@@ -105,4 +107,61 @@ test("default sorting keeps search match order and explicit alphabetical URLs su
   const serialized = serializeDirectoryFilters(explicitNameSort);
   assert.equal(serialized.get("sort"), "name");
   assert.equal(parseDirectoryFilters(serialized, options).sort, "name");
+});
+
+test("published tuition sorting is explicit while legacy net-price URLs retain their meaning", () => {
+  const tuitionSort = parseDirectoryFilters(
+    new URLSearchParams({ sort: "tuition" }),
+    options,
+  );
+  assert.equal(tuitionSort.sort, "tuition");
+  const byTuition = sortDirectoryColleges(dataset.colleges, "tuition", "");
+  const tuitionValues = byTuition
+    .map((college) => college.observations.tuitionOutOfState.value)
+    .filter((value): value is number => value !== null);
+  assert.deepEqual(tuitionValues, [...tuitionValues].sort((left, right) => left - right));
+
+  const legacyNetPriceSort = parseDirectoryFilters(
+    new URLSearchParams({ sort: "price" }),
+    options,
+  );
+  assert.equal(legacyNetPriceSort.sort, "price");
+  const byNetPrice = sortDirectoryColleges(dataset.colleges, "price", "");
+  const netPriceValues = byNetPrice
+    .map((college) => college.observations.averageNetPrice.value)
+    .filter((value): value is number => value !== null);
+  assert.deepEqual(netPriceValues, [...netPriceValues].sort((left, right) => left - right));
+});
+
+test("complete directory records include the tuition metric shown as the card headline", () => {
+  const missingTuition = dataset.colleges.find(
+    (college) => college.unitId === 188915,
+  );
+  const complete = dataset.colleges.find(
+    (college) => college.unitId === 110635,
+  );
+  assert.ok(missingTuition);
+  assert.ok(complete);
+  assert.equal(missingTuition.observations.tuitionOutOfState.value, null);
+  assert.equal(hasCompleteDirectoryData(missingTuition), false);
+  assert.equal(hasCompleteDirectoryData(complete), true);
+});
+
+test("directory selection removes rejected IDs without dropping newer choices", () => {
+  assert.deepEqual(
+    reconcileDirectorySelection(
+      [99999999, 110635],
+      [99999999, 110635],
+      [110635],
+    ),
+    [110635],
+  );
+  assert.deepEqual(
+    reconcileDirectorySelection(
+      [99999999, 110635, 243744],
+      [99999999, 110635],
+      [110635],
+    ),
+    [110635, 243744],
+  );
 });

@@ -21,6 +21,8 @@ test("research exports retain missing states, exact periods, sources and notes",
   assert.match(csv, /Ask about advising/);
   assert.match(csv, /Verify my major is currently offered/);
   assert.match(csv, /Overall admit rate \(fraction\)/);
+  assert.match(csv, /Historical average net price \(USD; reported federal aid cohort\)/);
+  assert.match(csv, /Out-of-state \/ private tuition \+ required fees \(USD\)/);
 });
 
 
