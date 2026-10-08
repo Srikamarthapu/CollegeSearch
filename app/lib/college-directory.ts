@@ -152,6 +152,7 @@ export function searchCollegeDirectory({
   const savedSet = new Set(savedIds);
   const maxPrice = Number(filters.maxPrice) || null;
   const maxTuition = Number(filters.maxTuition) || null;
+  const maxTuitionOnly = Number(filters.maxTuitionOnly) || null;
   const minGraduation = Number(filters.minGraduation) || null;
   const minEarnings = Number(filters.minEarnings) || null;
 
@@ -159,7 +160,8 @@ export function searchCollegeDirectory({
     colleges.filter((college) => {
       const admitRate = college.observations.admitRate.value;
       const netPrice = college.observations.averageNetPrice.value;
-      const tuition = college.observations.tuitionOutOfState.value;
+      const legacyTuition = college.observations.tuitionOutOfState.value;
+      const tuitionOnly = college.costs.tuitionOutOfState.value;
       const enrollment = college.observations.undergraduateEnrollment.value;
       const graduation = college.observations.graduationRate.value;
       const earnings = college.observations.medianEarnings.value;
@@ -171,7 +173,8 @@ export function searchCollegeDirectory({
         (!filters.institutionLevel || college.institutionLevel === filters.institutionLevel) &&
         matchesSelectivity(admitRate, filters.band) &&
         (!maxPrice || (netPrice !== null && netPrice <= maxPrice)) &&
-        (!maxTuition || (tuition !== null && tuition <= maxTuition)) &&
+        (!maxTuition || (legacyTuition !== null && legacyTuition <= maxTuition)) &&
+        (!maxTuitionOnly || (tuitionOnly !== null && tuitionOnly <= maxTuitionOnly)) &&
         matchesEnrollmentBand(enrollment, filters.enrollmentBand) &&
         (!minGraduation || (graduation !== null && graduation >= minGraduation)) &&
         (!minEarnings || (earnings !== null && earnings >= minEarnings)) &&

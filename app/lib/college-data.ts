@@ -1,4 +1,7 @@
 import rawDataset from "@/data/colleges.json";
+import tuitionDataset from "@/data/college-tuition.json";
+import costOverrides from "@/data/college-cost-overrides.json";
+import { assertCollegeCosts, type CollegeCosts } from "./college-costs";
 import { assertCollegeEvidence } from "./college-evidence";
 import type { CollegeCatalogCategory } from "./catalog-categories";
 
@@ -62,6 +65,7 @@ export type CollegeObservations = {
 };
 
 export type College = {
+  costs: CollegeCosts;
   catalogCategory: CollegeCatalogCategory;
   inclusionReason: string;
   unitId: number;
@@ -282,7 +286,24 @@ function validateDataset(value: unknown): CollegeDataset {
 }
 
 export const collegeDataset = validateDataset(rawDataset);
-export const colleges = collegeDataset.colleges;
+const tuitionById = new Map(tuitionDataset.colleges.map((row) => [row.unitId, row]));
+const costOverridesById = new Map(costOverrides.colleges.map((row) => [row.unitId, row]));
+if (tuitionById.size !== tuitionDataset.colleges.length || tuitionById.size !== collegeDataset.colleges.length || costOverridesById.size !== costOverrides.colleges.length) {
+  throw new Error("Tuition evidence has duplicate or incomplete catalog identities.");
+}
+export const colleges = collegeDataset.colleges.map((college): College => {
+  const row = tuitionById.get(college.unitId);
+  if (!row) throw new Error(`${college.name}: missing tuition evidence record.`);
+  const costs = (costOverridesById.get(college.unitId)?.costs ?? {
+    tuitionInState: row.tuition.inState,
+    tuitionOutOfState: row.tuition.outOfState,
+    feesInState: row.fees.inState,
+    feesOutOfState: row.fees.outOfState,
+    feeBasis: "required",
+  }) as CollegeCosts;
+  assertCollegeCosts(costs, college.name);
+  return { ...college, costs };
+});
 export const release = collegeDataset.release;
 
 export const currencyFormatter = new Intl.NumberFormat("en-US", {

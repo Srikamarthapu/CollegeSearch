@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import type { College } from "../app/lib/college-data.ts";
+import { attachCostEvidence } from "./helpers/college-cost-fixture.ts";
 import {
   DEFAULT_DIRECTORY_SORT,
   EMPTY_DIRECTORY_FILTERS,
@@ -14,9 +15,10 @@ import {
   serializeDirectoryFilters,
 } from "../app/lib/college-directory-state.ts";
 
-const dataset = JSON.parse(
+const rawDataset = JSON.parse(
   await readFile(new URL("../data/colleges.json", import.meta.url), "utf8"),
 ) as { colleges: College[] };
+const dataset = { ...rawDataset, colleges: attachCostEvidence(rawDataset.colleges) };
 const options = {
   majorOptions: [...new Set(dataset.colleges.flatMap((college) => college.majors.map((major) => major.name)))].sort(),
   states: [...new Set(dataset.colleges.map((college) => college.state))].sort(),
@@ -109,17 +111,63 @@ test("default sorting keeps search match order and explicit alphabetical URLs su
   assert.equal(parseDirectoryFilters(serialized, options).sort, "name");
 });
 
-test("published tuition sorting is explicit while legacy net-price URLs retain their meaning", () => {
+test("new tuition-only URLs and legacy tuition-with-fees URLs keep separate filter state", () => {
+  const tuitionOnly = parseDirectoryFilters(
+    new URLSearchParams({ tuitionOnly: "50000" }),
+    options,
+  );
+  assert.equal(tuitionOnly.maxTuitionOnly, "50000");
+  assert.equal(tuitionOnly.maxTuition, "");
+  const serializedTuitionOnly = serializeDirectoryFilters(tuitionOnly);
+  assert.equal(serializedTuitionOnly.get("tuitionOnly"), "50000");
+  assert.equal(serializedTuitionOnly.has("tuition"), false);
+
+  const legacyFilter = parseDirectoryFilters(
+    new URLSearchParams({ tuition: "50000" }),
+    options,
+  );
+  assert.equal(legacyFilter.maxTuition, "50000");
+  assert.equal(legacyFilter.maxTuitionOnly, "");
+  const serializedLegacy = serializeDirectoryFilters(legacyFilter);
+  assert.equal(serializedLegacy.get("tuition"), "50000");
+  assert.equal(serializedLegacy.has("tuitionOnly"), false);
+});
+
+test("legacy combined tuition sorting stays intact beside a new tuition-only sort", () => {
   const tuitionSort = parseDirectoryFilters(
     new URLSearchParams({ sort: "tuition" }),
     options,
   );
   assert.equal(tuitionSort.sort, "tuition");
-  const byTuition = sortDirectoryColleges(dataset.colleges, "tuition", "");
-  const tuitionValues = byTuition
-    .map((college) => college.observations.tuitionOutOfState.value)
-    .filter((value): value is number => value !== null);
-  assert.deepEqual(tuitionValues, [...tuitionValues].sort((left, right) => left - right));
+  assert.equal(serializeDirectoryFilters(tuitionSort).get("sort"), "tuition");
+
+  const [first, second] = dataset.colleges;
+  assert.ok(first && second);
+  const withCostValues = (college: College, legacy: number, tuitionOnly: number): College => ({
+    ...college,
+    observations: {
+      ...college.observations,
+      tuitionOutOfState: { ...college.observations.tuitionOutOfState, value: legacy },
+    },
+    costs: {
+      ...college.costs,
+      tuitionOutOfState: { ...college.costs.tuitionOutOfState, value: tuitionOnly },
+    },
+  });
+  const legacyCheap = withCostValues(first, 10_000, 20_000);
+  const legacyExpensive = withCostValues(second, 20_000, 10_000);
+  assert.deepEqual(
+    sortDirectoryColleges([legacyCheap, legacyExpensive], "tuition", "").map((college) => college.unitId),
+    [legacyCheap.unitId, legacyExpensive.unitId],
+  );
+  assert.deepEqual(
+    sortDirectoryColleges([legacyCheap, legacyExpensive], "tuition-only", "").map((college) => college.unitId),
+    [legacyExpensive.unitId, legacyCheap.unitId],
+  );
+  assert.equal(
+    parseDirectoryFilters(new URLSearchParams({ sort: "tuition-only" }), options).sort,
+    "tuition-only",
+  );
 
   const legacyNetPriceSort = parseDirectoryFilters(
     new URLSearchParams({ sort: "price" }),
@@ -133,18 +181,20 @@ test("published tuition sorting is explicit while legacy net-price URLs retain t
   assert.deepEqual(netPriceValues, [...netPriceValues].sort((left, right) => left - right));
 });
 
-test("complete directory records include the tuition metric shown as the card headline", () => {
-  const missingTuition = dataset.colleges.find(
-    (college) => college.unitId === 188915,
-  );
-  const complete = dataset.colleges.find(
-    (college) => college.unitId === 110635,
-  );
-  assert.ok(missingTuition);
+test("complete directory records require the current tuition-only headline", () => {
+  const complete = dataset.colleges.find((college) => college.unitId === 110635);
   assert.ok(complete);
-  assert.equal(missingTuition.observations.tuitionOutOfState.value, null);
-  assert.equal(hasCompleteDirectoryData(missingTuition), false);
   assert.equal(hasCompleteDirectoryData(complete), true);
+
+  const missingTuitionOnly = {
+    ...complete,
+    costs: {
+      ...complete.costs,
+      tuitionOutOfState: { ...complete.costs.tuitionOutOfState, value: null },
+    },
+  };
+  assert.notEqual(missingTuitionOnly.observations.tuitionOutOfState.value, null);
+  assert.equal(hasCompleteDirectoryData(missingTuitionOnly), false);
 });
 
 test("directory selection removes rejected IDs without dropping newer choices", () => {

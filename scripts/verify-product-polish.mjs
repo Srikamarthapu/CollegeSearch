@@ -72,11 +72,35 @@ async function verifyTuitionFilters() {
   assert.equal(stanford.observations?.tuitionOutOfState?.value, 68_574);
   assert.equal(stanford.observations?.tuitionOutOfState?.periodLabel, "2026-2027");
   assert.equal(stanford.observations?.averageNetPrice?.value, 13_807);
+  assert.equal(stanford.costs?.tuitionOutOfState?.value, 67_731);
+  assert.equal(stanford.costs?.tuitionOutOfState?.periodLabel, "2026-2027");
+  const tuitionOnlyRoute = "/api/colleges?q=Stanford%20University&tuitionOnly=30000";
+  assert.equal(collegeByUnitId(await getJson(tuitionOnlyRoute), STANFORD_UNIT_ID, tuitionOnlyRoute), undefined);
+  const tuitionOnlyIncludedRoute = "/api/colleges?q=Stanford%20University&tuitionOnly=70000";
+  assert.ok(collegeByUnitId(await getJson(tuitionOnlyIncludedRoute), STANFORD_UNIT_ID, tuitionOnlyIncludedRoute));
   assert.equal(
     collegeByUnitId(tuitionResult, STANFORD_UNIT_ID, tuitionRoute),
     undefined,
     "The tuition filter must exclude Stanford when its published tuition exceeds the cap.",
   );
+}
+
+async function verifyCostBudgets() {
+  const [stanford, berkeley, comparison] = await Promise.all([
+    getHtml("/colleges/stanford-university"),
+    getHtml("/colleges/university-of-california-berkeley"),
+    getHtml("/compare?colleges=110635,243744"),
+  ]);
+  assert.match(stanford, /\$67,731/);
+  assert.match(stanford, /\$97,545/);
+  assert.match(stanford, /Student fees allowance/);
+  assert.match(stanford, /financialaid\.stanford\.edu\/undergrad\/budget/);
+  assert.match(berkeley, /\$53,472/);
+  assert.match(berkeley, /\$14,202/);
+  assert.match(berkeley, /\$93,944/);
+  assert.match(berkeley, /registrar\.berkeley\.edu\/tuition-fees/);
+  assert.match(comparison, /\$67,731/);
+  assert.match(comparison, /\$53,472/);
 }
 
 async function verifyCompleteOnly() {
@@ -154,6 +178,7 @@ await Promise.all([
   verifyCompleteOnly(),
   verifyAdmissionsSurface(),
   verifyIdentityDirectory(),
+  verifyCostBudgets(),
 ]);
 
 console.log(`Product polish smoke checks passed for ${origin}.`);

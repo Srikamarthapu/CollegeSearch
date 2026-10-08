@@ -4,6 +4,7 @@ export type EnrollmentBand = "" | "small" | "medium" | "large";
 
 export type AdvancedExplorerFilters = {
   maxTuition: number | null;
+  maxTuitionOnly: number | null;
   enrollmentBand: EnrollmentBand;
   minGraduation: number | null;
   minEarnings: number | null;
@@ -38,6 +39,10 @@ export function matchesAdvancedExplorerFilters(
     atMost(
       college.observations.tuitionOutOfState.value,
       filters.maxTuition,
+    ) &&
+    atMost(
+      college.costs.tuitionOutOfState.value,
+      filters.maxTuitionOnly,
     ) &&
     matchesEnrollmentBand(
       college.observations.undergraduateEnrollment.value,

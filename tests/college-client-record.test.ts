@@ -1,3 +1,4 @@
+import { attachCostEvidence } from "./helpers/college-cost-fixture.ts";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
@@ -14,17 +15,17 @@ import { toMatchCollege } from "../app/match/college-record.ts";
 const dataset = JSON.parse(
   await readFile(new URL("../data/colleges.json", import.meta.url), "utf8"),
 ) as { colleges: College[] };
-const projected = projectCollegesForClient(dataset.colleges);
+const projected = projectCollegesForClient(attachCostEvidence(dataset.colleges));
 
 test("display names skip federal missing-value aliases while keeping student-facing aliases", () => {
   const alabamaState = dataset.colleges.find((college) => college.unitId === 100724)!;
   const berkeley = dataset.colleges.find((college) => college.slug === "university-of-california-berkeley")!;
-  assert.equal(compactName(projectCollegesForClient([alabamaState])[0]), "Alabama State University");
-  assert.equal(compactName(projectCollegesForClient([berkeley])[0]), "UC Berkeley");
+  assert.equal(compactName(projectCollegesForClient(attachCostEvidence([alabamaState]))[0]), "Alabama State University");
+  assert.equal(compactName(projectCollegesForClient(attachCostEvidence([berkeley]))[0]), "UC Berkeley");
 
   const adventHealth = dataset.colleges.find((college) => college.unitId === 133872)!;
   assert.ok(adventHealth.aliases.includes("Florida Hospital College"));
-  assert.equal(compactName(projectCollegesForClient([adventHealth])[0]), "AdventHealth University");
+  assert.equal(compactName(projectCollegesForClient(attachCostEvidence([adventHealth]))[0]), "AdventHealth University");
   assert.equal(toMatchCollege(adventHealth).name, "AdventHealth University");
 });
 

@@ -16,6 +16,7 @@ import { CollegeLogo } from "@/app/components/CollegeLogo";
 import { ResearchNotebook } from "@/app/components/ResearchNotebook";
 import { CollegeActionLinks } from "@/app/components/CollegeActionLinks";
 import { LocalSaveButton } from "@/app/components/LocalSaveButton";
+import { CollegeCostBudget } from "@/app/components/CollegeCostBudget";
 import {
   collegeBySlug,
   colleges,
@@ -226,14 +227,6 @@ export default async function CollegeProfilePage({
     observationSourceKind(undergraduateEnrollment).isFederal;
   const netPriceIsFederal = observationSourceKind(averageNetPrice).isFederal;
   const graduationIsFederal = observationSourceKind(graduationRate).isFederal;
-  const tuitionIsFederal =
-    observationSourceKind(college.observations.tuitionInState).isFederal &&
-    observationSourceKind(college.observations.tuitionOutOfState).isFederal;
-  const costFallbackSource = tuitionIsFederal
-    ? reviewedInstitutionSources.find((source) =>
-        /\b(cost|costs|tuition|fees?|charges?|g1)\b/i.test(source.notes ?? ""),
-      )
-    : undefined;
   const admissionMetrics: MetricDefinition[] = [
     { label: "Admit rate", observation: admissions },
     { label: "Applicants", observation: college.observations.applicants },
@@ -335,7 +328,7 @@ export default async function CollegeProfilePage({
             { label: "Undergraduate enrollment", observation: undergraduateEnrollment },
           ].map(({ label, observation }) => <div key={label}><span>{label}</span><strong>{formatObservation(observation)}</strong><small>{observation.periodLabel}</small></div>)}
         </div>
-        <p className="profile-cost-context">Tuition and required fees are before aid. Housing, meals, and other living costs are extra. <a href="#outcomes-heading">See costs and historical aid-adjusted averages <ExternalLink size={14} aria-hidden="true" /></a></p>
+        <p className="profile-cost-context">Tuition is before aid. Required fees, or a campus budget fee allowance where reported, are listed separately; housing, meals, and other living costs also affect the full cost. <a href="#outcomes-heading">See cost and historical aid evidence <ExternalLink size={14} aria-hidden="true" /></a></p>
         <aside
           className="profile-source-banner"
           aria-label="Headline admissions source"
@@ -446,9 +439,11 @@ export default async function CollegeProfilePage({
               Enrollment definitions vary: the federal baseline counts
               certificate/degree-seeking undergraduates, while official
               records may report total undergraduates. Published tuition and
-              required fees are not the same measure as historical net price.
+              fees, including any budget allowances, are not the same measure
+              as historical net price.
             </p>
           </div>
+          <CollegeCostBudget college={college} />
           <dl className="profile-metric-grid profile-outcome-grid">
             {outcomeMetrics.map((metric) => (
               <MetricRecord key={metric.label} {...metric} />
@@ -457,7 +452,7 @@ export default async function CollegeProfilePage({
           <div className="profile-evidence-notes">
             {averageNetPrice.value !== null && averageNetPrice.value < 0 ? <p className="profile-cost-note">This reported negative average means grants and scholarships exceeded attendance costs for the source cohort. It is not a promise of free attendance or a payment to you.</p> : null}
             <p className="profile-cost-note">
-              Tuition and required fees exclude housing, meals, books and other living costs.
+              Tuition is before aid. Housing, meals, books and other living costs are shown separately when an official budget is available.
               {college.ownership === "Public" && college.observations.tuitionInState.sourceField === "TUITIONFEE_IN"
                 ? " The federal in-district baseline can differ from the price for other in-state students; confirm your residency rate with the college."
                 : " Confirm current charges and your full cost of attendance with the college."}
@@ -489,45 +484,6 @@ export default async function CollegeProfilePage({
               label="Median earnings"
             />
           </div>
-          {costFallbackSource ? (
-            <aside
-              className="profile-source-comparison"
-              aria-label="Tuition source boundary"
-            >
-              <div className="profile-source-comparison-intro">
-                <span className="page-evidence-label">
-                  Why current tuition is not shown
-                </span>
-                <h3>This profile keeps the dated federal tuition baseline.</h3>
-                <p>{costFallbackSource.notes}</p>
-              </div>
-              <dl>
-                <div>
-                  <dt>Displayed tuition source</dt>
-                  <dd>
-                    <strong>
-                      {college.observations.tuitionInState.publisher}
-                    </strong>
-                    <span>
-                      {college.observations.tuitionInState.periodLabel} · federal
-                      baseline
-                    </span>
-                  </dd>
-                </div>
-                <div>
-                  <dt>Reviewed institution record</dt>
-                  <dd>
-                    <strong>
-                      <Link href={`/data-sources#${costFallbackSource.id}`}>
-                        {costFallbackSource.publisher}
-                      </Link>
-                    </strong>
-                    <span>Current cost excluded after review</span>
-                  </dd>
-                </div>
-              </dl>
-            </aside>
-          ) : null}
         </section>
 
         <section className="profile-section" aria-labelledby="majors-heading">

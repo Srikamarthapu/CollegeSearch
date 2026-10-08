@@ -69,6 +69,7 @@ export async function POST(request: NextRequest) {
     ["band", "band"],
     ["price", "maxPrice"],
     ["tuition", "maxTuition"],
+    ["tuitionOnly", "maxTuitionOnly"],
     ["size", "enrollmentBand"],
     ["grad", "minGraduation"],
     ["earnings", "minEarnings"],

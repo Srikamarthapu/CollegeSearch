@@ -24,7 +24,6 @@ import {
   type Observation,
 } from "@/app/lib/college-data";
 import { MAJOR_OPTIONS } from "@/app/lib/college-search";
-import { residentTuitionLabel } from "@/app/lib/tuition-labels";
 
 type ComparePageProps = {
   searchParams: Promise<{
@@ -40,11 +39,14 @@ type ComparisonRow = {
   publicOnly?: boolean;
   privateLabel?: string;
   mixedLabel?: string;
+  costKind?: "fees";
 };
 
 const comparisonRows: ComparisonRow[] = [
-  { label: "Resident tuition + required fees", publicOnly: true, observation: (college) => college.ownership === "Public" ? college.observations.tuitionInState : null },
-  { label: "Out-of-state tuition + required fees", privateLabel: "Published tuition + required fees", mixedLabel: "Out-of-state / private tuition + required fees", observation: (college) => college.observations.tuitionOutOfState },
+  { label: "Resident tuition", publicOnly: true, observation: (college) => college.costs.tuitionInState },
+  { label: "Out-of-state tuition", privateLabel: "Published tuition", mixedLabel: "Out-of-state / published tuition", observation: (college) => college.costs.tuitionOutOfState },
+  { label: "Resident fees", publicOnly: true, costKind: "fees", observation: (college) => college.costs.feesInState },
+  { label: "Out-of-state fees", privateLabel: "Published fees", mixedLabel: "Out-of-state / published fees", costKind: "fees", observation: (college) => college.costs.feesOutOfState },
   { label: "Historical average net price (federal aid cohort)", observation: (college) => college.observations.averageNetPrice },
   { label: "Headline admit rate", observation: (college) => college.observations.admitRate },
   { label: "Completion / graduation rate", observation: (college) => college.observations.graduationRate },
@@ -56,15 +58,30 @@ const comparisonRows: ComparisonRow[] = [
 ];
 
 function comparisonLabel(row: ComparisonRow, selected: College[]) {
-  if (row.label === "Resident tuition + required fees") {
-    const labels = new Set(
-      selected
-        .filter((college) => college.ownership === "Public")
-        .map((college) => residentTuitionLabel(college.observations.tuitionInState)),
-    );
-    return labels.size === 1
-      ? [...labels][0]
-      : "Resident tuition + required fees (basis varies)";
+  if (row.label === "Resident tuition") {
+    const labels = new Set(selected
+      .filter((college) => college.ownership === "Public")
+      .map((college) => college.costs.tuitionInState.sourceField === "TUITIONFEE_IN" && college.costs.tuitionInState.publisher === "U.S. Department of Education"
+        ? "In-district tuition"
+        : "In-state tuition"));
+    return labels.size === 1 ? [...labels][0] : "Resident tuition (basis varies)";
+  }
+  if (row.costKind === "fees") {
+    const applicable = row.publicOnly
+      ? selected.filter((college) => college.ownership === "Public")
+      : selected;
+    const bases = new Set(applicable.map((college) => college.costs.feeBasis));
+    const basisLabel = bases.size !== 1
+      ? "fees / allowances (basis varies)"
+      : [...bases][0] === "allowance" ? "fee allowance" : "required fees";
+    const scope = row.label === "Resident fees"
+      ? "Resident"
+      : selected.every((college) => college.ownership !== "Public")
+        ? "Published"
+        : selected.some((college) => college.ownership !== "Public")
+          ? "Out-of-state / published"
+          : "Out-of-state";
+    return `${scope} ${basisLabel}`;
   }
   if (row.privateLabel && selected.every((college) => college.ownership !== "Public")) return row.privateLabel;
   if (row.mixedLabel && selected.some((college) => college.ownership !== "Public")) return row.mixedLabel;
@@ -135,9 +152,11 @@ function mixedEvidenceRows(colleges: College[]) {
 function ObservationValue({
   observation,
   showDefinition = false,
+  sourceDetail,
 }: {
   observation: Observation | null;
   showDefinition?: boolean;
+  sourceDetail?: string;
 }) {
   if (!observation) {
     return (
@@ -152,6 +171,7 @@ function ObservationValue({
     <span className="comparison-value">
       <strong>{formatObservation(observation)}</strong>
       {showDefinition ? <small>{observation.definition}</small> : null}
+      {sourceDetail ? <small>{sourceDetail} · source field {observation.sourceField}</small> : null}
       <small>
         {observation.periodLabel} · <a href={observation.sourceUrl} target="_blank" rel="noreferrer">{observation.publisher}</a>
       </small>
@@ -381,14 +401,18 @@ export default async function ComparePage({
                     {comparisonRows.filter((row) => !row.publicOnly || selected.some((college) => college.ownership === "Public")).map((row) => (
                       <tr key={row.label}>
                         <th scope="row">{comparisonLabel(row, selected)}</th>
-                        {selected.map((college) => (
-                          <td key={college.unitId}>
-                            {row.publicOnly && college.ownership !== "Public" ? <span className="comparison-missing">See published tuition below</span> : <>
-                              <ObservationValue observation={row.observation(college)} showDefinition={row.label === "Completion / graduation rate"} />
+                        {selected.map((college) => {
+                          const observation = row.observation(college);
+                          const sourceDetail = row.costKind === "fees" && observation
+                            ? college.costs.feeBasis === "allowance" ? "Cost-of-attendance fee allowance (budget estimate)" : "Reported required fees"
+                            : undefined;
+                          return <td key={college.unitId}>
+                            {row.publicOnly && college.ownership !== "Public" ? <span className="comparison-missing">See published {row.costKind === "fees" ? "fees" : "tuition"} below</span> : <>
+                              <ObservationValue observation={observation} showDefinition={row.label === "Completion / graduation rate"} sourceDetail={sourceDetail} />
                               {row.label.startsWith("Historical average net price") ? <NegativeNetPriceNote value={college.observations.averageNetPrice.value} /> : null}
                             </>}
-                          </td>
-                        ))}
+                          </td>;
+                        })}
                       </tr>
                     ))}
                     {selectedMajor ? (
@@ -463,18 +487,23 @@ export default async function ComparePage({
                       </Link>
                     </header>
                     <dl>
-                      {comparisonRows.filter((row) => !row.publicOnly || college.ownership === "Public").map((row) => (
-                        <div key={row.label}>
+                      {comparisonRows.filter((row) => !row.publicOnly || college.ownership === "Public").map((row) => {
+                        const observation = row.observation(college);
+                        const sourceDetail = row.costKind === "fees" && observation
+                          ? college.costs.feeBasis === "allowance" ? "Cost-of-attendance fee allowance (budget estimate)" : "Reported required fees"
+                          : undefined;
+                        return <div key={row.label}>
                           <dt>{comparisonLabel(row, [college])}</dt>
                           <dd>
                             <ObservationValue
-                              observation={row.observation(college)}
+                              observation={observation}
                               showDefinition={row.label === "Completion / graduation rate"}
+                              sourceDetail={sourceDetail}
                             />
                             {row.label.startsWith("Historical average net price") ? <NegativeNetPriceNote value={college.observations.averageNetPrice.value} /> : null}
                           </dd>
-                        </div>
-                      ))}
+                        </div>;
+                      })}
                       {selectedMajor ? (
                         <div>
                           <dt>{selectedMajor} degree field</dt>
@@ -511,7 +540,7 @@ export default async function ComparePage({
               individual student. Net price applies to the reported federal
               aid cohort; earnings and graduation measures describe still
               different cohorts.{" "}
-              Tuition and required fees exclude housing, meals, books and other living costs.
+              Tuition and fee values are before aid. A fee row may be a required charge or a campus budget allowance; housing, meals, books and other living costs are separate.
               Federal in-district tuition can differ from other in-state rates; verify current charges with each college.
             </ComparisonNotice>
 

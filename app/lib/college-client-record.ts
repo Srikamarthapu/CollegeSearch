@@ -29,6 +29,10 @@ export type ClientCollege = Pick<
   | "undergraduateOffering"
   | "mainCampus"
 > & {
+  costs: {
+    tuitionOutOfState: ClientObservation;
+    feeBasis: "required" | "allowance";
+  };
   observations: {
     admitRate: ClientObservation;
     averageNetPrice: ClientObservation;
@@ -78,6 +82,10 @@ export function projectCollegeForClient(college: College): ClientCollege {
     institutionLevel: college.institutionLevel,
     undergraduateOffering: college.undergraduateOffering,
     mainCampus: college.mainCampus,
+    costs: {
+      tuitionOutOfState: projectObservation(college.costs.tuitionOutOfState),
+      feeBasis: college.costs.feeBasis,
+    },
     observations: {
       admitRate: projectObservation(college.observations.admitRate),
       averageNetPrice: projectObservation(

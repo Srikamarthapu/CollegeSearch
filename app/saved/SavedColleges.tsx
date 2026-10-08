@@ -484,6 +484,12 @@ export function SavedColleges() {
                   college.observations.admitRate,
                 );
                 const tuition = primaryTuitionMetric(college);
+                const feeContext = college.costs.feeBasis === "allowance"
+                  ? "Tuition is before aid. The campus fee allowance is a budget estimate; housing, meals, and other living costs are additional."
+                  : "Tuition is before aid. Required fees, housing, meals, and other living costs are additional.";
+                const tuitionDetail = college.ownership === "Public"
+                  ? `Out-of-state · ${tuition.observation.periodLabel}`
+                  : tuition.observation.periodLabel;
                 const isSelected = selected.includes(college.unitId);
                 return (
                   <article className={styles.card} key={college.unitId}>
@@ -503,12 +509,12 @@ export function SavedColleges() {
                     </div>
                     <dl className={styles.metrics}>
                       <div>
-                        <dt>{tuition.label}</dt>
+                        <dt>Tuition / year</dt>
                         <dd>
                           <strong>
                             {formatObservation(tuition.observation)}
                           </strong>
-                          <span>{tuition.observation.periodLabel}</span>
+                          <span>{tuitionDetail}</span>
                         </dd>
                       </div>
                       <div>
@@ -524,7 +530,7 @@ export function SavedColleges() {
                       </div>
                     </dl>
                     <p className={styles.costContext}>
-                      Before aid · Housing, meals, and other living costs are extra.
+                      {feeContext}
                     </p>
                     <ResearchNotebook unitId={college.unitId} collegeName={college.name} />
                     <div className={styles.actions}>

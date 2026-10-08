@@ -215,17 +215,19 @@ test("server-renders the CollegeSearch product shell", async () => {
   assert.doesNotMatch(html, /react-loading-skeleton/);
 });
 
-test("headline costs show Stanford tuition and fees instead of the historical aid-cohort average", async () => {
+test("headline costs show Stanford tuition alone and the profile separates the full budget", async () => {
   const response = await render("/colleges/stanford-university");
   assert.equal(response.status, 200);
   const html = await response.text();
   const overview = html.match(/<div class="profile-overview"[\s\S]*?<\/div>\s*<p class="profile-cost-context"/)?.[0];
   assert.ok(overview, "the profile exposes a distinct cost overview");
-  assert.match(overview, /Published tuition \+ required fees \/ year/);
-  assert.match(overview, /\$68,574/);
+  assert.match(overview, /Published tuition \/ year/);
+  assert.match(overview, /\$67,731/);
   assert.match(overview, /2026-2027/);
   assert.doesNotMatch(overview, /\$13,807/);
-  assert.match(html, /Housing, meals, and other living costs are extra/);
+  assert.match(html, /Plan for the whole year/);
+  assert.match(html, /\$97,545/);
+  assert.match(html, /Student fees allowance/);
   assert.match(html, /Historical average net price/);
   assert.match(html, /\$13,807/);
 });
@@ -419,8 +421,8 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
         /Yale University evidence profile · CollegeSearch/,
         /Federal admission baseline · reviewed college enrollment and outcomes/,
         /This admission value remains federal\./,
-        /Why current tuition is not shown/,
-        /Current first-party Yale enrollment and graduation values are used\./,
+        /A complete attendance budget has not been independently reviewed/,
+        /2024-25/,
       ],
     },
     {
@@ -429,7 +431,8 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
         /Federal admission baseline · reviewed college enrollment and cost/,
         /This admission value remains federal\./,
         /Fall 2025/,
-        /\$71,229/,
+        /\$63,402/,
+        /2024-25/,
       ],
     },
     {
@@ -437,7 +440,8 @@ test("canonical discovery, evidence, comparison, and source routes render HTML",
       markers: [
         /Federal admission baseline · reviewed college cost/,
         /This admission value remains federal\./,
-        /\$72,080/,
+        /\$65,000/,
+        /2024-25/,
       ],
     },
     {
@@ -606,25 +610,27 @@ test("the source ledger renders one action per unique source URL", async () => {
   }
 });
 
-test("cost displays distinguish federal district charges, verified resident charges and private tuition", async () => {
+test("cost displays distinguish separate in-state, out-of-state and private tuition", async () => {
   const cases = [
-    ["california-state-university-bakersfield", "In-district tuition + required fees"],
-    ["arizona-state-university-campus-immersion", "In-state tuition + required fees"],
-    ["california-institute-of-technology", "Published tuition + required fees"],
+    ["california-state-university-bakersfield", "In-state tuition"],
+    ["arizona-state-university-campus-immersion", "In-state tuition"],
+    ["california-institute-of-technology", "Published tuition"],
   ];
   for (const [slug, label] of cases) {
     const response = await render(`/colleges/${slug}`);
     assert.equal(response.status, 200);
     const html = await response.text();
     assert.ok(html.includes(`<dt>${label}</dt>`), `${slug} labels its actual tuition basis`);
-    assert.match(html, /Tuition and required fees exclude housing/);
+    assert.match(html, /Tuition covers instruction/);
+    assert.match(html, /2024-25/);
     if (slug === "california-institute-of-technology") {
       assert.ok(!html.includes("<dt>In-state tuition + required fees</dt>"));
       assert.ok(!html.includes("<dt>Out-of-state tuition + required fees</dt>"));
     }
   }
   const comparison = await (await render("/compare?colleges=110404,166027")).text();
-  assert.match(comparison, /Published tuition \+ required fees/);
+  assert.match(comparison, /Published tuition/);
+  assert.match(comparison, /Published required fees/);
   assert.ok(!comparison.includes('<th scope="row">In-district / in-state tuition + required fees</th>'));
 });
 

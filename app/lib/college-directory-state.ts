@@ -54,7 +54,10 @@ export type DirectoryFilters = {
   institutionLevel: "" | "Four-year" | "Two-year";
   band: string;
   maxPrice: string;
+  /** Legacy `tuition` URL filter: published tuition plus its reported fees. */
   maxTuition: string;
+  /** Current tuition-only URL filter. */
+  maxTuitionOnly: string;
   enrollmentBand: string;
   minGraduation: string;
   minEarnings: string;
@@ -81,6 +84,7 @@ export const EMPTY_DIRECTORY_FILTERS: DirectoryFilters = {
   band: "",
   maxPrice: "",
   maxTuition: "",
+  maxTuitionOnly: "",
   enrollmentBand: "",
   minGraduation: "",
   minEarnings: "",
@@ -95,7 +99,7 @@ export function hasCompleteDirectoryData(college: College) {
   return [
     college.observations.admitRate,
     college.observations.averageNetPrice,
-    college.observations.tuitionOutOfState,
+    college.costs.tuitionOutOfState,
     college.observations.graduationRate,
     college.observations.undergraduateEnrollment,
   ].every((observation) => observation.value !== null);
@@ -121,6 +125,7 @@ const compareSorts = new Set([
   "admit-low",
   "admit-high",
   "tuition",
+  "tuition-only",
   "price",
   "graduation",
   "enrollment",
@@ -162,6 +167,7 @@ export function parseDirectoryFilters(
     band: allowedString(params.get("band"), selectivityBands),
     maxPrice: allowedString(params.get("price"), allowedPrices),
     maxTuition: allowedString(params.get("tuition"), allowedTuition),
+    maxTuitionOnly: allowedString(params.get("tuitionOnly"), allowedTuition),
     enrollmentBand: allowedString(params.get("size"), allowedEnrollmentBands),
     minGraduation: allowedString(params.get("grad"), allowedGraduationRates),
     minEarnings: allowedString(params.get("earnings"), allowedEarnings),
@@ -191,6 +197,7 @@ export function serializeDirectoryFilters(
   if (filters.band) params.set("band", filters.band);
   if (filters.maxPrice) params.set("price", filters.maxPrice);
   if (filters.maxTuition) params.set("tuition", filters.maxTuition);
+  if (filters.maxTuitionOnly) params.set("tuitionOnly", filters.maxTuitionOnly);
   if (filters.enrollmentBand) params.set("size", filters.enrollmentBand);
   if (filters.minGraduation) params.set("grad", filters.minGraduation);
   if (filters.minEarnings) params.set("earnings", filters.minEarnings);
@@ -281,6 +288,11 @@ export function sortDirectoryColleges(
       comparison = compareNullable(
         left.observations.tuitionOutOfState.value,
         right.observations.tuitionOutOfState.value,
+      );
+    } else if (sort === "tuition-only") {
+      comparison = compareNullable(
+        left.costs.tuitionOutOfState.value,
+        right.costs.tuitionOutOfState.value,
       );
     } else if (sort === "price") {
       comparison = compareNullable(

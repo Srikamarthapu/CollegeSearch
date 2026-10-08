@@ -13,6 +13,8 @@ import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import logoSourcesFirst from "@/data/college-logo-sources-01-25.json";
 import logoSourcesSecond from "@/data/college-logo-sources-26-50.json";
+import tuitionDataset from "@/data/college-tuition.json";
+import costOverrides from "@/data/college-cost-overrides.json";
 import {
   colleges,
   observationSourceKind,
@@ -221,6 +223,26 @@ export default function DataSourcesPage() {
             </div>
           </dl>
         </header>
+
+        <section className="sources-section" aria-labelledby="tuition-evidence-heading">
+          <div className="page-section-heading"><div><h2 id="tuition-evidence-heading">Tuition, fees and the full budget</h2></div></div>
+          <div className="sources-field-map">
+            <article>
+              <h3>Tuition means instruction only</h3>
+              <p>Discovery cards show annual tuition before aid, excluding fees and living costs. Public colleges show the out-of-state rate; profiles also show in-state tuition. Every amount retains its academic year.</p>
+            </article>
+            <article>
+              <h3>IPEDS reports tuition separately</h3>
+              <p>{colleges.filter((college) => college.costs.tuitionOutOfState.value !== null).length.toLocaleString()} of {colleges.length.toLocaleString()} colleges have a separately reported or reviewed annual tuition amount. Missing figures stay “Not reported.” Federal figures are historical institutional reports, not a current bill; IPEDS may flag values as imputed or adjusted in their source definitions.</p>
+              <a href={tuitionDataset.release.sourceUrl} target="_blank" rel="noreferrer">Open the federal tuition source</a>
+            </article>
+            <article>
+              <h3>Full attendance costs are separate</h3>
+              <p>Official {costOverrides.colleges.length}-college budget review checked {costOverrides.reviewedOn}. Stanford and Berkeley profiles include sourced 2026–2027 budgets. A fee allowance is an estimate, not a fixed charge. Other colleges link to their official website where a full budget has not yet been reviewed.</p>
+              {costOverrides.colleges.map((row) => <p key={row.unitId}><a href={row.budget.sourceUrl} target="_blank" rel="noreferrer">{row.costs.tuitionOutOfState.publisher}: official budget</a></p>)}
+            </article>
+          </div>
+        </section>
 
         <section
           className="sources-section"

@@ -4,6 +4,7 @@ import test from "node:test";
 
 import type { College } from "../app/lib/college-data.ts";
 import { projectCollegesForClient } from "../app/lib/college-client-record.ts";
+import { attachCostEvidence } from "./helpers/college-cost-fixture.ts";
 import {
   matchesAdvancedExplorerFilters,
   matchesEnrollmentBand,
@@ -12,7 +13,7 @@ import {
 const dataset = JSON.parse(
   await readFile(new URL("../data/colleges.json", import.meta.url), "utf8"),
 ) as { colleges: College[] };
-const colleges = projectCollegesForClient(dataset.colleges);
+const colleges = projectCollegesForClient(attachCostEvidence(dataset.colleges));
 
 test("undergraduate-size bands are mutually exclusive at their boundaries", () => {
   assert.equal(matchesEnrollmentBand(9_999, "small"), true);
@@ -29,6 +30,7 @@ test("advanced filters apply exact evidence thresholds and exclude missing value
   const filtered = colleges.filter((college) =>
     matchesAdvancedExplorerFilters(college, {
       maxTuition: 70_000,
+      maxTuitionOnly: null,
       enrollmentBand: "large",
       minGraduation: 0.75,
       minEarnings: 75_000,
@@ -46,5 +48,55 @@ test("advanced filters apply exact evidence thresholds and exclude missing value
         (college.observations.graduationRate.value ?? 0) >= 0.75 &&
         (college.observations.medianEarnings.value ?? 0) >= 75_000,
     ),
+  );
+});
+
+test("tuition-only thresholds read published tuition while legacy thresholds keep combined tuition", () => {
+  const base = colleges[0];
+  assert.ok(base);
+  const college = {
+    ...base,
+    observations: {
+      ...base.observations,
+      tuitionOutOfState: { ...base.observations.tuitionOutOfState, value: 24_000 },
+    },
+    costs: {
+      ...base.costs,
+      tuitionOutOfState: { ...base.costs.tuitionOutOfState, value: 25_000 },
+    },
+  };
+  const noOtherFilters = {
+    maxTuition: null,
+    maxTuitionOnly: 25_000,
+    enrollmentBand: "" as const,
+    minGraduation: null,
+    minEarnings: null,
+    setting: "",
+  };
+
+  assert.equal(matchesAdvancedExplorerFilters(college, noOtherFilters), true);
+  assert.equal(
+    matchesAdvancedExplorerFilters(college, { ...noOtherFilters, maxTuitionOnly: 24_999 }),
+    false,
+  );
+  assert.equal(
+    matchesAdvancedExplorerFilters(college, { ...noOtherFilters, maxTuition: 23_999, maxTuitionOnly: null }),
+    false,
+  );
+  assert.equal(
+    matchesAdvancedExplorerFilters(college, { ...noOtherFilters, maxTuition: 24_000, maxTuitionOnly: null }),
+    true,
+  );
+
+  const missingTuitionOnly = {
+    ...college,
+    costs: {
+      ...college.costs,
+      tuitionOutOfState: { ...college.costs.tuitionOutOfState, value: null },
+    },
+  };
+  assert.equal(
+    matchesAdvancedExplorerFilters(missingTuitionOnly, noOtherFilters),
+    false,
   );
 });

@@ -1,3 +1,4 @@
+import { attachCostEvidence } from "./helpers/college-cost-fixture.ts";
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFile } from "node:fs/promises";
@@ -12,7 +13,7 @@ test("CSV cells preserve user punctuation while neutralizing spreadsheet formula
 
 test("research exports retain missing states, exact periods, sources and notes", () => {
   const observation = { value: null, periodLabel: "2023-2024 aid cohort", sourceUrl: "https://example.edu/data" };
-  const college = {unitId: 1, name: "Example", city: "Town", state: "CA", slug: "example", observations: Object.fromEntries(["averageNetPrice", "admitRate", "graduationRate", "undergraduateEnrollment", "medianEarnings", "tuitionOutOfState"].map(key => [key, observation]))} as unknown as ClientCollege;
+  const college = {unitId: 1, name: "Example", city: "Town", state: "CA", slug: "example", costs: {tuitionOutOfState: observation, feeBasis: "required"}, observations: Object.fromEntries(["averageNetPrice", "admitRate", "graduationRate", "undergraduateEnrollment", "medianEarnings", "tuitionOutOfState"].map(key => [key, observation]))} as unknown as ClientCollege;
   const csv = researchCsv([college], {1: {version: 1, notes: "Ask about advising", checked: ["major"]}}, "https://collegesearch.example");
   assert.match(csv, /https:\/\/collegesearch\.example\/colleges\/example/);
   assert.match(csv, /Not reported/);
@@ -22,13 +23,13 @@ test("research exports retain missing states, exact periods, sources and notes",
   assert.match(csv, /Verify my major is currently offered/);
   assert.match(csv, /Overall admit rate \(fraction\)/);
   assert.match(csv, /Historical average net price \(USD; reported federal aid cohort\)/);
-  assert.match(csv, /Out-of-state \/ private tuition \+ required fees \(USD\)/);
+  assert.match(csv, /Annual tuition only/);
 });
 
 
 test("every real projected college exports without profile-only fields", async () => {
   const dataset = JSON.parse(await readFile(new URL("../data/colleges.json", import.meta.url), "utf8"));
-  const projected = projectCollegesForClient(dataset.colleges);
+  const projected = projectCollegesForClient(attachCostEvidence(dataset.colleges));
   const csv = researchCsv(projected, {}, "https://collegesearch.example");
   assert.equal(csv.split("\r\n").length, projected.length + 1);
   for (const college of projected) {
