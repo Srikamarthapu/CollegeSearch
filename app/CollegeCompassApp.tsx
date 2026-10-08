@@ -73,7 +73,8 @@ import {
 import type {
   CollegeDirectoryPage,
 } from "@/app/lib/college-directory";
-import { primaryTuitionMetric } from "@/app/lib/tuition-labels";
+import { cardTuitionMetrics } from "@/app/lib/tuition-labels";
+import { CardTuition } from "@/app/components/CardTuition";
 
 type ExplorerState = DirectoryFilters;
 
@@ -168,16 +169,13 @@ const CollegeCard = memo(function CollegeCard({ college, selectedMajor, isSelect
   onCompare: (college: ClientCollege) => void; onSave: (college: ClientCollege) => void;
 }) {
   const admitRate = college.observations.admitRate;
-  const tuition = primaryTuitionMetric(college);
+  const tuition = cardTuitionMetrics(college);
   const feeContext = college.costs.feeBasis === "allowance"
     ? "Tuition is before aid. The campus fee allowance is a budget estimate; housing, meals, and other living costs are additional."
     : "Tuition is before aid. Required fees, housing, meals, and other living costs are additional.";
-  const tuitionDetail = college.ownership === "Public"
-    ? `Out-of-state · ${tuition.observation.periodLabel}`
-    : tuition.observation.periodLabel;
   const majorEvidence = selectedMajor ? majorEvidenceFor(college, selectedMajor) : null;
   const records = [
-    tuition,
+    ...tuition,
     { label: "Historical average net price (federal aid cohort)", observation: college.observations.averageNetPrice },
     { label: "Overall acceptance rate", observation: admitRate },
     { label: observationSourceKind(college.observations.graduationRate).isFederal ? "150% completion rate" : "Graduate within 6 years", observation: college.observations.graduationRate },
@@ -196,8 +194,8 @@ const CollegeCard = memo(function CollegeCard({ college, selectedMajor, isSelect
       </button>
     </div>
     <div className="college-character"><span>{college.ownership}</span><span>{college.institutionLevel}</span><span>{college.setting} campus</span><span title={`${college.observations.undergraduateEnrollment.periodLabel} · ${college.observations.undergraduateEnrollment.publisher}`}>{formatObservation(college.observations.undergraduateEnrollment)} undergrads</span></div>
-    <div className="metric-ledger">
-      <MetricStamp label="Tuition / year" observation={tuition.observation} detail={tuitionDetail} emphasis />
+    <div className="card-tuition"><CardTuition college={college} /></div>
+    <div className="metric-ledger card-outcome-ledger">
       <MetricStamp label="Overall admit rate" observation={admitRate} />
       <MetricStamp label={observationSourceKind(college.observations.graduationRate).isFederal ? "Completion rate" : "6-year graduation"} observation={college.observations.graduationRate} />
     </div>
@@ -208,7 +206,7 @@ const CollegeCard = memo(function CollegeCard({ college, selectedMajor, isSelect
     {selectedMajor ? <p className="rate-clarifier"><Info size={14} aria-hidden="true" />{formatObservation(admitRate)} is college-wide, not a {selectedMajor} admission rate.</p> : null}
     <details className="card-source-details">
       <summary><BookOpen size={14} aria-hidden="true" /> Sources & what these numbers mean <ChevronDown size={14} aria-hidden="true" /></summary>
-      <div><SourceBadge observation={tuition.observation} /><p>Tuition is shown before aid. Any required fees or campus budget fee allowance, plus living costs, are separate. Historical average net price describes the reported federal aid cohort after grants and scholarships; it is not your personal quote. Rates describe past cohorts. Federal completion measures finishing within 150% of normal program time; official six-year graduation uses each college&apos;s stated cohort.</p>
+      <div><SourceBadge observation={tuition[0].observation} /><p>Tuition is shown before aid. Any required fees or campus budget fee allowance, plus living costs, are separate. Historical average net price describes the reported federal aid cohort after grants and scholarships; it is not your personal quote. Rates describe past cohorts. Federal completion measures finishing within 150% of normal program time; official six-year graduation uses each college&apos;s stated cohort.</p>
       {records.map(({label,observation}) => <div className="card-source-row" key={label}><strong>{label}</strong><span>{formatObservation(observation)} · {observation.periodLabel}</span><a href={observation.sourceUrl} target="_blank" rel="noreferrer">{observation.publisher}<ArrowUpRight size={12} aria-hidden="true" /></a></div>)}
       <NegativeNetPriceNote value={college.observations.averageNetPrice.value} />
       <span>{selectivityLabel(admitRate.value)}</span></div>
@@ -267,7 +265,7 @@ function FilterControls({ state, dispatch, savedCount, idPrefix, stateOptions, o
       {field("ownership", "College type", [["", "Public & private"], ...ownershipOptions.map((value): [string, string] => [value, value])])}
     </div></fieldset>
     <fieldset className="filter-section"><legend>Cost & campus</legend><div className="filter-section-grid">
-      {field("maxTuitionOnly", "Tuition / year", [["", "Any tuition"], ["30000", "$30,000 or less"], ["50000", "$50,000 or less"], ["70000", "$70,000 or less"], ["90000", "$90,000 or less"]])}
+      {field("maxTuitionOnly", "Out-of-state / private tuition", [["", "Any tuition"], ["30000", "$30,000 or less"], ["50000", "$50,000 or less"], ["70000", "$70,000 or less"], ["90000", "$90,000 or less"]])}
       {field("enrollmentBand", "Undergraduate size", [["", "Any size"], ["small", "Under 10,000"], ["medium", "10,000–24,999"], ["large", "25,000 or more"]])}
     </div><p className="filter-context">This filter uses out-of-state tuition for public colleges and published tuition for private colleges. Fees, housing, and other living costs are separate.</p></fieldset>
     <details className="advanced-filters filter-section" open={extraCount > 0 || undefined}>
@@ -937,7 +935,7 @@ export function CollegeSearchApp({
               <SelectField id="quick-location" label="Location" value={state.stateCode} onChange={(event) => dispatch({ type: "set", key: "stateCode", value: event.target.value })}>
                 <option value="">Anywhere</option>{stateOptions.map((code) => <option key={code} value={code}>{stateNames[code] || code}</option>)}
               </SelectField>
-              <SelectField id="quick-tuition" label="Tuition / year" value={state.maxTuitionOnly} onChange={(event) => dispatch({ type: "set", key: "maxTuitionOnly", value: event.target.value })}>
+              <SelectField id="quick-tuition" label="Out-of-state / private tuition" value={state.maxTuitionOnly} onChange={(event) => dispatch({ type: "set", key: "maxTuitionOnly", value: event.target.value })}>
                 <option value="">Any tuition</option><option value="30000">Up to $30,000</option><option value="50000">Up to $50,000</option><option value="70000">Up to $70,000</option><option value="90000">Up to $90,000</option>
               </SelectField>
                 <Dialog.Root open={filtersOpen} onOpenChange={setFiltersOpen}>

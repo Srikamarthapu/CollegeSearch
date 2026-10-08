@@ -23,6 +23,17 @@ export function primaryTuitionMetric<TObservation>(college: TuitionCollege<TObse
   };
 }
 
+export function cardTuitionMetrics<TObservation>(college: TuitionCollege<TObservation> & {
+  costs: { tuitionInState: TObservation };
+}) {
+  return college.ownership === "Public"
+    ? [
+      { label: "In-state tuition", observation: college.costs.tuitionInState },
+      { label: "Out-of-state tuition", observation: college.costs.tuitionOutOfState },
+    ]
+    : [primaryTuitionMetric(college)];
+}
+
 export function tuitionMetrics(college: College) {
   const standard = primaryTuitionMetric(college);
   const fees = college.costs.feeBasis === "allowance" ? "Student fees allowance" : "Required fees";

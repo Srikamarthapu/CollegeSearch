@@ -229,7 +229,7 @@ export default function DataSourcesPage() {
           <div className="sources-field-map">
             <article>
               <h3>Tuition means instruction only</h3>
-              <p>Discovery cards show annual tuition before aid, excluding fees and living costs. Public colleges show the out-of-state rate; profiles also show in-state tuition. Every amount retains its academic year.</p>
+              <p>Discovery and saved-college cards show annual tuition before aid, excluding fees and living costs. Public colleges show in-state tuition first, alongside the out-of-state rate. Private colleges show one published tuition amount. Each amount retains its academic year; residency eligibility is determined by the college.</p>
             </article>
             <article>
               <h3>IPEDS reports tuition separately</h3>

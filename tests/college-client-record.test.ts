@@ -17,6 +17,19 @@ const dataset = JSON.parse(
 ) as { colleges: College[] };
 const projected = projectCollegesForClient(attachCostEvidence(dataset.colleges));
 
+test("both tuition-only prices retain their value, year and source in card payloads", () => {
+  const colleges = attachCostEvidence(dataset.colleges);
+  for (const [index, college] of colleges.entries()) {
+    for (const metric of ["tuitionInState", "tuitionOutOfState"] as const) {
+      const source = college.costs[metric];
+      assert.deepEqual(projected[index].costs[metric], {
+        value: source.value, unit: source.unit, periodLabel: source.periodLabel,
+        sourceId: source.sourceId, publisher: source.publisher, sourceUrl: source.sourceUrl,
+      });
+    }
+  }
+});
+
 test("display names skip federal missing-value aliases while keeping student-facing aliases", () => {
   const alabamaState = dataset.colleges.find((college) => college.unitId === 100724)!;
   const berkeley = dataset.colleges.find((college) => college.slug === "university-of-california-berkeley")!;
@@ -87,8 +100,8 @@ test("the browser projection does not copy profile-only provenance", () => {
     "the first 24-college page stays below 100 KB",
   );
   assert.ok(
-    Math.max(...projected.map((college) => JSON.stringify(college).length)) < 6_000,
-    "individual college records stay below 6 KB",
+    Math.max(...projected.map((college) => JSON.stringify(college).length)) < 6_400,
+    "individual records with both sourced tuition prices stay below 6.4 KB",
   );
   assert.doesNotMatch(serialized, /"sourceField"|"definition"|"cohort"/);
   assert.doesNotMatch(serialized, /"alternateObservations"|"release"/);

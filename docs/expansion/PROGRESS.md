@@ -1,5 +1,13 @@
 # CollegeSearch expansion progress
 
+## Tuition residency card layout — M13, October 7, 2026
+
+Public discovery and saved-college cards now pair in-state tuition (primary, left) with out-of-state tuition (secondary, right). Private colleges retain one published price. Each figure preserves its tuition-only observation, academic year and source; missing tuition stays “Not reported.” Source disclosures include both public rates. Tuition filter labels now state their unchanged out-of-state/private basis. Profile/compare amounts and source datasets are unchanged.
+
+Verification: 21 targeted price/projection/filter regressions pass, plus Next production build, TypeScript and ESLint. Desktop grid/list, saved cards, 390px prices and 320px missing-value wrapping checked in browser. Independent GPT-6 Luna review found no correctness regression. Projected records average 3,592 characters; first 24 records total 75,240. The per-record ceiling increased from 6,000 to 6,400 for the additional sourced observation (measured maximum 6,070); page and average caps remain unchanged.
+
+Publishing and hosted verification pending.
+
 ## Completed — M12 tuition evidence, October 7, 2026
 
 Tuition-only discovery, saved cards, profile headlines, comparison and CSV now use separate IPEDS annual tuition fields. New tuition-only filters/sorting match the displayed measure; legacy cost URLs retain explicitly labeled historical semantics. Added official 2026–27 Stanford and Berkeley tuition/fee/attendance-budget breakdowns. The catalog remains 3,912 colleges: 3,384 have sourced annual tuition-only values and 528 remain explicitly unavailable (472 program-priced, 19 unknown, 37 absent from the release). Dates, residency and source links remain visible.

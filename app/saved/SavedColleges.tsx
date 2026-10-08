@@ -39,7 +39,7 @@ import {
   retainResearchCollection,
   type ResearchCollectionSnapshot,
 } from "@/app/lib/research-notebook";
-import { primaryTuitionMetric } from "@/app/lib/tuition-labels";
+import { CardTuition } from "@/app/components/CardTuition";
 import {
   plannerTabFromHash,
   plannerTabFromKey,
@@ -483,13 +483,9 @@ export function SavedColleges() {
                 const source = observationSourceKind(
                   college.observations.admitRate,
                 );
-                const tuition = primaryTuitionMetric(college);
                 const feeContext = college.costs.feeBasis === "allowance"
                   ? "Tuition is before aid. The campus fee allowance is a budget estimate; housing, meals, and other living costs are additional."
                   : "Tuition is before aid. Required fees, housing, meals, and other living costs are additional.";
-                const tuitionDetail = college.ownership === "Public"
-                  ? `Out-of-state · ${tuition.observation.periodLabel}`
-                  : tuition.observation.periodLabel;
                 const isSelected = selected.includes(college.unitId);
                 return (
                   <article className={styles.card} key={college.unitId}>
@@ -507,16 +503,8 @@ export function SavedColleges() {
                         </h3>
                       </div>
                     </div>
+                    <div className={styles.tuition}><CardTuition college={college} /></div>
                     <dl className={styles.metrics}>
-                      <div>
-                        <dt>Tuition / year</dt>
-                        <dd>
-                          <strong>
-                            {formatObservation(tuition.observation)}
-                          </strong>
-                          <span>{tuitionDetail}</span>
-                        </dd>
-                      </div>
                       <div>
                         <dt>Overall admit rate</dt>
                         <dd>

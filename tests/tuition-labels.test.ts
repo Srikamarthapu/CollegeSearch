@@ -3,6 +3,7 @@ import { collegeCostFixtures } from "./helpers/college-cost-fixture.ts";
 import test from "node:test";
 import {
   primaryTuitionMetric,
+  cardTuitionMetrics,
   tuitionMetrics,
   combinedTuitionMetrics,
 } from "../app/lib/tuition-labels.ts";
@@ -28,7 +29,7 @@ test("federal in-district charges are not relabeled as verified in-state charges
   }
 });
 
-test("the default card tuition metric states the public residency basis", () => {
+test("the profile headline tuition metric states the public residency basis", () => {
   for (const college of colleges) {
     const metric = primaryTuitionMetric(college);
     assert.equal(metric.observation, college.costs.tuitionOutOfState);
@@ -39,6 +40,36 @@ test("the default card tuition metric states the public residency basis", () => 
         : "Published tuition",
     );
   }
+});
+
+test("cards lead with in-state tuition and retain a separate sourced out-of-state price", () => {
+  const berkeley = colleges.find((college) => college.unitId === 110635)!;
+  const metrics = cardTuitionMetrics(berkeley);
+  assert.deepEqual(metrics.map(({ label, observation }) => [label, observation.value]), [
+    ["In-state tuition", 14_202],
+    ["Out-of-state tuition", 53_472],
+  ]);
+  assert.equal(metrics[0].observation, berkeley.costs.tuitionInState);
+  assert.equal(metrics[1].observation, berkeley.costs.tuitionOutOfState);
+
+  const stanford = colleges.find((college) => college.unitId === 243744)!;
+  assert.deepEqual(cardTuitionMetrics(stanford), [
+    { label: "Published tuition", observation: stanford.costs.tuitionOutOfState },
+  ]);
+  assert.equal(cardTuitionMetrics(stanford)[0].observation.value, 67_731);
+});
+
+test("cards do not replace missing in-state tuition with out-of-state or fee-inclusive charges", () => {
+  const berkeley = colleges.find((college) => college.unitId === 110635)!;
+  const missingResident = { ...berkeley, costs: {
+    ...berkeley.costs,
+    tuitionInState: { ...berkeley.costs.tuitionInState, value: null, periodLabel: "2024-2025" },
+  } };
+  const [resident, nonresident] = cardTuitionMetrics(missingResident);
+  assert.equal(resident.observation.value, null);
+  assert.equal(resident.observation.periodLabel, "2024-2025");
+  assert.equal(nonresident.observation.value, 53_472);
+  assert.equal(nonresident.observation.periodLabel, "2026-2027");
 });
 
  test("tuition-only fields never substitute combined charges and fee allowances retain their basis", () => {
