@@ -9,7 +9,7 @@
 }
 
 .prices > div { min-width: 0; }
-.prices > div:only-child { grid-column: 1 / -1; }
+.prices > div:only-child { grid-column: 1 / -1; text-align: center; }
 .prices dt { color: var(--ink-soft); font-size: 12px; line-height: 1.5; }
 .prices dt span { white-space: nowrap; }
 .prices dd { display: grid; gap: 4px; margin: 5px 0 0; }
@@ -22,6 +22,7 @@
 @media (max-width: 420px) {
   .prices { gap: 12px; }
   .prices dt { min-height: 36px; }
+  .prices > div:only-child dt { min-height: 0; }
   .prices strong { font-size: 24px; line-height: 30px; }
   .secondary strong { font-size: 21px; }
 }

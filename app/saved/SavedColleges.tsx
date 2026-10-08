@@ -41,10 +41,6 @@ import {
 } from "@/app/lib/research-notebook";
 import { CardTuition } from "@/app/components/CardTuition";
 import {
-  hasReliableSingleTuitionRate,
-  primaryTuitionMetric,
-} from "@/app/lib/tuition-labels";
-import {
   plannerTabFromHash,
   plannerTabFromKey,
   type PlannerTab,
@@ -487,11 +483,6 @@ export function SavedColleges() {
                 const source = observationSourceKind(
                   college.observations.admitRate,
                 );
-                const tuition = primaryTuitionMetric(college);
-                const hasSingleTuitionRate = hasReliableSingleTuitionRate(college);
-                const tuitionDetail = college.ownership === "Public"
-                  ? `In-state & out-of-state · ${tuition.observation.periodLabel}`
-                  : tuition.observation.periodLabel;
                 const feeContext = college.costs.feeBasis === "allowance"
                   ? "Tuition is before aid. The campus fee allowance is a budget estimate; housing, meals, and other living costs are additional."
                   : "Tuition is before aid. Required fees, housing, meals, and other living costs are additional.";
@@ -512,15 +503,8 @@ export function SavedColleges() {
                         </h3>
                       </div>
                     </div>
-                    {!hasSingleTuitionRate ? <div className={styles.tuition}><CardTuition college={college} /></div> : null}
-                    <dl className={`${styles.metrics} ${hasSingleTuitionRate ? styles.compactMetrics : ""}`}>
-                      {hasSingleTuitionRate ? <div>
-                        <dt>Tuition / year</dt>
-                        <dd>
-                          <strong>{formatObservation(tuition.observation)}</strong>
-                          <span>{tuitionDetail}</span>
-                        </dd>
-                      </div> : null}
+                    <div className={styles.tuition}><CardTuition college={college} /></div>
+                    <dl className={styles.metrics}>
                       <div>
                         <dt>Overall admit rate</dt>
                         <dd>

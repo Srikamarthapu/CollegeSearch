@@ -1,5 +1,11 @@
 # CollegeSearch expansion progress
 
+## Publishing — M15 uniform tuition cards, October 7, 2026
+
+Restored a shared long-form card structure in discovery and saved colleges: tuition above outcome metrics for every college, with one centered price for reliable single-rate colleges. Distinct or incomplete public residency rates remain paired. Discovery grid rows now stretch and retain bottom-aligned footers, removing the short-card gaps without fixed card heights. Data and source disclosures are unchanged.
+
+GPT-5.6-Sol worker implementation and root review completed. Existing tuition tests passed 7/7, targeted ESLint passed, and native Next production build plus TypeScript passed. Desktop rendered review showed matching 525px heights for the first six cards. The 390px mobile single-rate card centered its price with no horizontal overflow; browser console had no warnings/errors. Deployment and hosted confirmation are next. Usage began at 87% used; requested budget is approximately five percentage points account-wide.
+
 ## Released — M14 compact cards and reviewed campus profile banners, October 7, 2026
 
 User asks for compact single-price cards and correct campus photo banners on college profiles. GPT-5.6-Sol workers implemented/reviewed compact cards and the photo evidence pipeline. Root owns profile layout, rendered verification and release. Private colleges and public colleges with two equal, non-null same-period tuition values use compact metrics; unknown/different public rates stay paired with source evidence. This restores the old single-price card density without changing costs or filter semantics.

@@ -129,7 +129,7 @@ button:disabled { cursor: not-allowed; opacity: .6; }
 .filter-chips { margin: 0 0 15px; gap: 7px; }
 .filter-chips button { min-height: 36px; border-radius: 6px; font-size: 12px; background: var(--forest-pale); color: var(--forest); border-color: #d4defb; }
 .major-context-banner { border-radius: 9px; font-size: 13px; background: var(--blue-pale); padding: 16px; margin-bottom: 18px; }
-.research-results { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); margin: 0; gap: 18px; align-items: start; }
+.research-results { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); margin: 0; gap: 18px; align-items: stretch; }
 .research-card { display: flex; flex-direction: column; min-width: 0; border-radius: 12px; background: white; overflow: hidden; border: 1px solid var(--line); }
 .research-card:hover { border-color: #b8c6e5; box-shadow: var(--shadow-small); }
 .research-card.is-selected { border-color: var(--forest); box-shadow: 0 0 0 1px var(--forest); }
