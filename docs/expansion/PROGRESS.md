@@ -6,7 +6,7 @@ Public discovery and saved-college cards now pair in-state tuition (primary, lef
 
 Verification: 21 targeted price/projection/filter regressions pass, plus Next production build, TypeScript and ESLint. Desktop grid/list, saved cards, 390px prices and 320px missing-value wrapping checked in browser. Independent GPT-6 Luna review found no correctness regression. Projected records average 3,592 characters; first 24 records total 75,240. The per-record ceiling increased from 6,000 to 6,400 for the additional sourced observation (measured maximum 6,070); page and average caps remain unchanged.
 
-Publishing and hosted verification pending.
+Code `f5574a5` is live in READY production deployment `dpl_9EDtwYUYmQdcoci39UDtEorT5tuq` at https://collegesearch-steel.vercel.app. Hosted product smoke checks passed; live browser verification confirmed both Berkeley rates/source records, Stanford's single published tuition and no browser console warnings/errors. Screenshot: `outputs/m13/tuition-cards-live.png`. No data values, provider settings or launch gates changed.
 
 ## Completed — M12 tuition evidence, October 7, 2026
 
