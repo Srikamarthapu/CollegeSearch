@@ -4,6 +4,13 @@ type TuitionCollege<TObservation> = Pick<College, "ownership"> & {
   costs: { tuitionOutOfState: TObservation };
 };
 
+type CardTuitionCollege = Pick<College, "ownership"> & {
+  costs: {
+    tuitionInState: Pick<Observation, "value" | "periodLabel">;
+    tuitionOutOfState: Pick<Observation, "value" | "periodLabel">;
+  };
+};
+
 export function residentTuitionLabel(observation: Observation) {
   return observation.sourceField === "TUITIONFEE_IN" && observation.publisher === "U.S. Department of Education"
     ? "In-district tuition + required fees"
@@ -32,6 +39,20 @@ export function cardTuitionMetrics<TObservation>(college: TuitionCollege<TObserv
       { label: "Out-of-state tuition", observation: college.costs.tuitionOutOfState },
     ]
     : [primaryTuitionMetric(college)];
+}
+
+export function hasReliableSingleTuitionRate(college: CardTuitionCollege) {
+  if (college.ownership === "Private nonprofit" || college.ownership === "Private for-profit") {
+    return true;
+  }
+  if (college.ownership !== "Public") return false;
+
+  const residentRate = college.costs.tuitionInState.value;
+  const nonresidentRate = college.costs.tuitionOutOfState.value;
+  return residentRate !== null
+    && nonresidentRate !== null
+    && residentRate === nonresidentRate
+    && college.costs.tuitionInState.periodLabel === college.costs.tuitionOutOfState.periodLabel;
 }
 
 export function tuitionMetrics(college: College) {

@@ -1,8 +1,8 @@
 /**
- * Genuine campus photos sourced and visually inspected September 6, 2026.
- * All local JPEGs are unchanged bytes from the source or its served thumbnail.
+ * Genuine campus photos sourced and visually inspected September 6 and October 7, 2026.
+ * Per-photo crop notes state whether the local JPEG is unchanged or a resized web derivative.
  * When displayed with object-fit: cover, credit the image as cropped for display.
- * Keep each CC BY-SA photograph/derivative under its stated image license.
+ * Each stated image license also applies to its local resized/cropped web derivative.
  * These image licenses do not assert university endorsement.
  */
 export type CampusPhotoSource = {
@@ -21,7 +21,8 @@ export type CampusPhotoSource = {
     | "CC BY-SA 2.0"
     | "CC BY-SA 3.0"
     | "CC BY-SA 4.0"
-    | "CC0 1.0";
+    | "CC0 1.0"
+    | "Public domain";
   licenseUrl: string;
   photoDate: string;
   width: number;
@@ -81,20 +82,20 @@ export const campusPhotos: CampusPhotoSource[] = [
     name: "University of Washington-Seattle Campus",
     shortName: "Washington",
     location: "Seattle, Washington",
-    src: "/images/campuses/washington.jpg",
-    sourceUrl: "https://commons.wikimedia.org/wiki/File:University_of_Washington_Cherry_Blossoms_(33800023865).jpg",
-    downloadUrl: "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/University_of_Washington_Cherry_Blossoms_%2833800023865%29.jpg/960px-University_of_Washington_Cherry_Blossoms_%2833800023865%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail",
-    creator: "Steve Ginn",
-    credit: "Steve Ginn / Wikimedia Commons / CC0",
-    license: "CC0 1.0",
-    licenseUrl: "https://creativecommons.org/publicdomain/zero/1.0/",
-    photoDate: "2017-04-02",
-    width: 960,
-    height: 640,
-    alt: "Pale pink cherry blossoms around a moss-covered tree on the University of Washington campus, with campus buildings behind.",
-    caption: "Cherry blossoms · University of Washington",
-    objectPosition: "50% 55%",
-    cropNotes: "Downloaded the current Commons 960px thumbnail unchanged. Commons verified the original Flickr image as CC0 in 2018. This is a close view of the flowering tree, not a wide view of the Quad. Attribution is included voluntarily for source transparency; crop freely.",
+    src: "/images/campuses/washington-drumheller.jpg",
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:MK03244_University_of_Washington_Drumheller_Fountain.jpg",
+    downloadUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a0/MK03244_University_of_Washington_Drumheller_Fountain.jpg",
+    creator: "Martin Kraft",
+    credit: "Martin Kraft / Wikimedia Commons / CC BY-SA 3.0",
+    license: "CC BY-SA 3.0",
+    licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0/",
+    photoDate: "2013-09-24",
+    width: 1600,
+    height: 900,
+    alt: "Drumheller Fountain in front of brick academic buildings on the University of Washington campus.",
+    caption: "Drumheller Fountain · University of Washington",
+    objectPosition: "50% 50%",
+    cropNotes: "Wikidata P18 for the exact IPEDS UNITID 236948. Commons identifies Johnson, Gerberding, Suzzallo, and Mary Gates halls around Drumheller Fountain. Local web asset resized from the original to 1600×900 and encoded as JPEG quality 82; center the fountain and retain the campus buildings in wide crops.",
   },
   {
     unitId: 190150,
@@ -168,22 +169,21 @@ export const campusPhotos: CampusPhotoSource[] = [
     name: "California Institute of Technology",
     shortName: "Caltech",
     location: "Pasadena, California",
-    src: "/images/campuses/caltech.jpg",
-    sourceUrl: "https://commons.wikimedia.org/wiki/File:Caltech_from_the_air.jpg",
-    downloadUrl:
-      "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Caltech_from_the_air.jpg/960px-Caltech_from_the_air.jpg",
-    creator: "Tobin",
-    credit: "Tobin / Wikimedia Commons / CC BY-SA 2.0",
-    license: "CC BY-SA 2.0",
-    licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/",
-    photoDate: "2007-10-27",
-    width: 960,
-    height: 720,
-    alt: "Aerial view from a plane over Caltech's Pasadena campus, with campus buildings and the San Gabriel Valley beyond.",
-    caption: "Campus from above · Caltech",
+    src: "/images/campuses/caltech-entrance.jpg",
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Caltech_Entrance.jpg",
+    downloadUrl: "https://upload.wikimedia.org/wikipedia/commons/c/cc/Caltech_Entrance.jpg",
+    creator: "Canon.vs.nikon",
+    credit: "Canon.vs.nikon / Wikimedia Commons / CC BY-SA 3.0",
+    license: "CC BY-SA 3.0",
+    licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0/",
+    photoDate: "2012-09-28",
+    width: 1600,
+    height: 477,
+    alt: "Caltech's campus entrance between the Norman Bridge physics laboratory and Alfred Sloan mathematics and physics laboratory.",
+    caption: "Campus entrance · Caltech",
     objectPosition: "50% 50%",
     cropNotes:
-      "Downloaded the Commons 960px thumbnail unchanged. The source is an aerial photo from a Cessna; part of its wing appears in the upper-left corner. Keep the campus blocks near the center when the carousel crops the frame.",
+      "Wikidata P18 for the exact IPEDS UNITID 110404. Commons identifies the two campus laboratories and the East California Boulevard entrance. Local web asset resized from the original to 1600×477 and encoded as JPEG quality 82; its wide frame needs only a shallow vertical crop.",
   },
   {
     unitId: 198419,
@@ -310,23 +310,21 @@ export const campusPhotos: CampusPhotoSource[] = [
     name: "Princeton University",
     shortName: "Princeton",
     location: "Princeton, New Jersey",
-    src: "/images/campuses/princeton.jpg",
-    sourceUrl:
-      "https://commons.wikimedia.org/wiki/File:Cannon_Green_and_Nassau_Hall,_Princeton_University.jpg",
-    downloadUrl:
-      "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Cannon_Green_and_Nassau_Hall%2C_Princeton_University.jpg/960px-Cannon_Green_and_Nassau_Hall%2C_Princeton_University.jpg",
-    creator: "Ken Lund",
-    credit: "Ken Lund / Wikimedia Commons / CC BY-SA 2.0",
-    license: "CC BY-SA 2.0",
-    licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/",
-    photoDate: "2019-03-31",
-    width: 960,
-    height: 655,
-    alt: "Nassau Hall and its tower across Princeton University's Cannon Green, with trees beyond the lawn.",
-    caption: "Cannon Green · Princeton",
-    objectPosition: "50% 42%",
+    src: "/images/campuses/princeton-nassau.jpg",
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Nassau_Hall_Princeton.JPG",
+    downloadUrl: "https://upload.wikimedia.org/wikipedia/commons/0/04/Nassau_Hall_Princeton.JPG",
+    creator: "Smallbones",
+    credit: "Smallbones / Wikimedia Commons / CC0",
+    license: "CC0 1.0",
+    licenseUrl: "https://creativecommons.org/publicdomain/zero/1.0/",
+    photoDate: "2012-02-18",
+    width: 1600,
+    height: 1066,
+    alt: "Nassau Hall's ivy-covered facade and cupola across a tree-lined lawn at Princeton University.",
+    caption: "Nassau Hall · Princeton",
+    objectPosition: "50% 5%",
     cropNotes:
-      "Downloaded the Commons 960px thumbnail unchanged. Preserve Nassau Hall's tower and the green foreground in the cropped display frame.",
+      "Commons explicitly identifies Nassau Hall as Princeton University's original and current administration building. Local web asset resized from the original to 1600×1066 and encoded as JPEG quality 82. Bias the profile crop toward the top to retain the cupola and recognizable upper facade; the full building remains visible at taller aspect ratios.",
   },
   {
     unitId: 228778,

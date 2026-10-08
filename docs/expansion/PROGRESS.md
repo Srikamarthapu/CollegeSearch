@@ -1,5 +1,15 @@
 # CollegeSearch expansion progress
 
+## Publishing — M14 compact cards and campus profile banners, October 7, 2026
+
+User asks for compact single-price cards and correct campus photo banners on college profiles. GPT-5.6-Sol workers implemented/reviewed compact cards and the photo evidence pipeline. Root owns profile layout, rendered verification and release. Private colleges and public colleges with two equal, non-null same-period tuition values use compact metrics; unknown/different public rates stay paired with source evidence. This restores the old single-price card density without changing costs or filter semantics.
+
+Profile banners now use exact UNITID+slug matches from an approved local photo map, visible photo source/creator/license/year and a bounded desktop/mobile crop. Missing or failed photos produce a small official-site link instead of a stock or incorrect campus. College identity layout is compacted to accommodate the photo. Baseline UI guidance applied while preserving the existing tokens and stack.
+
+The reviewed runtime set is now 47 of 3,912 profiles: 15 existing institutions, including stronger documented replacements for Caltech, Princeton and Washington, plus 32 newly reviewed additions. The other 3,865 profiles use the designed fallback. Exact UNITID+slug matching, source and license records, local asset hashes, responsive crops and candidate non-leakage are recorded in [M14 campus-photo evidence](M14_CAMPUS_PHOTOS.md). The offline candidate queue remains unpublished and excluded from deployment.
+
+Completed verification before the final small responsive-image optimization: the 523-test full regression and 10 M14-focused tests passed, along with the native Next production build, TypeScript and full ESLint. Local desktop and 390px review covered reviewed-photo, fallback and compact-card states. The banner now requests responsive image widths instead of always transferring the full source JPEG; its final Vinext build and focused rendered-banner check, native Next build, TypeScript and targeted lint all passed. The production browser confirmed the optimized image loads without console errors. Deployment and hosted verification remain pending. Full 3,912-photo coverage is not claimed.
+
 ## Tuition residency card layout — M13, October 7, 2026
 
 Public discovery and saved-college cards now pair in-state tuition (primary, left) with out-of-state tuition (secondary, right). Private colleges retain one published price. Each figure preserves its tuition-only observation, academic year and source; missing tuition stays “Not reported.” Source disclosures include both public rates. Tuition filter labels now state their unchanged out-of-state/private basis. Profile/compare amounts and source datasets are unchanged.

@@ -17,3 +17,4 @@ supabase/.temp
 supabase/.branches
 data/.refresh-*
 data/.refresh.lock
+data/profile-campus-photo-candidates.json

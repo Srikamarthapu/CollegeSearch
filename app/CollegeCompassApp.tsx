@@ -73,7 +73,11 @@ import {
 import type {
   CollegeDirectoryPage,
 } from "@/app/lib/college-directory";
-import { cardTuitionMetrics } from "@/app/lib/tuition-labels";
+import {
+  cardTuitionMetrics,
+  hasReliableSingleTuitionRate,
+  primaryTuitionMetric,
+} from "@/app/lib/tuition-labels";
 import { CardTuition } from "@/app/components/CardTuition";
 
 type ExplorerState = DirectoryFilters;
@@ -170,6 +174,11 @@ const CollegeCard = memo(function CollegeCard({ college, selectedMajor, isSelect
 }) {
   const admitRate = college.observations.admitRate;
   const tuition = cardTuitionMetrics(college);
+  const headlineTuition = primaryTuitionMetric(college);
+  const hasSingleTuitionRate = hasReliableSingleTuitionRate(college);
+  const tuitionDetail = college.ownership === "Public"
+    ? `In-state & out-of-state · ${headlineTuition.observation.periodLabel}`
+    : headlineTuition.observation.periodLabel;
   const feeContext = college.costs.feeBasis === "allowance"
     ? "Tuition is before aid. The campus fee allowance is a budget estimate; housing, meals, and other living costs are additional."
     : "Tuition is before aid. Required fees, housing, meals, and other living costs are additional.";
@@ -194,11 +203,17 @@ const CollegeCard = memo(function CollegeCard({ college, selectedMajor, isSelect
       </button>
     </div>
     <div className="college-character"><span>{college.ownership}</span><span>{college.institutionLevel}</span><span>{college.setting} campus</span><span title={`${college.observations.undergraduateEnrollment.periodLabel} · ${college.observations.undergraduateEnrollment.publisher}`}>{formatObservation(college.observations.undergraduateEnrollment)} undergrads</span></div>
-    <div className="card-tuition"><CardTuition college={college} /></div>
-    <div className="metric-ledger card-outcome-ledger">
+    {hasSingleTuitionRate ? <div className="metric-ledger">
+      <MetricStamp label="Tuition / year" observation={headlineTuition.observation} detail={tuitionDetail} emphasis />
       <MetricStamp label="Overall admit rate" observation={admitRate} />
       <MetricStamp label={observationSourceKind(college.observations.graduationRate).isFederal ? "Completion rate" : "6-year graduation"} observation={college.observations.graduationRate} />
-    </div>
+    </div> : <>
+      <div className="card-tuition"><CardTuition college={college} /></div>
+      <div className="metric-ledger card-outcome-ledger">
+        <MetricStamp label="Overall admit rate" observation={admitRate} />
+        <MetricStamp label={observationSourceKind(college.observations.graduationRate).isFederal ? "Completion rate" : "6-year graduation"} observation={college.observations.graduationRate} />
+      </div>
+    </>}
     <p className="card-cost-context">{feeContext}</p>
     <div className="card-field-line"><GraduationCap size={16} aria-hidden="true" />
       {selectedMajor && majorEvidence ? <span><strong>{selectedMajor}</strong> · {percentFormatter.format(majorEvidence.share)} of all awards</span> : <span>{college.majors.length} broad {college.majors.length === 1 ? "field" : "fields"} reported <span className="field-dot">·</span> <Link href={`/colleges/${college.slug}#majors-heading`}>Explore fields</Link></span>}

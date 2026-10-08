@@ -17,6 +17,8 @@ import { ResearchNotebook } from "@/app/components/ResearchNotebook";
 import { CollegeActionLinks } from "@/app/components/CollegeActionLinks";
 import { LocalSaveButton } from "@/app/components/LocalSaveButton";
 import { CollegeCostBudget } from "@/app/components/CollegeCostBudget";
+import { CampusBanner } from "@/app/components/CampusBanner";
+import styles from "./profile.module.css";
 import {
   collegeBySlug,
   colleges,
@@ -274,8 +276,9 @@ export default async function CollegeProfilePage({
           <span aria-current="page">{compactName(college)}</span>
         </nav>
 
-        <header className="profile-masthead">
-          <div className="profile-masthead-copy">
+        <CampusBanner college={college} />
+        <header className={`profile-masthead ${styles.masthead}`}>
+          <div className={`profile-masthead-copy ${styles.identity}`}>
             <CollegeLogo college={college} variant="profile" />
             <span className="page-eyebrow">
               <Landmark size={15} aria-hidden="true" />

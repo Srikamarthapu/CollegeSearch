@@ -179,7 +179,8 @@
 .identity h3 { margin: 6px 0 0; font-size: 19px; font-weight: 650; letter-spacing: -.035em; line-height: 1.25; }
 .identity h3 a:hover { color: var(--forest); text-decoration: underline; text-underline-offset: 4px; }
 .tuition { margin: 0 20px; }
-.metrics { margin: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.metrics { display: grid; margin: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.compactMetrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .metrics > div { min-width: 0; padding: 15px 20px; }
 .metrics > div + div { border-left: 1px solid var(--line); }
 .metrics dt { color: var(--ink-soft); font-size: 12px; }

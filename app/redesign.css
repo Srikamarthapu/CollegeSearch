@@ -426,3 +426,7 @@ button:disabled { cursor: not-allowed; opacity: .6; }
 .card-cost-context { margin: 0 19px 9px; color: var(--ink-faint); font-size: 11px; line-height: 1.6; }
 .profile-cost-context { margin: -8px 0 24px; color: var(--ink-soft); font-size: 13px; line-height: 1.65; }
 .profile-cost-context a { display: inline-flex; align-items: center; gap: 5px; min-height: 32px; color: var(--forest); text-decoration: underline; text-underline-offset: 3px; }
+
+@media (min-width: 381px) and (max-width: 640px) {
+  .research-card .metric-ledger:not(.card-outcome-ledger) .metric-label { min-height: 36px; }
+}

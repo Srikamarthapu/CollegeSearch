@@ -15,6 +15,7 @@ import logoSourcesFirst from "@/data/college-logo-sources-01-25.json";
 import logoSourcesSecond from "@/data/college-logo-sources-26-50.json";
 import tuitionDataset from "@/data/college-tuition.json";
 import costOverrides from "@/data/college-cost-overrides.json";
+import { approvedProfileCampusPhotoCount } from "@/app/lib/profile-campus-photos";
 import {
   colleges,
   observationSourceKind,
@@ -389,10 +390,25 @@ export default function DataSourcesPage() {
           </details>
         </section>
 
-        <section
-          className="sources-section"
-          aria-labelledby="freshness-heading"
-        >
+        <section className="sources-section" aria-labelledby="campus-photography-heading">
+          <div className="page-section-heading"><div><h2 id="campus-photography-heading">Campus photographs</h2></div></div>
+          <div className="sources-field-map">
+            <article>
+              <h3>Matched to the college</h3>
+              <p>{approvedProfileCampusPhotoCount.toLocaleString()} of {colleges.length.toLocaleString()} profiles have a reviewed campus photograph. Photos are matched to the exact college record and checked for campus identity, subject and reuse license. Automatically discovered images stay unpublished until reviewed.</p>
+            </article>
+            <article>
+              <h3>Credit stays with the image</h3>
+              <p>Each photograph links to its source and license, credits its creator, and shows its photo year. Images may be cropped to fit the banner; older photos do not establish current campus conditions. College marks and photographs do not imply endorsement.</p>
+            </article>
+            <article>
+              <h3>No substitute campuses</h3>
+              <p>When a verified photo is unavailable, the profile links to the college’s official website. We do not fill the gap with a different campus, a stock photograph or a generated scene.</p>
+            </article>
+          </div>
+        </section>
+
+        <section className="sources-section" aria-labelledby="freshness-heading">
           <div className="page-section-heading">
             <div>
               <span className="page-section-index">05</span>

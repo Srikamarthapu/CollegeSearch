@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   primaryTuitionMetric,
   cardTuitionMetrics,
+  hasReliableSingleTuitionRate,
   tuitionMetrics,
   combinedTuitionMetrics,
 } from "../app/lib/tuition-labels.ts";
@@ -70,6 +71,45 @@ test("cards do not replace missing in-state tuition with out-of-state or fee-inc
   assert.equal(resident.observation.periodLabel, "2024-2025");
   assert.equal(nonresident.observation.value, 53_472);
   assert.equal(nonresident.observation.periodLabel, "2026-2027");
+});
+
+test("cards use the compact tuition arrangement only with reliable single-rate evidence", () => {
+  const stanford = colleges.find((college) => college.unitId === 243744)!;
+  assert.equal(hasReliableSingleTuitionRate(stanford), true);
+  assert.equal(hasReliableSingleTuitionRate({ ...stanford, ownership: "Unknown" }), false);
+
+  const berkeley = colleges.find((college) => college.unitId === 110635)!;
+  assert.equal(hasReliableSingleTuitionRate(berkeley), false);
+
+  const sameRatePublic = {
+    ...berkeley,
+    costs: {
+      ...berkeley.costs,
+      tuitionOutOfState: {
+        ...berkeley.costs.tuitionOutOfState,
+        value: berkeley.costs.tuitionInState.value,
+      },
+    },
+  };
+  assert.equal(hasReliableSingleTuitionRate(sameRatePublic), true);
+
+  const mismatchedPeriod = {
+    ...sameRatePublic,
+    costs: {
+      ...sameRatePublic.costs,
+      tuitionInState: { ...sameRatePublic.costs.tuitionInState, periodLabel: "2024-2025" },
+    },
+  };
+  assert.equal(hasReliableSingleTuitionRate(mismatchedPeriod), false);
+
+  const unknownResidentRate = {
+    ...sameRatePublic,
+    costs: {
+      ...sameRatePublic.costs,
+      tuitionInState: { ...sameRatePublic.costs.tuitionInState, value: null },
+    },
+  };
+  assert.equal(hasReliableSingleTuitionRate(unknownResidentRate), false);
 });
 
  test("tuition-only fields never substitute combined charges and fee allowances retain their basis", () => {

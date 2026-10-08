@@ -232,6 +232,32 @@ test("headline costs show Stanford tuition alone and the profile separates the f
   assert.match(html, /\$13,807/);
 });
 
+test("college profiles render their own sourced campus banner with attribution", async () => {
+  const response = await render("/colleges/stanford-university");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  const banner = html.match(/<figure[\s\S]*?<\/figure>/)?.[0];
+  assert.ok(banner, "the profile contains a campus photograph");
+  assert.match(banner, /(?:\/images\/campuses\/|%2Fimages%2Fcampuses%2F)stanford\.jpg/);
+  assert.match(banner, /sizes="/);
+  assert.match(banner, /Stanford&#x27;s sandstone Main Quad|Stanford's sandstone Main Quad/);
+  assert.match(banner, /King of Hearts/);
+  assert.match(banner, /creativecommons\.org\/licenses\/by-sa\/3\.0/);
+  assert.match(banner, /2011/);
+  assert.match(banner, /cropped for display/);
+  assert.doesNotMatch(banner, /campuses\/ucla\.jpg/);
+});
+
+test("profiles without a reviewed photograph offer the college website without a substitute image", async () => {
+  const response = await render("/colleges/atlantic-technical-college");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /Campus photo not yet verified/);
+  assert.match(html, /Visit college website/);
+  assert.doesNotMatch(html, /<figure/);
+  assert.doesNotMatch(html, /src="\/images\/campuses\//);
+});
+
 test("global HTML responses enforce one fresh nonce on every executable block", async () => {
   const observedNonces = [];
 
