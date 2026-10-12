@@ -95,7 +95,16 @@ export function CampusCarousel() {
             inert={index !== active}
           >
             {slide.loaded.includes(index) ? (
-              <Image unoptimized src={item.src} width={item.width} height={item.height} alt={item.alt} loading={index === active ? "eager" : "lazy"} style={{ objectPosition: item.objectPosition }} />
+              <Image
+                src={item.src}
+                width={item.width}
+                height={item.height}
+                alt={item.alt}
+                sizes="(max-width: 360px) calc(100vw - 70px), (max-width: 700px) calc(100vw - 78px), (max-width: 900px) calc(50vw - 69px), (max-width: 1304px) calc(60vw - 85px), 698px"
+                loading={index === active ? "eager" : "lazy"}
+                fetchPriority={index === active ? "high" : "low"}
+                style={{ objectPosition: item.objectPosition }}
+              />
             ) : null}
             <span className={styles.caption}>
               <span>{item.location}</span>

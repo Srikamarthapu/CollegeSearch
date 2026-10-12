@@ -1,30 +1,20 @@
-import {
-  collegeActions,
-} from "@/app/lib/college-actions";
-import {
-  colleges,
-  type College,
-} from "@/app/lib/college-data";
-import {
-  projectCollegeForClient,
-  type ClientCollege,
-} from "@/app/lib/college-client-record";
+import { collegeActions } from "./college-actions.ts";
+import type { ClientCollege } from "./college-client-record.ts";
+import directoryArtifact from "../../data/college-directory-client.json" with { type: "json" };
+import runtimeSummary from "../../data/college-runtime-summary.json" with { type: "json" };
+import { COLLEGE_DIRECTORY_CACHE_VERSION } from "./college-directory-cache-version.ts";
+import { BoundedLruCache } from "./bounded-lru-cache.ts";
 import {
   filterCollegesByQuery,
   normalizeSearchText,
-} from "@/app/lib/college-search";
-import {
-  observationSourceKind,
-  isUniversityOfCalifornia,
-} from "@/app/lib/college-data";
-import { matchesEnrollmentBand } from "./explorer-filters";
-import knowledgeRelease from "@/data/college-knowledge-release.json";
+} from "./college-search.ts";
+import { matchesEnrollmentBand } from "./explorer-filters.ts";
 import {
   DIRECTORY_PAGE_SIZE,
   hasCompleteDirectoryData,
   sortDirectoryColleges,
   type DirectoryFilters,
-} from "./college-directory-state";
+} from "./college-directory-state.ts";
 
 export const DIRECTORY_MAX_PAGE_SIZE = 48;
 export {
@@ -32,7 +22,7 @@ export {
   EMPTY_DIRECTORY_FILTERS,
   parseDirectoryFilters,
   serializeDirectoryFilters,
-} from "./college-directory-state";
+} from "./college-directory-state.ts";
 export type { DirectoryFilters } from "./college-directory-state";
 
 export type DirectoryCollegeIdentity = Pick<
@@ -73,43 +63,39 @@ export type CollegeDirectoryPage = {
   facets: DirectoryFacets;
 };
 
-const stateSet = new Set(colleges.map((college) => college.state));
-const ownershipSet = new Set(colleges.map((college) => college.ownership));
-const settingSet = new Set(
-  colleges
-    .map((college) => college.setting)
-    .filter((setting) => setting !== "Setting unavailable"),
-);
-const majorOptions = [...new Set(colleges.flatMap((college) => college.majors.map((major) => major.name)))].sort();
+type CachedDirectoryPage = Omit<CollegeDirectoryPage, "selectedItems">;
+
+const colleges = directoryArtifact.colleges as ClientCollege[];
+const collegeByUnitId = new Map(colleges.map((college) => [college.unitId, college]));
+const majorOptions = runtimeSummary.directoryFacets.majorOptions;
+const facets = runtimeSummary.directoryFacets as DirectoryFacets;
+
+if (
+  directoryArtifact.cacheVersion !== COLLEGE_DIRECTORY_CACHE_VERSION ||
+  runtimeSummary.cacheVersion !== COLLEGE_DIRECTORY_CACHE_VERSION ||
+  directoryArtifact.releaseId !== runtimeSummary.releaseId ||
+  directoryArtifact.sourceHashes["colleges.json"] !== directoryArtifact.releaseId ||
+  colleges.length !== runtimeSummary.institutionCount ||
+  collegeByUnitId.size !== colleges.length ||
+  runtimeSummary.unitIds.length !== colleges.length ||
+  runtimeSummary.unitIds.some((unitId, index) => colleges[index]?.unitId !== unitId)
+) {
+  throw new Error(
+    "The generated college directory artifact is stale or inconsistent. Run scripts/build-college-directory-artifact.mjs.",
+  );
+}
+
+const publicDirectoryPageCache = new BoundedLruCache<CachedDirectoryPage>({
+  maxEntries: 32,
+  maxBytes: 6 * 1024 * 1024,
+  maxEntryBytes: 512 * 1024,
+  ttlMs: 30_000,
+  measureBytes: (value) =>
+    new TextEncoder().encode(JSON.stringify(value)).byteLength,
+});
+
 export function directoryFacets(): DirectoryFacets {
-  const federalAdmissions = colleges.filter((college) =>
-    observationSourceKind(college.observations.admitRate).isFederal,
-  ).length;
-  const ucAdmissions = colleges.filter(isUniversityOfCalifornia).length;
-  const reviewedInstitutionRecords = colleges.filter((college) =>
-    Object.values(college.observations).some(
-      (observation) =>
-        observation !== null &&
-        !observation.sourceId.startsWith("uc-") &&
-        !observationSourceKind(observation).isFederal,
-    ),
-  ).length;
-  return {
-    states: [...stateSet].sort(),
-    ownerships: ["Public", "Private nonprofit", "Private for-profit"].filter(
-      (ownership) => ownershipSet.has(ownership),
-    ),
-    institutionLevels: ["Four-year", "Two-year"],
-    settings: [...settingSet].sort(),
-    majorOptions,
-    totalInstitutions: colleges.length,
-    releaseId: knowledgeRelease.releaseId,
-    evidenceCounts: {
-      firstPartyAdmissions: colleges.length - federalAdmissions,
-      reviewedCollegeAdmissions: colleges.length - federalAdmissions - ucAdmissions,
-      reviewedInstitutionRecords,
-    },
-  };
+  return facets;
 }
 
 function matchesSelectivity(value: number | null, band: string) {
@@ -121,7 +107,7 @@ function matchesSelectivity(value: number | null, band: string) {
   return value > 0.5;
 }
 
-function majorForCollege(college: College, name: string) {
+function majorForCollege(college: ClientCollege, name: string) {
   return college.majors.find(
     (major) =>
       major.name === name &&
@@ -144,6 +130,69 @@ export function searchCollegeDirectory({
 }): CollegeDirectoryPage {
   const safeOffset = Number.isSafeInteger(offset) ? Math.max(0, Math.min(offset, colleges.length)) : 0;
   const safeLimit = Number.isSafeInteger(limit) ? Math.max(1, Math.min(limit, DIRECTORY_MAX_PAGE_SIZE)) : DIRECTORY_PAGE_SIZE;
+
+  const cacheKey =
+    savedIds.length === 0 &&
+    !filters.savedOnly &&
+    filters.query.length <= 120
+      ? directoryPageCacheKey(filters, safeOffset, safeLimit)
+      : null;
+  let basePage = cacheKey ? publicDirectoryPageCache.get(cacheKey) : undefined;
+  if (!basePage) {
+    basePage = computeDirectoryPage({
+      filters,
+      savedIds,
+      offset: safeOffset,
+      limit: safeLimit,
+    });
+    if (cacheKey) publicDirectoryPageCache.set(cacheKey, basePage);
+  }
+
+  return {
+    ...basePage,
+    selectedItems: selectedDirectoryColleges(selectedIds),
+  };
+}
+
+function directoryPageCacheKey(
+  filters: DirectoryFilters,
+  offset: number,
+  limit: number,
+) {
+  return JSON.stringify([
+    COLLEGE_DIRECTORY_CACHE_VERSION,
+    normalizeSearchText(filters.query),
+    filters.major,
+    filters.stateCode,
+    filters.ownership,
+    filters.institutionLevel,
+    filters.band,
+    filters.maxPrice,
+    filters.maxTuition,
+    filters.maxTuitionOnly,
+    filters.enrollmentBand,
+    filters.minGraduation,
+    filters.minEarnings,
+    filters.setting,
+    filters.ucOnly,
+    filters.completeOnly,
+    filters.sort,
+    offset,
+    limit,
+  ]);
+}
+
+function computeDirectoryPage({
+  filters,
+  savedIds,
+  offset,
+  limit,
+}: {
+  filters: DirectoryFilters;
+  savedIds: number[];
+  offset: number;
+  limit: number;
+}): CachedDirectoryPage {
   const queryMatches = filterCollegesByQuery(colleges, filters.query, majorOptions);
   const queryIds = new Set(queryMatches.map((college) => college.unitId));
   const queryOrder = normalizeSearchText(filters.query)
@@ -189,28 +238,29 @@ export function searchCollegeDirectory({
     queryOrder,
   );
 
-  const items = filtered.slice(safeOffset, safeOffset + safeLimit).map(projectCollegeForClient);
-  const knownIds = new Set(colleges.map((college) => college.unitId));
-  const normalizedSelected = [...new Set(selectedIds)]
-    .filter((unitId) => Number.isSafeInteger(unitId) && unitId > 0 && knownIds.has(unitId))
-    .slice(0, 4);
-  const selectedSet = new Set(normalizedSelected);
-  const selectedItems = colleges
-    .filter((college) => selectedSet.has(college.unitId))
-    .map(projectCollegeForClient);
+  const items = filtered.slice(offset, offset + limit);
 
   return {
     items,
-    selectedItems,
     total: filtered.length,
-    offset: safeOffset,
-    limit: safeLimit,
-    nextOffset: safeOffset + items.length < filtered.length ? safeOffset + items.length : null,
+    offset,
+    limit,
+    nextOffset: offset + items.length < filtered.length ? offset + items.length : null,
     facets: directoryFacets(),
   };
 }
 
-const collegeByUnitId = new Map(colleges.map((college) => [college.unitId, college]));
+function selectedDirectoryColleges(selectedIds: number[]) {
+  const normalizedSelected = [...new Set(selectedIds)]
+    .filter((unitId) => Number.isSafeInteger(unitId) && unitId > 0 && collegeByUnitId.has(unitId))
+    .slice(0, 4);
+  const selectedSet = new Set(normalizedSelected);
+  return colleges.filter((college) => selectedSet.has(college.unitId));
+}
+
+function isUniversityOfCalifornia(college: ClientCollege) {
+  return college.observations.admitRate.sourceId.startsWith("uc-");
+}
 
 export function lookupDirectoryColleges({
   unitIds,
@@ -232,7 +282,7 @@ export function lookupDirectoryColleges({
     if (!college) return [];
     const actions = collegeActions(unitId);
     return [{
-      ...projectCollegeForClient(college),
+      ...college,
       deadlineSourceUrl: actions?.deadlines.status === "verified" ? actions.deadlines.url : undefined,
       admissionsSourceUrl: actions?.admissions.status === "verified" ? actions.admissions.url : undefined,
     }];
@@ -266,6 +316,6 @@ export function directoryCollegeIdentityPayload() {
   return {
     items,
     total: items.length,
-    releaseId: knowledgeRelease.releaseId,
+    releaseId: runtimeSummary.releaseId,
   };
 }

@@ -1,23 +1,26 @@
 import { createHash } from "node:crypto";
-import { emptyAdviserPreferences, parseAdviserPreferences, type AdviserPreferences } from "./contracts.ts";
+import type { AdviserPreferences } from "./contracts.ts";
 import type { AdviserAnswer } from "./engine.ts";
 
 export const adviserConsentVersion = "2026-10-04";
 export const adviserUuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export type AdviserUsage = { limit: number; used: number; remaining: number; resetsAt: string };
 export type AdviserReservation = {
-  status: "reserved" | "completed" | "unauthorized" | "conflict" | "deleted" | "pending" | "expired" | "busy" | "quota" | "retry-limit" | "capacity";
-  conversationId?: string; leaseId?: string; answer?: AdviserAnswer;
+  status: "queued" | "completed" | "unauthorized" | "conflict" | "deleted" | "pending" | "expired" | "busy" | "quota" | "retry-limit" | "capacity" | "failed";
+  conversationId?: string; answer?: AdviserAnswer;
 };
 export type AdviserTurnServices = {
   enabled: boolean;
-  reserve(input: { requestId: string; conversationId: string | null; bodyHash: string }): Promise<AdviserReservation>;
-  preferences(conversationId: string): Promise<unknown>;
+  enqueue(input: { requestId: string; conversationId: string | null; bodyHash: string; message: string }): Promise<AdviserReservation>;
+  usage(): Promise<AdviserUsage>;
+};
+export type AdviserWorkerServices = {
+  enabled: boolean;
+  preferences(conversationId: string): Promise<AdviserPreferences>;
   previousRecommendationIds(conversationId: string): Promise<number[]>;
   generate(message: string, preferences: AdviserPreferences, signal: AbortSignal, previousRecommendationIds: number[]): Promise<{ answer: AdviserAnswer; inputTokens: number; outputTokens: number }>;
   complete(input: { requestId: string; leaseId: string; message: string; answer: AdviserAnswer; inputTokens: number; outputTokens: number }): Promise<boolean>;
-  release(requestId: string, leaseId: string): Promise<void>;
-  usage(): Promise<AdviserUsage>;
+  retry(input: { userId: string; requestId: string; leaseId: string; failureCode: "worker_failed" | "session" | "conversation" }): Promise<unknown>;
 };
 export function adviserResponse(data: unknown, status = 200) {
   return Response.json(data, { status, headers: { "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" } });
@@ -61,12 +64,14 @@ export async function handleAdviserTurn(request: Request, services: AdviserTurnS
         input.consentVersion !== adviserConsentVersion) throw new Error("Invalid message");
     body = { requestId: input.requestId, conversationId: input.conversationId as string | null, message: input.message.trim() };
   } catch { return error(400, "Check your message and the privacy consent, then try again.", "invalid"); }
-  let leaseId: string | undefined;
   try {
     const bodyHash = createHash("sha256").update(JSON.stringify([body.conversationId, body.message])).digest("hex");
-    const reservation = await services.reserve({ ...body, bodyHash });
+    const reservation = await services.enqueue({ ...body, bodyHash });
     if (reservation.status === "completed" && reservation.answer && reservation.conversationId) {
       return adviserResponse({ requestId: body.requestId, conversationId: reservation.conversationId, answer: reservation.answer, usage: await services.usage() });
+    }
+    if (reservation.status === "queued" && reservation.conversationId) {
+      return adviserResponse({ requestId: body.requestId, conversationId: reservation.conversationId, status: "queued" }, 202);
     }
     const messages: Partial<Record<AdviserReservation["status"], [number, string]>> = {
       unauthorized: [401, "Sign in again before sending a message."],
@@ -78,26 +83,11 @@ export async function handleAdviserTurn(request: Request, services: AdviserTurnS
       quota: [429, "You've used this month's adviser allowance. Your history and free college tools remain available."],
       "retry-limit": [429, "There have been too many attempts this month. Your history and free college tools remain available."],
       capacity: [503, "The adviser has reached its current service limit. Your draft and free college tools remain available."],
+      failed: [503, "The adviser couldn't process that message. Your draft and free college tools remain available."],
     };
-    if (reservation.status !== "reserved") {
-      const [status, message] = messages[reservation.status] ?? [503, "The adviser could not start this request."];
-      return error(status, message, reservation.status);
-    }
-    if (!reservation.leaseId || !reservation.conversationId) throw new Error("Invalid reservation");
-    leaseId = reservation.leaseId;
-    const storedPreferences = await services.preferences(reservation.conversationId);
-    const preferences = storedPreferences && typeof storedPreferences === "object" && Object.keys(storedPreferences).length ? parseAdviserPreferences(storedPreferences) : emptyAdviserPreferences;
-    const previousRecommendationIds = (await services.previousRecommendationIds(reservation.conversationId))
-      .filter((unitId) => Number.isSafeInteger(unitId) && unitId > 0).slice(0, 4);
-    const signal = AbortSignal.any([request.signal, AbortSignal.timeout(110_000)]);
-    const generated = await services.generate(body.message, preferences, signal, previousRecommendationIds);
-    signal.throwIfAborted();
-    const committed = await services.complete({ requestId: body.requestId, leaseId, message: body.message, ...generated });
-    if (!committed) throw new Error("The session, conversation or request changed before saving");
-    leaseId = undefined;
-    return adviserResponse({ requestId: body.requestId, conversationId: reservation.conversationId, answer: generated.answer, usage: await services.usage() });
+    const [status, message] = messages[reservation.status] ?? [503, "The adviser could not start this request."];
+    return error(status, message, reservation.status);
   } catch {
-    if (leaseId) { try { await services.release(body.requestId, leaseId); } catch { /* A short reservation expiry prevents permanent quota loss. */ } }
-    return error(503, "The adviser couldn't finish that message. Your draft is preserved; retry shortly. A saved answer, if any, will be returned without using the allowance twice.", "unavailable");
+    return error(503, "The adviser couldn't queue that message. Your draft is preserved; retry shortly.", "unavailable");
   }
 }

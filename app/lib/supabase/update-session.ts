@@ -11,7 +11,12 @@ export async function updateSupabaseSession(
   forwardedRequestHeaders = new Headers(request.headers),
 ) {
   const config = getSupabasePublicConfig();
-  if (!config.configured) {
+  // A guest has nothing to refresh. Avoid constructing an Auth client on every
+  // public request, especially on catalog/cache traffic.
+  const hasSessionCookie = request.cookies.getAll().some(({ name }) =>
+    /^sb-[a-z0-9]+-auth-token(?:\.\d+)?$/.test(name),
+  );
+  if (!config.configured || !hasSessionCookie) {
     return NextResponse.next({
       request: { headers: forwardedRequestHeaders },
     });

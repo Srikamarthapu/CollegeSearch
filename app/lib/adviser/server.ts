@@ -1,30 +1,11 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { collegeDataset } from "../college-data";
-import releaseMarker from "@/data/college-knowledge-release.json";
 import { getSupabasePublicConfig } from "../supabase/config";
-import { nvidiaConfigFromEnv, createNvidiaProvider, createNvidiaRequestBudget } from "./nvidia";
-import { createKnowledgeRetriever } from "./retrieval";
-import { runAdviserTurn } from "./engine";
 import { adviserUuidPattern, type AdviserReservation, type AdviserTurnServices, type AdviserUsage } from "./service";
 
-export type AdviserPublicStatus = { available: boolean; monthlyAllowance: number | null; catalogCount: number };
-function configuredLimit(value: string | undefined, max: number) {
-  if (!value || !/^\d+$/.test(value)) return null;
-  const number = Number(value);
-  return Number.isSafeInteger(number) && number >= 1 && number <= max ? number : null;
-}
-export function getAdviserPublicStatus(): AdviserPublicStatus {
-  try {
-    const provider = nvidiaConfigFromEnv();
-    const allowance = configuredLimit(process.env.ADVISER_MONTHLY_ALLOWANCE, 1000);
-    const global = configuredLimit(process.env.ADVISER_GLOBAL_MONTHLY_ATTEMPTS, 100000);
-    const available = provider.mode === "production" && provider.productionAuthorized && !!provider.apiKey?.trim() &&
-      process.env.ADVISER_EVALUATION_PASSED === "true" && !!allowance && !!global &&
-      !!process.env.SUPABASE_SECRET_KEY?.trim() && getSupabasePublicConfig().configured &&
-      (process.env.CRON_SECRET?.length ?? 0) >= 32;
-    return { available, monthlyAllowance: available ? allowance : null, catalogCount: collegeDataset.colleges.length };
-  } catch { return { available: false, monthlyAllowance: null, catalogCount: collegeDataset.colleges.length }; }
-}
+import { configuredLimit, getAdviserPublicStatus } from "./public-status";
+export { getAdviserPublicStatus } from "./public-status";
+export type { AdviserPublicStatus } from "./public-status";
+
 const boundedFetch: typeof fetch = (input, init) => fetch(input, { ...init,
   signal: init?.signal ? AbortSignal.any([init.signal, AbortSignal.timeout(12_000)]) : AbortSignal.timeout(12_000),
 });
@@ -76,60 +57,21 @@ export function createAdviserTurnServices(account: VerifiedAdviserAccount): Advi
   }
   return {
     enabled: status.available,
-    reserve: async ({ requestId, conversationId, bodyHash }) => await serverRpc("reserve_adviser_request", {
+    enqueue: async ({ requestId, conversationId, bodyHash, message }) => await serverRpc("enqueue_adviser_request", {
       p_user_id: account.userId, p_session_id: account.sessionId, p_request_id: requestId,
-      p_conversation_id: conversationId, p_body_hash: bodyHash, p_free_limit: status.monthlyAllowance,
+      p_conversation_id: conversationId, p_body_hash: bodyHash, p_message: message, p_free_limit: status.monthlyAllowance,
       p_global_limit: configuredLimit(process.env.ADVISER_GLOBAL_MONTHLY_ATTEMPTS, 100000),
     }) as AdviserReservation,
-    async preferences(conversationId) {
-      const { data, error } = await account.caller.from("adviser_conversations").select("preferences").eq("id", conversationId).single();
-      if (error || !data) throw new Error("Conversation unavailable.");
-      return data.preferences;
-    },
-    async previousRecommendationIds(conversationId) {
-      const { data, error } = await account.caller.from("adviser_messages").select("payload")
-        .eq("conversation_id", conversationId).eq("role", "assistant")
-        .order("created_at", { ascending: false }).limit(1).maybeSingle();
-      if (error) throw new Error("Conversation context unavailable.");
-      const payload = data?.payload;
-      if (!payload || typeof payload !== "object" || Array.isArray(payload)) return [];
-      const recommendations = (payload as Record<string, unknown>).recommendations;
-      if (!Array.isArray(recommendations)) return [];
-      return recommendations.slice(0, 4).flatMap((recommendation) => {
-        if (!recommendation || typeof recommendation !== "object" || Array.isArray(recommendation)) return [];
-        const unitId = (recommendation as Record<string, unknown>).unitId;
-        return Number.isSafeInteger(unitId) && Number(unitId) > 0 ? [Number(unitId)] : [];
-      });
-    },
-    async generate(message, preferences, signal, previousRecommendationIds) {
-      const config = nvidiaConfigFromEnv();
-      // A single student turn can call embeddings, interpretation and ranking. Bound their
-      // combined external calls so transient fallback cannot multiply one allowance lease.
-      const provider = createNvidiaProvider(config, fetch, { requestBudget: createNvidiaRequestBudget(6) });
-      let inputTokens = 0; let outputTokens = 0;
-      const retrieve = createKnowledgeRetriever(collegeDataset, releaseMarker.releaseId, async (name, parameters, abort) => {
-        const call = account.caller.rpc(name, parameters);
-        const { data, error } = await (abort ? call.abortSignal(abort) : call);
-        if (error) throw new Error("Verified college evidence is unavailable.");
-        return data;
-      }, { model: config.embeddingModel, modelVersion: config.embeddingModelVersion, query: async (text, abort) => {
-        const result = await provider.embed(text, "query", abort);
-        inputTokens += result.usage.promptTokens ?? result.usage.totalTokens ?? 0;
-        return result;
-      } });
-      const answer = await runAdviserTurn(message, preferences, { dataset: collegeDataset, retrieve, previousRecommendationIds, generate: async (system, input, abort) => {
-        const result = await provider.generateWithUsage(system, input, abort);
-        inputTokens += result.usage.promptTokens ?? 0; outputTokens += result.usage.completionTokens ?? 0;
-        return result.value;
-      } }, signal);
-      return { answer, inputTokens, outputTokens };
-    },
-    async complete({ requestId, leaseId, message, answer, inputTokens, outputTokens }) {
-      return await serverRpc("complete_adviser_request", { p_user_id: account.userId, p_session_id: account.sessionId,
-        p_request_id: requestId, p_lease_id: leaseId, p_message: message, p_answer: answer,
-        p_preferences: answer.preferences, p_input_tokens: inputTokens, p_output_tokens: outputTokens }) === true;
-    },
-    async release(requestId, leaseId) { await serverRpc("release_adviser_request", { p_user_id: account.userId, p_request_id: requestId, p_lease_id: leaseId }); },
     usage: () => readAdviserUsage(account),
   };
+}
+
+export function createAdviserAdmin() {
+  const config = getSupabasePublicConfig();
+  const secret = process.env.SUPABASE_SECRET_KEY?.trim();
+  if (!config.configured || !secret) throw new Error("Adviser storage is unavailable.");
+  return createClient(config.url, secret, {
+    global: { fetch: boundedFetch },
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+  });
 }

@@ -13,6 +13,7 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  images: { formats: ["image/avif", "image/webp"] },
   // Each build worker loads the nationwide source artifact. Bound parallelism
   // so static rendering also fits the existing deployment's memory budget.
   experimental: { cpus: 2 },

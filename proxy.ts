@@ -1,5 +1,6 @@
-import type { NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { updateSupabaseSession } from "@/app/lib/supabase/update-session";
+import { isPublicCatalogCacheRequest } from "@/app/lib/public-catalog-cache-policy";
 import {
   createContentSecurityPolicy,
   createCspNonce,
@@ -26,6 +27,21 @@ function enforcePrivateNoStore(response: Response) {
 }
 
 export async function proxy(request: NextRequest) {
+  // These responses are deterministic JSON without a session or an HTML CSP
+  // nonce. Let their route choose a bounded public TTL; every other request
+  // keeps the private boundary below, including filtered/personal queries.
+  if (isPublicCatalogCacheRequest(request)) {
+    const response = NextResponse.next();
+    response.headers.set(
+      "Content-Security-Policy",
+      "default-src 'none'; frame-ancestors 'none'; base-uri 'none'",
+    );
+    for (const { key, value } of NON_CSP_SECURITY_HEADERS) {
+      response.headers.set(key, value);
+    }
+    return response;
+  }
+
   const nonce = createCspNonce();
   const contentSecurityPolicy = createContentSecurityPolicy({ nonce });
   const requestHeaders = new Headers(request.headers);
@@ -40,7 +56,7 @@ export async function proxy(request: NextRequest) {
   for (const { key, value } of NON_CSP_SECURITY_HEADERS) {
     response.headers.set(key, value);
   }
-  // Every matched response carries a request-specific nonce and may carry
+  // Every remaining response carries a request-specific nonce and may carry
   // refreshed auth cookies. It must never be stored or shared by a CDN.
   enforcePrivateNoStore(response);
 

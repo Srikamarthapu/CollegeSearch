@@ -12,12 +12,14 @@ import { getSupabaseBrowserClient } from "@/app/lib/supabase/browser";
 import { captureVerifiedSupabaseSession } from "@/app/lib/supabase/verified-session";
 import type { AdviserAnswer } from "@/app/lib/adviser/engine";
 import type { AdviserRecommendation } from "@/app/lib/adviser/evidence";
+import { createPollLoop } from "@/app/lib/adviser/polling";
 import type { AdviserPublicStatus } from "@/app/lib/adviser/server";
 import type { AdviserUsage } from "@/app/lib/adviser/service";
 import styles from "./adviser.module.css";
 
 type Conversation = { id: string; title: string; updated_at: string; expires_at: string };
-type Message = { id: string; role: "user" | "assistant"; payload: { text?: string } & Partial<AdviserAnswer>; created_at: string };
+type Message = { id: string; request_id?: string | null; role: "user" | "assistant"; payload: { text?: string } & Partial<AdviserAnswer>; created_at: string };
+type PendingJob = { requestId: string; conversationId: string; message: string; status: "queued" | "running" };
 const examples = ["I'm interested in engineering in California.", "Help me compare smaller colleges in the Northeast.", "I live in Texas. What should I know before comparing costs?"];
 
 function InactiveAdviser({ collegeCount, showHistorySignIn = false }: { collegeCount: number; showHistorySignIn?: boolean }) {
@@ -72,6 +74,7 @@ function AdviserSession({ userId, available }: { userId: string; available: bool
   const [messagesOffset, setMessagesOffset] = useState<number | null>(null);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [pendingJob, setPendingJob] = useState<PendingJob | null>(null);
   const [draft, setDraft] = useState("");
   const [consent, setConsent] = useState(false);
   const [usage, setUsage] = useState<AdviserUsage | null>(null);
@@ -83,8 +86,10 @@ function AdviserSession({ userId, available }: { userId: string; available: bool
   const [deleteTarget, setDeleteTarget] = useState<string | "all" | null>(null);
   const [deleting, setDeleting] = useState(false);
   const effectGeneration = useRef(0);
+  const historyRevision = useRef(0);
   const requests = useRef(new Set<AbortController>());
   const historyPageRequest = useRef(false);
+  const suppressedPendingIds = useRef(new Set<string>());
   const requestIdentity = useRef<{ id: string; text: string; conversationId: string | null } | null>(null);
   const composer = useRef<HTMLTextAreaElement>(null);
   const lastReply = useRef<HTMLDivElement>(null);
@@ -108,21 +113,26 @@ function AdviserSession({ userId, available }: { userId: string; available: bool
 
   const loadHistory = useCallback(async (offset = 0) => {
     const generation = effectGeneration.current;
+    const revision = historyRevision.current;
     const result = await api(offset ? `?offset=${offset}` : "");
-    if (!generation || generation !== effectGeneration.current) return;
+    if (!generation || generation !== effectGeneration.current || revision !== historyRevision.current) return;
     setConversations((current) => offset ? [...current, ...result.conversations] : result.conversations);
     setHistoryOffset(result.nextOffset); setUsage(result.usage);
+    if (result.pendingJob && !suppressedPendingIds.current.has(result.pendingJob.requestId)) setPendingJob(result.pendingJob);
     setHistoryError(null);
   }, [api]);
 
   useEffect(() => {
     const generation = ++effectGeneration.current;
-    loadHistory().catch((cause) => {
-      if (generation !== effectGeneration.current || (cause as Error)?.name === "AbortError") return;
-      setHistoryError((cause as Error).message);
-    }).finally(() => { if (generation === effectGeneration.current) setLoading(false); });
+    const start = setTimeout(() => {
+      loadHistory().catch((cause) => {
+        if (generation !== effectGeneration.current || (cause as Error)?.name === "AbortError") return;
+        setHistoryError((cause as Error).message);
+      }).finally(() => { if (generation === effectGeneration.current) setLoading(false); });
+    }, 0);
     const controllers = requests.current;
     return () => {
+      clearTimeout(start);
       if (generation === effectGeneration.current) effectGeneration.current += 1;
       for (const controller of controllers) controller.abort();
     };
@@ -137,7 +147,12 @@ function AdviserSession({ userId, available }: { userId: string; available: bool
     try {
       const result = await api(`?conversationId=${id}${offset ? `&offset=${offset}` : ""}`);
       if (generation !== effectGeneration.current) return;
-      setMessages((current) => offset ? [...result.messages, ...current] : result.messages);
+      const loaded: Message[] = result.messages;
+      if (!offset && pendingJob?.conversationId === id && !loaded.some((message) => message.request_id === pendingJob.requestId)) {
+        loaded.push({ id: `${pendingJob.requestId}-pending`, request_id: pendingJob.requestId, role: "user",
+          payload: { text: pendingJob.message }, created_at: new Date().toISOString() });
+      }
+      setMessages((current) => offset ? [...loaded, ...current] : loaded);
       setMessagesOffset(result.nextOffset); setConversationId(id);
       if (!offset) { setDraft(""); requestIdentity.current = null; }
     } catch (cause) { if (generation === effectGeneration.current) setError((cause as Error).message); }
@@ -152,7 +167,7 @@ function AdviserSession({ userId, available }: { userId: string; available: bool
 
   async function send(event: FormEvent) {
     event.preventDefault();
-    if (!available || !draft.trim() || !consent || busy || loading || loadingMore || usage?.remaining === 0) return;
+    if (!available || !draft.trim() || !consent || busy || pendingJob || loading || loadingMore || usage?.remaining === 0) return;
     const generation = effectGeneration.current;
     const text = draft.trim();
     const prior = requestIdentity.current;
@@ -162,28 +177,90 @@ function AdviserSession({ userId, available }: { userId: string; available: bool
     try {
       const result = await api("", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ requestId: id, conversationId, message: text, consentVersion: "2026-10-04" }) });
       if (generation !== effectGeneration.current) return;
-      setConversationId(result.conversationId); setUsage(result.usage);
-      setMessages((current) => [...current, { id: `${id}-user`, role: "user", payload: { text }, created_at: new Date().toISOString() }, { id: `${id}-assistant`, role: "assistant", payload: result.answer, created_at: new Date().toISOString() }]);
+      setConversationId(result.conversationId);
+      if (result.status === "queued") {
+        setPendingJob({ requestId: id, conversationId: result.conversationId, message: text, status: "queued" });
+        setMessages((current) => [...current.filter((message) => message.request_id !== id), {
+          id: `${id}-pending`, request_id: id, role: "user", payload: { text }, created_at: new Date().toISOString(),
+        }]);
+        setDraft("");
+        void loadHistory().catch((cause) => {
+          if (generation === effectGeneration.current && (cause as Error)?.name !== "AbortError") {
+            setHistoryError("Your message is queued, but the conversation list could not be refreshed. Try loading history again.");
+          }
+        });
+        return;
+      }
+      setUsage(result.usage);
+      setMessages((current) => [...current, { id: `${id}-user`, request_id: id, role: "user", payload: { text }, created_at: new Date().toISOString() }, { id: `${id}-assistant`, request_id: id, role: "assistant", payload: result.answer, created_at: new Date().toISOString() }]);
       setDraft(""); requestIdentity.current = null;
-      try { await loadHistory(); }
-      catch (cause) {
+      void loadHistory().catch((cause) => {
         if (generation === effectGeneration.current && (cause as Error)?.name !== "AbortError") {
           setHistoryError("Your reply was saved, but the conversation list could not be refreshed. Try loading history again.");
         }
-      }
+      });
       window.requestAnimationFrame(() => lastReply.current?.focus());
     } catch (cause) { if (generation === effectGeneration.current) setError((cause as Error).message); }
     finally { if (generation === effectGeneration.current) setBusy(false); }
   }
 
+  useEffect(() => {
+    if (!pendingJob) return;
+    let cancelled = false;
+    const poll = async () => {
+      if (cancelled || suppressedPendingIds.current.has(pendingJob.requestId)) return false;
+      try {
+        const result = await api(`?requestId=${pendingJob.requestId}`);
+        if (cancelled || suppressedPendingIds.current.has(pendingJob.requestId)) return false;
+        if (result.status === "completed") {
+          setPendingJob(null); requestIdentity.current = null;
+          if (conversationId === result.conversationId && result.answer) {
+            setMessages((current) => [...current.filter((message) => message.request_id !== pendingJob.requestId || message.role !== "assistant"), {
+              id: `${pendingJob.requestId}-assistant`, request_id: pendingJob.requestId, role: "assistant",
+              payload: result.answer, created_at: new Date().toISOString(),
+            }]);
+            window.requestAnimationFrame(() => lastReply.current?.focus());
+          }
+          void loadHistory().catch(() => {});
+          return false;
+        }
+        if (result.status === "failed" || result.status === "deleted") {
+          setPendingJob(null); requestIdentity.current = null;
+          setMessages((current) => current.filter((message) => message.request_id !== pendingJob.requestId));
+          if (result.status === "failed") setDraft((current) => current.trim() ? current : pendingJob.message);
+          setError(result.status === "deleted" ? "That conversation was deleted while the message was queued." : "The adviser couldn't finish that message. Your draft is back; you can edit it or send again.");
+          void loadHistory().catch(() => {});
+          return false;
+        }
+        if ((result.status === "queued" || result.status === "running") && result.status !== pendingJob.status) {
+          setPendingJob({ ...pendingJob, status: result.status });
+        }
+      } catch {
+        // A transient status read does not discard the durable job or its local preview.
+      }
+      return !cancelled && !suppressedPendingIds.current.has(pendingJob.requestId);
+    };
+    const loop = createPollLoop(poll, { isVisible: () => !document.hidden,
+      setTimer: (callback, delay) => setTimeout(callback, delay), clearTimer: clearTimeout });
+    const onVisibilityChange = () => loop.visibilityChanged();
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    loop.start();
+    return () => { cancelled = true; loop.stop(); document.removeEventListener("visibilitychange", onVisibilityChange); };
+  }, [api, conversationId, loadHistory, pendingJob]);
+
   async function deleteHistory() {
     if (!deleteTarget || deleting || loading || loadingMore || busy) return;
     const generation = effectGeneration.current;
     const target = deleteTarget;
+    const pendingToDelete = pendingJob && (target === "all" || target === pendingJob.conversationId) ? pendingJob : null;
+    if (pendingToDelete) suppressedPendingIds.current.add(pendingToDelete.requestId);
+    historyRevision.current += 1;
     setDeleting(true); setError(null);
     try {
       await api(target === "all" ? "" : `?conversationId=${target}`, { method: "DELETE", headers: { "X-CollegeSearch-Delete-History": "delete-history" } });
       if (generation !== effectGeneration.current) return;
+      historyRevision.current += 1;
+      if (pendingToDelete) { setPendingJob(null); requestIdentity.current = null; }
       setConversations((current) => target === "all" ? [] : current.filter((conversation) => conversation.id !== target));
       if (target === "all" || target === conversationId) { setMessages([]); setConversationId(null); setMessagesOffset(null); requestIdentity.current = null; }
       setDeleteTarget(null);
@@ -193,7 +270,21 @@ function AdviserSession({ userId, available }: { userId: string; available: bool
           setHistoryError("History was deleted, but the conversation list could not be refreshed. Try loading history again.");
         }
       }
-    } catch (cause) { if (generation === effectGeneration.current) setError((cause as Error).message); }
+    } catch (cause) {
+      historyRevision.current += 1;
+      if (pendingToDelete) {
+        suppressedPendingIds.current.delete(pendingToDelete.requestId);
+        if (generation === effectGeneration.current) setPendingJob({ ...pendingToDelete });
+      }
+      if (generation === effectGeneration.current) {
+        setError((cause as Error).message);
+        void loadHistory().catch((refreshError) => {
+          if (generation === effectGeneration.current && (refreshError as Error)?.name !== "AbortError") {
+            setHistoryError("History could not be refreshed after the deletion failed. Try loading history again.");
+          }
+        });
+      }
+    }
     finally { if (generation === effectGeneration.current) setDeleting(false); }
   }
 
@@ -228,7 +319,7 @@ function AdviserSession({ userId, available }: { userId: string; available: bool
       <button className={styles.historySummary} type="button" aria-expanded={historyOpen} aria-controls="adviser-history-content" onClick={() => setHistoryOpen((open) => !open)}><span>Your conversations</span><ChevronDown className={styles.historyChevron} size={16} aria-hidden="true" /></button>
       <div id="adviser-history-content" className={styles.historyContent} data-open={historyOpen}>
       {available && <button className={styles.newConversation} disabled={busy || loading || loadingMore || deleting} onClick={newConversation}><Plus size={17} aria-hidden="true" /> New conversation</button>}<h2 className={styles.historyHeading}>Your conversations</h2>
-      {loading && !conversations.length ? <p role="status">Loading your history…</p> : !conversations.length ? <p className={styles.muted}>Your conversations will appear here.</p> : <ul>{conversations.map((conversation) => <li key={conversation.id}><button disabled={busy || loading || loadingMore || deleting} className={conversationId === conversation.id ? styles.selectedHistory : ""} onClick={() => openConversation(conversation.id)} aria-current={conversationId === conversation.id ? "true" : undefined}><span>{conversation.title}</span><small>{new Date(conversation.updated_at).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</small></button><button disabled={busy || loading || loadingMore || deleting} aria-label={`Delete conversation: ${conversation.title}`} onClick={() => setDeleteTarget(conversation.id)}><Trash2 size={15} aria-hidden="true" /></button></li>)}</ul>}
+      {loading && !conversations.length ? <p role="status">Loading your history…</p> : !conversations.length ? <p className={styles.muted}>Your conversations will appear here.</p> : <ul>{conversations.map((conversation) => <li key={conversation.id}><button disabled={busy || loading || loadingMore || deleting} className={conversationId === conversation.id ? styles.selectedHistory : ""} onClick={() => openConversation(conversation.id)} aria-current={conversationId === conversation.id ? "true" : undefined}><span>{conversation.title}</span><small>{pendingJob?.conversationId === conversation.id ? (pendingJob.status === "running" ? "Processing" : "Queued") : new Date(conversation.updated_at).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</small></button><button disabled={busy || loading || loadingMore || deleting} aria-label={`Delete conversation: ${conversation.title}`} onClick={() => setDeleteTarget(conversation.id)}><Trash2 size={15} aria-hidden="true" /></button></li>)}</ul>}
       {historyError && <div role="alert"><p className={styles.error}>{historyError}</p><button className={styles.textButton} disabled={busy || loading || loadingMore || deleting} onClick={retryHistoryRefresh}>Retry history refresh</button></div>}
       {historyOffset !== null && <button className={styles.textButton} disabled={busy || loading || loadingMore || deleting} onClick={loadMoreHistory}>{loadingMore ? "Loading conversations…" : "Load more conversations"}</button>}
       {conversations.length > 0 && <button className={styles.textButton} disabled={busy || loading || loadingMore || deleting} onClick={() => setDeleteTarget("all")}>Delete all history</button>}
@@ -246,13 +337,14 @@ function AdviserSession({ userId, available }: { userId: string; available: bool
           {!!message.payload.notices?.length && <details className={styles.answerNotes}><summary>Research notes &amp; limits</summary><ul>{message.payload.notices.map((notice) => <li key={notice}>{notice}</li>)}</ul></details>}
           {message.payload.question && <p className={styles.followUp}>{message.payload.question}</p>}
         </div>)}
-        {busy && <div className={styles.loading} role="status"><span>Checking college evidence…</span><div /><div /><div /></div>}
+        {busy && <div className={styles.loading} role="status"><span>Saving your message…</span><div /><div /><div /></div>}
+        {pendingJob?.conversationId === conversationId && <div className={styles.loading} role="status"><span>{pendingJob.status === "running" ? "Checking college evidence…" : "Your message is queued…"}</span><div /><div /><div /></div>}
       </div>
       {available ? <form className={styles.composer} onSubmit={send}><label htmlFor="adviser-message">Your message</label><textarea id="adviser-message" ref={composer} rows={3} maxLength={2000} value={draft} disabled={busy || loading} onChange={(event) => setDraft(event.target.value)} placeholder="Tell me what matters to you in a college…" aria-describedby="adviser-consent adviser-form-error" />
         <label className={styles.consent} id="adviser-consent"><input type="checkbox" checked={consent} disabled={busy} onChange={(event) => setConsent(event.target.checked)} /><span>I agree to send my message and research preferences to NVIDIA. I&apos;ll leave out names, contact details and sensitive information. <Link href="/privacy#adviser-privacy">What is shared</Link></span></label>
         <div id="adviser-form-error" role={error ? "alert" : undefined}>{error && <p className={styles.error}>{error}</p>}</div>
         {usage?.remaining === 0 && <p className={styles.notice}>Your monthly allowance is used. Your history, draft and <Link href="/explore">free college tools</Link> are still available.</p>}
-        <div className={styles.sendRow}><small>{draft.length}/2,000 · {!consent ? "Agree to the privacy note to send." : "Your profile and notes are not attached."}</small><button className={styles.primary} type="submit" disabled={busy || loading || loadingMore || !consent || !draft.trim() || usage?.remaining === 0}>{busy ? "Working…" : "Send"}<ArrowUp size={18} aria-hidden="true" /></button></div>
+        <div className={styles.sendRow}><small>{draft.length}/2,000 · {pendingJob ? (pendingJob.status === "running" ? "Your queued message is processing." : "Your message is queued; you can keep browsing your history.") : !consent ? "Agree to the privacy note to send." : "Your profile and notes are not attached."}</small><button className={styles.primary} type="submit" disabled={busy || !!pendingJob || loading || loadingMore || !consent || !draft.trim() || usage?.remaining === 0}>{busy ? "Saving…" : pendingJob?.status === "running" ? "Processing…" : pendingJob ? "Queued" : "Send"}<ArrowUp size={18} aria-hidden="true" /></button></div>
       </form> : <div className={styles.composer}><p className={styles.notice} role="status">The adviser is not available for new messages right now. Your private history and deletion controls remain available.</p></div>}
     </section>
     <Dialog.Root open={deleteTarget !== null} onOpenChange={(open) => { if (!open && !deleting) setDeleteTarget(null); }}><Dialog.Portal><Dialog.Overlay className={styles.modalOverlay} /><Dialog.Content className={styles.modal}><Dialog.Title>{deleteTarget === "all" ? "Delete all adviser history?" : "Delete this conversation?"}</Dialog.Title><Dialog.Description>Messages and saved adviser answers will be removed. Your current unsent draft will stay in the message box; if it belonged to the deleted conversation, sending it later will start a new conversation. Your saved colleges and research notes are kept. This cannot be undone.</Dialog.Description>{error && <p className={styles.error} role="alert">{error}</p>}<div><Dialog.Close asChild><button disabled={deleting}>Keep history</button></Dialog.Close><button className={styles.primary} disabled={deleting || loading || loadingMore || busy} onClick={deleteHistory}>{deleting ? "Deleting…" : "Delete history"}</button></div><Dialog.Close asChild><button className={styles.modalClose} disabled={deleting} aria-label="Close delete history dialog"><X size={20} aria-hidden="true" /></button></Dialog.Close></Dialog.Content></Dialog.Portal></Dialog.Root>

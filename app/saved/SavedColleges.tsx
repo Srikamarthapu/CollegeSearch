@@ -30,6 +30,7 @@ import {
 } from "@/app/lib/college-client-record";
 import type { DirectoryCollegeIdentity } from "@/app/lib/college-directory";
 import { parseCollegeIdentityDirectory } from "@/app/lib/college-identity-directory";
+import { COLLEGE_DIRECTORY_CACHE_VERSION } from "@/app/lib/college-directory-cache-version";
 import {
   type SavedComparisonSelection,
   visibleSavedComparisonIds,
@@ -109,9 +110,13 @@ export function SavedColleges() {
     setIdentityDirectory({ status: "loading", items: null });
     const request = (async () => {
       try {
-        const response = await fetch("/api/colleges/identities", {
-          headers: { Accept: "application/json" },
-        });
+        const response = await fetch(
+          `/api/colleges/identities?release=${encodeURIComponent(COLLEGE_DIRECTORY_CACHE_VERSION)}`,
+          {
+            headers: { Accept: "application/json" },
+            credentials: "omit",
+          },
+        );
         if (!response.ok) throw new Error("The college directory could not be loaded.");
         const payload = parseCollegeIdentityDirectory(await response.json());
         if (!payload) throw new Error("The college directory response was incomplete.");

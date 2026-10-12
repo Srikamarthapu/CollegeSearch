@@ -1,4 +1,4 @@
-import { getAdviserPublicStatus } from "@/app/lib/adviser/server";
+import { getAdviserPublicStatus } from "@/app/lib/adviser/public-status";
 import { CollegeSearchApp } from "@/app/CollegeCompassApp";
 import {
   searchCollegeDirectory,

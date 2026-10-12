@@ -1,4 +1,4 @@
-import type { College } from "./college-data.ts";
+import type { ClientCollege } from "./college-client-record.ts";
 
 export const DIRECTORY_PAGE_SIZE = 24;
 
@@ -95,7 +95,7 @@ export const EMPTY_DIRECTORY_FILTERS: DirectoryFilters = {
   sort: DEFAULT_DIRECTORY_SORT,
 };
 
-export function hasCompleteDirectoryData(college: College) {
+export function hasCompleteDirectoryData(college: ClientCollege) {
   return [
     college.observations.admitRate,
     college.observations.averageNetPrice,
@@ -210,7 +210,7 @@ export function serializeDirectoryFilters(
   return params;
 }
 
-function compareDirectoryNames(left: College, right: College) {
+function compareDirectoryNames(left: ClientCollege, right: ClientCollege) {
   return (
     left.name.localeCompare(right.name, "en", { sensitivity: "base" }) ||
     left.unitId - right.unitId
@@ -228,7 +228,7 @@ function compareNullable(
   return direction === "asc" ? left - right : right - left;
 }
 
-function majorForCollege(college: College, name: string) {
+function majorForCollege(college: ClientCollege, name: string) {
   return college.majors.find(
     (major) =>
       major.name === name &&
@@ -241,7 +241,7 @@ function majorForCollege(college: College, name: string) {
  * keep the order supplied by the query matcher so exact matches stay first.
  */
 export function sortDirectoryColleges(
-  rows: College[],
+  rows: ClientCollege[],
   sort: string,
   major: string,
   queryOrder?: ReadonlyMap<number, number>,

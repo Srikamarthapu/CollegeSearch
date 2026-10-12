@@ -509,9 +509,15 @@ async function requestDirectoryPage({
     return response.json() as Promise<CollegeDirectoryPage>;
   }
   const params = serializeDirectoryFilters(filters, selectedIds);
-  params.set("offset", String(offset));
-  params.set("limit", String(limit));
-  const response = await fetch(`/api/colleges?${params}`, { signal });
+  if (offset !== 0) params.set("offset", String(offset));
+  if (limit !== DIRECTORY_PAGE_SIZE) params.set("limit", String(limit));
+  const isPublicDefaultPage =
+    params.size === 0 && savedIds.length === 0 && offset === 0;
+  const url = params.size ? `/api/colleges?${params}` : "/api/colleges";
+  const response = await fetch(url, {
+    ...(isPublicDefaultPage ? { credentials: "omit" as const } : {}),
+    signal,
+  });
   if (!response.ok) throw new Error("The college list could not be searched.");
   return response.json() as Promise<CollegeDirectoryPage>;
 }

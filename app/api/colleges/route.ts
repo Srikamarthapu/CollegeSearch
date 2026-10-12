@@ -5,6 +5,7 @@ import {
   directoryFacets,
 } from "@/app/lib/college-directory";
 import { parseDirectoryFilters } from "@/app/lib/college-directory-state";
+import { catalogCacheControl } from "@/app/lib/public-catalog-cache-policy";
 
 function integerParameter(value: string | null, fallback: number) {
   if (!value || !/^\d{1,7}$/.test(value)) return fallback;
@@ -38,7 +39,13 @@ export async function GET(request: NextRequest) {
     offset: integerParameter(params.get("offset"), 0),
     limit: integerParameter(params.get("limit"), 24),
   });
-  return responseFor(result, "public, s-maxage=300, stale-while-revalidate=3600");
+  return responseFor(
+    result,
+    catalogCacheControl(
+      request,
+      "public, max-age=0, s-maxage=60, stale-while-revalidate=300",
+    ),
+  );
 }
 
 export async function POST(request: NextRequest) {

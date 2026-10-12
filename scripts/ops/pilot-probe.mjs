@@ -104,9 +104,13 @@ export async function smoke({ origin, authMode = "configured", now = Date.now(),
     const result = await requestOne(origin, path, fetcher);
     checks.push(publicResult(result, result.error ? [result.error] : inspectCallback(result.response, origin, authMode)));
   }
-  // Current first-party public asset and the actual worker optimizer parameters.
+  // Follow the optimizer URL emitted by the deployed framework instead of
+  // assuming the local Vinext path is also used by native Next on Vercel.
   const jsPath = /<script\b[^>]*\bsrc=["']((?:\/assets\/|\/_next\/static\/)[^"']+)["']/i.exec(homeHtml)?.[1];
-  const assetChecks = [["/favicon.svg", /image\/svg\+xml/], ["/_vinext/image?url=%2Fberkeley-campus.jpg&w=640&q=75", /image\/(?:webp|avif|jpeg|png)/]];
+  const imagePath = /<img\b[^>]*\bsrc=["']((?:\/_next\/|\/_vinext\/)image\?[^"']+)["']/i.exec(homeHtml)?.[1];
+  const assetChecks = [["/favicon.svg", /image\/svg\+xml/]];
+  if (imagePath) assetChecks.push([imagePath.replaceAll("&amp;", "&"), /image\/(?:webp|avif|jpeg|png)/]);
+  else checks.push({ path: "(home optimized image)", failures: ["same-origin optimized campus image was not found"] });
   if (jsPath) assetChecks.push([jsPath.replaceAll("&amp;", "&"), /(?:javascript|ecmascript)/]);
   else checks.push({ path: "(home script asset)", failures: ["same-origin compiled script reference was not found"] });
   for (const [path, mime] of assetChecks) {

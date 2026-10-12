@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import { headers } from "next/headers";
-import { colleges } from "./lib/college-data";
+import runtimeSummary from "@/data/college-runtime-summary.json";
 import { Providers } from "./providers";
 import "lenis/dist/lenis.css";
 import "./globals.css";
@@ -38,7 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "CollegeSearch",
     description:
-      `Your college field guide. Explore ${colleges.length} U.S. colleges, compare dated official records, and build a shortlist with your own research.`,
+      `Your college field guide. Explore ${runtimeSummary.institutionCount} U.S. colleges, compare dated official records, and build a shortlist with your own research.`,
     applicationName: "CollegeSearch",
     keywords: [
       "college search",
@@ -90,7 +90,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable}`}
       >
-        <Providers knownCollegeIds={colleges.map((college) => college.unitId)}>
+        <Providers knownCollegeIds={runtimeSummary.unitIds}>
           {children}
         </Providers>
       </body>

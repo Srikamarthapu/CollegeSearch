@@ -25,6 +25,7 @@ async function run(script, args) {
   if (code !== 0) throw new Error(`Build step failed: ${script} (exit ${code}).`);
 }
 async function main() {
+  await run('scripts/build-college-directory-artifact.mjs', []);
   let plan = null;
   if (process.env.COLLEGESEARCH_PUBLISH_RELEASE) {
     const bytes = await readFile(resolve(root, 'data/colleges.json'));

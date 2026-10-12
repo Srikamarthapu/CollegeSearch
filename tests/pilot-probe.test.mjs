@@ -7,7 +7,7 @@ const origin = "https://college.example";
 const nonce = "abcdefgh12345678abcdefgh12345678";
 const health = '<h2>26<!-- --> of <!-- -->26<!-- --> registered artifacts passed</h2><p>Published verification snapshot: <time dateTime="2026-09-13T19:00:00Z">Today</time></p>';
 function doc(value = nonce, extra = "") {
-  return `<title>Explore | CollegeSearch</title><script nonce="${value}">window.ready=true</script><style nonce="${value}">body{color:black}</style><script src="/assets/main.js"></script>${extra}`;
+  return `<title>Explore | CollegeSearch</title><script nonce="${value}">window.ready=true</script><style nonce="${value}">body{color:black}</style><script src="/assets/main.js"></script><img src="/_next/image?url=%2Fcampus.jpg&amp;w=640&amp;q=75"/>${extra}`;
 }
 function response(body, value = nonce, overrides = {}) {
   return new Response(body, { headers: { "content-type": "text/html", "cache-control": "private, no-cache, no-store, max-age=0", "content-security-policy": `script-src 'self' 'nonce-${value}'`, "x-frame-options": "DENY", "x-content-type-options": "nosniff", ...overrides } });
@@ -55,7 +55,11 @@ test("smoke records all checked routes, assets, callbacks and freshness without 
     const path = url.pathname;
     if (path.startsWith("/auth/")) return new Response(null, { status: 307, headers: { location: "/auth/auth-code-error?reason=missing-code", "cache-control": "private, no-store" } });
     if (path === "/favicon.svg") return new Response("<svg/>", { headers: { "content-type": "image/svg+xml" } });
-    if (path === "/_vinext/image") return new Response("image", { headers: { "content-type": "image/webp" } });
+    if (path === "/_next/image") {
+      assert.equal(url.searchParams.get("url"), "/campus.jpg");
+      assert.equal(url.searchParams.get("w"), "640");
+      return new Response("image", { headers: { "content-type": "image/webp" } });
+    }
     if (path === "/assets/main.js") return new Response("console.log('ok')", { headers: { "content-type": "text/javascript" } });
     const n = `${nonce}${++serial}`; return response(doc(n, path === "/data-health" ? health : ""), n);
   };

@@ -54,6 +54,9 @@ test("the planner page does not serialize the full identity directory on initial
   const page = await readFile(new URL("../app/my-colleges/page.tsx", import.meta.url), "utf8");
   const planner = await readFile(new URL("../app/saved/SavedColleges.tsx", import.meta.url), "utf8");
   assert.doesNotMatch(page, /directoryCollegeIdentities|collegeIdentities=/);
-  assert.match(planner, /fetch\("\/api\/colleges\/identities"/);
+  assert.match(
+    planner,
+    /fetch\(\s*`\/api\/colleges\/identities\?release=\$\{encodeURIComponent\(COLLEGE_DIRECTORY_CACHE_VERSION\)\}`\s*,\s*\{\s*headers:\s*\{\s*Accept:\s*"application\/json"\s*\}\s*,\s*credentials:\s*"omit"/,
+  );
   assert.match(planner, /identityDirectory\.status === "ready"[\s\S]*<DeadlinePlanner/);
 });

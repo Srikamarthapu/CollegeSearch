@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { FitNavigation } from "@/app/components/FitNavigation";
-import { getAdviserPublicStatus } from "@/app/lib/adviser/server";
+import { getAdviserPublicStatus } from "@/app/lib/adviser/public-status";
 import { AdviserWorkspace } from "./AdviserWorkspace";
 import styles from "./adviser.module.css";
 

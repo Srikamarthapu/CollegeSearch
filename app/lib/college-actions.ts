@@ -8,6 +8,10 @@ export type CollegeAction = {
   url?: string;
   note?: string;
 };
+const actionsByUnitId = new Map(
+  manifest.colleges.map((college) => [college.unitId, college.actions] as const),
+);
+
 export function collegeActions(unitId: number): Record<"admissions" | "deadlines" | "programs" | "netPriceCalculator", CollegeAction> | null {
-  return manifest.colleges.find((college) => college.unitId === unitId)?.actions ?? null;
+  return actionsByUnitId.get(unitId) ?? null;
 }
