@@ -1,0 +1,28 @@
+.prices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 16px;
+  margin: 0;
+  padding: 16px 0 14px;
+  border-top: 1px solid var(--line);
+}
+
+.prices > div { min-width: 0; }
+.prices > div:only-child { grid-column: 1 / -1; text-align: center; }
+.prices dt { color: var(--ink-soft); font-size: 12px; line-height: 1.5; }
+.prices dt span { white-space: nowrap; }
+.prices dd { display: grid; gap: 4px; margin: 5px 0 0; }
+.prices strong { font-size: 26px; font-weight: 600; line-height: 32px; letter-spacing: -.035em; font-variant-numeric: tabular-nums; }
+.prices dd > span { color: var(--ink-faint); font-size: 12px; line-height: 1.4; }
+.primary strong { color: var(--forest); }
+.secondary { text-align: right; }
+.secondary strong { color: var(--ink-soft); font-size: 22px; }
+
+@media (max-width: 420px) {
+  .prices { gap: 12px; }
+  .prices dt { min-height: 36px; }
+  .prices > div:only-child dt { min-height: 0; }
+  .prices strong { font-size: 24px; line-height: 30px; }
+  .secondary strong { font-size: 21px; }
+}

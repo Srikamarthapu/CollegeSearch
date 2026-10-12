@@ -13,12 +13,46 @@ import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import logoSourcesFirst from "@/data/college-logo-sources-01-25.json";
 import logoSourcesSecond from "@/data/college-logo-sources-26-50.json";
-import { colleges, release, type SourceRelease } from "@/app/lib/college-data";
+import trustMetadata from "@/data/college-trust-metadata.json";
+import { approvedProfileCampusPhotoCount } from "@/app/lib/profile-campus-photos";
+import type { SourceRelease } from "@/app/lib/college-data";
 
 const logoSources = [...logoSourcesFirst, ...logoSourcesSecond];
-const collegeNames = new Map(
-  colleges.map((college) => [college.slug, college.name]),
-);
+const collegeNames = new Map(Object.entries(trustMetadata.logoCollegeNames));
+const { release, coverage, tuitionSourceUrl, budgetReview } = trustMetadata;
+function parseSourceRelease(source: (typeof release.sources)[number]): SourceRelease {
+  let publicationStatus: SourceRelease["publicationStatus"];
+  if (source.publicationStatus === undefined) {
+    publicationStatus = undefined;
+  } else if (source.publicationStatus === "published") {
+    publicationStatus = "published";
+  } else {
+    throw new Error(`Unsupported publication status for source ${source.id}.`);
+  }
+  const { finality, artifactHashMode, artifactKind, review } = source;
+  if (finality !== undefined && finality !== "snapshot" && finality !== "provisional" && finality !== "finalized") {
+    throw new Error(`Unsupported finality for source ${source.id}.`);
+  }
+  if (artifactHashMode !== undefined && artifactHashMode !== "raw" && artifactHashMode !== "html-without-volatile-assets-and-edge-challenge") {
+    throw new Error(`Unsupported artifact hash mode for source ${source.id}.`);
+  }
+  if (artifactKind !== undefined && artifactKind !== "html" && artifactKind !== "pdf" && artifactKind !== "xlsx") {
+    throw new Error(`Unsupported artifact kind for source ${source.id}.`);
+  }
+  let validatedReview: SourceRelease["review"];
+  if (review !== undefined) {
+    if (review.status !== "approved" || review.method !== "manual") {
+      throw new Error(`Unsupported review for source ${source.id}.`);
+    }
+    validatedReview = { ...review, status: review.status, method: review.method };
+  }
+  return { ...source, publicationStatus, finality, artifactHashMode, artifactKind, review: validatedReview };
+}
+const sourceReleases: SourceRelease[] = release.sources.map(parseSourceRelease);
+const reviewedInstitutionRecords = coverage.reviewedInstitutionRecordCount;
+const reviewedAdmissionHeadlines = coverage.reviewedCollegeAdmissionCount;
+const firstPartyAdmissionHeadlines = coverage.firstPartyAdmissionCount;
+const federalAdmissionBaselines = coverage.federalAdmissionCount;
 
 export const metadata: Metadata = {
   title: "Data sources · CollegeSearch",
@@ -34,7 +68,7 @@ function SourceRecord({
   position: number;
 }) {
   return (
-    <article className="sources-record">
+    <article className="sources-record" id={source.id}>
       <header>
         <span className="sources-record-number">
           {String(position).padStart(2, "0")}
@@ -120,13 +154,19 @@ function SourceRecord({
             <ExternalLink size={14} aria-hidden="true" />
           </a>
         ) : null}
-        <a href={source.sourceUrl} target="_blank" rel="noreferrer">
-          {source.sourcePage ? "Source file" : "Open source"}
-          <ExternalLink size={14} aria-hidden="true" />
-        </a>
-        {source.artifactUrl ? (
+        {!source.sourcePage || source.sourceUrl !== source.sourcePage ? (
+          <a href={source.sourceUrl} target="_blank" rel="noreferrer">
+            {source.sourcePage ? "Source file" : "Open source"}
+            <ExternalLink size={14} aria-hidden="true" />
+          </a>
+        ) : null}
+        {source.artifactUrl &&
+        source.artifactUrl !== source.sourceUrl &&
+        source.artifactUrl !== source.sourcePage ? (
           <a href={source.artifactUrl} target="_blank" rel="noreferrer">
-            {source.artifactKind === "html" ? "Open reviewed page" : "Open source file"}
+            {source.artifactKind === "html"
+              ? "Open reviewed page"
+              : "Open source file"}
             <ExternalLink size={14} aria-hidden="true" />
           </a>
         ) : null}
@@ -176,8 +216,44 @@ export default function DataSourcesPage() {
               <dt>Earnings period</dt>
               <dd>{release.earningsPeriodLabel}</dd>
             </div>
+            <div>
+              <dt>Reviewed institution records</dt>
+              <dd>{reviewedInstitutionRecords}</dd>
+            </div>
+            <div>
+              <dt>Reviewed admission headlines</dt>
+              <dd>{reviewedAdmissionHeadlines}</dd>
+            </div>
+            <div>
+              <dt>Total first-party admission headlines</dt>
+              <dd>{firstPartyAdmissionHeadlines}</dd>
+            </div>
+            <div>
+              <dt>Federal admission baselines</dt>
+              <dd>{federalAdmissionBaselines}</dd>
+            </div>
           </dl>
         </header>
+
+        <section className="sources-section" aria-labelledby="tuition-evidence-heading">
+          <div className="page-section-heading"><div><h2 id="tuition-evidence-heading">Tuition, fees and the full budget</h2></div></div>
+          <div className="sources-field-map">
+            <article>
+              <h3>Tuition means instruction only</h3>
+              <p>Discovery and saved-college cards show annual tuition before aid, excluding fees and living costs. Public colleges show in-state tuition first, alongside the out-of-state rate. Private colleges show one published tuition amount. Each amount retains its academic year; residency eligibility is determined by the college.</p>
+            </article>
+            <article>
+              <h3>IPEDS reports tuition separately</h3>
+              <p>{coverage.tuitionReportedCount.toLocaleString()} of {coverage.institutionCount.toLocaleString()} colleges have a separately reported or reviewed annual tuition amount. Missing figures stay “Not reported.” Federal figures are historical institutional reports, not a current bill; IPEDS may flag values as imputed or adjusted in their source definitions.</p>
+              <a href={tuitionSourceUrl} target="_blank" rel="noreferrer">Open the federal tuition source</a>
+            </article>
+            <article>
+              <h3>Full attendance costs are separate</h3>
+              <p>Official {budgetReview.collegeCount}-college budget review checked {budgetReview.reviewedOn}. Stanford and Berkeley profiles include sourced 2026–2027 budgets. A fee allowance is an estimate, not a fixed charge. Other colleges link to their official website where a full budget has not yet been reviewed.</p>
+              {budgetReview.colleges.map((row) => <p key={row.unitId}><a href={row.budgetSourceUrl} target="_blank" rel="noreferrer">{row.publisher}: official budget</a></p>)}
+            </article>
+          </div>
+        </section>
 
         <section
           className="sources-section"
@@ -188,10 +264,10 @@ export default function DataSourcesPage() {
               <span className="page-section-index">01</span>
               <h2 id="active-sources-heading">Sources in the current release</h2>
             </div>
-            <p>{release.sources.length} normalized source releases</p>
+            <p>{sourceReleases.length} normalized source releases</p>
           </div>
           <div className="sources-record-list">
-            {release.sources.map((source, index) => (
+            {sourceReleases.map((source, index) => (
               <SourceRecord
                 source={source}
                 position={index + 1}
@@ -231,15 +307,14 @@ export default function DataSourcesPage() {
                 certificate/degree-seeking undergraduates; public-college net
                 price covers first-time, full-time, in-state Title IV
                 recipients; and C150_4 measures degree or certificate
-                completion within 150% of normal time at four-year
-                institutions.
+                completion within 150% of normal time at four-year institutions. C150_L4 covers two-year institutions and has a different entering cohort.
               </p>
             </article>
             <article>
               <span className="sources-status">Program + award evidence</span>
-              <h3>Federal bachelor&apos;s fields</h3>
+              <h3>Federal broad fields</h3>
               <p>
-                Each 2024-2025 broad CIP family requires a bachelor&apos;s-program
+                Each 2024-2025 broad CIP family requires a bachelor&apos;s or associate program
                 indicator. Percentages are still shares of all institutional
                 awards, so CollegeSearch does not present them as an exact
                 major catalog or program-specific acceptance rate.
@@ -298,8 +373,9 @@ export default function DataSourcesPage() {
             <div>
               <h3>For identification, never endorsement.</h3>
               <p>
-                Each result uses a real institutional or athletics identity
+                Where available, results use an institutional or athletics identity
                 mark from an official university source or Wikimedia Commons.
+                Other colleges use a text initial, not an invented mark.
                 Copyright status and trademark permission are different, so
                 the source and usage note stay recorded for every asset.
               </p>
@@ -324,10 +400,25 @@ export default function DataSourcesPage() {
           </details>
         </section>
 
-        <section
-          className="sources-section"
-          aria-labelledby="freshness-heading"
-        >
+        <section className="sources-section" aria-labelledby="campus-photography-heading">
+          <div className="page-section-heading"><div><h2 id="campus-photography-heading">Campus photographs</h2></div></div>
+          <div className="sources-field-map">
+            <article>
+              <h3>Matched to the college</h3>
+              <p>{approvedProfileCampusPhotoCount.toLocaleString()} of {coverage.institutionCount.toLocaleString()} profiles have a reviewed campus photograph. Photos are matched to the exact college record and checked for campus identity, subject and reuse license. Automatically discovered images stay unpublished until reviewed.</p>
+            </article>
+            <article>
+              <h3>Credit stays with the image</h3>
+              <p>Each photograph links to its source and license, credits its creator, and shows its photo year. Images may be cropped to fit the banner; older photos do not establish current campus conditions. College marks and photographs do not imply endorsement.</p>
+            </article>
+            <article>
+              <h3>No substitute campuses</h3>
+              <p>When a verified photo is unavailable, the profile links to the college’s official website. We do not fill the gap with a different campus, a stock photograph or a generated scene.</p>
+            </article>
+          </div>
+        </section>
+
+        <section className="sources-section" aria-labelledby="freshness-heading">
           <div className="page-section-heading">
             <div>
               <span className="page-section-index">05</span>

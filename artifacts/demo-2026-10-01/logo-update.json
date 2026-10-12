@@ -1,0 +1,296 @@
+{
+  "date": "2026-10-01",
+  "scope": "Supplied CollegeSearch campus pin logo in shared header and footer",
+  "productionUrl": "https://collegesearch-steel.vercel.app",
+  "deploymentId": "dpl_mhVhNAHkh19GyXvdC8jimKsBvijv",
+  "sourceCommit": "cf7e4197fcceeaaf90c1b004a2ff8cbfad714952",
+  "readyState": "READY",
+  "checks": {
+    "nativeNextBuild": "passed; TypeScript and 80 generated pages",
+    "targetedEslint": "passed",
+    "responsiveBrowser": {
+      "url": "https://collegesearch-steel.vercel.app",
+      "results": [
+        {
+          "viewport": 1440,
+          "documentWidth": 1440,
+          "header": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 76,
+            "right": 1440,
+            "bottom": 76
+          },
+          "logo": {
+            "x": 80,
+            "y": 10.609375,
+            "width": 246,
+            "height": 53.78125,
+            "right": 326,
+            "bottom": 64.390625
+          },
+          "actions": {
+            "x": 377.640625,
+            "y": 15.5,
+            "width": 982.359375,
+            "height": 44,
+            "right": 1360,
+            "bottom": 59.5
+          },
+          "imageLoaded": true,
+          "accessibleHomeLinks": 2
+        },
+        {
+          "viewport": 1366,
+          "documentWidth": 1366,
+          "header": {
+            "x": 0,
+            "y": 0,
+            "width": 1366,
+            "height": 76,
+            "right": 1366,
+            "bottom": 76
+          },
+          "logo": {
+            "x": 43,
+            "y": 10.609375,
+            "width": 246,
+            "height": 53.78125,
+            "right": 289,
+            "bottom": 64.390625
+          },
+          "actions": {
+            "x": 576.796875,
+            "y": 15.5,
+            "width": 746.203125,
+            "height": 44,
+            "right": 1323,
+            "bottom": 59.5
+          },
+          "imageLoaded": true,
+          "accessibleHomeLinks": 2
+        },
+        {
+          "viewport": 1280,
+          "documentWidth": 1280,
+          "header": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 76,
+            "right": 1280,
+            "bottom": 76
+          },
+          "logo": {
+            "x": 24,
+            "y": 10.609375,
+            "width": 246,
+            "height": 53.78125,
+            "right": 270,
+            "bottom": 64.390625
+          },
+          "actions": {
+            "x": 509.796875,
+            "y": 15.5,
+            "width": 746.203125,
+            "height": 44,
+            "right": 1256,
+            "bottom": 59.5
+          },
+          "imageLoaded": true,
+          "accessibleHomeLinks": 2
+        },
+        {
+          "viewport": 1024,
+          "documentWidth": 1024,
+          "header": {
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 76,
+            "right": 1024,
+            "bottom": 76
+          },
+          "logo": {
+            "x": 24,
+            "y": 10.609375,
+            "width": 246,
+            "height": 53.78125,
+            "right": 270,
+            "bottom": 64.390625
+          },
+          "actions": {
+            "x": 849.21875,
+            "y": 15.5,
+            "width": 150.78125,
+            "height": 44,
+            "right": 1000,
+            "bottom": 59.5
+          },
+          "imageLoaded": true,
+          "accessibleHomeLinks": 2
+        },
+        {
+          "viewport": 768,
+          "documentWidth": 768,
+          "header": {
+            "x": 0,
+            "y": 0,
+            "width": 768,
+            "height": 76,
+            "right": 768,
+            "bottom": 76
+          },
+          "logo": {
+            "x": 20,
+            "y": 10.609375,
+            "width": 246,
+            "height": 53.78125,
+            "right": 266,
+            "bottom": 64.390625
+          },
+          "actions": {
+            "x": 597.21875,
+            "y": 15.5,
+            "width": 150.78125,
+            "height": 44,
+            "right": 748,
+            "bottom": 59.5
+          },
+          "imageLoaded": true,
+          "accessibleHomeLinks": 2
+        },
+        {
+          "viewport": 390,
+          "documentWidth": 390,
+          "header": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 66,
+            "right": 390,
+            "bottom": 66
+          },
+          "logo": {
+            "x": 18,
+            "y": 12.390625,
+            "width": 184,
+            "height": 40.21875,
+            "right": 202,
+            "bottom": 52.609375
+          },
+          "actions": {
+            "x": 221.21875,
+            "y": 10.5,
+            "width": 150.78125,
+            "height": 44,
+            "right": 372,
+            "bottom": 54.5
+          },
+          "imageLoaded": true,
+          "accessibleHomeLinks": 2
+        },
+        {
+          "viewport": 375,
+          "documentWidth": 375,
+          "header": {
+            "x": 0,
+            "y": 0,
+            "width": 375,
+            "height": 66,
+            "right": 375,
+            "bottom": 66
+          },
+          "logo": {
+            "x": 18,
+            "y": 14.03125,
+            "width": 169,
+            "height": 36.9375,
+            "right": 187,
+            "bottom": 50.96875
+          },
+          "actions": {
+            "x": 206.21875,
+            "y": 10.5,
+            "width": 150.78125,
+            "height": 44,
+            "right": 357,
+            "bottom": 54.5
+          },
+          "imageLoaded": true,
+          "accessibleHomeLinks": 2
+        },
+        {
+          "viewport": 361,
+          "documentWidth": 361,
+          "header": {
+            "x": 0,
+            "y": 0,
+            "width": 361,
+            "height": 66,
+            "right": 361,
+            "bottom": 66
+          },
+          "logo": {
+            "x": 18,
+            "y": 15.234375,
+            "width": 158,
+            "height": 34.53125,
+            "right": 176,
+            "bottom": 49.765625
+          },
+          "actions": {
+            "x": 192.21875,
+            "y": 10.5,
+            "width": 150.78125,
+            "height": 44,
+            "right": 343,
+            "bottom": 54.5
+          },
+          "imageLoaded": true,
+          "accessibleHomeLinks": 2
+        },
+        {
+          "viewport": 320,
+          "documentWidth": 320,
+          "header": {
+            "x": 0,
+            "y": 0,
+            "width": 320,
+            "height": 66,
+            "right": 320,
+            "bottom": 66
+          },
+          "logo": {
+            "x": 18,
+            "y": 13.265625,
+            "width": 176,
+            "height": 38.46875,
+            "right": 194,
+            "bottom": 51.734375
+          },
+          "actions": {
+            "x": 206,
+            "y": 10.5,
+            "width": 96,
+            "height": 44,
+            "right": 302,
+            "bottom": 54.5
+          },
+          "imageLoaded": true,
+          "accessibleHomeLinks": 2
+        }
+      ],
+      "errors": []
+    },
+    "mobileNavigation": "390px open and Escape close passed",
+    "hostedAsset": {
+      "status": 200,
+      "bytes": 387071,
+      "sha256": "6b562e27b2eb63861bee2eab0b7b8c871d20bf6ab0347ae667f6cb79c88b4b00",
+      "identicalToSuppliedAsset": true
+    }
+  },
+  "releaseStatus": "Logo update verified. Existing school-launch gates and newly observed dependency advisories remain in docs/launch/readiness.md."
+}

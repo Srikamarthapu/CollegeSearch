@@ -1,0 +1,7 @@
+.note {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--ink-muted, #5f665f);
+  font-size: 0.76rem;
+  line-height: 1.45;
+}

@@ -1,21 +1,17 @@
-import { Compass, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import Link from "next/link";
+import { BrandMark } from "./BrandMark";
 
 export function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="footer-brand-block">
-        <Link className="brand footer-brand" href="/">
-          <span className="brand-mark" aria-hidden="true">
-            <Compass size={18} strokeWidth={1.8} />
-          </span>
-          <span className="brand-wordmark">
-            CollegeSearch
-            <small>Evidence edition</small>
-          </span>
+        <Link className="brand footer-brand" href="/" aria-label="CollegeSearch home">
+          <BrandMark />
+          <span className="footer-tagline">Your college field guide.</span>
         </Link>
         <p>
-          Official evidence for the college list only you can build.
+          Explore your options. Make a list. Take the next step.
         </p>
       </div>
       <div className="footer-links">
@@ -23,7 +19,8 @@ export function SiteFooter() {
         <Link href="/majors">Explore fields</Link>
         <Link href="/match">Build a match list</Link>
         <Link href="/chances">Read admit-rate context</Link>
-        <Link href="/saved">Saved colleges</Link>
+        <Link href="/my-colleges">My colleges</Link>
+        <Link href="/account">Account settings</Link>
         <Link href="/methodology">Methodology</Link>
         <Link href="/data-sources">Data sources</Link>
         <Link href="/data-health">Data health</Link>

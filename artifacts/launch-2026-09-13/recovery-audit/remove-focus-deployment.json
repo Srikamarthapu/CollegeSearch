@@ -1,0 +1,47 @@
+{
+  "sourceCommit": "f34b2e525fc422297e4cc88efdbc788452f8e56d",
+  "projectId": "appgprj_6a64f648520081919bb6328932d2ff1c",
+  "versionNumber": 7,
+  "versionId": "appgprj_6a64f648520081919bb6328932d2ff1c~appgver_a5dec80d9e60819193646a4a1570ffbc",
+  "deploymentId": "appgdep_6aa7207b02c48191afaca39599f6eec5",
+  "status": "succeeded",
+  "updatedAt": "2026-09-13T22:15:34.245014+00:00",
+  "environmentRevision": 1,
+  "url": "https://college-compass-students.kamarthapusri.chatgpt.site",
+  "audience": "owner-private",
+  "ci": {
+    "runId": 34786172700,
+    "status": "completed",
+    "conclusion": "success",
+    "headSha": "f34b2e525fc422297e4cc88efdbc788452f8e56d",
+    "url": "https://github.com/Srikamarthapu/CollegeSearch/actions/runs/34786172700"
+  },
+  "validation": {
+    "build": "passed",
+    "typecheck": "passed",
+    "lint": "passed",
+    "tests": {
+      "passed": 335,
+      "failed": 0
+    },
+    "targetedHostedKeyboardChecks": "passed; see remove-focus-browser.json"
+  },
+  "limitations": "This release received targeted hosted saved-list keyboard checks. Earlier comprehensive checks, local smoke, session renewal, account integration, load and rollback retain their recorded source boundaries.",
+  "providerArchiveContentHash": "sha256:7f199029afa79ada44fc4a6ac8650363d11764f0fdd1a1538037b16e094163cc",
+  "providerArchive": {
+    "format": "tar",
+    "sizeBytes": 10127360,
+    "fileCount": 355
+  },
+  "localPackage": {
+    "fileName": "remove-focus-f34b2e5.tar.gz",
+    "compressedSha256": "sha256:fd30a30f5692c98047ee5c83a13ef4123a0e8104a21e79cb844d31d54d4b8fee",
+    "compressedBytes": 6069936,
+    "uncompressedSha256": "sha256:2edc80599646b89dabada035e6134fc4fbdbddbb4a4d3044a7364492b8c9e04a",
+    "uncompressedBytes": 10924032,
+    "regularFileCount": 738,
+    "appleDoubleMetadataFileCount": 383,
+    "applicationFileCount": 355
+  },
+  "archiveProvenanceNote": "Sites reports its stored archive content hash, which differs from the compressed and decompressed local package checksums. The local package has 355 application files plus 383 AppleDouble metadata files; the provider reports 355 files. These checksums are recorded separately without asserting byte identity. The saved-version API confirms the exact source SHA and version/deployment binding."
+}

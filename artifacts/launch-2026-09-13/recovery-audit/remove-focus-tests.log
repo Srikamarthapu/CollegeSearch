@@ -1,0 +1,2031 @@
+TAP version 13
+# Subtest: small trust and metadata colors meet AA contrast on app surfaces
+ok 1 - small trust and metadata colors meet AA contrast on app surfaces
+  ---
+  duration_ms: 0.525625
+  type: 'test'
+  ...
+# Subtest: high-frequency student controls retain 44px touch targets
+ok 2 - high-frequency student controls retain 44px touch targets
+  ---
+  duration_ms: 0.332417
+  type: 'test'
+  ...
+# Subtest: account key matching uses complete scope delimiters and never erases guest or unrelated namespaces
+ok 3 - account key matching uses complete scope delimiters and never erases guest or unrelated namespaces
+  ---
+  duration_ms: 0.777
+  type: 'test'
+  ...
+# Subtest: purge snapshots storage indexes and removes every owned key including out-of-directory records
+ok 4 - purge snapshots storage indexes and removes every owned key including out-of-directory records
+  ---
+  duration_ms: 0.683042
+  type: 'test'
+  ...
+# Subtest: successful erasure keeps other owners, marker and guest records and invalidates the captured account
+ok 5 - successful erasure keeps other owners, marker and guest records and invalidates the captured account
+  ---
+  duration_ms: 1.141833
+  type: 'test'
+  ...
+# Subtest: blocked receipt storage reports partial cleanup instead of changing the server deletion result
+ok 6 - blocked receipt storage reports partial cleanup instead of changing the server deletion result
+  ---
+  duration_ms: 0.192959
+  type: 'test'
+  ...
+# Subtest: storage read failure is unavailable, not fabricated evidence of deletion
+ok 7 - storage read failure is unavailable, not fabricated evidence of deletion
+  ---
+  duration_ms: 0.181084
+  type: 'test'
+  ...
+# Subtest: resumed tab erases its old session journals from the durable deletion marker without touching guest drafts
+ok 8 - resumed tab erases its old session journals from the durable deletion marker without touching guest drafts
+  ---
+  duration_ms: 0.467417
+  type: 'test'
+  ...
+# Subtest: cleanup fences immediately then drains an already running research write before final sweep
+ok 9 - cleanup fences immediately then drains an already running research write before final sweep
+  ---
+  duration_ms: 0.371875
+  type: 'test'
+  ...
+# Subtest: confirmed notebook deletion prevents pending results or subsequent input from recreating memory or storage
+ok 10 - confirmed notebook deletion prevents pending results or subsequent input from recreating memory or storage
+  ---
+  duration_ms: 0.654833
+  type: 'test'
+  ...
+# Subtest: temporarily paused initial notebook recovers a retained journal when writing is allowed again
+ok 11 - temporarily paused initial notebook recovers a retained journal when writing is allowed again
+  ---
+  duration_ms: 0.506625
+  type: 'test'
+  ...
+# Subtest: invalid deletion targets never call callbacks or touch either storage
+ok 12 - invalid deletion targets never call callbacks or touch either storage
+  ---
+  duration_ms: 0.283166
+  type: 'test'
+  ...
+# Subtest: a stale backup restore cannot recreate notebooks for a deleted account
+ok 13 - a stale backup restore cannot recreate notebooks for a deleted account
+  ---
+  duration_ms: 0.306125
+  type: 'test'
+  ...
+# Subtest: a failed second freeze cannot release the first deletion's active write fence
+ok 14 - a failed second freeze cannot release the first deletion's active write fence
+  ---
+  duration_ms: 0.330542
+  type: 'test'
+  ...
+# Subtest: a captured release is idempotent and cannot clear a later deletion's freeze
+ok 15 - a captured release is idempotent and cannot clear a later deletion's freeze
+  ---
+  duration_ms: 0.052875
+  type: 'test'
+  ...
+# Subtest: a scope-mismatched acquisition never unfreezes another account
+ok 16 - a scope-mismatched acquisition never unfreezes another account
+  ---
+  duration_ms: 0.037542
+  type: 'test'
+  ...
+# Subtest: completed and partial cleanup results reach the UI unchanged
+ok 17 - completed and partial cleanup results reach the UI unchanged
+  ---
+  duration_ms: 0.317667
+  type: 'test'
+  ...
+# Subtest: an indefinitely occupied cleanup lock no longer blocks the confirmed-delete result
+ok 18 - an indefinitely occupied cleanup lock no longer blocks the confirmed-delete result
+  ---
+  duration_ms: 5.8325
+  type: 'test'
+  ...
+# Subtest: cleanup failure is still reported as failure, including after a timeout race
+ok 19 - cleanup failure is still reported as failure, including after a timeout race
+  ---
+  duration_ms: 6.241875
+  type: 'test'
+  ...
+# Subtest: deletion uses verified identity and revokes all sessions before deletion
+ok 20 - deletion uses verified identity and revokes all sessions before deletion
+  ---
+  duration_ms: 9.0995
+  type: 'test'
+  ...
+# Subtest: cross-origin, missing confirmation, malformed bearer, and wrong method cannot call Auth
+ok 21 - cross-origin, missing confirmation, malformed bearer, and wrong method cannot call Auth
+  ---
+  duration_ms: 0.566333
+  type: 'test'
+  ...
+# Subtest: a revoked session and provider verification errors fail closed
+ok 22 - a revoked session and provider verification errors fail closed
+  ---
+  duration_ms: 0.547708
+  type: 'test'
+  ...
+# Subtest: failed revocation prevents deletion and failed deletion reports retry after sign-in
+ok 23 - failed revocation prevents deletion and failed deletion reports retry after sign-in
+  ---
+  duration_ms: 0.676
+  type: 'test'
+  ...
+# Subtest: freezing blocks matching callbacks until unfreeze without authorizing guest or another account
+ok 24 - freezing blocks matching callbacks until unfreeze without authorizing guest or another account
+  ---
+  duration_ms: 0.424
+  type: 'test'
+  ...
+# Subtest: confirmed forget blocks the exact account permanently and never invalidates the new owner
+ok 25 - confirmed forget blocks the exact account permanently and never invalidates the new owner
+  ---
+  duration_ms: 0.081125
+  type: 'test'
+  ...
+# Subtest: receipt read failures pause changes and are never treated as confirmed deletion
+ok 26 - receipt read failures pause changes and are never treated as confirmed deletion
+  ---
+  duration_ms: 0.080584
+  type: 'test'
+  ...
+# Subtest: freezing while a remote write completes preserves outbox and prevents subsequent cache/ack writes
+ok 27 - freezing while a remote write completes preserves outbox and prevents subsequent cache/ack writes
+  ---
+  duration_ms: 68.886541
+  type: 'test'
+  ...
+# Subtest: explicit applicant clear outcome: successful-clear
+ok 28 - explicit applicant clear outcome: successful-clear
+  ---
+  duration_ms: 0.995125
+  type: 'test'
+  ...
+# Subtest: explicit applicant clear outcome: newer-local-edit
+ok 29 - explicit applicant clear outcome: newer-local-edit
+  ---
+  duration_ms: 0.153583
+  type: 'test'
+  ...
+# Subtest: explicit applicant clear outcome: newer-shared-copy
+ok 30 - explicit applicant clear outcome: newer-shared-copy
+  ---
+  duration_ms: 0.175917
+  type: 'test'
+  ...
+# Subtest: explicit applicant clear outcome: auth-boundary
+ok 31 - explicit applicant clear outcome: auth-boundary
+  ---
+  duration_ms: 0.124625
+  type: 'test'
+  ...
+# Subtest: explicit applicant clear outcome: canonical-removal-failure
+ok 32 - explicit applicant clear outcome: canonical-removal-failure
+  ---
+  duration_ms: 0.142375
+  type: 'test'
+  ...
+# Subtest: explicit applicant clear outcome: journal-removal-failure
+ok 33 - explicit applicant clear outcome: journal-removal-failure
+  ---
+  duration_ms: 0.061084
+  type: 'test'
+  ...
+# Subtest: explicit applicant clear outcome: missing-locks
+ok 34 - explicit applicant clear outcome: missing-locks
+  ---
+  duration_ms: 0.083042
+  type: 'test'
+  ...
+# Subtest: explicit applicant clear outcome: missing-storage
+ok 35 - explicit applicant clear outcome: missing-storage
+  ---
+  duration_ms: 0.044333
+  type: 'test'
+  ...
+# Subtest: explicit applicant clear outcome: unseen-shared-revision
+ok 36 - explicit applicant clear outcome: unseen-shared-revision
+  ---
+  duration_ms: 1.72575
+  type: 'test'
+  ...
+# Subtest: guest and verified account profiles never migrate or share records
+ok 37 - guest and verified account profiles never migrate or share records
+  ---
+  duration_ms: 3.486625
+  type: 'test'
+  ...
+# Subtest: loading, email, malformed IDs, and unverified states cannot expose an editor or access storage
+ok 38 - loading, email, malformed IDs, and unverified states cannot expose an editor or access storage
+  ---
+  duration_ms: 5.388292
+  type: 'test'
+  ...
+# Subtest: a scope change or verification pause never selects the previous owner or guesses guest
+ok 39 - a scope change or verification pause never selects the previous owner or guesses guest
+  ---
+  duration_ms: 0.420459
+  type: 'test'
+  ...
+# Subtest: bounded parser preserves original GPA/context and ignores unapproved prediction or identity fields
+ok 40 - bounded parser preserves original GPA/context and ignores unapproved prediction or identity fields
+  ---
+  duration_ms: 1.018917
+  type: 'test'
+  ...
+# Subtest: invalid structure and duplicate or invented preparation assertions are rejected
+ok 41 - invalid structure and duplicate or invented preparation assertions are rejected
+  ---
+  duration_ms: 0.107875
+  type: 'test'
+  ...
+# Subtest: incomplete GPA context survives autosave while review prompts remain advisory
+ok 42 - incomplete GPA context survives autosave while review prompts remain advisory
+  ---
+  duration_ms: 0.384709
+  type: 'test'
+  ...
+# Subtest: completed autosaves restore from the shared browser copy after reload
+ok 43 - completed autosaves restore from the shared browser copy after reload
+  ---
+  duration_ms: 0.1785
+  type: 'test'
+  ...
+# Subtest: a final keystroke is journaled synchronously before autosave and survives immediate reload
+ok 44 - a final keystroke is journaled synchronously before autosave and survives immediate reload
+  ---
+  duration_ms: 0.131084
+  type: 'test'
+  ...
+# Subtest: simultaneous tab autosaves serialize: exactly one commits and the other retains its journal
+ok 45 - simultaneous tab autosaves serialize: exactly one commits and the other retains its journal
+  ---
+  duration_ms: 0.312875
+  type: 'test'
+  ...
+# Subtest: identity is checked again after lock wait, and stale account drafts remain scoped
+ok 46 - identity is checked again after lock wait, and stale account drafts remain scoped
+  ---
+  duration_ms: 0.330875
+  type: 'test'
+  ...
+# Subtest: account-deletion invalidation prevents queued writes and drops the deleted owner's cached draft
+ok 47 - account-deletion invalidation prevents queued writes and drops the deleted owner's cached draft
+  ---
+  duration_ms: 0.20975
+  type: 'test'
+  ...
+# Subtest: typing while an autosave waits preserves later edits and rebases their recovery revision
+ok 48 - typing while an autosave waits preserves later edits and rebases their recovery revision
+  ---
+  duration_ms: 0.093708
+  type: 'test'
+  ...
+# Subtest: unsupported locking keeps a reloadable draft and never falls back to unlocked writes
+ok 49 - unsupported locking keeps a reloadable draft and never falls back to unlocked writes
+  ---
+  duration_ms: 0.064375
+  type: 'test'
+  ...
+# Subtest: clear does not erase a later edit made while it waits for the shared lock
+ok 50 - clear does not erase a later edit made while it waits for the shared lock
+  ---
+  duration_ms: 0.689583
+  type: 'test'
+  ...
+# Subtest: blocked storage retains edits for same-tab route changes and isolates them by owner
+ok 51 - blocked storage retains edits for same-tab route changes and isolates them by owner
+  ---
+  duration_ms: 0.177708
+  type: 'test'
+  ...
+# Subtest: quota and read failures never claim persistence or lose the active draft
+ok 52 - quota and read failures never claim persistence or lose the active draft
+  ---
+  duration_ms: 0.1745
+  type: 'test'
+  ...
+# Subtest: stale edits keep a recoverable draft and do not silently overwrite a newer browser copy
+ok 53 - stale edits keep a recoverable draft and do not silently overwrite a newer browser copy
+  ---
+  duration_ms: 0.212709
+  type: 'test'
+  ...
+# Subtest: retry after storage returns detects a previously unseen copy before offering replacement
+ok 54 - retry after storage returns detects a previously unseen copy before offering replacement
+  ---
+  duration_ms: 0.161709
+  type: 'test'
+  ...
+# Subtest: unreadable records stay untouched until explicit replacement or clear
+ok 55 - unreadable records stay untouched until explicit replacement or clear
+  ---
+  duration_ms: 0.10725
+  type: 'test'
+  ...
+# Subtest: clear removes only the selected scope and the in-memory draft; failure retains contents
+ok 56 - clear removes only the selected scope and the in-memory draft; failure retains contents
+  ---
+  duration_ms: 0.208792
+  type: 'test'
+  ...
+# Subtest: brief exports the current self-reported draft, original grading context, responsibilities, and marked preparation
+ok 57 - brief exports the current self-reported draft, original grading context, responsibilities, and marked preparation
+  ---
+  duration_ms: 1.005958
+  type: 'test'
+  ...
+# Subtest: plain-text export preserves user content as text, handles empty entries honestly, and invents no deadlines
+ok 58 - plain-text export preserves user content as text, handles empty entries honestly, and invents no deadlines
+  ---
+  duration_ms: 0.1515
+  type: 'test'
+  ...
+# Subtest: typing every profile field empty retains that clear intent across a competing tab write and reload
+ok 59 - typing every profile field empty retains that clear intent across a competing tab write and reload
+  ---
+  duration_ms: 0.153584
+  type: 'test'
+  ...
+# Subtest: all account consumers use the shared verification trust decision
+ok 60 - all account consumers use the shared verification trust decision
+  ---
+  duration_ms: 44.982416
+  type: 'test'
+  ...
+# Subtest: the account page gates account-scoped actions on current verification
+ok 61 - the account page gates account-scoped actions on current verification
+  ---
+  duration_ms: 0.63825
+  type: 'test'
+  ...
+# Subtest: password mutation has both a runtime trust gate and a disabled control
+ok 62 - password mutation has both a runtime trust gate and a disabled control
+  ---
+  duration_ms: 0.742833
+  type: 'test'
+  ...
+# Subtest: terminal account state offers retry and local-session clearing
+ok 63 - terminal account state offers retry and local-session clearing
+  ---
+  duration_ms: 0.329167
+  type: 'test'
+  ...
+# Subtest: only a currently verified signed-in identity enables account actions
+ok 64 - only a currently verified signed-in identity enables account actions
+  ---
+  duration_ms: 0.570583
+  type: 'test'
+  ...
+# Subtest: a checking or failed prior identity is labeled as last verified
+ok 65 - a checking or failed prior identity is labeled as last verified
+  ---
+  duration_ms: 0.053334
+  type: 'test'
+  ...
+# Subtest: unknown, failed signed-out, and inconsistent states fail closed
+ok 66 - unknown, failed signed-out, and inconsistent states fail closed
+  ---
+  duration_ms: 0.047333
+  type: 'test'
+  ...
+# Subtest: verified signed-out and unconfigured states remain distinct
+ok 67 - verified signed-out and unconfigured states remain distinct
+  ---
+  duration_ms: 0.072542
+  type: 'test'
+  ...
+# Subtest: a deferred old identity cannot overwrite sign-out followed by another account
+ok 68 - a deferred old identity cannot overwrite sign-out followed by another account
+  ---
+  duration_ms: 0.844541
+  type: 'test'
+  ...
+# Subtest: an auth event invalidates a different identity before verification finishes
+ok 69 - an auth event invalidates a different identity before verification finishes
+  ---
+  duration_ms: 0.089708
+  type: 'test'
+  ...
+# Subtest: transient getUser failures never claim a confirmed sign-out
+ok 70 - transient getUser failures never claim a confirmed sign-out
+  ---
+  duration_ms: 0.158375
+  type: 'test'
+  ...
+# Subtest: terminal getUser failures clear a previously verified identity
+ok 71 - terminal getUser failures clear a previously verified identity
+  ---
+  duration_ms: 0.416167
+  type: 'test'
+  ...
+# Subtest: initial, event, and manual refreshes share one in-flight verification
+ok 72 - initial, event, and manual refreshes share one in-flight verification
+  ---
+  duration_ms: 0.105875
+  type: 'test'
+  ...
+# Subtest: local sign-out invalidates old refreshes and restores a verified identity only on a safe failure
+ok 73 - local sign-out invalidates old refreshes and restores a verified identity only on a safe failure
+  ---
+  duration_ms: 0.195458
+  type: 'test'
+  ...
+# Subtest: a failed sign-out never promotes a degraded identity back to verified
+ok 74 - a failed sign-out never promotes a degraded identity back to verified
+  ---
+  duration_ms: 0.068416
+  type: 'test'
+  ...
+# Subtest: a failed sign-out cannot restore the old identity over a newer auth event
+ok 75 - a failed sign-out cannot restore the old identity over a newer auth event
+  ---
+  duration_ms: 0.103
+  type: 'test'
+  ...
+# Subtest: a failed sign-out during a new identity boundary never restores the prior account
+ok 76 - a failed sign-out during a new identity boundary never restores the prior account
+  ---
+  duration_ms: 0.807166
+  type: 'test'
+  ...
+# Subtest: the installed Supabase client reports a fresh empty session without a network call, and guest saves remain enabled
+ok 77 - the installed Supabase client reports a fresh empty session without a network call, and guest saves remain enabled
+  ---
+  duration_ms: 1158.848542
+  type: 'test'
+  ...
+# Subtest: returned and thrown genuine missing-session errors classify as signed out while arbitrary 400 errors do not
+ok 78 - returned and thrown genuine missing-session errors classify as signed out while arbitrary 400 errors do not
+  ---
+  duration_ms: 0.338
+  type: 'test'
+  ...
+# Subtest: an old missing-session response cannot sign out a newer verified account
+ok 79 - an old missing-session response cannot sign out a newer verified account
+  ---
+  duration_ms: 0.113709
+  type: 'test'
+  ...
+# Subtest: exact deletion invalidation cancels pending work and cached future Auth events cannot revive the account
+ok 80 - exact deletion invalidation cancels pending work and cached future Auth events cannot revive the account
+  ---
+  duration_ms: 0.141125
+  type: 'test'
+  ...
+# Subtest: deletion of the old account preserves a newer pending account boundary
+ok 81 - deletion of the old account preserves a newer pending account boundary
+  ---
+  duration_ms: 0.084541
+  type: 'test'
+  ...
+# Subtest: a persisted deletion receipt rejects both initial event identities and unseen getUser identities
+ok 82 - a persisted deletion receipt rejects both initial event identities and unseen getUser identities
+  ---
+  duration_ms: 0.091958
+  type: 'test'
+  ...
+# Subtest: app build inputs avoid the currently vulnerable image-size parser
+ok 83 - app build inputs avoid the currently vulnerable image-size parser
+  ---
+  duration_ms: 2788.471417
+  type: 'test'
+  ...
+# Subtest: admit-rate selector resolves the aliases advertised in its search field
+ok 84 - admit-rate selector resolves the aliases advertised in its search field
+  ---
+  duration_ms: 0.804083
+  type: 'test'
+  ...
+# Subtest: admit-rate selector tolerates a one-edit college-name misspelling
+ok 85 - admit-rate selector tolerates a one-edit college-name misspelling
+  ---
+  duration_ms: 0.741375
+  type: 'test'
+  ...
+# Subtest: admit-rate selector keeps selected colleges out of filtered options
+ok 86 - admit-rate selector keeps selected colleges out of filtered options
+  ---
+  duration_ms: 0.212792
+  type: 'test'
+  ...
+# Subtest: the pull-request gate runs the complete deterministic verification sequence
+ok 87 - the pull-request gate runs the complete deterministic verification sequence
+  ---
+  duration_ms: 0.379292
+  type: 'test'
+  ...
+# Subtest: both workflows are bounded, read-only, secret-free, and SHA-pinned
+ok 88 - both workflows are bounded, read-only, secret-free, and SHA-pinned
+  ---
+  duration_ms: 0.126375
+  type: 'test'
+  ...
+# Subtest: live artifact availability is monitored outside the pull-request gate
+ok 89 - live artifact availability is monitored outside the pull-request gate
+  ---
+  duration_ms: 0.087791
+  type: 'test'
+  ...
+# Subtest: the client projection preserves every explorer evidence field
+ok 90 - the client projection preserves every explorer evidence field
+  ---
+  duration_ms: 3.796083
+  type: 'test'
+  ...
+# Subtest: the browser projection does not copy profile-only provenance
+ok 91 - the browser projection does not copy profile-only provenance
+  ---
+  duration_ms: 0.523875
+  type: 'test'
+  ...
+# Subtest: exact short aliases take precedence over broad substring matches
+ok 92 - exact short aliases take precedence over broad substring matches
+  ---
+  duration_ms: 0.685792
+  type: 'test'
+  ...
+# Subtest: canonical aliases and one-edit misspellings resolve college identity
+ok 93 - canonical aliases and one-edit misspellings resolve college identity
+  ---
+  duration_ms: 0.594333
+  type: 'test'
+  ...
+# Subtest: short field aliases filter by actual broad-field evidence
+ok 94 - short field aliases filter by actual broad-field evidence
+  ---
+  duration_ms: 0.535708
+  type: 'test'
+  ...
+# Subtest: combined fuzzy field and location queries preserve both intents
+ok 95 - combined fuzzy field and location queries preserve both intents
+  ---
+  duration_ms: 0.229125
+  type: 'test'
+  ...
+# Subtest: accepts a distinct UC archive and the exact reviewed cohort
+ok 96 - accepts a distinct UC archive and the exact reviewed cohort
+  ---
+  duration_ms: 0.640917
+  type: 'test'
+  ...
+# Subtest: rejects a finalized/latest UC filename collision
+ok 97 - rejects a finalized/latest UC filename collision
+  ---
+  duration_ms: 0.167542
+  type: 'test'
+  ...
+# Subtest: rejects missing, duplicate, or unexpected cohort UNITIDs
+ok 98 - rejects missing, duplicate, or unexpected cohort UNITIDs
+  ---
+  duration_ms: 0.07675
+  type: 'test'
+  ...
+# Subtest: detects a manifest edit between verification and publication
+ok 99 - detects a manifest edit between verification and publication
+  ---
+  duration_ms: 0.229375
+  type: 'test'
+  ...
+# Subtest: publishes every staged data file together
+ok 100 - publishes every staged data file together
+  ---
+  duration_ms: 6.591666
+  type: 'test'
+  ...
+# Subtest: restores existing and previously absent files when publication fails
+ok 101 - restores existing and previously absent files when publication fails
+  ---
+  duration_ms: 4.42925
+  type: 'test'
+  ...
+# Subtest: preserves backups and a recovery lock when rollback is incomplete
+ok 102 - preserves backups and a recovery lock when rollback is incomplete
+  ---
+  duration_ms: 3.551917
+  type: 'test'
+  ...
+# Subtest: rejects duplicate targets before changing live data
+ok 103 - rejects duplicate targets before changing live data
+  ---
+  duration_ms: 2.281125
+  type: 'test'
+  ...
+# Subtest: rejects missing and non-file staged targets before publication
+ok 104 - rejects missing and non-file staged targets before publication
+  ---
+  duration_ms: 3.047125
+  type: 'test'
+  ...
+# Subtest: serializes publication locks and releases only the owning token
+ok 105 - serializes publication locks and releases only the owning token
+  ---
+  duration_ms: 2.006
+  type: 'test'
+  ...
+# Subtest: calendar validation handles leap years, month lengths, and date-only values
+ok 106 - calendar validation handles leap years, month lengths, and date-only values
+  ---
+  duration_ms: 0.49525
+  type: 'test'
+  ...
+# Subtest: local today and date display do not shift an entered date through timezone conversion
+ok 107 - local today and date display do not shift an entered date through timezone conversion
+  ---
+  duration_ms: 12.471208
+  type: 'test'
+  ...
+# Subtest: upcoming, past, and completed are derived from today's local calendar date
+ok 108 - upcoming, past, and completed are derived from today's local calendar date
+  ---
+  duration_ms: 0.70875
+  type: 'test'
+  ...
+# Subtest: source URLs reject script schemes, embedded credentials, and controls without claiming a source is official
+ok 109 - source URLs reject script schemes, embedded credentials, and controls without claiming a source is official
+  ---
+  duration_ms: 0.074458
+  type: 'test'
+  ...
+# Subtest: new forms never invent a date, source, cycle, or confirmation
+ok 110 - new forms never invent a date, source, cycle, or confirmation
+  ---
+  duration_ms: 0.467209
+  type: 'test'
+  ...
+# Subtest: material edits reset student confirmation, and notes do not create a new checked-on date
+ok 111 - material edits reset student confirmation, and notes do not create a new checked-on date
+  ---
+  duration_ms: 0.196916
+  type: 'test'
+  ...
+# Subtest: add/edit preserve completion, and stale edit forms do not overwrite changed tasks
+ok 112 - add/edit preserve completion, and stale edit forms do not overwrite changed tasks
+  ---
+  duration_ms: 0.119209
+  type: 'test'
+  ...
+# Subtest: parser validates known colleges, 100-task limit, duplicates, fields, and checked provenance
+ok 113 - parser validates known colleges, 100-task limit, duplicates, fields, and checked provenance
+  ---
+  duration_ms: 0.29075
+  type: 'test'
+  ...
+# Subtest: portable backup round-trips user text and dates without account scope or executable formats
+ok 114 - portable backup round-trips user text and dates without account scope or executable formats
+  ---
+  duration_ms: 0.250917
+  type: 'test'
+  ...
+# Subtest: a full 100-task tracker with bounded Unicode notes produces a restorable backup
+ok 115 - a full 100-task tracker with bounded Unicode notes produces a restorable backup
+  ---
+  duration_ms: 1.741125
+  type: 'test'
+  ...
+# Subtest: scope gates never guess guest during verification or allow unverified identifiers
+ok 116 - scope gates never guess guest during verification or allow unverified identifiers
+  ---
+  duration_ms: 0.116375
+  type: 'test'
+  ...
+# Subtest: guest/account records and unfinished form drafts survive reload without crossing scopes
+ok 117 - guest/account records and unfinished form drafts survive reload without crossing scopes
+  ---
+  duration_ms: 0.604875
+  type: 'test'
+  ...
+# Subtest: incomplete editor drafts are bounded and preserve invalid dates for correction
+ok 118 - incomplete editor drafts are bounded and preserve invalid dates for correction
+  ---
+  duration_ms: 0.050542
+  type: 'test'
+  ...
+# Subtest: collection edits are journaled before autosave and restore after an immediate reload
+ok 119 - collection edits are journaled before autosave and restore after an immediate reload
+  ---
+  duration_ms: 0.098208
+  type: 'test'
+  ...
+# Subtest: simultaneous writers serialize and the losing tab retains a recoverable conflict draft
+ok 120 - simultaneous writers serialize and the losing tab retains a recoverable conflict draft
+  ---
+  duration_ms: 0.190375
+  type: 'test'
+  ...
+# Subtest: removing the final task is a durable empty intent, even when another tab changes the list
+ok 121 - removing the final task is a durable empty intent, even when another tab changes the list
+  ---
+  duration_ms: 0.247208
+  type: 'test'
+  ...
+# Subtest: account switches while waiting for a lock prevent stale writes and preserve old-owner drafts
+ok 122 - account switches while waiting for a lock prevent stale writes and preserve old-owner drafts
+  ---
+  duration_ms: 0.088959
+  type: 'test'
+  ...
+# Subtest: confirmed deletion fences writes and clears only that owner's plan/form journals and cache
+ok 123 - confirmed deletion fences writes and clears only that owner's plan/form journals and cache
+  ---
+  duration_ms: 0.144209
+  type: 'test'
+  ...
+# Subtest: unsupported locks and quota failures never pretend a shared save succeeded
+ok 124 - unsupported locks and quota failures never pretend a shared save succeeded
+  ---
+  duration_ms: 0.107666
+  type: 'test'
+  ...
+# Subtest: a transient deletion-marker failure blocks access without deleting previously retained drafts
+ok 125 - a transient deletion-marker failure blocks access without deleting previously retained drafts
+  ---
+  duration_ms: 0.051125
+  type: 'test'
+  ...
+# Subtest: preference scoring never uses overall admit rate
+ok 126 - preference scoring never uses overall admit rate
+  ---
+  duration_ms: 0.943167
+  type: 'test'
+  ...
+# Subtest: missing evidence is excluded instead of treated as zero
+ok 127 - missing evidence is excluded instead of treated as zero
+  ---
+  duration_ms: 0.091625
+  type: 'test'
+  ...
+# Subtest: ownership remains an explicit hard filter
+ok 128 - ownership remains an explicit hard filter
+  ---
+  duration_ms: 0.30175
+  type: 'test'
+  ...
+# Subtest: a required broad field removes colleges without that evidence
+ok 129 - a required broad field removes colleges without that evidence
+  ---
+  duration_ms: 0.065416
+  type: 'test'
+  ...
+# Subtest: campus setting is an explicit auditable preference signal
+ok 130 - campus setting is an explicit auditable preference signal
+  ---
+  duration_ms: 0.132667
+  type: 'test'
+  ...
+# Subtest: zero weights leave the match worksheet unranked
+ok 131 - zero weights leave the match worksheet unranked
+  ---
+  duration_ms: 0.049208
+  type: 'test'
+  ...
+# Subtest: untouched suggested weights keep the match worksheet neutral
+ok 132 - untouched suggested weights keep the match worksheet neutral
+  ---
+  duration_ms: 0.081417
+  type: 'test'
+  ...
+# Subtest: choosing one preference activates only its mapped criterion
+ok 133 - choosing one preference activates only its mapped criterion
+  ---
+  duration_ms: 0.152458
+  type: 'test'
+  ...
+# Subtest: a hard ownership filter cannot create an unscored ranking
+ok 134 - a hard ownership filter cannot create an unscored ranking
+  ---
+  duration_ms: 0.178041
+  type: 'test'
+  ...
+# Subtest: the sticky preference rail keeps every control reachable
+ok 135 - the sticky preference rail keeps every control reachable
+  ---
+  duration_ms: 60.911458
+  type: 'test'
+  ...
+# Subtest: historical admit bands are descriptive and deterministic
+ok 136 - historical admit bands are descriptive and deterministic
+  ---
+  duration_ms: 0.13825
+  type: 'test'
+  ...
+# Subtest: balanced shortlist keeps the leading fit in each observed rate band
+ok 137 - balanced shortlist keeps the leading fit in each observed rate band
+  ---
+  duration_ms: 5.011125
+  type: 'test'
+  ...
+# Subtest: undergraduate-size bands are mutually exclusive at their boundaries
+ok 138 - undergraduate-size bands are mutually exclusive at their boundaries
+  ---
+  duration_ms: 0.267458
+  type: 'test'
+  ...
+# Subtest: advanced filters apply exact evidence thresholds and exclude missing values
+ok 139 - advanced filters apply exact evidence thresholds and exclude missing values
+  ---
+  duration_ms: 0.149959
+  type: 'test'
+  ...
+# Subtest: auth dialog always releases its busy state after unexpected auth failures
+ok 140 - auth dialog always releases its busy state after unexpected auth failures
+  ---
+  duration_ms: 16.738708
+  type: 'test'
+  ...
+# Subtest: saved-only Explore never represents an unavailable account list as empty
+ok 141 - saved-only Explore never represents an unavailable account list as empty
+  ---
+  duration_ms: 39.81275
+  type: 'test'
+  ...
+# Subtest: auth callback routes convert unexpected exchange failures into safe redirects
+ok 142 - auth callback routes convert unexpected exchange failures into safe redirects
+  ---
+  duration_ms: 10.604292
+  type: 'test'
+  ...
+# Subtest: repeated save and comparison controls name their college
+ok 143 - repeated save and comparison controls name their college
+  ---
+  duration_ms: 124.02675
+  type: 'test'
+  ...
+# Subtest: admit-rate cards name the college in remove controls
+ok 144 - admit-rate cards name the college in remove controls
+  ---
+  duration_ms: 67.340417
+  type: 'test'
+  ...
+# Subtest: the reviewed institution cohort has 26 artifacts and 19 admission headlines
+ok 145 - the reviewed institution cohort has 26 artifacts and 19 admission headlines
+  ---
+  duration_ms: 10.560375
+  type: 'test'
+  ...
+# Subtest: Purdue stays on the federal baseline while its first-party workbook blocks automated verification
+ok 146 - Purdue stays on the federal baseline while its first-party workbook blocks automated verification
+  ---
+  duration_ms: 3.754708
+  type: 'test'
+  ...
+# Subtest: Northwestern uses two pinned Data Book PDFs without changing admission or cost
+ok 147 - Northwestern uses two pinned Data Book PDFs without changing admission or cost
+  ---
+  duration_ms: 4.264916
+  type: 'test'
+  ...
+# Subtest: Caltech and Pomona add only verifier-safe current fields and keep coherent federal admissions
+ok 148 - Caltech and Pomona add only verifier-safe current fields and keep coherent federal admissions
+  ---
+  duration_ms: 2.624125
+  type: 'test'
+  ...
+# Subtest: new reviewed admissions exactly match their approved PDF and XLSX records
+ok 149 - new reviewed admissions exactly match their approved PDF and XLSX records
+  ---
+  duration_ms: 4.107625
+  type: 'test'
+  ...
+# Subtest: unsupported Duke and Yale admissions and deliberately excluded costs stay federal
+ok 150 - unsupported Duke and Yale admissions and deliberately excluded costs stay federal
+  ---
+  duration_ms: 2.863375
+  type: 'test'
+  ...
+# Subtest: institution overlays satisfy lineage and arithmetic invariants
+ok 151 - institution overlays satisfy lineage and arithmetic invariants
+  ---
+  duration_ms: 9.3655
+  type: 'test'
+  ...
+# Subtest: the generated release exactly reflects every reviewed overlay
+ok 152 - the generated release exactly reflects every reviewed overlay
+  ---
+  duration_ms: 4.232917
+  type: 'test'
+  ...
+# Subtest: a complete derived-admissions fixture passes validation
+ok 153 - a complete derived-admissions fixture passes validation
+  ---
+  duration_ms: 0.21525
+  type: 'test'
+  ...
+# Subtest: a college can bind different metrics to explicitly declared reviewed sources
+ok 154 - a college can bind different metrics to explicitly declared reviewed sources
+  ---
+  duration_ms: 0.218625
+  type: 'test'
+  ...
+# Subtest: multi-source overlays require explicit, declared, and used metric lineage
+ok 155 - multi-source overlays require explicit, declared, and used metric lineage
+  ---
+  duration_ms: 0.311041
+  type: 'test'
+  ...
+# Subtest: derived metrics cannot combine operands from different artifacts
+ok 156 - derived metrics cannot combine operands from different artifacts
+  ---
+  duration_ms: 0.088667
+  type: 'test'
+  ...
+# Subtest: multi-source declarations reject ambiguous or unregistered source sets
+ok 157 - multi-source declarations reject ambiguous or unregistered source sets
+  ---
+  duration_ms: 0.313708
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a reportingYear mismatch
+ok 158 - admit-rate inputs reject a reportingYear mismatch
+  ---
+  duration_ms: 0.153209
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a reportingYear mismatch
+ok 159 - yield-rate inputs reject a reportingYear mismatch
+  ---
+  duration_ms: 0.21425
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a periodLabel mismatch
+ok 160 - admit-rate inputs reject a periodLabel mismatch
+  ---
+  duration_ms: 0.232667
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a periodLabel mismatch
+ok 161 - yield-rate inputs reject a periodLabel mismatch
+  ---
+  duration_ms: 0.10525
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a cohort mismatch
+ok 162 - admit-rate inputs reject a cohort mismatch
+  ---
+  duration_ms: 0.058042
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a cohort mismatch
+ok 163 - yield-rate inputs reject a cohort mismatch
+  ---
+  duration_ms: 0.054166
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a finality mismatch
+ok 164 - admit-rate inputs reject a finality mismatch
+  ---
+  duration_ms: 0.050041
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a finality mismatch
+ok 165 - yield-rate inputs reject a finality mismatch
+  ---
+  duration_ms: 0.05075
+  type: 'test'
+  ...
+# Subtest: an observation cannot override its college source lineage
+ok 166 - an observation cannot override its college source lineage
+  ---
+  duration_ms: 0.078792
+  type: 'test'
+  ...
+# Subtest: a derived rate cannot omit its source observations
+ok 167 - a derived rate cannot omit its source observations
+  ---
+  duration_ms: 0.331708
+  type: 'test'
+  ...
+# Subtest: HTML artifact hashing ignores volatile asset versions and edge challenges
+ok 168 - HTML artifact hashing ignores volatile asset versions and edge challenges
+  ---
+  duration_ms: 0.537583
+  type: 'test'
+  ...
+# {"component":"applicant profile","fault":"read-failure","status":"unavailable","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical"]}
+# {"component":"applicant profile","fault":"malformed-shared-copy","status":"invalid","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical"]}
+# {"component":"applicant profile","fault":"journal-removal-failure","status":"unavailable","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# {"component":"applicant profile","fault":"valid-shared-copy","status":"ready","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# {"component":"applicant profile","fault":"absent-shared-copy","status":"ready","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# {"component":"deadline planner","fault":"read-failure","status":"unavailable","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical"]}
+# {"component":"deadline planner","fault":"malformed-shared-copy","status":"invalid","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical"]}
+# {"component":"deadline planner","fault":"journal-removal-failure","status":"unavailable","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# {"component":"deadline planner","fault":"valid-shared-copy","status":"ready","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# {"component":"deadline planner","fault":"absent-shared-copy","status":"ready","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# Subtest: applicant profile: recovery read-failure
+ok 169 - applicant profile: recovery read-failure
+  ---
+  duration_ms: 1.451541
+  type: 'test'
+  ...
+# Subtest: applicant profile: recovery malformed-shared-copy
+ok 170 - applicant profile: recovery malformed-shared-copy
+  ---
+  duration_ms: 0.20925
+  type: 'test'
+  ...
+# Subtest: applicant profile: recovery journal-removal-failure
+ok 171 - applicant profile: recovery journal-removal-failure
+  ---
+  duration_ms: 0.102791
+  type: 'test'
+  ...
+# Subtest: applicant profile: recovery valid-shared-copy
+ok 172 - applicant profile: recovery valid-shared-copy
+  ---
+  duration_ms: 0.13925
+  type: 'test'
+  ...
+# Subtest: applicant profile: recovery absent-shared-copy
+ok 173 - applicant profile: recovery absent-shared-copy
+  ---
+  duration_ms: 0.068708
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery read-failure
+ok 174 - deadline planner: recovery read-failure
+  ---
+  duration_ms: 0.6645
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery malformed-shared-copy
+ok 175 - deadline planner: recovery malformed-shared-copy
+  ---
+  duration_ms: 0.22925
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery journal-removal-failure
+ok 176 - deadline planner: recovery journal-removal-failure
+  ---
+  duration_ms: 0.191291
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery valid-shared-copy
+ok 177 - deadline planner: recovery valid-shared-copy
+  ---
+  duration_ms: 0.389292
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery absent-shared-copy
+ok 178 - deadline planner: recovery absent-shared-copy
+  ---
+  duration_ms: 0.498083
+  type: 'test'
+  ...
+# Subtest: student decision surfaces render an explicit browser-local save action
+ok 179 - student decision surfaces render an explicit browser-local save action
+  ---
+  duration_ms: 4754.748417
+  type: 'test'
+  ...
+# Subtest: match results offer local saves once preferences produce a shortlist
+ok 180 - match results offer local saves once preferences produce a shortlist
+  ---
+  duration_ms: 1.321875
+  type: 'test'
+  ...
+# Subtest: account saves are rendered immediately but never sent before the outbox persists
+ok 181 - account saves are rendered immediately but never sent before the outbox persists
+  ---
+  duration_ms: 0.70875
+  type: 'test'
+  ...
+# Subtest: the provider delegates each locked account cycle to the tested sync primitive
+ok 182 - the provider delegates each locked account cycle to the tested sync primitive
+  ---
+  duration_ms: 0.596042
+  type: 'test'
+  ...
+# Subtest: guest save updates use the canonical writer that removes the legacy key
+ok 183 - guest save updates use the canonical writer that removes the legacy key
+  ---
+  duration_ms: 0.427375
+  type: 'test'
+  ...
+# Subtest: saved college IDs are positive, unique integers from the known release
+ok 184 - saved college IDs are positive, unique integers from the known release
+  ---
+  duration_ms: 0.540291
+  type: 'test'
+  ...
+# Subtest: reads the canonical list first and safely falls back to the legacy key
+ok 185 - reads the canonical list first and safely falls back to the legacy key
+  ---
+  duration_ms: 0.097542
+  type: 'test'
+  ...
+# Subtest: blocked or malformed storage never crashes the save flow
+ok 186 - blocked or malformed storage never crashes the save flow
+  ---
+  duration_ms: 0.1675
+  type: 'test'
+  ...
+# Subtest: writes migrate the legacy key and notify same-tab and other-tab listeners
+ok 187 - writes migrate the legacy key and notify same-tab and other-tab listeners
+  ---
+  duration_ms: 0.147
+  type: 'test'
+  ...
+# Subtest: portrait and landscape college marks stay contained in fixed logo frames
+ok 188 - portrait and landscape college marks stay contained in fixed logo frames
+  ---
+  duration_ms: 3.561459
+  type: 'test'
+  ...
+# Subtest: matching uses one exact federal graduation and enrollment population
+ok 189 - matching uses one exact federal graduation and enrollment population
+  ---
+  duration_ms: 0.36275
+  type: 'test'
+  ...
+# Subtest: a public in-state average cannot contribute price points for unknown or nonresident students
+ok 190 - a public in-state average cannot contribute price points for unknown or nonresident students
+  ---
+  duration_ms: 0.453959
+  type: 'test'
+  ...
+# Subtest: mismatched future graduation cohorts and earnings horizons are excluded consistently
+ok 191 - mismatched future graduation cohorts and earnings horizons are excluded consistently
+  ---
+  duration_ms: 0.066208
+  type: 'test'
+  ...
+# Subtest: residency survives shared preferences and rejects unknown states
+ok 192 - residency survives shared preferences and rejects unknown states
+  ---
+  duration_ms: 0.415959
+  type: 'test'
+  ...
+# Subtest: a shared worksheet restores exact preferences, weights, and active criteria
+ok 193 - a shared worksheet restores exact preferences, weights, and active criteria
+  ---
+  duration_ms: 0.858125
+  type: 'test'
+  ...
+# Subtest: restoring one preference does not turn on untouched weights
+ok 194 - restoring one preference does not turn on untouched weights
+  ---
+  duration_ms: 0.11175
+  type: 'test'
+  ...
+# Subtest: invalid URL values return neutral defaults instead of changing the formula
+ok 195 - invalid URL values return neutral defaults instead of changing the formula
+  ---
+  duration_ms: 0.069875
+  type: 'test'
+  ...
+# Subtest: zero weights and unset criteria cannot be reactivated by a URL
+ok 196 - zero weights and unset criteria cannot be reactivated by a URL
+  ---
+  duration_ms: 0.194042
+  type: 'test'
+  ...
+# Subtest: reset removes worksheet parameters and preserves unrelated URL context
+ok 197 - reset removes worksheet parameters and preserves unrelated URL context
+  ---
+  duration_ms: 0.096917
+  type: 'test'
+  ...
+# Subtest: initial worksheets do not share mutable weights
+ok 198 - initial worksheets do not share mutable weights
+  ---
+  duration_ms: 0.032708
+  type: 'test'
+  ...
+# Subtest: the mobile navigation behaves as a contained modal surface
+ok 199 - the mobile navigation behaves as a contained modal surface
+  ---
+  duration_ms: 0.348708
+  type: 'test'
+  ...
+# Subtest: new passwords respect minimum length and the provider's UTF-8 byte limit without truncation
+ok 200 - new passwords respect minimum length and the provider's UTF-8 byte limit without truncation
+  ---
+  duration_ms: 0.314667
+  type: 'test'
+  ...
+# Subtest: only explicit HTTPS origins and loopback HTTP origins are accepted
+ok 201 - only explicit HTTPS origins and loopback HTTP origins are accepted
+  ---
+  duration_ms: 0.760292
+  type: 'test'
+  ...
+# Subtest: published freshness is separate from availability and handles React comment separators
+ok 202 - published freshness is separate from availability and handles React comment separators
+  ---
+  duration_ms: 0.497833
+  type: 'test'
+  ...
+# Subtest: document identity, private caching, and all executable inline nonces are checked
+ok 203 - document identity, private caching, and all executable inline nonces are checked
+  ---
+  duration_ms: 9.356083
+  type: 'test'
+  ...
+# Subtest: callbacks must fail on the expected same-origin path without exchanging an auth code
+ok 204 - callbacks must fail on the expected same-origin path without exchanging an auth code
+  ---
+  duration_ms: 0.217084
+  type: 'test'
+  ...
+# Subtest: smoke records all checked routes, assets, callbacks and freshness without keeping bodies or cookies
+ok 205 - smoke records all checked routes, assets, callbacks and freshness without keeping bodies or cookies
+  ---
+  duration_ms: 3.350416
+  type: 'test'
+  ...
+# Subtest: smoke reports independent endpoint failures instead of stopping at the first
+ok 206 - smoke reports independent endpoint failures instead of stopping at the first
+  ---
+  duration_ms: 0.58425
+  type: 'test'
+  ...
+# Subtest: classroom scenario is capped at thirty students and 120 GET requests
+ok 207 - classroom scenario is capped at thirty students and 120 GET requests
+  ---
+  duration_ms: 3.578542
+  type: 'test'
+  ...
+# Subtest: classroom scenario stops issuing new work after repeated errors
+ok 208 - classroom scenario stops issuing new work after repeated errors
+  ---
+  duration_ms: 0.929625
+  type: 'test'
+  ...
+# Subtest: latency summary uses a real nearest-rank p95 and retains failures
+ok 209 - latency summary uses a real nearest-rank p95 and retains failures
+  ---
+  duration_ms: 0.244792
+  type: 'test'
+  ...
+# Subtest: student-facing stylesheets avoid unreadable microcopy
+ok 210 - student-facing stylesheets avoid unreadable microcopy
+  ---
+  duration_ms: 63.467709
+  type: 'test'
+  ...
+# Subtest: server-renders the CollegeSearch product shell
+ok 211 - server-renders the CollegeSearch product shell
+  ---
+  duration_ms: 4561.791791
+  type: 'test'
+  ...
+# Subtest: global HTML responses enforce one fresh nonce on every executable block
+ok 212 - global HTML responses enforce one fresh nonce on every executable block
+  ---
+  duration_ms: 81.606542
+  type: 'test'
+  ...
+# Subtest: auth redirects inherit CSP and reject an external next destination
+ok 213 - auth redirects inherit CSP and reject an external next destination
+  ---
+  duration_ms: 112.298458
+  type: 'test'
+  ...
+# Subtest: account copy is student-facing and keeps the local-save boundary explicit
+ok 214 - account copy is student-facing and keeps the local-save boundary explicit
+  ---
+  duration_ms: 0.51675
+  type: 'test'
+  ...
+# Subtest: canonical discovery, evidence, comparison, and source routes render HTML
+ok 215 - canonical discovery, evidence, comparison, and source routes render HTML
+  ---
+  duration_ms: 326.361333
+  type: 'test'
+  ...
+# Subtest: comparison field form preserves colleges and renders the selected broad field
+ok 216 - comparison field form preserves colleges and renders the selected broad field
+  ---
+  duration_ms: 20.0695
+  type: 'test'
+  ...
+# Subtest: the source ledger renders one action per unique source URL
+ok 217 - the source ledger renders one action per unique source URL
+  ---
+  duration_ms: 31.276625
+  type: 'test'
+  ...
+# Subtest: the published cohort has complete, source-registered observations
+ok 218 - the published cohort has complete, source-registered observations
+  ---
+  duration_ms: 3.781958
+  type: 'test'
+  ...
+# Subtest: all nine UC headlines use Fall 2026 snapshots without mixing Fall 2025 yield
+ok 219 - all nine UC headlines use Fall 2026 snapshots without mixing Fall 2025 yield
+  ---
+  duration_ms: 2.867959
+  type: 'test'
+  ...
+# Subtest: ASU uses its latest official campus-immersion record and keeps the federal alternate
+ok 220 - ASU uses its latest official campus-immersion record and keeps the federal alternate
+  ---
+  duration_ms: 3.151375
+  type: 'test'
+  ...
+# Subtest: Stanford and MIT use reviewed current Common Data Set records
+ok 221 - Stanford and MIT use reviewed current Common Data Set records
+  ---
+  duration_ms: 3.081583
+  type: 'test'
+  ...
+# Subtest: backup parser round-trips every research field and rejects unsupported or ambiguous input
+ok 222 - backup parser round-trips every research field and rejects unsupported or ambiguous input
+  ---
+  duration_ms: 2.410375
+  type: 'test'
+  ...
+# Subtest: preview identifies drafts, existing, unreadable and unavailable colleges without modifying storage
+ok 223 - preview identifies drafts, existing, unreadable and unavailable colleges without modifying storage
+  ---
+  duration_ms: 0.421917
+  type: 'test'
+  ...
+# Subtest: restore rechecks after preview, never overwrites any existing notes, and isolates owners
+ok 224 - restore rechecks after preview, never overwrites any existing notes, and isolates owners
+  ---
+  duration_ms: 0.306542
+  type: 'test'
+  ...
+# Subtest: restore reports completed entries exactly if storage fills partway through
+ok 225 - restore reports completed entries exactly if storage fills partway through
+  ---
+  duration_ms: 0.107166
+  type: 'test'
+  ...
+# Subtest: restore refuses unverified identities and unavailable coordination
+ok 226 - restore refuses unverified identities and unavailable coordination
+  ---
+  duration_ms: 0.098542
+  type: 'test'
+  ...
+# Subtest: draft journals recover all fields after controller and route destruction without changing saved v1 data
+ok 227 - draft journals recover all fields after controller and route destruction without changing saved v1 data
+  ---
+  duration_ms: 0.906375
+  type: 'test'
+  ...
+# Subtest: simultaneous stale writes serialize revision check with commit and only one succeeds
+ok 228 - simultaneous stale writes serialize revision check with commit and only one succeeds
+  ---
+  duration_ms: 0.171375
+  type: 'test'
+  ...
+# Subtest: save without cross-tab locks is explicitly unsupported and never writes
+ok 229 - save without cross-tab locks is explicitly unsupported and never writes
+  ---
+  duration_ms: 0.148542
+  type: 'test'
+  ...
+# Subtest: verification changes while waiting for lock abort writes while retaining scoped draft
+ok 230 - verification changes while waiting for lock abort writes while retaining scoped draft
+  ---
+  duration_ms: 0.246167
+  type: 'test'
+  ...
+# Subtest: edits typed while a save is waiting are retained and rebased for the next save
+ok 231 - edits typed while a save is waiting are retained and rebased for the next save
+  ---
+  duration_ms: 0.189417
+  type: 'test'
+  ...
+# Subtest: another tab's commit preserves dirty local edits and explicit replacement is conflict checked
+ok 232 - another tab's commit preserves dirty local edits and explicit replacement is conflict checked
+  ---
+  duration_ms: 1.228375
+  type: 'test'
+  ...
+# Subtest: clear removes notes, checks, category and recoverable draft; another tab's unreviewed save survives
+ok 233 - clear removes notes, checks, category and recoverable draft; another tab's unreviewed save survives
+  ---
+  duration_ms: 0.299083
+  type: 'test'
+  ...
+# Subtest: corrupt or full draft storage is visible and never silently replaces recoverable bytes
+ok 234 - corrupt or full draft storage is visible and never silently replaces recoverable bytes
+  ---
+  duration_ms: 0.083542
+  type: 'test'
+  ...
+# Subtest: existing v1 saved records recover without mutation and dirty journal detects changes during reload
+ok 235 - existing v1 saved records recover without mutation and dirty journal detects changes during reload
+  ---
+  duration_ms: 0.2225
+  type: 'test'
+  ...
+# Subtest: exports include the latest uncommitted notes, checks, and category; conflicts block the whole export
+ok 236 - exports include the latest uncommitted notes, checks, and category; conflicts block the whole export
+  ---
+  duration_ms: 0.280958
+  type: 'test'
+  ...
+# Subtest: explicit draft replacement cannot overwrite a copy changed since the student reviewed it
+ok 237 - explicit draft replacement cannot overwrite a copy changed since the student reviewed it
+  ---
+  duration_ms: 0.101625
+  type: 'test'
+  ...
+# Subtest: CSV cells preserve user punctuation while neutralizing spreadsheet formulas
+ok 238 - CSV cells preserve user punctuation while neutralizing spreadsheet formulas
+  ---
+  duration_ms: 0.379417
+  type: 'test'
+  ...
+# Subtest: research exports retain missing states, exact periods, sources and notes
+ok 239 - research exports retain missing states, exact periods, sources and notes
+  ---
+  duration_ms: 0.1965
+  type: 'test'
+  ...
+# Subtest: every real projected college exports without profile-only fields
+ok 240 - every real projected college exports without profile-only fields
+  ---
+  duration_ms: 4.746084
+  type: 'test'
+  ...
+# Subtest: student list roles preserve legacy notebooks and never accept inferred rating fields
+ok 241 - student list roles preserve legacy notebooks and never accept inferred rating fields
+  ---
+  duration_ms: 0.739125
+  type: 'test'
+  ...
+# Subtest: notebook records remain separate by college and verified account scope
+ok 242 - notebook records remain separate by college and verified account scope
+  ---
+  duration_ms: 0.316584
+  type: 'test'
+  ...
+# Subtest: loading, unverified, malformed, and unsafe college scopes never read or write storage
+ok 243 - loading, unverified, malformed, and unsafe college scopes never read or write storage
+  ---
+  duration_ms: 0.09525
+  type: 'test'
+  ...
+# Subtest: parser rejects corrupt or unsupported data and projects known fields only
+ok 244 - parser rejects corrupt or unsupported data and projects known fields only
+  ---
+  duration_ms: 0.138416
+  type: 'test'
+  ...
+# Subtest: missing notes are empty, malformed notes preserve a revision for explicit replacement
+ok 245 - missing notes are empty, malformed notes preserve a revision for explicit replacement
+  ---
+  duration_ms: 0.107583
+  type: 'test'
+  ...
+# Subtest: a stale notebook save cannot replace a copy that changed after it was loaded
+ok 246 - a stale notebook save cannot replace a copy that changed after it was loaded
+  ---
+  duration_ms: 0.059583
+  type: 'test'
+  ...
+# Subtest: unavailable and quota-limited storage fail visibly without claiming persistence
+ok 247 - unavailable and quota-limited storage fail visibly without claiming persistence
+  ---
+  duration_ms: 0.12825
+  type: 'test'
+  ...
+# Subtest: invalid writes leave the existing stored research intact
+ok 248 - invalid writes leave the existing stored research intact
+  ---
+  duration_ms: 0.949542
+  type: 'test'
+  ...
+# Subtest: checklist order does not create false dirty states and empty records do not share arrays
+ok 249 - checklist order does not create false dirty states and empty records do not share arrays
+  ---
+  duration_ms: 0.218792
+  type: 'test'
+  ...
+# Subtest: transient verification preserves an account's editor key and resumes only that scope
+ok 250 - transient verification preserves an account's editor key and resumes only that scope
+  ---
+  duration_ms: 0.272583
+  type: 'test'
+  ...
+# Subtest: a different verified account replaces the hidden editor before its list hydrates
+ok 251 - a different verified account replaces the hidden editor before its list hydrates
+  ---
+  duration_ms: 0.104542
+  type: 'test'
+  ...
+# Subtest: sign-out discards the account editor and subsequent loading retains only guest research
+ok 252 - sign-out discards the account editor and subsequent loading retains only guest research
+  ---
+  duration_ms: 0.037167
+  type: 'test'
+  ...
+# Subtest: server and initial loading render no editor, while readiness failures disable retained editors
+ok 253 - server and initial loading render no editor, while readiness failures disable retained editors
+  ---
+  duration_ms: 0.043209
+  type: 'test'
+  ...
+# Subtest: saved-card snapshots preserve item references during same-account re-verification
+ok 254 - saved-card snapshots preserve item references during same-account re-verification
+  ---
+  duration_ms: 0.037708
+  type: 'test'
+  ...
+# Subtest: a newly verified account clears old cards immediately, without waiting for hydration
+ok 255 - a newly verified account clears old cards immediately, without waiting for hydration
+  ---
+  duration_ms: 0.03175
+  type: 'test'
+  ...
+# Subtest: hydrated changes replace retained cards, including a genuinely empty saved list
+ok 256 - hydrated changes replace retained cards, including a genuinely empty saved list
+  ---
+  duration_ms: 0.024875
+  type: 'test'
+  ...
+# Subtest: every published profile, broad field, and internal app link resolves
+ok 257 - every published profile, broad field, and internal app link resolves
+  ---
+  duration_ms: 3849.809042
+  type: 'test'
+  ...
+# Subtest: two tabs serialize the same unit and preserve the newer intent
+ok 258 - two tabs serialize the same unit and preserve the newer intent
+  ---
+  duration_ms: 1.233125
+  type: 'test'
+  ...
+# Subtest: an invalid outbox stops before every network and cache operation
+ok 259 - an invalid outbox stops before every network and cache operation
+  ---
+  duration_ms: 0.272166
+  type: 'test'
+  ...
+# Subtest: cache and acknowledgement failures retain exact pending records
+    # Subtest: cache failure retains the pending record
+    ok 1 - cache failure retains the pending record
+      ---
+      duration_ms: 0.492
+      type: 'test'
+      ...
+    # Subtest: ack failure retains the pending record
+    ok 2 - ack failure retains the pending record
+      ---
+      duration_ms: 0.142625
+      type: 'test'
+      ...
+    1..2
+ok 260 - cache and acknowledgement failures retain exact pending records
+  ---
+  duration_ms: 0.759917
+  type: 'test'
+  ...
+# Subtest: a no-op authoritative read still persists the complete account cache
+ok 261 - a no-op authoritative read still persists the complete account cache
+  ---
+  duration_ms: 0.099375
+  type: 'test'
+  ...
+# Subtest: account lock names are canonical and reject unverified identifiers
+ok 262 - account lock names are canonical and reject unverified identifiers
+  ---
+  duration_ms: 0.466625
+  type: 'test'
+  ...
+# Subtest: same-account work is serialized across concurrent callers
+ok 263 - same-account work is serialized across concurrent callers
+  ---
+  duration_ms: 0.305125
+  type: 'test'
+  ...
+# Subtest: remote mutation is rejected when the browser has no lock manager
+ok 264 - remote mutation is rejected when the browser has no lock manager
+  ---
+  duration_ms: 0.086166
+  type: 'test'
+  ...
+# Subtest: guest saves, user caches, and user outboxes remain isolated by key
+ok 265 - guest saves, user caches, and user outboxes remain isolated by key
+  ---
+  duration_ms: 0.945625
+  type: 'test'
+  ...
+# Subtest: guest reads preserve the legacy College Compass save key
+ok 266 - guest reads preserve the legacy College Compass save key
+  ---
+  duration_ms: 0.112458
+  type: 'test'
+  ...
+# Subtest: account cache reports missing, valid-empty, valid, corrupt, and unavailable separately
+ok 267 - account cache reports missing, valid-empty, valid, corrupt, and unavailable separately
+  ---
+  duration_ms: 0.194833
+  type: 'test'
+  ...
+# Subtest: scoped storage rejects empty, malformed, nil, and non-RFC UUIDs
+ok 268 - scoped storage rejects empty, malformed, nil, and non-RFC UUIDs
+  ---
+  duration_ms: 0.477958
+  type: 'test'
+  ...
+# Subtest: storage read, write, and remove failures are reported without throwing
+ok 269 - storage read, write, and remove failures are reported without throwing
+  ---
+  duration_ms: 0.260333
+  type: 'test'
+  ...
+# Subtest: the outbox keeps only the latest valid intent for each known college
+ok 270 - the outbox keeps only the latest valid intent for each known college
+  ---
+  duration_ms: 0.202041
+  type: 'test'
+  ...
+# Subtest: outbox reads distinguish missing, corrupt, and unavailable records
+ok 271 - outbox reads distinguish missing, corrupt, and unavailable records
+  ---
+  duration_ms: 0.094541
+  type: 'test'
+  ...
+# Subtest: different tabs cannot overwrite pending intentions for other colleges
+ok 272 - different tabs cannot overwrite pending intentions for other colleges
+  ---
+  duration_ms: 0.069458
+  type: 'test'
+  ...
+# Subtest: acknowledgement never clears a newer same-college intention
+ok 273 - acknowledgement never clears a newer same-college intention
+  ---
+  duration_ms: 0.250375
+  type: 'test'
+  ...
+# Subtest: acknowledgement reports corrupt records without deleting them
+ok 274 - acknowledgement reports corrupt records without deleting them
+  ---
+  duration_ms: 0.7635
+  type: 'test'
+  ...
+# Subtest: a pending mutation is synchronously durable before its writer returns
+ok 275 - a pending mutation is synchronously durable before its writer returns
+  ---
+  duration_ms: 0.135667
+  type: 'test'
+  ...
+# Subtest: an offline remove remains a tombstone over a stale account cache
+ok 276 - an offline remove remains a tombstone over a stale account cache
+  ---
+  duration_ms: 0.063958
+  type: 'test'
+  ...
+# Subtest: mutation sanitization keeps the last intent and drops unknown colleges
+ok 277 - mutation sanitization keeps the last intent and drops unknown colleges
+  ---
+  duration_ms: 1.288417
+  type: 'test'
+  ...
+# Subtest: remote state is authoritative before local actions are applied
+ok 278 - remote state is authoritative before local actions are applied
+  ---
+  duration_ms: 0.320333
+  type: 'test'
+  ...
+# Subtest: duplicate add/remove actions collapse into idempotent final operations
+ok 279 - duplicate add/remove actions collapse into idempotent final operations
+  ---
+  duration_ms: 0.108084
+  type: 'test'
+  ...
+# Subtest: sync rejects a non-UUID owner before any remote request
+ok 280 - sync rejects a non-UUID owner before any remote request
+  ---
+  duration_ms: 0.202666
+  type: 'test'
+  ...
+# Subtest: save-remove-save during an in-flight save preserves the final save
+ok 281 - save-remove-save during an in-flight save preserves the final save
+  ---
+  duration_ms: 0.250167
+  type: 'test'
+  ...
+# Subtest: a failed remote write retains the local intent for a safe retry
+ok 282 - a failed remote write retains the local intent for a safe retry
+  ---
+  duration_ms: 0.246292
+  type: 'test'
+  ...
+# Subtest: enqueue starts no network work, allowing the outbox to persist before flush
+ok 283 - enqueue starts no network work, allowing the outbox to persist before flush
+  ---
+  duration_ms: 0.18375
+  type: 'test'
+  ...
+# Subtest: a failed commit acknowledgement retains the operation for idempotent retry
+ok 284 - a failed commit acknowledgement retains the operation for idempotent retry
+  ---
+  duration_ms: 0.602125
+  type: 'test'
+  ...
+# Subtest: a partial save-then-remove failure retries the complete idempotent batch
+ok 285 - a partial save-then-remove failure retries the complete idempotent batch
+  ---
+  duration_ms: 0.316916
+  type: 'test'
+  ...
+# Subtest: account A is hidden through every loading and account-B transition frame
+ok 286 - account A is hidden through every loading and account-B transition frame
+  ---
+  duration_ms: 0.712375
+  type: 'test'
+  ...
+# Subtest: a valid account cache is complete but an outbox by itself is not
+ok 287 - a valid account cache is complete but an outbox by itself is not
+  ---
+  duration_ms: 0.092125
+  type: 'test'
+  ...
+# Subtest: a failed remote read without a complete base is unavailable, not empty
+ok 288 - a failed remote read without a complete base is unavailable, not empty
+  ---
+  duration_ms: 0.093333
+  type: 'test'
+  ...
+# Subtest: cached offline data remains labeled cached rather than synced
+ok 289 - cached offline data remains labeled cached rather than synced
+  ---
+  duration_ms: 0.0445
+  type: 'test'
+  ...
+# Subtest: a previously confirmed remote base stays visible during a retry
+ok 290 - a previously confirmed remote base stays visible during a retry
+  ---
+  duration_ms: 0.08575
+  type: 'test'
+  ...
+# Subtest: guest import is enabled only for a current, confirmed remote account view
+ok 291 - guest import is enabled only for a current, confirmed remote account view
+  ---
+  duration_ms: 0.059083
+  type: 'test'
+  ...
+# Subtest: only canonical verified UUIDs can define an account storage scope
+ok 292 - only canonical verified UUIDs can define an account storage scope
+  ---
+  duration_ms: 0.072
+  type: 'test'
+  ...
+# Subtest: comparison selections never cross saved-list account scopes
+ok 293 - comparison selections never cross saved-list account scopes
+  ---
+  duration_ms: 0.850041
+  type: 'test'
+  ...
+# Subtest: comparison selections retain only colleges still saved in the same scope
+ok 294 - comparison selections retain only colleges still saved in the same scope
+  ---
+  duration_ms: 0.080667
+  type: 'test'
+  ...
+# Subtest: Supabase CSP origins are reduced to a safe public origin
+ok 295 - Supabase CSP origins are reduced to a safe public origin
+  ---
+  duration_ms: 0.349084
+  type: 'test'
+  ...
+# Subtest: Supabase CSP origins reject header injection and non-origin URLs
+ok 296 - Supabase CSP origins reject header injection and non-origin URLs
+  ---
+  duration_ms: 0.209458
+  type: 'test'
+  ...
+# Subtest: production CSP is strict for scripts and scoped for optional auth
+ok 297 - production CSP is strict for scripts and scoped for optional auth
+  ---
+  duration_ms: 0.239667
+  type: 'test'
+  ...
+# Subtest: development CSP permits only the extra runtime transports it needs
+ok 298 - development CSP permits only the extra runtime transports it needs
+  ---
+  duration_ms: 0.1055
+  type: 'test'
+  ...
+# Subtest: CSP refuses a fixed-shape injection value as a nonce
+ok 299 - CSP refuses a fixed-shape injection value as a nonce
+  ---
+  duration_ms: 0.088333
+  type: 'test'
+  ...
+# Subtest: public Supabase config accepts publishable and legacy anon keys
+ok 300 - public Supabase config accepts publishable and legacy anon keys
+  ---
+  duration_ms: 1.002375
+  type: 'test'
+  ...
+# Subtest: public Supabase config rejects privileged keys before a browser client can exist
+ok 301 - public Supabase config rejects privileged keys before a browser client can exist
+  ---
+  duration_ms: 0.083583
+  type: 'test'
+  ...
+# Subtest: malformed or missing public settings fail closed
+ok 302 - malformed or missing public settings fail closed
+  ---
+  duration_ms: 0.04725
+  type: 'test'
+  ...
+# Subtest: saved_colleges has a constrained user-owned identity
+ok 303 - saved_colleges has a constrained user-owned identity
+  ---
+  duration_ms: 40.877958
+  type: 'test'
+  ...
+# Subtest: saved_colleges exposes only the required authenticated operations
+ok 304 - saved_colleges exposes only the required authenticated operations
+  ---
+  duration_ms: 35.010291
+  type: 'test'
+  ...
+# Subtest: saved_colleges RLS has separate owner-only policies
+ok 305 - saved_colleges RLS has separate owner-only policies
+  ---
+  duration_ms: 11.56575
+  type: 'test'
+  ...
+# Subtest: saved_colleges migration stays free of privileged database code
+ok 306 - saved_colleges migration stays free of privileged database code
+  ---
+  duration_ms: 90.609458
+  type: 'test'
+  ...
+# Subtest: local Supabase config disables anonymous Auth users
+ok 307 - local Supabase config disables anonymous Auth users
+  ---
+  duration_ms: 1.569625
+  type: 'test'
+  ...
+# Subtest: listOwned selects only unit IDs and applies the exact owner filter
+ok 308 - listOwned selects only unit IDs and applies the exact owner filter
+  ---
+  duration_ms: 2.86325
+  type: 'test'
+  ...
+# Subtest: upsertOwned sends explicit owners and uses conflict-safe duplicate ignoring
+ok 309 - upsertOwned sends explicit owners and uses conflict-safe duplicate ignoring
+  ---
+  duration_ms: 0.1365
+  type: 'test'
+  ...
+# Subtest: removeOwned applies both the owner and unit filters before execution
+ok 310 - removeOwned applies both the owner and unit filters before execution
+  ---
+  duration_ms: 0.090667
+  type: 'test'
+  ...
+# Subtest: empty mutations do not issue Supabase requests
+ok 311 - empty mutations do not issue Supabase requests
+  ---
+  duration_ms: 0.158
+  type: 'test'
+  ...
+# Subtest: Supabase adapter errors are surfaced without leaking query details
+ok 312 - Supabase adapter errors are surfaced without leaking query details
+  ---
+  duration_ms: 0.342875
+  type: 'test'
+  ...
+# Subtest: the adapter rejects a caller whose UUID differs from its bound token owner
+ok 313 - the adapter rejects a caller whose UUID differs from its bound token owner
+  ---
+  duration_ms: 0.558166
+  type: 'test'
+  ...
+# Subtest: revoked or unverified sessions cannot turn filtered rows into a successful read or mutation
+ok 314 - revoked or unverified sessions cannot turn filtered rows into a successful read or mutation
+  ---
+  duration_ms: 0.874875
+  type: 'test'
+  ...
+# Subtest: revocation during a successful query fails before the result is acknowledged
+ok 315 - revocation during a successful query fails before the result is acknowledged
+  ---
+  duration_ms: 0.396375
+  type: 'test'
+  ...
+# Subtest: a verified empty account remains a valid empty snapshot
+ok 316 - a verified empty account remains a valid empty snapshot
+  ---
+  duration_ms: 0.24325
+  type: 'test'
+  ...
+# Subtest: the full sync cycle preserves cached colleges and pending intent when revocation races a read or delete
+ok 317 - the full sync cycle preserves cached colleges and pending intent when revocation races a read or delete
+  ---
+  duration_ms: 17.552417
+  type: 'test'
+  ...
+# Subtest: a verified identity and matching local token are captured together
+ok 318 - a verified identity and matching local token are captured together
+  ---
+  duration_ms: 1.591209
+  type: 'test'
+  ...
+# Subtest: a shared-client account switch fails before a token can be bound
+ok 319 - a shared-client account switch fails before a token can be bound
+  ---
+  duration_ms: 0.303833
+  type: 'test'
+  ...
+# Subtest: malformed expected identities fail before Auth is read
+ok 320 - malformed expected identities fail before Auth is read
+  ---
+  duration_ms: 0.200333
+  type: 'test'
+  ...
+# Subtest: the same built Worker updates verification recency on later requests
+ok 321 - the same built Worker updates verification recency on later requests
+  ---
+  duration_ms: 4209.045042
+  type: 'test'
+  ...
+# Subtest: verification becomes overdue after the exact eight-day boundary, before rounding
+ok 322 - verification becomes overdue after the exact eight-day boundary, before rounding
+  ---
+  duration_ms: 0.275666
+  type: 'test'
+  ...
+# Subtest: future verification timestamps tolerate at most one hour of clock skew
+ok 323 - future verification timestamps tolerate at most one hour of clock skew
+  ---
+  duration_ms: 0.0425
+  type: 'test'
+  ...
+# Subtest: unverified coverage takes precedence over overdue age
+ok 324 - unverified coverage takes precedence over overdue age
+  ---
+  duration_ms: 0.334417
+  type: 'test'
+  ...
+# Subtest: unusable timestamps and inconsistent artifact coverage fail closed
+ok 325 - unusable timestamps and inconsistent artifact coverage fail closed
+  ---
+  duration_ms: 0.068584
+  type: 'test'
+  ...
+# Subtest: the HTML probe and page classifier share the same clock and coverage policy
+ok 326 - the HTML probe and page classifier share the same clock and coverage policy
+  ---
+  duration_ms: 0.631958
+  type: 'test'
+  ...
+# Subtest: accepts a bounded XLSX workbook with the required OOXML entries
+ok 327 - accepts a bounded XLSX workbook with the required OOXML entries
+  ---
+  duration_ms: 14.539125
+  type: 'test'
+  ...
+# Subtest: rejects an arbitrary ZIP that is not an XLSX workbook
+ok 328 - rejects an arbitrary ZIP that is not an XLSX workbook
+  ---
+  duration_ms: 0.547792
+  type: 'test'
+  ...
+# Subtest: rejects a workbook served with an unapproved MIME type
+ok 329 - rejects a workbook served with an unapproved MIME type
+  ---
+  duration_ms: 1.056833
+  type: 'test'
+  ...
+# Subtest: rejects a redirect host before making the redirected request
+ok 330 - rejects a redirect host before making the redirected request
+  ---
+  duration_ms: 1.178
+  type: 'test'
+  ...
+# Subtest: independently downloads and fingerprint-checks every source in a multi-artifact overlay
+ok 331 - independently downloads and fingerprint-checks every source in a multi-artifact overlay
+  ---
+  duration_ms: 10.920542
+  type: 'test'
+  ...
+# Subtest: records every source failure and preserves the last approved evidence before rejecting
+ok 332 - records every source failure and preserves the last approved evidence before rejecting
+  ---
+  duration_ms: 4.255834
+  type: 'test'
+  ...
+# Subtest: an invalid manifest produces a schema failure report without fetching or approving sources
+ok 333 - an invalid manifest produces a schema failure report without fetching or approving sources
+  ---
+  duration_ms: 2.419708
+  type: 'test'
+  ...
+1..333
+# tests 335
+# suites 0
+# pass 335
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6834.603791

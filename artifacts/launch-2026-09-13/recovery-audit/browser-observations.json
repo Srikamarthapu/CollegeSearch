@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-13T21:18:00Z",
+  "applicationSource": "07672e6603fe43980fbb5923d9c05fe348a746c1",
+  "origin": "http://127.0.0.1:4173",
+  "browser": "Codex in-app browser",
+  "plannerStaleEdit": {
+    "changedByPeerRejected": true,
+    "errorFocused": true,
+    "formSurvivedSameTabReload": true,
+    "retainedAsSeparateTask": true,
+    "peerSavedVersionPreserved": true,
+    "originalBackupRestoredAndReloaded": true
+  },
+  "profile": {
+    "ordinaryCrossTabConvergence": true,
+    "simultaneousConflictNotInduced": true,
+    "originalSyntheticNotesRestored": true
+  },
+  "limitations": [
+    "Planner stale-entry protection is distinct from whole-list write conflicts.",
+    "Read-denied, malformed canonical data and lock races are covered by synthetic pure-store tests, not browser storage injection.",
+    "Additional native-browser inventory was unavailable because the Mac was locked.",
+    "No actual screen reader speech, browser zoom or reduced-motion preference claim is made."
+  ],
+  "rebuiltBackupPreview": {
+    "headingFocusedAfterRead": true,
+    "headingVisibleBelowHeader": true,
+    "tabEntersNamedReviewRegion": true,
+    "cancelReturnsToRestoreTrigger": true,
+    "taskListUnchanged": true,
+    "asyncFocusInterruption": "code-reviewed; not behavior-tested"
+  }
+}

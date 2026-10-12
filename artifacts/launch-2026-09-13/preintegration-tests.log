@@ -1,0 +1,1619 @@
+TAP version 13
+# Subtest: small trust and metadata colors meet AA contrast on app surfaces
+ok 1 - small trust and metadata colors meet AA contrast on app surfaces
+  ---
+  duration_ms: 0.501958
+  type: 'test'
+  ...
+# Subtest: high-frequency student controls retain 44px touch targets
+ok 2 - high-frequency student controls retain 44px touch targets
+  ---
+  duration_ms: 0.331042
+  type: 'test'
+  ...
+# Subtest: deletion uses verified identity and revokes all sessions before deletion
+ok 3 - deletion uses verified identity and revokes all sessions before deletion
+  ---
+  duration_ms: 10.828917
+  type: 'test'
+  ...
+# Subtest: cross-origin, missing confirmation, malformed bearer, and wrong method cannot call Auth
+ok 4 - cross-origin, missing confirmation, malformed bearer, and wrong method cannot call Auth
+  ---
+  duration_ms: 0.607209
+  type: 'test'
+  ...
+# Subtest: a revoked session and provider verification errors fail closed
+ok 5 - a revoked session and provider verification errors fail closed
+  ---
+  duration_ms: 0.560459
+  type: 'test'
+  ...
+# Subtest: failed revocation prevents deletion and failed deletion reports retry after sign-in
+ok 6 - failed revocation prevents deletion and failed deletion reports retry after sign-in
+  ---
+  duration_ms: 1.309958
+  type: 'test'
+  ...
+# Subtest: all account consumers use the shared verification trust decision
+ok 7 - all account consumers use the shared verification trust decision
+  ---
+  duration_ms: 115.801333
+  type: 'test'
+  ...
+# Subtest: the account page gates account-scoped actions on current verification
+ok 8 - the account page gates account-scoped actions on current verification
+  ---
+  duration_ms: 0.62475
+  type: 'test'
+  ...
+# Subtest: password mutation has both a runtime trust gate and a disabled control
+ok 9 - password mutation has both a runtime trust gate and a disabled control
+  ---
+  duration_ms: 0.480875
+  type: 'test'
+  ...
+# Subtest: terminal account state offers retry and local-session clearing
+ok 10 - terminal account state offers retry and local-session clearing
+  ---
+  duration_ms: 0.726958
+  type: 'test'
+  ...
+# Subtest: only a currently verified signed-in identity enables account actions
+ok 11 - only a currently verified signed-in identity enables account actions
+  ---
+  duration_ms: 0.614541
+  type: 'test'
+  ...
+# Subtest: a checking or failed prior identity is labeled as last verified
+ok 12 - a checking or failed prior identity is labeled as last verified
+  ---
+  duration_ms: 0.058125
+  type: 'test'
+  ...
+# Subtest: unknown, failed signed-out, and inconsistent states fail closed
+ok 13 - unknown, failed signed-out, and inconsistent states fail closed
+  ---
+  duration_ms: 0.049708
+  type: 'test'
+  ...
+# Subtest: verified signed-out and unconfigured states remain distinct
+ok 14 - verified signed-out and unconfigured states remain distinct
+  ---
+  duration_ms: 0.072208
+  type: 'test'
+  ...
+# Subtest: a deferred old identity cannot overwrite sign-out followed by another account
+ok 15 - a deferred old identity cannot overwrite sign-out followed by another account
+  ---
+  duration_ms: 0.790833
+  type: 'test'
+  ...
+# Subtest: an auth event invalidates a different identity before verification finishes
+ok 16 - an auth event invalidates a different identity before verification finishes
+  ---
+  duration_ms: 0.123125
+  type: 'test'
+  ...
+# Subtest: transient getUser failures never claim a confirmed sign-out
+ok 17 - transient getUser failures never claim a confirmed sign-out
+  ---
+  duration_ms: 0.118834
+  type: 'test'
+  ...
+# Subtest: terminal getUser failures clear a previously verified identity
+ok 18 - terminal getUser failures clear a previously verified identity
+  ---
+  duration_ms: 0.09475
+  type: 'test'
+  ...
+# Subtest: initial, event, and manual refreshes share one in-flight verification
+ok 19 - initial, event, and manual refreshes share one in-flight verification
+  ---
+  duration_ms: 0.065375
+  type: 'test'
+  ...
+# Subtest: local sign-out invalidates old refreshes and restores a verified identity only on a safe failure
+ok 20 - local sign-out invalidates old refreshes and restores a verified identity only on a safe failure
+  ---
+  duration_ms: 0.188167
+  type: 'test'
+  ...
+# Subtest: a failed sign-out never promotes a degraded identity back to verified
+ok 21 - a failed sign-out never promotes a degraded identity back to verified
+  ---
+  duration_ms: 0.061792
+  type: 'test'
+  ...
+# Subtest: a failed sign-out cannot restore the old identity over a newer auth event
+ok 22 - a failed sign-out cannot restore the old identity over a newer auth event
+  ---
+  duration_ms: 0.097375
+  type: 'test'
+  ...
+# Subtest: a failed sign-out during a new identity boundary never restores the prior account
+ok 23 - a failed sign-out during a new identity boundary never restores the prior account
+  ---
+  duration_ms: 0.20175
+  type: 'test'
+  ...
+# Subtest: app build inputs avoid the currently vulnerable image-size parser
+ok 24 - app build inputs avoid the currently vulnerable image-size parser
+  ---
+  duration_ms: 3600.822417
+  type: 'test'
+  ...
+# Subtest: admit-rate selector resolves the aliases advertised in its search field
+ok 25 - admit-rate selector resolves the aliases advertised in its search field
+  ---
+  duration_ms: 1.132958
+  type: 'test'
+  ...
+# Subtest: admit-rate selector tolerates a one-edit college-name misspelling
+ok 26 - admit-rate selector tolerates a one-edit college-name misspelling
+  ---
+  duration_ms: 1.900875
+  type: 'test'
+  ...
+# Subtest: admit-rate selector keeps selected colleges out of filtered options
+ok 27 - admit-rate selector keeps selected colleges out of filtered options
+  ---
+  duration_ms: 0.216875
+  type: 'test'
+  ...
+# Subtest: the pull-request gate runs the complete deterministic verification sequence
+ok 28 - the pull-request gate runs the complete deterministic verification sequence
+  ---
+  duration_ms: 1.719791
+  type: 'test'
+  ...
+# Subtest: both workflows are bounded, read-only, secret-free, and SHA-pinned
+ok 29 - both workflows are bounded, read-only, secret-free, and SHA-pinned
+  ---
+  duration_ms: 0.170125
+  type: 'test'
+  ...
+# Subtest: live artifact availability is monitored outside the pull-request gate
+not ok 30 - live artifact availability is monitored outside the pull-request gate
+  ---
+  duration_ms: 0.389083
+  type: 'test'
+  location: '/Volumes/Seagate /CollegeSearch/tests/ci-workflows.test.mjs:45:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /run: npm run data:verify-overlays/. Input:
+    
+    'name: Live data artifact verification\n' +
+      '\n' +
+      'on:\n' +
+      '  schedule:\n' +
+      '    - cron: "17 15 * * 1"\n' +
+      '  workflow_dispatch:\n' +
+      '\n' +
+      'permissions:\n' +
+      '  contents: read\n' +
+      '\n' +
+      'concurrency:\n' +
+      '  group: live-data-artifact-verification\n' +
+      '  cancel-in-progress: true\n' +
+      '\n' +
+      'jobs:\n' +
+      '  verify-live-artifacts:\n' +
+      '    name: Verify pinned first-party artifacts\n' +
+      '    runs-on: ubuntu-latest\n' +
+      '    timeout-minutes: 30\n' +
+      '    env:\n' +
+      '      CI: true\n' +
+      '\n' +
+      '    steps:\n' +
+      '      - name: Check out repository\n' +
+      '        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1\n' +
+      '        with:\n' +
+      '          persist-credentials: false\n' +
+      '\n' +
+      '      - name: Use Node.js 22\n' +
+      '        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0\n' +
+      '        with:\n' +
+      '          node-version: 22.x\n' +
+      '          cache: npm\n' +
+      '          cache-dependency-path: package-lock.json\n' +
+      '\n' +
+      '      - name: Install locked dependencies\n' +
+      '        run: npm ci\n' +
+      '\n' +
+      '      - name: Verify live first-party artifacts\n' +
+      '        id: verify\n' +
+      '        run: |\n' +
+      '          rm -f data/institution-source-verification.json\n' +
+      '          npm run data:verify-overlays\n' +
+      '\n' +
+      '      - name: Summarize source verification\n' +
+      "        if: always() && steps.verify.outcome != 'skipped'\n" +
+      '        run: node scripts/summarize-institution-verification.mjs >> "$GITHUB_STEP_SUMMARY"\n' +
+      '\n' +
+      '      - name: Preserve source verification report\n' +
+      "        if: always() && steps.verify.outcome != 'skipped'\n" +
+      '        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2\n' +
+      '        with:\n' +
+      '          name: institution-source-verification-${{ github.run_id }}-${{ github.run_attempt }}\n' +
+      '          path: data/institution-source-verification.json\n' +
+      '          if-no-files-found: error\n' +
+      '          retention-days: 90\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    name: Live data artifact verification
+    
+    on:
+      schedule:
+        - cron: "17 15 * * 1"
+      workflow_dispatch:
+    
+    permissions:
+      contents: read
+    
+    concurrency:
+      group: live-data-artifact-verification
+      cancel-in-progress: true
+    
+    jobs:
+      verify-live-artifacts:
+        name: Verify pinned first-party artifacts
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        env:
+          CI: true
+    
+        steps:
+          - name: Check out repository
+            uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+            with:
+              persist-credentials: false
+    
+          - name: Use Node.js 22
+            uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+            with:
+              node-version: 22.x
+              cache: npm
+              cache-dependency-path: package-lock.json
+    
+          - name: Install locked dependencies
+            run: npm ci
+    
+          - name: Verify live first-party artifacts
+            id: verify
+            run: |
+              rm -f data/institution-source-verification.json
+              npm run data:verify-overlays
+    
+          - name: Summarize source verification
+            if: always() && steps.verify.outcome != 'skipped'
+            run: node scripts/summarize-institution-verification.mjs >> "$GITHUB_STEP_SUMMARY"
+    
+          - name: Preserve source verification report
+            if: always() && steps.verify.outcome != 'skipped'
+            uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+            with:
+              name: institution-source-verification-${{ github.run_id }}-${{ github.run_attempt }}
+              path: data/institution-source-verification.json
+              if-no-files-found: error
+              retention-days: 90
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///Volumes/Seagate%20/CollegeSearch/tests/ci-workflows.test.mjs:48:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: the client projection preserves every explorer evidence field
+ok 31 - the client projection preserves every explorer evidence field
+  ---
+  duration_ms: 2.8945
+  type: 'test'
+  ...
+# Subtest: the browser projection does not copy profile-only provenance
+ok 32 - the browser projection does not copy profile-only provenance
+  ---
+  duration_ms: 0.371375
+  type: 'test'
+  ...
+# Subtest: exact short aliases take precedence over broad substring matches
+ok 33 - exact short aliases take precedence over broad substring matches
+  ---
+  duration_ms: 0.78175
+  type: 'test'
+  ...
+# Subtest: canonical aliases and one-edit misspellings resolve college identity
+ok 34 - canonical aliases and one-edit misspellings resolve college identity
+  ---
+  duration_ms: 0.6125
+  type: 'test'
+  ...
+# Subtest: short field aliases filter by actual broad-field evidence
+ok 35 - short field aliases filter by actual broad-field evidence
+  ---
+  duration_ms: 0.802042
+  type: 'test'
+  ...
+# Subtest: combined fuzzy field and location queries preserve both intents
+ok 36 - combined fuzzy field and location queries preserve both intents
+  ---
+  duration_ms: 0.229
+  type: 'test'
+  ...
+# Subtest: accepts a distinct UC archive and the exact reviewed cohort
+ok 37 - accepts a distinct UC archive and the exact reviewed cohort
+  ---
+  duration_ms: 0.517458
+  type: 'test'
+  ...
+# Subtest: rejects a finalized/latest UC filename collision
+ok 38 - rejects a finalized/latest UC filename collision
+  ---
+  duration_ms: 0.127542
+  type: 'test'
+  ...
+# Subtest: rejects missing, duplicate, or unexpected cohort UNITIDs
+ok 39 - rejects missing, duplicate, or unexpected cohort UNITIDs
+  ---
+  duration_ms: 0.064959
+  type: 'test'
+  ...
+# Subtest: detects a manifest edit between verification and publication
+ok 40 - detects a manifest edit between verification and publication
+  ---
+  duration_ms: 0.232667
+  type: 'test'
+  ...
+# Subtest: publishes every staged data file together
+ok 41 - publishes every staged data file together
+  ---
+  duration_ms: 6.078667
+  type: 'test'
+  ...
+# Subtest: restores existing and previously absent files when publication fails
+ok 42 - restores existing and previously absent files when publication fails
+  ---
+  duration_ms: 3.909875
+  type: 'test'
+  ...
+# Subtest: preserves backups and a recovery lock when rollback is incomplete
+ok 43 - preserves backups and a recovery lock when rollback is incomplete
+  ---
+  duration_ms: 2.977833
+  type: 'test'
+  ...
+# Subtest: rejects duplicate targets before changing live data
+ok 44 - rejects duplicate targets before changing live data
+  ---
+  duration_ms: 1.05475
+  type: 'test'
+  ...
+# Subtest: rejects missing and non-file staged targets before publication
+ok 45 - rejects missing and non-file staged targets before publication
+  ---
+  duration_ms: 2.431667
+  type: 'test'
+  ...
+# Subtest: serializes publication locks and releases only the owning token
+ok 46 - serializes publication locks and releases only the owning token
+  ---
+  duration_ms: 2.037083
+  type: 'test'
+  ...
+# Subtest: preference scoring never uses overall admit rate
+ok 47 - preference scoring never uses overall admit rate
+  ---
+  duration_ms: 0.642709
+  type: 'test'
+  ...
+# Subtest: missing evidence is excluded instead of treated as zero
+ok 48 - missing evidence is excluded instead of treated as zero
+  ---
+  duration_ms: 0.080666
+  type: 'test'
+  ...
+# Subtest: ownership remains an explicit hard filter
+ok 49 - ownership remains an explicit hard filter
+  ---
+  duration_ms: 0.290334
+  type: 'test'
+  ...
+# Subtest: a required broad field removes colleges without that evidence
+ok 50 - a required broad field removes colleges without that evidence
+  ---
+  duration_ms: 0.063125
+  type: 'test'
+  ...
+# Subtest: campus setting is an explicit auditable preference signal
+ok 51 - campus setting is an explicit auditable preference signal
+  ---
+  duration_ms: 0.128
+  type: 'test'
+  ...
+# Subtest: zero weights leave the match worksheet unranked
+ok 52 - zero weights leave the match worksheet unranked
+  ---
+  duration_ms: 0.04575
+  type: 'test'
+  ...
+# Subtest: untouched suggested weights keep the match worksheet neutral
+ok 53 - untouched suggested weights keep the match worksheet neutral
+  ---
+  duration_ms: 0.079
+  type: 'test'
+  ...
+# Subtest: choosing one preference activates only its mapped criterion
+ok 54 - choosing one preference activates only its mapped criterion
+  ---
+  duration_ms: 0.14425
+  type: 'test'
+  ...
+# Subtest: a hard ownership filter cannot create an unscored ranking
+ok 55 - a hard ownership filter cannot create an unscored ranking
+  ---
+  duration_ms: 0.171791
+  type: 'test'
+  ...
+# Subtest: the sticky preference rail keeps every control reachable
+ok 56 - the sticky preference rail keeps every control reachable
+  ---
+  duration_ms: 169.724208
+  type: 'test'
+  ...
+# Subtest: historical admit bands are descriptive and deterministic
+ok 57 - historical admit bands are descriptive and deterministic
+  ---
+  duration_ms: 0.13025
+  type: 'test'
+  ...
+# Subtest: balanced shortlist keeps the leading fit in each observed rate band
+ok 58 - balanced shortlist keeps the leading fit in each observed rate band
+  ---
+  duration_ms: 4.538125
+  type: 'test'
+  ...
+# Subtest: undergraduate-size bands are mutually exclusive at their boundaries
+ok 59 - undergraduate-size bands are mutually exclusive at their boundaries
+  ---
+  duration_ms: 0.511209
+  type: 'test'
+  ...
+# Subtest: advanced filters apply exact evidence thresholds and exclude missing values
+ok 60 - advanced filters apply exact evidence thresholds and exclude missing values
+  ---
+  duration_ms: 0.191083
+  type: 'test'
+  ...
+# Subtest: auth dialog always releases its busy state after unexpected auth failures
+ok 61 - auth dialog always releases its busy state after unexpected auth failures
+  ---
+  duration_ms: 2.765959
+  type: 'test'
+  ...
+# Subtest: saved-only Explore never represents an unavailable account list as empty
+ok 62 - saved-only Explore never represents an unavailable account list as empty
+  ---
+  duration_ms: 12.404791
+  type: 'test'
+  ...
+# Subtest: auth callback routes convert unexpected exchange failures into safe redirects
+ok 63 - auth callback routes convert unexpected exchange failures into safe redirects
+  ---
+  duration_ms: 21.469208
+  type: 'test'
+  ...
+# Subtest: repeated save and comparison controls name their college
+ok 64 - repeated save and comparison controls name their college
+  ---
+  duration_ms: 7.150208
+  type: 'test'
+  ...
+# Subtest: admit-rate cards name the college in remove controls
+ok 65 - admit-rate cards name the college in remove controls
+  ---
+  duration_ms: 19.506709
+  type: 'test'
+  ...
+# Subtest: the reviewed institution cohort has 26 artifacts and 19 admission headlines
+ok 66 - the reviewed institution cohort has 26 artifacts and 19 admission headlines
+  ---
+  duration_ms: 29.511
+  type: 'test'
+  ...
+# Subtest: Purdue stays on the federal baseline while its first-party workbook blocks automated verification
+ok 67 - Purdue stays on the federal baseline while its first-party workbook blocks automated verification
+  ---
+  duration_ms: 4.006042
+  type: 'test'
+  ...
+# Subtest: Northwestern uses two pinned Data Book PDFs without changing admission or cost
+ok 68 - Northwestern uses two pinned Data Book PDFs without changing admission or cost
+  ---
+  duration_ms: 5.446542
+  type: 'test'
+  ...
+# Subtest: Caltech and Pomona add only verifier-safe current fields and keep coherent federal admissions
+ok 69 - Caltech and Pomona add only verifier-safe current fields and keep coherent federal admissions
+  ---
+  duration_ms: 3.105959
+  type: 'test'
+  ...
+# Subtest: new reviewed admissions exactly match their approved PDF and XLSX records
+ok 70 - new reviewed admissions exactly match their approved PDF and XLSX records
+  ---
+  duration_ms: 3.232542
+  type: 'test'
+  ...
+# Subtest: unsupported Duke and Yale admissions and deliberately excluded costs stay federal
+ok 71 - unsupported Duke and Yale admissions and deliberately excluded costs stay federal
+  ---
+  duration_ms: 3.788667
+  type: 'test'
+  ...
+# Subtest: institution overlays satisfy lineage and arithmetic invariants
+ok 72 - institution overlays satisfy lineage and arithmetic invariants
+  ---
+  duration_ms: 4.948209
+  type: 'test'
+  ...
+# Subtest: the generated release exactly reflects every reviewed overlay
+ok 73 - the generated release exactly reflects every reviewed overlay
+  ---
+  duration_ms: 3.801708
+  type: 'test'
+  ...
+# Subtest: a complete derived-admissions fixture passes validation
+ok 74 - a complete derived-admissions fixture passes validation
+  ---
+  duration_ms: 0.185208
+  type: 'test'
+  ...
+# Subtest: a college can bind different metrics to explicitly declared reviewed sources
+ok 75 - a college can bind different metrics to explicitly declared reviewed sources
+  ---
+  duration_ms: 0.19775
+  type: 'test'
+  ...
+# Subtest: multi-source overlays require explicit, declared, and used metric lineage
+ok 76 - multi-source overlays require explicit, declared, and used metric lineage
+  ---
+  duration_ms: 0.301291
+  type: 'test'
+  ...
+# Subtest: derived metrics cannot combine operands from different artifacts
+ok 77 - derived metrics cannot combine operands from different artifacts
+  ---
+  duration_ms: 0.082167
+  type: 'test'
+  ...
+# Subtest: multi-source declarations reject ambiguous or unregistered source sets
+ok 78 - multi-source declarations reject ambiguous or unregistered source sets
+  ---
+  duration_ms: 0.233459
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a reportingYear mismatch
+ok 79 - admit-rate inputs reject a reportingYear mismatch
+  ---
+  duration_ms: 0.117041
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a reportingYear mismatch
+ok 80 - yield-rate inputs reject a reportingYear mismatch
+  ---
+  duration_ms: 0.184375
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a periodLabel mismatch
+ok 81 - admit-rate inputs reject a periodLabel mismatch
+  ---
+  duration_ms: 0.23175
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a periodLabel mismatch
+ok 82 - yield-rate inputs reject a periodLabel mismatch
+  ---
+  duration_ms: 0.09275
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a cohort mismatch
+ok 83 - admit-rate inputs reject a cohort mismatch
+  ---
+  duration_ms: 0.06425
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a cohort mismatch
+ok 84 - yield-rate inputs reject a cohort mismatch
+  ---
+  duration_ms: 0.051417
+  type: 'test'
+  ...
+# Subtest: admit-rate inputs reject a finality mismatch
+ok 85 - admit-rate inputs reject a finality mismatch
+  ---
+  duration_ms: 0.050875
+  type: 'test'
+  ...
+# Subtest: yield-rate inputs reject a finality mismatch
+ok 86 - yield-rate inputs reject a finality mismatch
+  ---
+  duration_ms: 0.056958
+  type: 'test'
+  ...
+# Subtest: an observation cannot override its college source lineage
+ok 87 - an observation cannot override its college source lineage
+  ---
+  duration_ms: 0.052125
+  type: 'test'
+  ...
+# Subtest: a derived rate cannot omit its source observations
+ok 88 - a derived rate cannot omit its source observations
+  ---
+  duration_ms: 0.091375
+  type: 'test'
+  ...
+# Subtest: HTML artifact hashing ignores volatile asset versions and edge challenges
+ok 89 - HTML artifact hashing ignores volatile asset versions and edge challenges
+  ---
+  duration_ms: 0.330583
+  type: 'test'
+  ...
+# Subtest: student decision surfaces render an explicit browser-local save action
+ok 90 - student decision surfaces render an explicit browser-local save action
+  ---
+  duration_ms: 6200.115917
+  type: 'test'
+  ...
+# Subtest: match results offer local saves once preferences produce a shortlist
+ok 91 - match results offer local saves once preferences produce a shortlist
+  ---
+  duration_ms: 0.9165
+  type: 'test'
+  ...
+# Subtest: account saves are rendered immediately but never sent before the outbox persists
+ok 92 - account saves are rendered immediately but never sent before the outbox persists
+  ---
+  duration_ms: 0.422292
+  type: 'test'
+  ...
+# Subtest: the provider delegates each locked account cycle to the tested sync primitive
+ok 93 - the provider delegates each locked account cycle to the tested sync primitive
+  ---
+  duration_ms: 0.384833
+  type: 'test'
+  ...
+# Subtest: guest save updates use the canonical writer that removes the legacy key
+ok 94 - guest save updates use the canonical writer that removes the legacy key
+  ---
+  duration_ms: 0.236583
+  type: 'test'
+  ...
+# Subtest: saved college IDs are positive, unique integers from the known release
+ok 95 - saved college IDs are positive, unique integers from the known release
+  ---
+  duration_ms: 0.525833
+  type: 'test'
+  ...
+# Subtest: reads the canonical list first and safely falls back to the legacy key
+ok 96 - reads the canonical list first and safely falls back to the legacy key
+  ---
+  duration_ms: 0.09275
+  type: 'test'
+  ...
+# Subtest: blocked or malformed storage never crashes the save flow
+ok 97 - blocked or malformed storage never crashes the save flow
+  ---
+  duration_ms: 0.159875
+  type: 'test'
+  ...
+# Subtest: writes migrate the legacy key and notify same-tab and other-tab listeners
+ok 98 - writes migrate the legacy key and notify same-tab and other-tab listeners
+  ---
+  duration_ms: 0.148292
+  type: 'test'
+  ...
+# Subtest: portrait and landscape college marks stay contained in fixed logo frames
+ok 99 - portrait and landscape college marks stay contained in fixed logo frames
+  ---
+  duration_ms: 1.804292
+  type: 'test'
+  ...
+# Subtest: matching uses one exact federal graduation and enrollment population
+ok 100 - matching uses one exact federal graduation and enrollment population
+  ---
+  duration_ms: 0.323042
+  type: 'test'
+  ...
+# Subtest: a public in-state average cannot contribute price points for unknown or nonresident students
+ok 101 - a public in-state average cannot contribute price points for unknown or nonresident students
+  ---
+  duration_ms: 0.382791
+  type: 'test'
+  ...
+# Subtest: mismatched future graduation cohorts and earnings horizons are excluded consistently
+ok 102 - mismatched future graduation cohorts and earnings horizons are excluded consistently
+  ---
+  duration_ms: 0.062667
+  type: 'test'
+  ...
+# Subtest: residency survives shared preferences and rejects unknown states
+ok 103 - residency survives shared preferences and rejects unknown states
+  ---
+  duration_ms: 0.377375
+  type: 'test'
+  ...
+# Subtest: a shared worksheet restores exact preferences, weights, and active criteria
+ok 104 - a shared worksheet restores exact preferences, weights, and active criteria
+  ---
+  duration_ms: 0.743333
+  type: 'test'
+  ...
+# Subtest: restoring one preference does not turn on untouched weights
+ok 105 - restoring one preference does not turn on untouched weights
+  ---
+  duration_ms: 0.1085
+  type: 'test'
+  ...
+# Subtest: invalid URL values return neutral defaults instead of changing the formula
+ok 106 - invalid URL values return neutral defaults instead of changing the formula
+  ---
+  duration_ms: 0.071041
+  type: 'test'
+  ...
+# Subtest: zero weights and unset criteria cannot be reactivated by a URL
+ok 107 - zero weights and unset criteria cannot be reactivated by a URL
+  ---
+  duration_ms: 0.169834
+  type: 'test'
+  ...
+# Subtest: reset removes worksheet parameters and preserves unrelated URL context
+ok 108 - reset removes worksheet parameters and preserves unrelated URL context
+  ---
+  duration_ms: 0.0965
+  type: 'test'
+  ...
+# Subtest: initial worksheets do not share mutable weights
+ok 109 - initial worksheets do not share mutable weights
+  ---
+  duration_ms: 0.03025
+  type: 'test'
+  ...
+# Subtest: the mobile navigation behaves as a contained modal surface
+ok 110 - the mobile navigation behaves as a contained modal surface
+  ---
+  duration_ms: 0.334875
+  type: 'test'
+  ...
+# Subtest: student-facing stylesheets avoid unreadable microcopy
+ok 111 - student-facing stylesheets avoid unreadable microcopy
+  ---
+  duration_ms: 119.484041
+  type: 'test'
+  ...
+# Subtest: server-renders the CollegeSearch product shell
+ok 112 - server-renders the CollegeSearch product shell
+  ---
+  duration_ms: 5999.705084
+  type: 'test'
+  ...
+# Subtest: global HTML responses enforce one fresh nonce on every executable block
+not ok 113 - global HTML responses enforce one fresh nonce on every executable block
+  ---
+  duration_ms: 29.632791
+  type: 'test'
+  location: '/Volumes/Seagate /CollegeSearch/tests/rendered-html.test.mjs:211:1'
+  failureType: 'testCodeFailure'
+  error: '/ module preload stays on the content-hashed local asset path'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: ' rel="modulepreload" fetchPriority="low" nonce="ddac4bd581494fb48df27f895c87c61e" href="/_next/static/chunks/index-BB6B-HI3.js"/'
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///Volumes/Seagate%20/CollegeSearch/tests/rendered-html.test.mjs:263:14)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: auth redirects inherit CSP and reject an external next destination
+not ok 114 - auth redirects inherit CSP and reject an external next destination
+  ---
+  duration_ms: 163.701458
+  type: 'test'
+  location: '/Volumes/Seagate /CollegeSearch/tests/rendered-html.test.mjs:304:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    auth redirects cannot be cached with a request-specific nonce
+    + actual - expected
+    
+    + 'private, no-cache, no-store, max-age=0, must-revalidate'
+    - 'private, no-cache, no-store, must-revalidate, max-age=0'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'private, no-cache, no-store, must-revalidate, max-age=0'
+  actual: 'private, no-cache, no-store, max-age=0, must-revalidate'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Volumes/Seagate%20/CollegeSearch/tests/rendered-html.test.mjs:328:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: account copy is student-facing and keeps the local-save boundary explicit
+ok 115 - account copy is student-facing and keeps the local-save boundary explicit
+  ---
+  duration_ms: 0.659084
+  type: 'test'
+  ...
+# Subtest: canonical discovery, evidence, comparison, and source routes render HTML
+not ok 116 - canonical discovery, evidence, comparison, and source routes render HTML
+  ---
+  duration_ms: 414.496583
+  type: 'test'
+  location: '/Volumes/Seagate /CollegeSearch/tests/rendered-html.test.mjs:361:1'
+  failureType: 'testCodeFailure'
+  error: '/privacy includes its canonical content'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    <!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/layout.BQytZRFi.css" data-rsc-css-href="/_next/static/css/layout.BQytZRFi.css" data-precedence="vite-rsc/importer-resources"/><link rel="stylesheet" href="/_next/static/css/SiteHeader.CTcBFfJv.css" data-precedence="vite-rsc/client-reference"/><link rel="modulepreload" fetchPriority="low" nonce="53e55ea1f48c4d5a8da19105f7d33c3d" href="/_next/static/chunks/index-BB6B-HI3.js"/><script src="/_next/static/chunks/rolldown-runtime-B0Z9INg1.js" type="module" async="" nonce="53e55ea1f48c4d5a8da19105f7d33c3d"></script><script src="/_next/static/chunks/framework-CrLOsIli.js" type="module" async="" nonce="53e55ea1f48c4d5a8da19105f7d33c3d"></script><script src="/_next/static/chunks/vinext-CvgJWMiN.js" type="module" async="" nonce="53e55ea1f48c4d5a8da19105f7d33c3d"></script><link rel="modulepreload" href="/_next/static/chunks/error-Mhhf1_ZA.js" crossorigin=""/><link rel="modulepreload" href="/_next/static/chunks/createLucideIcon-Br3bBTMS.js" crossorigin=""/><link rel="modulepreload" href="/_next/static/chunks/Icon-BLVmta52.js" crossorigin=""/><link rel="modulepreload" href="/_next/static/chunks/rotate-ccw-COtrzEIv.js" crossorigin=""/><link rel="modulepreload" href="/_next/static/chunks/layout-segment-context-DCEKmYD0.js" crossorigin=""/><link rel="modulepreload" href="/_next/static/chunks/providers-D5eY5slS.js" crossorigin=""/><link rel="modulepreload" href="/_next/static/chunks/verified-session-D_dFbpVY.js" crossorigin=""/><link rel="modulepreload" href="/_next/static/chunks/lenis-react-Cn_gGeZa.js" crossorigin=""/><link rel="modulepreload" href="/_next/static/chunks/filter-props-C7KVBE74.js" crossorigin=""/><link rel="modulepreload" href="/_next/static/chunks/SavedCollegesProvider-V3KNwxbV.js" crossorigin=""/><link rel="modulepreload" href="/_next/static/chunks/SiteHeader-LXqafhVp.js" crossorigin=""/><link rel="modulepreload" href="/_next/static/chunks/bookmark-CJKZ-iwv.js" crossorigin=""/><link rel="modulepreload" href="/_next/static/chunks/sliders-horizontal-CaCKF-Vm.js" crossorigin=""/><link rel="modulepreload" href="/_next/static/chunks/auth-consumer-state-C420rNul.js" crossorigin=""/><link rel="modulepreload" href="/_next/static/chunks/x-C3YlIJ2l.js" crossorigin=""/><link rel="modulepreload" href="/_next/static/chunks/link-Cv5XG4BF.js" crossorigin=""/><link rel="modulepreload" href="/_next/static/chunks/query-DugiHe4Q.js" crossorigin=""/><link rel="modulepreload" href="/_next/static/chunks/image-Bda7e1jt.js" crossorigin=""/><meta property="csp-nonce" nonce="53e55ea1f48c4d5a8da19105f7d33c3d"/><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">Object.assign(((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}),{params:{},nav:{"pathname":"/privacy","searchParams":[]}})</script><link rel="modulepreload" nonce="53e55ea1f48c4d5a8da19105f7d33c3d" href="/_next/static/chunks/index-BB6B-HI3.js" />
+    <link rel="preload" nonce="53e55ea1f48c4d5a8da19105f7d33c3d" href="/_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" nonce="53e55ea1f48c4d5a8da19105f7d33c3d" href="/_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" nonce="53e55ea1f48c4d5a8da19105f7d33c3d" href="/_next/static/_vinext_fonts/newsreader-94c054835b7e/newsreader-2415edd0.woff2" as="font" type="font/woff2" crossorigin />
+    <style data-vinext-fonts nonce="53e55ea1f48c4d5a8da19105f7d33c3d">/* cyrillic-ext */
+    @font-face {
+      font-family: 'Geist';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url(/_next/static/_vinext_fonts/geist-8ac0455e797f/geist-ff2310f5.woff2) format('woff2');
+      unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+    }
+    /* cyrillic */
+    @font-face {
+      font-family: 'Geist';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url(/_next/static/_vinext_fonts/geist-8ac0455e797f/geist-875ccdd4.woff2) format('woff2');
+      unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+    }
+    /* vietnamese */
+    @font-face {
+      font-family: 'Geist';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url(/_next/static/_vinext_fonts/geist-8ac0455e797f/geist-52306abf.woff2) format('woff2');
+      unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+    }
+    /* latin-ext */
+    @font-face {
+      font-family: 'Geist';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url(/_next/static/_vinext_fonts/geist-8ac0455e797f/geist-001175b1.woff2) format('woff2');
+      unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+    /* latin */
+    @font-face {
+      font-family: 'Geist';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url(/_next/static/_vinext_fonts/geist-8ac0455e797f/geist-98bbbccb.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    
+    @font-face {
+      font-family: 'Geist Fallback';
+      src: local("Arial");
+      ascent-override: 95.94%;
+      descent-override: 28.16%;
+      line-gap-override: 0.00%;
+      size-adjust: 104.76%;
+    }
+    
+    .__font_geist_19ysh9d { font-family: 'Geist', 'Geist Fallback'; font-style: normal; }
+    
+    .__variable_geist_19ysh9d { --font-geist-sans: 'Geist', 'Geist Fallback'; }
+    
+    /* cyrillic-ext */
+    @font-face {
+      font-family: 'Geist Mono';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url(/_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-f6b33328.woff2) format('woff2');
+      unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+    }
+    /* cyrillic */
+    @font-face {
+      font-family: 'Geist Mono';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url(/_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-44e03052.woff2) format('woff2');
+      unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+    }
+    /* symbols2 */
+    @font-face {
+      font-family: 'Geist Mono';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url(/_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-0638449e.woff2) format('woff2');
+      unicode-range: U+2000-2001, U+2004-2008, U+200A, U+23B8-23BD, U+2500-259F;
+    }
+    /* vietnamese */
+    @font-face {
+      font-family: 'Geist Mono';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url(/_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-971fb274.woff2) format('woff2');
+      unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+    }
+    /* latin-ext */
+    @font-face {
+      font-family: 'Geist Mono';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url(/_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-44745446.woff2) format('woff2');
+      unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+    /* latin */
+    @font-face {
+      font-family: 'Geist Mono';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url(/_next/static/_vinext_fonts/geist-mono-00e989178794/geist-mono-013b2f2f.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    
+    @font-face {
+      font-family: 'Geist Mono Fallback';
+      src: local("Arial");
+      ascent-override: 74.67%;
+      descent-override: 21.92%;
+      line-gap-override: 0.00%;
+      size-adjust: 134.59%;
+    }
+    
+    .__font_geist_mono_1001rt9 { font-family: 'Geist Mono', 'Geist Mono Fallback'; font-style: normal; }
+    
+    .__variable_geist_mono_1001rt9 { --font-geist-mono: 'Geist Mono', 'Geist Mono Fallback'; }
+    
+    /* vietnamese */
+    @font-face {
+      font-family: 'Newsreader';
+      font-style: normal;
+      font-weight: 200 800;
+      font-display: swap;
+      src: url(/_next/static/_vinext_fonts/newsreader-94c054835b7e/newsreader-cdecad9c.woff2) format('woff2');
+      unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+    }
+    /* latin-ext */
+    @font-face {
+      font-family: 'Newsreader';
+      font-style: normal;
+      font-weight: 200 800;
+      font-display: swap;
+      src: url(/_next/static/_vinext_fonts/newsreader-94c054835b7e/newsreader-a239d8f4.woff2) format('woff2');
+      unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+    /* latin */
+    @font-face {
+      font-family: 'Newsreader';
+      font-style: normal;
+      font-weight: 200 800;
+      font-display: swap;
+      src: url(/_next/static/_vinext_fonts/newsreader-94c054835b7e/newsreader-2415edd0.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    
+    @font-face {
+      font-family: 'Newsreader Fallback';
+      src: local("Times New Roman");
+      ascent-override: 69.68%;
+      descent-override: 25.12%;
+      line-gap-override: 0.00%;
+      size-adjust: 105.48%;
+    }
+    
+    .__font_newsreader_0f45o04 { font-family: 'Newsreader', 'Newsreader Fallback'; font-style: normal; }
+    
+    .__variable_newsreader_0f45o04 { --font-newsreader: 'Newsreader', 'Newsreader Fallback'; }
+    </style>
+    </head><body class="__variable_geist_19ysh9d __variable_geist_mono_1001rt9 __variable_newsreader_0f45o04"><!--$--><!--$?--><template id="B:0"></template><main id="main-content" class="page-shell comparison-page"><section class="comparison-empty" aria-live="polite" aria-busy="true"><span class="page-section-index">Loading</span><h1>Opening the evidence record…</h1><p>Source labels and reporting periods stay attached while the view loads.</p></section></main><!--/$--><!--$--><!--/$--><!--/$--><div hidden=""><!--$--><div hidden=""><title>Privacy | CollegeSearch</title><meta name="description" content="What CollegeSearch stores, where it stays, and what is not collected."><meta name="application-name" content="CollegeSearch"><meta name="keywords" content="college search,college comparison,admission rates,college majors,College Scorecard"><meta property="og:title" content="CollegeSearch — Build a college list you can explain"><meta property="og:description" content="Explore colleges with dated official records and a place for your own research."><meta property="og:type" content="website"><meta property="og:image" content="http://localhost/og.png"><meta property="og:image:width" content="1731"><meta property="og:image:height" content="909"><meta property="og:image:alt" content="CollegeSearch — Build a college list you can explain."><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="CollegeSearch"><meta name="twitter:description" content="Evidence for the college list only you can build."><meta name="twitter:image" content="http://localhost/og.png"><link data-vinext-streamed-icon="/privacy:rz13eh:0" rel="shortcut icon" href="/favicon.svg"><link data-vinext-streamed-icon="/privacy:rz13eh:1" rel="icon" href="/favicon.svg" type="image/svg+xml"><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">document.querySelectorAll('body link[rel="icon"], body link[rel="apple-touch-icon"]').forEach(el => document.head.appendChild(el));const a='data-vinext-streamed-icon',o=el=>{const m=el.getAttribute(a),i=m.lastIndexOf(':');return Number(m.slice(i+1))};[...document.querySelectorAll('link['+a+']')].sort((l,r)=>o(l)-o(r)).forEach(el=>document.head.appendChild(el))</script></div><!--/$--></div><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">requestAnimationFrame(function(){$RT=performance.now()});</script><script type="module" src="/_next/static/chunks/index-BB6B-HI3.js" nonce="53e55ea1f48c4d5a8da19105f7d33c3d" id="_R_" async=""></script><div hidden id="S:0"><header class="site-header"><a class="skip-link" href="#main-content">Skip to main content</a><a href="/" class="brand" aria-label="CollegeSearch home"><span class="brand-mark" aria-hidden="true"><img src="/favicon.svg" alt="" width="38" height="38" loading="lazy" decoding="async" data-nimg="1"/></span><span class="brand-wordmark">CollegeSearch</span></a><div class="header-actions"><nav class="desktop-nav" aria-label="Primary navigation"><a href="/explore"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>Colleges</a><a href="/majors"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-graduation-cap" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>Fields of study</a><a href="/match"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sliders-horizontal" aria-hidden="true"><path d="M10 5H3"></path><path d="M12 19H3"></path><path d="M14 3v4"></path><path d="M16 17v4"></path><path d="M21 12h-9"></path><path d="M21 19h-5"></path><path d="M21 5h-7"></path><path d="M8 10v4"></path><path d="M8 12H3"></path></svg>Find my fit</a><a href="/chances"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gauge" aria-hidden="true"><path d="m12 14 4-4"></path><path d="M3.34 19a10 10 0 1 1 17.32 0"></path></svg>Admissions</a><a href="/compare"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scale" aria-hidden="true"><path d="M12 3v18"></path><path d="m19 8 3 8a5 5 0 0 1-6 0zV7"></path><path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1"></path><path d="m5 8 3 8a5 5 0 0 1-6 0zV7"></path><path d="M7 21h10"></path></svg>Compare</a><a href="/saved"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bookmark" aria-hidden="true"><path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"></path></svg>My shortlist</a></nav><button class="_accountTrigger_1w0sx_87" type="button" aria-label="Sign in to CollegeSearch" aria-haspopup="dialog" aria-expanded="false" data-state="closed"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in" aria-hidden="true"><path d="m10 17 5-5-5-5"></path><path d="M15 12H3"></path><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path></svg><span class="_accountTriggerLabel_1w0sx_312">Sign in</span></button><button class="menu-button" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-navigation"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu" aria-hidden="true"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg></button></div></header><main id="main-content" class="page-shell methodology-page"><nav class="page-breadcrumbs" aria-label="Breadcrumb"><a href="/">CollegeSearch</a><span aria-hidden="true">/</span><span aria-current="page">Privacy</span></nav><header class="methodology-masthead"><div><span class="page-eyebrow"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>Plain-language privacy note</span><h1>Your college list is yours.</h1></div><p>CollegeSearch keeps browser-only saves separate from account data. When account services are configured and you sign in, new account saves can sync; existing browser saves require an explicit import.</p></header><section class="methodology-section" aria-labelledby="stored-heading"><div class="page-section-heading"><div><span class="page-section-index">01</span><h2 id="stored-heading">What is stored today</h2></div></div><ul class="methodology-rule-list"><li><span><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hard-drive" aria-hidden="true"><path d="M10 16h.01"></path><path d="M2.212 11.577a2 2 0 0 0-.212.896V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5.527a2 2 0 0 0-.212-.896L18.55 5.11A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path><path d="M21.946 12.013H2.054"></path><path d="M6 16h.01"></path></svg></span><div><strong>Browser-only saves stay separate.</strong><p>College identifiers are stored in browser local storage under<code> college-search-saved</code>. Remove individual saves on the Saved page or clear this site&#x27;s browser data to erase them. Signing in does not upload this guest list automatically.</p></div></li><li><span><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-key-round" aria-hidden="true"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle></svg></span><div><strong>Account data exists only when authentication is configured.</strong><p>If a deployment enables Supabase and you sign up, Supabase processes your email, password credential or Google identity, authentication session, and college identifiers you save to your account. Ownership rules restrict each account to its own rows. CollegeSearch never places a privileged Supabase service key in the browser.</p></div></li><li><span><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hard-drive" aria-hidden="true"><path d="M10 16h.01"></path><path d="M2.212 11.577a2 2 0 0 0-.212.896V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5.527a2 2 0 0 0-.212-.896L18.55 5.11A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path><path d="M21.946 12.013H2.054"></path><path d="M6 16h.01"></path></svg></span><div><strong>Signed-in lists also keep a browser recovery copy.</strong><p>CollegeSearch stores each verified account&#x27;s college identifiers and per-college pending save or remove actions in UUID-scoped local-storage keys. This supports offline retry and never stores email, tokens, or profile fields. Signing out hides but does not erase that recovery copy; clear this site&#x27;s browser data to remove every local copy on a shared browser profile.</p></div></li><li><span><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hard-drive" aria-hidden="true"><path d="M10 16h.01"></path><path d="M2.212 11.577a2 2 0 0 0-.212.896V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5.527a2 2 0 0 0-.212-.896L18.55 5.11A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path><path d="M21.946 12.013H2.054"></path><path d="M6 16h.01"></path></svg></span><div><strong>Research notes and checklists stay in this browser.</strong><p>Each college notebook is stored locally, separately for guests and verified accounts. Notes do not sync or upload when you sign in. Removing a college from your shortlist keeps its notebook; clear the notes and checklist and save to erase the contents, or clear this site&#x27;s browser data to remove all local notebooks. Export research downloads a CSV containing your saved notes, checklist, student-assigned list categories, college metrics, and source links. Reach, target, and likely labels are your own planning notes, not generated predictions.</p></div></li><li><span><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-database" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5V19A9 3 0 0 0 21 19V5"></path><path d="M3 12A9 3 0 0 0 21 12"></path></svg></span><div><strong>Your optional application profile stays local.</strong><p>Find my fit can keep the GPA, grading context, course notes, activities, and priorities you choose to enter in this browser. This optional profile is separate for guests and verified accounts. It does not sync, enter shared links, or go to an AI provider. Use Clear profile to remove it. A review brief is downloaded only when you request it.</p><p>Search and matching preferences are included in the page URL so you can return to or share the same choices. Anyone with that link can see those preferences. The application profile does not change preference scores. The app does not request transcripts, financial-aid records, or demographic profiles.</p></div></li></ul></section><section class="methodology-section methodology-limitations" aria-labelledby="services-heading"><div class="page-section-heading"><div><span class="page-section-index">02</span><h2 id="services-heading">Services and limits</h2></div></div><ul><li>This codebase does not include an advertising or behavioral analytics SDK. A production hosting provider may still keep standard request and security logs under its own terms.</li><li>Opening an official college or source link sends you to that organization&#x27;s website, where its privacy policy applies.</li><li>Self-service account deletion is not active yet. Account-synced college identifiers use ownership-based row security, but deleting an account still requires the deployment operator until a tested self-service path ships.</li><li>This note describes the current repository build. A public launch needs an operator contact, effective date, retention schedule, and deployment-specific provider list.</li></ul></section><aside class="methodology-integrity-note"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg><div><strong>Want to clear your local list?</strong><p>Open Saved and remove the colleges you no longer want retained.</p></div><a href="/saved" class="page-primary-action">Review saved colleges</a></aside></main><footer class="site-footer"><div class="footer-brand-block"><a href="/" class="brand footer-brand"><span class="brand-mark" aria-hidden="true"><img src="/favicon.svg" alt="" width="38" height="38" loading="lazy" decoding="async" data-nimg="1"/></span><span class="brand-wordmark">CollegeSearch<small>Your college field guide.</small></span></a><p>Explore your options. Make a list. Take the next step.</p></div><div class="footer-links"><a href="/explore">Explore colleges</a><a href="/majors">Explore fields</a><a href="/match">Build a match list</a><a href="/chances">Read admit-rate context</a><a href="/saved">Saved colleges</a><a href="/methodology">Methodology</a><a href="/data-sources">Data sources</a><a href="/data-health">Data health</a><a href="/privacy">Privacy</a><a href="https://collegescorecard.ed.gov/data/" target="_blank" rel="noreferrer">College Scorecard<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link" aria-hidden="true"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a></div><p class="footer-disclaimer">Admissions context is educational, never a guarantee. Verify current programs and policies with each institution. College marks identify schools and do not imply university endorsement.</p></footer></div><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">$RB=[];$RV=function(a){$RT=performance.now();for(var b=0;b<a.length;b+=2){var c=a[b],e=a[b+1];null!==e.parentNode&&e.parentNode.removeChild(e);var f=c.parentNode;if(f){var g=c.previousSibling,h=0;do{if(c&&8===c.nodeType){var d=c.data;if("/$"===d||"/&"===d)if(0===h)break;else h--;else"$"!==d&&"$?"!==d&&"$~"!==d&&"$!"!==d&&"&"!==d||h++}d=c.nextSibling;f.removeChild(c);c=d}while(c);for(;e.firstChild;)f.insertBefore(e.firstChild,c);g.data="$";g._reactRetry&&requestAnimationFrame(g._reactRetry)}}a.length=0};
+    $RC=function(a,b){if(b=document.getElementById(b))(a=document.getElementById(a))?(a.previousSibling.data="$~",$RB.push(a,b),2===$RB.length&&("number"!==typeof $RT?requestAnimationFrame($RV.bind(null,$RB)):(a=performance.now(),setTimeout($RV.bind(null,$RB),2300>a&&2E3<a?2300-a:$RT+300-a)))):b.parentNode.removeChild(b)};$RC("B:0","S:0")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("3:\"$Sreact.suspense\"\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("0:{\"__vinext_streaming_metadata_body:route:/privacy\":\"$L1\",\"__vinext_streaming_metadata_outlet:route:/privacy\":\"$L2\",\"page:/privacy\":[\"$\",\"$3\",\"[\\\"privacy\\\"]\",{\"fallback\":[\"$\",\"main\",null,{\"id\":\"main-content\",\"className\":\"page-shell comparison-page\",\"children\":[\"$\",\"section\",null,{\"className\":\"comparison-empty\",\"aria-live\":\"polite\",\"aria-busy\":\"true\",\"children\":[[\"$\",\"span\",null,{\"className\":\"page-section-index\",\"children\":\"Loading\"}],[\"$\",\"h1\",null,{\"children\":\"Opening the evidence record…\"}],[\"$\",\"p\",null,{\"children\":\"Source labels and reporting periods stay attached while the view loads.\"}]]}]}],\"children\":\"$L4\"}],\"layout:/\":\"$L5\",\"route:/privacy\":\"$L6\",\"__route\":\"route:/privacy\",\"__interceptionContext\":null,\"__layoutIds\":[\"layout:/\"],\"__rootLayout\":\"/\",\"__bfcacheSegmentIdentities\":{\"layout:/\":\"[\\\"layout\\\",\\\"layout:/\\\",\\\"root-boundary:/\\\",\\\"\\\"]\",\"page:/privacy\":\"[\\\"page\\\",\\\"page:/privacy\\\",\\\"root-boundary:/\\\",\\\"[\\\\\\\"privacy\\\\\\\"]\\\"]\"},\"__srcPage\":[\"privacy\",\"page\"],\"__layoutFlags\":{\"layout:/\":\"d\"},\"__artifactCompatibility\":{\"schemaVersion\":1,\"graphVersion\":\"app-route-graph:cafd66b895952518\",\"deploymentVersion\":\"561c42b0-1387-49cf-a745-d2dcb75ec908\",\"appElementsSchemaVersion\":1,\"rscPayloadSchemaVersion\":1,\"rootBoundaryId\":\"/\",\"renderEpoch\":null},\"__dynamicStaleTime\":0}\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("8:I[\"89c3cac48cb5\",[],\"StreamedIconsInsertion\",1]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("a:I[\"593f344dc510\",[],\"GlobalErrorBoundary\",1]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("b:I[\"0b874ad30386\",[],\"default\",1]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("c:I[\"593f344dc510\",[],\"ErrorBoundary\",1]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("d:I[\"15c18cfaeeff\",[],\"LayoutSegmentProvider\",1]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("e:I[\"8c0f216c4604\",[],\"Slot\",1]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("f:I[\"a9bbde40cf2d\",[],\"default\",1]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("10:I[\"593f344dc510\",[],\"NotFoundBoundary\",1]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("11:I[\"205625b5a228\",[],\"SiteHeader\",1]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("12:I[\"339f946bc456\",[],\"default\",1]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("13:I[\"c2747888630f\",[],\"default\",1]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("14:I[\"9fb86276be8f\",[],\"default\",1]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push(":HL[\"/_next/static/css/layout.BQytZRFi.css\",\"style\"     ]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("7:T69f,")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("\u003ctitle\u003ePrivacy | CollegeSearch\u003c/title\u003e\u003cmeta name=\"description\" content=\"What CollegeSearch stores, where it stays, and what is not collected.\"\u003e\u003cmeta name=\"application-name\" content=\"CollegeSearch\"\u003e\u003cmeta name=\"keywords\" content=\"college search,college comparison,admission rates,college majors,College Scorecard\"\u003e\u003cmeta property=\"og:title\" content=\"CollegeSearch — Build a college list you can explain\"\u003e\u003cmeta property=\"og:description\" content=\"Explore colleges with dated official records and a place for your own research.\"\u003e\u003cmeta property=\"og:type\" content=\"website\"\u003e\u003cmeta property=\"og:image\" content=\"http://localhost/og.png\"\u003e\u003cmeta property=\"og:image:width\" content=\"1731\"\u003e\u003cmeta property=\"og:image:height\" content=\"909\"\u003e\u003cmeta property=\"og:image:alt\" content=\"CollegeSearch — Build a college list you can explain.\"\u003e\u003cmeta name=\"twitter:card\" content=\"summary_large_image\"\u003e\u003cmeta name=\"twitter:title\" content=\"CollegeSearch\"\u003e\u003cmeta name=\"twitter:description\" content=\"Evidence for the college list only you can build.\"\u003e\u003cmeta name=\"twitter:image\" content=\"http://localhost/og.png\"\u003e\u003clink data-vinext-streamed-icon=\"/privacy:rz13eh:0\" rel=\"shortcut icon\" href=\"/favicon.svg\"\u003e\u003clink data-vinext-streamed-icon=\"/privacy:rz13eh:1\" rel=\"icon\" href=\"/favicon.svg\" type=\"image/svg+xml\"\u003e\u003cscript nonce=\"53e55ea1f48c4d5a8da19105f7d33c3d\"\u003edocument.querySelectorAll('body link[rel=\"icon\"], body link[rel=\"apple-touch-icon\"]').forEach(el =\u003e document.head.appendChild(el));const a='data-vinext-streamed-icon',o=el=\u003e{cons")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("t m=el.getAttribute(a),i=m.lastIndexOf(':');return Number(m.slice(i+1))};[...document.querySelectorAll('link['+a+']')].sort((l,r)=\u003eo(l)-o(r)).forEach(el=\u003edocument.head.appendChild(el))\u003c/script\u003e")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("1:[[\"$\",\"div\",null,{\"hidden\":true,\"suppressHydrationWarning\":true,\"dangerouslySetInnerHTML\":{\"__html\":\"$7\"}}],[\"$\",\"$L8\",null,{\"metadataKey\":\"/privacy:rz13eh\"}]]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("2:null\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("5:[[[\"$\",\"link\",\"css:/_next/static/css/layout.BQytZRFi.css\",{\"rel\":\"stylesheet\",\"precedence\":\"vite-rsc/importer-resources\",\"href\":\"/_next/static/css/layout.BQytZRFi.css\",\"data-rsc-css-href\":\"/_next/static/css/layout.BQytZRFi.css\"}],\"$undefined\"],\"$L9\"]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("6:[[[\"$\",\"meta\",null,{\"charSet\":\"utf-8\"}],null,[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]],[\"$\",\"$La\",null,{\"fallback\":\"$b\",\"children\":[\"$\",\"$Lc\",null,{\"fallback\":\"$b\",\"children\":[\"$\",\"$Ld\",null,{\"providerId\":\"layout:/\",\"segmentMap\":{\"children\":[\"privacy\"]},\"children\":[\"$\",\"$Le\",null,{\"id\":\"layout:/\",\"parallelSlots\":\"$undefined\",\"children\":[\"$\",\"$Lc\",null,{\"resetKey\":\"privacy\",\"fallback\":\"$f\",\"children\":[\"$\",\"$L10\",null,{\"resetKey\":\"privacy\",\"fallback\":[[\"$\",\"$L11\",null,{}],[\"$\",\"main\",null,{\"id\":\"main-content\",\"className\":\"page-shell comparison-page\",\"children\":[\"$\",\"section\",null,{\"className\":\"comparison-empty\",\"children\":[[\"$\",\"$L12\",null,{\"ref\":\"$undefined\",\"iconNode\":[[\"circle\",{\"cx\":\"12\",\"cy\":\"12\",\"r\":\"10\",\"key\":\"1mglay\"}],[\"path\",{\"d\":\"m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z\",\"key\":\"9ktpf1\"}]],\"className\":\"lucide-compass\",\"size\":31,\"aria-hidden\":\"true\"}],[\"$\",\"span\",null,{\"className\":\"page-section-index\",\"children\":\"404\"}],[\"$\",\"h1\",null,{\"children\":\"That record is not in this edition.\"}],[\"$\",\"p\",null,{\"children\":\"The page may have moved, or the college is not part of the current reviewed cohort.\"}],[\"$\",\"$L13\",null,{\"className\":\"page-primary-action\",\"href\":\"/explore\",\"children\":[\"Explore the current cohort\",[\"$\",\"$L12\",null,{\"ref\":\"$undefined\",\"iconNode\":[[\"path\",{\"d\":\"M5 12h14\",\"key\":\"1ays0h\"}],[\"path\",{\"d\":\"m12 5 7 7-7 7\",\"key\":\"xquz4c\"}]],\"className\":\"lucide-arrow-right\",\"size\":16,\"aria-hidden\":\"true\"}]]}]]}]}],[\"$\",\"footer\",null,{\"className\":\"site-footer\",\"children\":[[\"$\",\"div\",null,{\"className\":\"footer-brand-block\",\"children\":[[\"$\",\"$L13\",null,{\"className\":\"brand footer-brand\",\"href\":\"/\",\"children\":[[\"$\",\"span\",null,{\"className\":\"brand-mark\",\"aria-hidden\":\"true\",\"children\":[\"$\",\"$L14\",null,{\"unoptimized\":true,\"src\":\"/favicon.svg\",\"width\":38,\"height\":38,\"alt\":\"\"}]}],[\"$\",\"span\",null,{\"className\":\"brand-wordmark\",\"children\":[\"CollegeSearch\",[\"$\",\"small\",null,{\"children\":\"Your college field guide.\"}]]}]]}],[\"$\",\"p\",null,{\"children\":\"Explore your options. Make a list. Take the next step.\"}]]}],[\"$\",\"div\",null,{\"className\":\"footer-links\",\"children\":[[\"$\",\"$L13\",null,{\"href\":\"/explore\",\"children\":\"Explore colleges\"}],[\"$\",\"$L13\",null,{\"href\":\"/majors\",\"children\":\"Explore fields\"}],[\"$\",\"$L13\",null,{\"href\":\"/match\",\"children\":\"Build a match list\"}],[\"$\",\"$L13\",null,{\"href\":\"/chances\",\"children\":\"Read admit-rate context\"}],[\"$\",\"$L13\",null,{\"href\":\"/saved\",\"children\":\"Saved colleges\"}],[\"$\",\"$L13\",null,{\"href\":\"/methodology\",\"children\":\"Methodology\"}],[\"$\",\"$L13\",null,{\"href\":\"/data-sources\",\"children\":\"Data sources\"}],[\"$\",\"$L13\",null,{\"href\":\"/data-health\",\"children\":\"Data health\"}],[\"$\",\"$L13\",null,{\"href\":\"/privacy\",\"children\":\"Privacy\"}],[\"$\",\"a\",null,{\"href\":\"https://collegescorecard.ed.gov/data/\",\"target\":\"_blank\",\"rel\":\"noreferrer\",\"children\":[\"College Scorecard\",[\"$\",\"$L12\",null,{\"ref\":\"$undefined\",\"iconNode\":[[\"path\",{\"d\":\"M15 3h6v6\",\"key\":\"1q9fwt\"}],[\"path\",{\"d\":\"M10 14 21 3\",\"key\":\"gplh6r\"}],[\"path\",{\"d\":\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\",\"key\":\"a6xqqp\"}]],\"className\":\"lucide-external-link\",\"size\":13,\"aria-hidden\":\"true\"}]]}]]}],[\"$\",\"p\",null,{\"className\":\"footer-disclaimer\",\"children\":\"Admissions context is educational, never a guarantee. Verify current programs and policies with each institution. College marks identify schools and do not imply university endorsement.\"}]]}]],\"children\":[\"$\",\"$3\",\"privacy\",{\"fallback\":[\"$\",\"main\",null,{\"id\":\"main-content\",\"className\":\"page-shell comparison-page\",\"children\":[\"$\",\"section\",null,{\"className\":\"comparison-empty\",\"aria-live\":\"polite\",\"aria-busy\":\"true\",\"children\":[[\"$\",\"span\",null,{\"className\":\"page-section-index\",\"children\":\"Loading\"}],[\"$\",\"h1\",null,{\"children\":\"Opening the evidence record…\"}],[\"$\",\"p\",null,{\"children\":\"Source labels and reporting periods stay attached while the view loads.\"}]]}]}],\"children\":[\"$\",\"$L10\",null,{\"resetKey\":\"[\\\"privacy\\\"]\",\"fallback\":[[\"$\",\"$L11\",null,{}],[\"$\",\"main\",null,{\"id\":\"main-content\",\"className\":\"page-shell comparison-page\",\"children\":[\"$\",\"section\",null,{\"className\":\"comparison-empty\",\"children\":[[\"$\",\"$L12\",null,{\"ref\":\"$undefined\",\"iconNode\":\"$6:1:props:children:props:children:props:children:props:children:props:children:props:fallback:1:props:children:props:children:0:props:iconNode\",\"className\":\"lucide-compass\",\"size\":31,\"aria-hidden\":\"true\"}],[\"$\",\"span\",null,{\"className\":\"page-section-index\",\"children\":\"404\"}],[\"$\",\"h1\",null,{\"children\":\"That record is not in this edition.\"}],[\"$\",\"p\",null,{\"children\":\"The page may have moved, or the college is not part of the current reviewed cohort.\"}],[\"$\",\"$L13\",null,{\"className\":\"page-primary-action\",\"href\":\"/explore\",\"children\":[\"Explore the current cohort\",[\"$\",\"$L12\",null,{\"ref\":\"$undefined\",\"iconNode\":\"$6:1:props:children:props:children:props:children:props:children:props:children:props:fallback:1:props:children:props:children:4:props:children:1:props:iconNode\",\"className\":\"lucide-arrow-right\",\"size\":16,\"aria-hidden\":\"true\"}]]}]]}]}],[\"$\",\"footer\",null,{\"className\":\"site-footer\",\"children\":[\"$L15\",\"$L16\",\"$L17\"]}]],\"children\":\"$L18\"}]}]}]}]}]}]}]}],null,\"$L19\"]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("1a:I[\"9276801271d6\",[],\"AppRouterScrollTarget\",1]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("1b:I[\"593f344dc510\",[],\"RedirectBoundary\",1]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("15:[\"$\",\"div\",null,{\"className\":\"footer-brand-block\",\"children\":[[\"$\",\"$L13\",null,{\"className\":\"brand footer-brand\",\"href\":\"/\",\"children\":[[\"$\",\"span\",null,{\"className\":\"brand-mark\",\"aria-hidden\":\"true\",\"children\":[\"$\",\"$L14\",null,{\"unoptimized\":true,\"src\":\"/favicon.svg\",\"width\":38,\"height\":38,\"alt\":\"\"}]}],[\"$\",\"span\",null,{\"className\":\"brand-wordmark\",\"children\":[\"CollegeSearch\",[\"$\",\"small\",null,{\"children\":\"Your college field guide.\"}]]}]]}],[\"$\",\"p\",null,{\"children\":\"Explore your options. Make a list. Take the next step.\"}]]}]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("16:[\"$\",\"div\",null,{\"className\":\"footer-links\",\"children\":[[\"$\",\"$L13\",null,{\"href\":\"/explore\",\"children\":\"Explore colleges\"}],[\"$\",\"$L13\",null,{\"href\":\"/majors\",\"children\":\"Explore fields\"}],[\"$\",\"$L13\",null,{\"href\":\"/match\",\"children\":\"Build a match list\"}],[\"$\",\"$L13\",null,{\"href\":\"/chances\",\"children\":\"Read admit-rate context\"}],[\"$\",\"$L13\",null,{\"href\":\"/saved\",\"children\":\"Saved colleges\"}],[\"$\",\"$L13\",null,{\"href\":\"/methodology\",\"children\":\"Methodology\"}],[\"$\",\"$L13\",null,{\"href\":\"/data-sources\",\"children\":\"Data sources\"}],[\"$\",\"$L13\",null,{\"href\":\"/data-health\",\"children\":\"Data health\"}],[\"$\",\"$L13\",null,{\"href\":\"/privacy\",\"children\":\"Privacy\"}],[\"$\",\"a\",null,{\"href\":\"https://collegescorecard.ed.gov/data/\",\"target\":\"_blank\",\"rel\":\"noreferrer\",\"children\":[\"College Scorecard\",[\"$\",\"$L12\",null,{\"ref\":\"$undefined\",\"iconNode\":\"$6:1:props:children:props:children:props:children:props:children:props:children:props:fallback:2:props:children:1:props:children:9:props:children:1:props:iconNode\",\"className\":\"lucide-external-link\",\"size\":13,\"aria-hidden\":\"true\"}]]}]]}]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("17:[\"$\",\"p\",null,{\"className\":\"footer-disclaimer\",\"children\":\"Admissions context is educational, never a guarantee. Verify current programs and policies with each institution. College marks identify schools and do not imply university endorsement.\"}]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("18:[\"$\",\"$L1a\",null,{\"children\":[\"$\",\"$L1b\",null,{\"children\":[[\"$\",\"$Ld\",null,{\"providerId\":\"page:/privacy\",\"segmentMap\":{\"children\":[\"__PAGE__\"]},\"children\":[\"$\",\"$Le\",null,{\"id\":\"page:/privacy\"}]}],[\"$\",\"$3\",null,{\"fallback\":null,\"children\":[\"$\",\"$Le\",null,{\"id\":\"__vinext_streaming_metadata_outlet:route:/privacy\"}]}]]}]}]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("19:[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$3\",null,{\"fallback\":null,\"children\":[\"$\",\"$Le\",null,{\"id\":\"__vinext_streaming_metadata_body:route:/privacy\"}]}]}]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("4:[[\"$\",\"$L11\",null,{}],[\"$\",\"main\",null,{\"id\":\"main-content\",\"className\":\"page-shell methodology-page\",\"children\":[[\"$\",\"nav\",null,{\"className\":\"page-breadcrumbs\",\"aria-label\":\"Breadcrumb\",\"children\":[[\"$\",\"$L13\",null,{\"href\":\"/\",\"children\":\"CollegeSearch\"}],[\"$\",\"span\",null,{\"aria-hidden\":\"true\",\"children\":\"/\"}],[\"$\",\"span\",null,{\"aria-current\":\"page\",\"children\":\"Privacy\"}]]}],[\"$\",\"header\",null,{\"className\":\"methodology-masthead\",\"children\":[[\"$\",\"div\",null,{\"children\":[[\"$\",\"span\",null,{\"className\":\"page-eyebrow\",\"children\":[[\"$\",\"$L12\",null,{\"ref\":\"$undefined\",\"iconNode\":[[\"path\",{\"d\":\"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z\",\"key\":\"oel41y\"}],[\"path\",{\"d\":\"m9 12 2 2 4-4\",\"key\":\"dzmm74\"}]],\"className\":\"lucide-shield-check\",\"size\":15,\"aria-hidden\":\"true\"}],\"Plain-language privacy note\"]}],[\"$\",\"h1\",null,{\"children\":\"Your college list is yours.\"}]]}],[\"$\",\"p\",null,{\"children\":\"CollegeSearch keeps browser-only saves separate from account data. When account services are configured and you sign in, new account saves can sync; existing browser saves require an explicit import.\"}]]}],[\"$\",\"section\",null,{\"className\":\"methodology-section\",\"aria-labelledby\":\"stored-heading\",\"children\":[[\"$\",\"div\",null,{\"className\":\"page-section-heading\",\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"span\",null,{\"className\":\"page-section-index\",\"children\":\"01\"}],[\"$\",\"h2\",null,{\"id\":\"stored-heading\",\"children\":\"What is stored today\"}]]}]}],[\"$\",\"ul\",null,{\"className\":\"methodology-rule-list\",\"children\":[[\"$\",\"li\",null,{\"children\":[[\"$\",\"span\",null,{\"children\":[\"$\",\"$L12\",null,{\"ref\":\"$undefined\",\"iconNode\":[[\"path\",{\"d\":\"M10 16h.01\",\"key\":\"1bzywj\"}],[\"path\",{\"d\":\"M2.212 11.577a2 2 0 0 0-.212.896V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5.527a2 2 0 0 0-.212-.896L18.55 5.11A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z\",\"key\":\"18tbho\"}],[\"path\",{\"d\":\"M21.946 12.013H2.054\",\"key\":\"zqlbp7\"}],[\"path\",{\"d\":\"M6 16h.01\",\"key\":\"1pmjb7\"}]],\"className\":\"lucide-hard-drive\",\"size\":19,\"aria-hidden\":\"true\"}]}],[\"$\",\"div\",null,{\"children\":[[\"$\",\"strong\",null,{\"children\":\"Browser-only saves stay separate.\"}],[\"$\",\"p\",null,{\"children\":[\"College identifiers are stored in browser local storage under\",[\"$\",\"code\",null,{\"children\":\" college-search-saved\"}],\". Remove individual saves on the Saved page or clear this site's browser data to erase them. Signing in does not upload this guest list automatically.\"]}]]}]]}],[\"$\",\"li\",null,{\"children\":[[\"$\",\"span\",null,{\"children\":[\"$\",\"$L12\",null,{\"ref\":\"$undefined\",\"iconNode\":[[\"path\",{\"d\":\"M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z\",\"key\":\"1s6t7t\"}],[\"circle\",{\"cx\":\"16.5\",\"cy\":\"7.5\",\"r\":\".5\",\"fill\":\"currentColor\",\"key\":\"w0ekpg\"}]],\"className\":\"lucide-key-round\",\"size\":19,\"aria-hidden\":\"true\"}]}],[\"$\",\"div\",null,{\"children\":[[\"$\",\"strong\",null,{\"children\":\"Account data exists only when authentication is configured.\"}],[\"$\",\"p\",null,{\"children\":\"If a deployment enables Supabase and you sign up, Supabase processes your email, password credential or Google identity, authentication session, and college identifiers you save to your account. Ownership rules restrict each account to its own rows. CollegeSearch never places a privileged Supabase service key in the browser.\"}]]}]]}],[\"$\",\"li\",null,{\"children\":[[\"$\",\"span\",null,{\"children\":[\"$\",\"$L12\",null,{\"ref\":\"$undefined\",\"iconNode\":\"$4:1:props:children:2:props:children:1:props:children:0:props:children:0:props:children:props:iconNode\",\"className\":\"lucide-hard-drive\",\"size\":19,\"aria-hidden\":\"true\"}]}],[\"$\",\"div\",null,{\"children\":[[\"$\",\"strong\",null,{\"children\":\"Signed-in lists also keep a browser recovery copy.\"}],[\"$\",\"p\",null,{\"children\":\"CollegeSearch stores each verified account's college identifiers and per-college pending save or remove actions in UUID-scoped local-storage keys. This supports offline retry and never stores email, tokens, or profile fields. Signing out hides but does not erase that recovery copy; clear this site's browser data to remove every local copy on a shared browser profile.\"}]]}]]}],[\"$\",\"li\",null,{\"children\":[[\"$\",\"span\",null,{\"children\":\"$L1c\"}],\"$L1d\"]}],\"$L1e\"]}]]}],\"$L1f\",\"$L20\"]}],\"$L21\"]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("1c:[\"$\",\"$L12\",null,{\"ref\":\"$undefined\",\"iconNode\":\"$4:1:props:children:2:props:children:1:props:children:0:props:children:0:props:children:props:iconNode\",\"className\":\"lucide-hard-drive\",\"size\":19,\"aria-hidden\":\"true\"}]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("1d:[\"$\",\"div\",null,{\"children\":[[\"$\",\"strong\",null,{\"children\":\"Research notes and checklists stay in this browser.\"}],[\"$\",\"p\",null,{\"children\":\"Each college notebook is stored locally, separately for guests and verified accounts. Notes do not sync or upload when you sign in. Removing a college from your shortlist keeps its notebook; clear the notes and checklist and save to erase the contents, or clear this site's browser data to remove all local notebooks. Export research downloads a CSV containing your saved notes, checklist, student-assigned list categories, college metrics, and source links. Reach, target, and likely labels are your own planning notes, not generated predictions.\"}]]}]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("1e:[\"$\",\"li\",null,{\"children\":[[\"$\",\"span\",null,{\"children\":[\"$\",\"$L12\",null,{\"ref\":\"$undefined\",\"iconNode\":[[\"ellipse\",{\"cx\":\"12\",\"cy\":\"5\",\"rx\":\"9\",\"ry\":\"3\",\"key\":\"msslwz\"}],[\"path\",{\"d\":\"M3 5V19A9 3 0 0 0 21 19V5\",\"key\":\"1wlel7\"}],[\"path\",{\"d\":\"M3 12A9 3 0 0 0 21 12\",\"key\":\"mv7ke4\"}]],\"className\":\"lucide-database\",\"size\":19,\"aria-hidden\":\"true\"}]}],[\"$\",\"div\",null,{\"children\":[[\"$\",\"strong\",null,{\"children\":\"Your optional application profile stays local.\"}],[\"$\",\"p\",null,{\"children\":\"Find my fit can keep the GPA, grading context, course notes, activities, and priorities you choose to enter in this browser. This optional profile is separate for guests and verified accounts. It does not sync, enter shared links, or go to an AI provider. Use Clear profile to remove it. A review brief is downloaded only when you request it.\"}],[\"$\",\"p\",null,{\"children\":\"Search and matching preferences are included in the page URL so you can return to or share the same choices. Anyone with that link can see those preferences. The application profile does not change preference scores. The app does not request transcripts, financial-aid records, or demographic profiles.\"}]]}]]}]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("1f:[\"$\",\"section\",null,{\"className\":\"methodology-section methodology-limitations\",\"aria-labelledby\":\"services-heading\",\"children\":[[\"$\",\"div\",null,{\"className\":\"page-section-heading\",\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"span\",null,{\"className\":\"page-section-index\",\"children\":\"02\"}],[\"$\",\"h2\",null,{\"id\":\"services-heading\",\"children\":\"Services and limits\"}]]}]}],[\"$\",\"ul\",null,{\"children\":[[\"$\",\"li\",null,{\"children\":\"This codebase does not include an advertising or behavioral analytics SDK. A production hosting provider may still keep standard request and security logs under its own terms.\"}],[\"$\",\"li\",null,{\"children\":\"Opening an official college or source link sends you to that organization's website, where its privacy policy applies.\"}],[\"$\",\"li\",null,{\"children\":\"Self-service account deletion is not active yet. Account-synced college identifiers use ownership-based row security, but deleting an account still requires the deployment operator until a tested self-service path ships.\"}],[\"$\",\"li\",null,{\"children\":\"This note describes the current repository build. A public launch needs an operator contact, effective date, retention schedule, and deployment-specific provider list.\"}]]}]]}]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("20:[\"$\",\"aside\",null,{\"className\":\"methodology-integrity-note\",\"children\":[[\"$\",\"$L12\",null,{\"ref\":\"$undefined\",\"iconNode\":\"$4:1:props:children:1:props:children:0:props:children:0:props:children:0:props:iconNode\",\"className\":\"lucide-shield-check\",\"size\":22,\"aria-hidden\":\"true\"}],[\"$\",\"div\",null,{\"children\":[[\"$\",\"strong\",null,{\"children\":\"Want to clear your local list?\"}],[\"$\",\"p\",null,{\"children\":\"Open Saved and remove the colleges you no longer want retained.\"}]]}],[\"$\",\"$L13\",null,{\"className\":\"page-primary-action\",\"href\":\"/saved\",\"children\":\"Review saved colleges\"}]]}]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("21:[\"$\",\"footer\",null,{\"className\":\"site-footer\",\"children\":[[\"$\",\"div\",null,{\"className\":\"footer-brand-block\",\"children\":[[\"$\",\"$L13\",null,{\"className\":\"brand footer-brand\",\"href\":\"/\",\"children\":[[\"$\",\"span\",null,{\"className\":\"brand-mark\",\"aria-hidden\":\"true\",\"children\":[\"$\",\"$L14\",null,{\"unoptimized\":true,\"src\":\"/favicon.svg\",\"width\":38,\"height\":38,\"alt\":\"\"}]}],[\"$\",\"span\",null,{\"className\":\"brand-wordmark\",\"children\":[\"CollegeSearch\",[\"$\",\"small\",null,{\"children\":\"Your college field guide.\"}]]}]]}],[\"$\",\"p\",null,{\"children\":\"Explore your options. Make a list. Take the next step.\"}]]}],[\"$\",\"div\",null,{\"className\":\"footer-links\",\"children\":[[\"$\",\"$L13\",null,{\"href\":\"/explore\",\"children\":\"Explore colleges\"}],[\"$\",\"$L13\",null,{\"href\":\"/majors\",\"children\":\"Explore fields\"}],[\"$\",\"$L13\",null,{\"href\":\"/match\",\"children\":\"Build a match list\"}],[\"$\",\"$L13\",null,{\"href\":\"/chances\",\"children\":\"Read admit-rate context\"}],[\"$\",\"$L13\",null,{\"href\":\"/saved\",\"children\":\"Saved colleges\"}],[\"$\",\"$L13\",null,{\"href\":\"/methodology\",\"children\":\"Methodology\"}],[\"$\",\"$L13\",null,{\"href\":\"/data-sources\",\"children\":\"Data sources\"}],[\"$\",\"$L13\",null,{\"href\":\"/data-health\",\"children\":\"Data health\"}],[\"$\",\"$L13\",null,{\"href\":\"/privacy\",\"children\":\"Privacy\"}],[\"$\",\"a\",null,{\"href\":\"https://collegescorecard.ed.gov/data/\",\"target\":\"_blank\",\"rel\":\"noreferrer\",\"children\":[\"College Scorecard\",[\"$\",\"$L12\",null,{\"ref\":\"$undefined\",\"iconNode\":\"$6:1:props:children:props:children:props:children:props:children:props:children:props:fallback:2:props:children:1:props:children:9:props:children:1:props:iconNode\",\"className\":\"lucide-external-link\",\"size\":13,\"aria-hidden\":\"true\"}]]}]]}],[\"$\",\"p\",null,{\"className\":\"footer-disclaimer\",\"children\":\"Admissions context is educational, never a guarantee. Verify current programs and policies with each institution. College marks identify schools and do not imply university endorsement.\"}]]}]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("22:I[\"9f8e69af32ba\",[],\"Providers\",1]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("23:I[\"8c0f216c4604\",[],\"Children\",1]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).rsc.push("9:[\"$\",\"html\",null,{\"lang\":\"en\",\"children\":[[\"$\",\"head\",null,{\"children\":[\"$\",\"meta\",null,{\"property\":\"csp-nonce\",\"nonce\":\"53e55ea1f48c4d5a8da19105f7d33c3d\"}]}],[\"$\",\"body\",null,{\"className\":\"__variable_geist_19ysh9d __variable_geist_mono_1001rt9 __variable_newsreader_0f45o04\",\"children\":[\"$\",\"$L22\",null,{\"knownCollegeIds\":[104151,110404,110422,110529,110556,110565,110583,110592,110608,110617,111948,190150,198419,139755,166027,117946,166683,193900,147767,204796,209542,121345,186131,243780,122409,122755,122931,243744,228778,104179,110635,110644,110653,110662,445188,110671,110680,110705,110714,145637,166629,170976,199120,122612,123961,234076,236948,240444,236939,130794],\"children\":[\"$\",\"$L23\",null,{}]}]}]]}]\n")</script><script nonce="53e55ea1f48c4d5a8da19105f7d33c3d">Object.assign(((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}),{"initialCacheKind":"dynamic","dynamicStaleTimeSeconds":0});((self[Symbol.for("vinext.navigationRuntime")]??={bootstrap:{routeManifest:null},functions:{}}).bootstrap.rsc??={rsc:[]}).done=true</script></body></html>
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///Volumes/Seagate%20/CollegeSearch/tests/rendered-html.test.mjs:503:14)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: comparison field form preserves colleges and renders the selected broad field
+ok 117 - comparison field form preserves colleges and renders the selected broad field
+  ---
+  duration_ms: 24.242833
+  type: 'test'
+  ...
+# Subtest: the source ledger renders one action per unique source URL
+ok 118 - the source ledger renders one action per unique source URL
+  ---
+  duration_ms: 27.964291
+  type: 'test'
+  ...
+# Subtest: the published cohort has complete, source-registered observations
+ok 119 - the published cohort has complete, source-registered observations
+  ---
+  duration_ms: 3.346041
+  type: 'test'
+  ...
+# Subtest: all nine UC headlines use Fall 2026 snapshots without mixing Fall 2025 yield
+ok 120 - all nine UC headlines use Fall 2026 snapshots without mixing Fall 2025 yield
+  ---
+  duration_ms: 3.962042
+  type: 'test'
+  ...
+# Subtest: ASU uses its latest official campus-immersion record and keeps the federal alternate
+ok 121 - ASU uses its latest official campus-immersion record and keeps the federal alternate
+  ---
+  duration_ms: 2.371917
+  type: 'test'
+  ...
+# Subtest: Stanford and MIT use reviewed current Common Data Set records
+ok 122 - Stanford and MIT use reviewed current Common Data Set records
+  ---
+  duration_ms: 2.189583
+  type: 'test'
+  ...
+# Subtest: CSV cells preserve user punctuation while neutralizing spreadsheet formulas
+ok 123 - CSV cells preserve user punctuation while neutralizing spreadsheet formulas
+  ---
+  duration_ms: 0.355917
+  type: 'test'
+  ...
+# Subtest: research exports retain missing states, exact periods, sources and notes
+ok 124 - research exports retain missing states, exact periods, sources and notes
+  ---
+  duration_ms: 0.180375
+  type: 'test'
+  ...
+# Subtest: every real projected college exports without profile-only fields
+ok 125 - every real projected college exports without profile-only fields
+  ---
+  duration_ms: 4.755375
+  type: 'test'
+  ...
+# Subtest: student list roles preserve legacy notebooks and never accept inferred rating fields
+ok 126 - student list roles preserve legacy notebooks and never accept inferred rating fields
+  ---
+  duration_ms: 0.721209
+  type: 'test'
+  ...
+# Subtest: notebook records remain separate by college and verified account scope
+ok 127 - notebook records remain separate by college and verified account scope
+  ---
+  duration_ms: 0.240209
+  type: 'test'
+  ...
+# Subtest: loading, unverified, malformed, and unsafe college scopes never read or write storage
+ok 128 - loading, unverified, malformed, and unsafe college scopes never read or write storage
+  ---
+  duration_ms: 0.066459
+  type: 'test'
+  ...
+# Subtest: parser rejects corrupt or unsupported data and projects known fields only
+ok 129 - parser rejects corrupt or unsupported data and projects known fields only
+  ---
+  duration_ms: 0.144833
+  type: 'test'
+  ...
+# Subtest: missing notes are empty, malformed notes preserve a revision for explicit replacement
+ok 130 - missing notes are empty, malformed notes preserve a revision for explicit replacement
+  ---
+  duration_ms: 0.066792
+  type: 'test'
+  ...
+# Subtest: a stale notebook save cannot replace a copy that changed after it was loaded
+ok 131 - a stale notebook save cannot replace a copy that changed after it was loaded
+  ---
+  duration_ms: 0.044125
+  type: 'test'
+  ...
+# Subtest: unavailable and quota-limited storage fail visibly without claiming persistence
+ok 132 - unavailable and quota-limited storage fail visibly without claiming persistence
+  ---
+  duration_ms: 0.061542
+  type: 'test'
+  ...
+# Subtest: invalid writes leave the existing stored research intact
+ok 133 - invalid writes leave the existing stored research intact
+  ---
+  duration_ms: 0.048916
+  type: 'test'
+  ...
+# Subtest: checklist order does not create false dirty states and empty records do not share arrays
+ok 134 - checklist order does not create false dirty states and empty records do not share arrays
+  ---
+  duration_ms: 0.18825
+  type: 'test'
+  ...
+# Subtest: transient verification preserves an account's editor key and resumes only that scope
+ok 135 - transient verification preserves an account's editor key and resumes only that scope
+  ---
+  duration_ms: 0.227084
+  type: 'test'
+  ...
+# Subtest: a different verified account replaces the hidden editor before its list hydrates
+ok 136 - a different verified account replaces the hidden editor before its list hydrates
+  ---
+  duration_ms: 0.390584
+  type: 'test'
+  ...
+# Subtest: sign-out discards the account editor and subsequent loading retains only guest research
+ok 137 - sign-out discards the account editor and subsequent loading retains only guest research
+  ---
+  duration_ms: 0.036833
+  type: 'test'
+  ...
+# Subtest: server and initial loading render no editor, while readiness failures disable retained editors
+ok 138 - server and initial loading render no editor, while readiness failures disable retained editors
+  ---
+  duration_ms: 0.0395
+  type: 'test'
+  ...
+# Subtest: saved-card snapshots preserve item references during same-account re-verification
+ok 139 - saved-card snapshots preserve item references during same-account re-verification
+  ---
+  duration_ms: 0.034833
+  type: 'test'
+  ...
+# Subtest: a newly verified account clears old cards immediately, without waiting for hydration
+ok 140 - a newly verified account clears old cards immediately, without waiting for hydration
+  ---
+  duration_ms: 0.027666
+  type: 'test'
+  ...
+# Subtest: hydrated changes replace retained cards, including a genuinely empty saved list
+ok 141 - hydrated changes replace retained cards, including a genuinely empty saved list
+  ---
+  duration_ms: 0.023833
+  type: 'test'
+  ...
+# Subtest: every published profile, broad field, and internal app link resolves
+ok 142 - every published profile, broad field, and internal app link resolves
+  ---
+  duration_ms: 5456.7885
+  type: 'test'
+  ...
+# Subtest: two tabs serialize the same unit and preserve the newer intent
+ok 143 - two tabs serialize the same unit and preserve the newer intent
+  ---
+  duration_ms: 1.230875
+  type: 'test'
+  ...
+# Subtest: an invalid outbox stops before every network and cache operation
+ok 144 - an invalid outbox stops before every network and cache operation
+  ---
+  duration_ms: 0.27875
+  type: 'test'
+  ...
+# Subtest: cache and acknowledgement failures retain exact pending records
+    # Subtest: cache failure retains the pending record
+    ok 1 - cache failure retains the pending record
+      ---
+      duration_ms: 0.52275
+      type: 'test'
+      ...
+    # Subtest: ack failure retains the pending record
+    ok 2 - ack failure retains the pending record
+      ---
+      duration_ms: 0.145791
+      type: 'test'
+      ...
+    1..2
+ok 145 - cache and acknowledgement failures retain exact pending records
+  ---
+  duration_ms: 0.792917
+  type: 'test'
+  ...
+# Subtest: a no-op authoritative read still persists the complete account cache
+ok 146 - a no-op authoritative read still persists the complete account cache
+  ---
+  duration_ms: 0.097333
+  type: 'test'
+  ...
+# Subtest: account lock names are canonical and reject unverified identifiers
+ok 147 - account lock names are canonical and reject unverified identifiers
+  ---
+  duration_ms: 0.510792
+  type: 'test'
+  ...
+# Subtest: same-account work is serialized across concurrent callers
+ok 148 - same-account work is serialized across concurrent callers
+  ---
+  duration_ms: 0.324375
+  type: 'test'
+  ...
+# Subtest: remote mutation is rejected when the browser has no lock manager
+ok 149 - remote mutation is rejected when the browser has no lock manager
+  ---
+  duration_ms: 0.091
+  type: 'test'
+  ...
+# Subtest: guest saves, user caches, and user outboxes remain isolated by key
+ok 150 - guest saves, user caches, and user outboxes remain isolated by key
+  ---
+  duration_ms: 0.860375
+  type: 'test'
+  ...
+# Subtest: guest reads preserve the legacy College Compass save key
+ok 151 - guest reads preserve the legacy College Compass save key
+  ---
+  duration_ms: 0.106
+  type: 'test'
+  ...
+# Subtest: account cache reports missing, valid-empty, valid, corrupt, and unavailable separately
+ok 152 - account cache reports missing, valid-empty, valid, corrupt, and unavailable separately
+  ---
+  duration_ms: 0.077583
+  type: 'test'
+  ...
+# Subtest: scoped storage rejects empty, malformed, nil, and non-RFC UUIDs
+ok 153 - scoped storage rejects empty, malformed, nil, and non-RFC UUIDs
+  ---
+  duration_ms: 0.225208
+  type: 'test'
+  ...
+# Subtest: storage read, write, and remove failures are reported without throwing
+ok 154 - storage read, write, and remove failures are reported without throwing
+  ---
+  duration_ms: 0.090417
+  type: 'test'
+  ...
+# Subtest: the outbox keeps only the latest valid intent for each known college
+ok 155 - the outbox keeps only the latest valid intent for each known college
+  ---
+  duration_ms: 0.1235
+  type: 'test'
+  ...
+# Subtest: outbox reads distinguish missing, corrupt, and unavailable records
+ok 156 - outbox reads distinguish missing, corrupt, and unavailable records
+  ---
+  duration_ms: 0.067917
+  type: 'test'
+  ...
+# Subtest: different tabs cannot overwrite pending intentions for other colleges
+ok 157 - different tabs cannot overwrite pending intentions for other colleges
+  ---
+  duration_ms: 0.0575
+  type: 'test'
+  ...
+# Subtest: acknowledgement never clears a newer same-college intention
+ok 158 - acknowledgement never clears a newer same-college intention
+  ---
+  duration_ms: 0.229709
+  type: 'test'
+  ...
+# Subtest: acknowledgement reports corrupt records without deleting them
+ok 159 - acknowledgement reports corrupt records without deleting them
+  ---
+  duration_ms: 0.2125
+  type: 'test'
+  ...
+# Subtest: a pending mutation is synchronously durable before its writer returns
+ok 160 - a pending mutation is synchronously durable before its writer returns
+  ---
+  duration_ms: 0.3535
+  type: 'test'
+  ...
+# Subtest: an offline remove remains a tombstone over a stale account cache
+ok 161 - an offline remove remains a tombstone over a stale account cache
+  ---
+  duration_ms: 0.04525
+  type: 'test'
+  ...
+# Subtest: mutation sanitization keeps the last intent and drops unknown colleges
+ok 162 - mutation sanitization keeps the last intent and drops unknown colleges
+  ---
+  duration_ms: 0.557542
+  type: 'test'
+  ...
+# Subtest: remote state is authoritative before local actions are applied
+ok 163 - remote state is authoritative before local actions are applied
+  ---
+  duration_ms: 0.267083
+  type: 'test'
+  ...
+# Subtest: duplicate add/remove actions collapse into idempotent final operations
+ok 164 - duplicate add/remove actions collapse into idempotent final operations
+  ---
+  duration_ms: 0.097417
+  type: 'test'
+  ...
+# Subtest: sync rejects a non-UUID owner before any remote request
+ok 165 - sync rejects a non-UUID owner before any remote request
+  ---
+  duration_ms: 0.183083
+  type: 'test'
+  ...
+# Subtest: save-remove-save during an in-flight save preserves the final save
+ok 166 - save-remove-save during an in-flight save preserves the final save
+  ---
+  duration_ms: 0.231875
+  type: 'test'
+  ...
+# Subtest: a failed remote write retains the local intent for a safe retry
+ok 167 - a failed remote write retains the local intent for a safe retry
+  ---
+  duration_ms: 0.135708
+  type: 'test'
+  ...
+# Subtest: enqueue starts no network work, allowing the outbox to persist before flush
+ok 168 - enqueue starts no network work, allowing the outbox to persist before flush
+  ---
+  duration_ms: 0.144
+  type: 'test'
+  ...
+# Subtest: a failed commit acknowledgement retains the operation for idempotent retry
+ok 169 - a failed commit acknowledgement retains the operation for idempotent retry
+  ---
+  duration_ms: 0.553
+  type: 'test'
+  ...
+# Subtest: a partial save-then-remove failure retries the complete idempotent batch
+ok 170 - a partial save-then-remove failure retries the complete idempotent batch
+  ---
+  duration_ms: 0.335333
+  type: 'test'
+  ...
+# Subtest: account A is hidden through every loading and account-B transition frame
+ok 171 - account A is hidden through every loading and account-B transition frame
+  ---
+  duration_ms: 0.646292
+  type: 'test'
+  ...
+# Subtest: a valid account cache is complete but an outbox by itself is not
+ok 172 - a valid account cache is complete but an outbox by itself is not
+  ---
+  duration_ms: 0.092958
+  type: 'test'
+  ...
+# Subtest: a failed remote read without a complete base is unavailable, not empty
+ok 173 - a failed remote read without a complete base is unavailable, not empty
+  ---
+  duration_ms: 0.096583
+  type: 'test'
+  ...
+# Subtest: cached offline data remains labeled cached rather than synced
+ok 174 - cached offline data remains labeled cached rather than synced
+  ---
+  duration_ms: 0.043541
+  type: 'test'
+  ...
+# Subtest: a previously confirmed remote base stays visible during a retry
+ok 175 - a previously confirmed remote base stays visible during a retry
+  ---
+  duration_ms: 0.084834
+  type: 'test'
+  ...
+# Subtest: guest import is enabled only for a current, confirmed remote account view
+ok 176 - guest import is enabled only for a current, confirmed remote account view
+  ---
+  duration_ms: 0.061166
+  type: 'test'
+  ...
+# Subtest: only canonical verified UUIDs can define an account storage scope
+ok 177 - only canonical verified UUIDs can define an account storage scope
+  ---
+  duration_ms: 0.071417
+  type: 'test'
+  ...
+# Subtest: comparison selections never cross saved-list account scopes
+ok 178 - comparison selections never cross saved-list account scopes
+  ---
+  duration_ms: 0.707792
+  type: 'test'
+  ...
+# Subtest: comparison selections retain only colleges still saved in the same scope
+ok 179 - comparison selections retain only colleges still saved in the same scope
+  ---
+  duration_ms: 0.07625
+  type: 'test'
+  ...
+# Subtest: Supabase CSP origins are reduced to a safe public origin
+ok 180 - Supabase CSP origins are reduced to a safe public origin
+  ---
+  duration_ms: 0.369583
+  type: 'test'
+  ...
+# Subtest: Supabase CSP origins reject header injection and non-origin URLs
+ok 181 - Supabase CSP origins reject header injection and non-origin URLs
+  ---
+  duration_ms: 0.208958
+  type: 'test'
+  ...
+# Subtest: production CSP is strict for scripts and scoped for optional auth
+ok 182 - production CSP is strict for scripts and scoped for optional auth
+  ---
+  duration_ms: 0.251542
+  type: 'test'
+  ...
+# Subtest: development CSP permits only the extra runtime transports it needs
+ok 183 - development CSP permits only the extra runtime transports it needs
+  ---
+  duration_ms: 0.107959
+  type: 'test'
+  ...
+# Subtest: CSP refuses a fixed-shape injection value as a nonce
+ok 184 - CSP refuses a fixed-shape injection value as a nonce
+  ---
+  duration_ms: 0.091
+  type: 'test'
+  ...
+# Subtest: public Supabase config accepts publishable and legacy anon keys
+ok 185 - public Supabase config accepts publishable and legacy anon keys
+  ---
+  duration_ms: 3.003666
+  type: 'test'
+  ...
+# Subtest: public Supabase config rejects privileged keys before a browser client can exist
+ok 186 - public Supabase config rejects privileged keys before a browser client can exist
+  ---
+  duration_ms: 0.200583
+  type: 'test'
+  ...
+# Subtest: malformed or missing public settings fail closed
+ok 187 - malformed or missing public settings fail closed
+  ---
+  duration_ms: 0.117459
+  type: 'test'
+  ...
+# Subtest: saved_colleges has a constrained user-owned identity
+ok 188 - saved_colleges has a constrained user-owned identity
+  ---
+  duration_ms: 130.017083
+  type: 'test'
+  ...
+# Subtest: saved_colleges exposes only the required authenticated operations
+ok 189 - saved_colleges exposes only the required authenticated operations
+  ---
+  duration_ms: 0.621625
+  type: 'test'
+  ...
+# Subtest: saved_colleges RLS has separate owner-only policies
+ok 190 - saved_colleges RLS has separate owner-only policies
+  ---
+  duration_ms: 0.656417
+  type: 'test'
+  ...
+# Subtest: saved_colleges migration stays free of privileged database code
+ok 191 - saved_colleges migration stays free of privileged database code
+  ---
+  duration_ms: 0.36725
+  type: 'test'
+  ...
+# Subtest: local Supabase config disables anonymous Auth users
+ok 192 - local Supabase config disables anonymous Auth users
+  ---
+  duration_ms: 59.675709
+  type: 'test'
+  ...
+# Subtest: listOwned selects only unit IDs and applies the exact owner filter
+ok 193 - listOwned selects only unit IDs and applies the exact owner filter
+  ---
+  duration_ms: 0.655625
+  type: 'test'
+  ...
+# Subtest: upsertOwned sends explicit owners and uses conflict-safe duplicate ignoring
+ok 194 - upsertOwned sends explicit owners and uses conflict-safe duplicate ignoring
+  ---
+  duration_ms: 0.113125
+  type: 'test'
+  ...
+# Subtest: removeOwned applies both the owner and unit filters before execution
+ok 195 - removeOwned applies both the owner and unit filters before execution
+  ---
+  duration_ms: 0.066833
+  type: 'test'
+  ...
+# Subtest: empty mutations do not issue Supabase requests
+ok 196 - empty mutations do not issue Supabase requests
+  ---
+  duration_ms: 0.040291
+  type: 'test'
+  ...
+# Subtest: Supabase adapter errors are surfaced without leaking query details
+ok 197 - Supabase adapter errors are surfaced without leaking query details
+  ---
+  duration_ms: 0.150958
+  type: 'test'
+  ...
+# Subtest: the adapter rejects a caller whose UUID differs from its bound token owner
+ok 198 - the adapter rejects a caller whose UUID differs from its bound token owner
+  ---
+  duration_ms: 0.106625
+  type: 'test'
+  ...
+# Subtest: a verified identity and matching local token are captured together
+ok 199 - a verified identity and matching local token are captured together
+  ---
+  duration_ms: 0.663417
+  type: 'test'
+  ...
+# Subtest: a shared-client account switch fails before a token can be bound
+ok 200 - a shared-client account switch fails before a token can be bound
+  ---
+  duration_ms: 0.225375
+  type: 'test'
+  ...
+# Subtest: malformed expected identities fail before Auth is read
+ok 201 - malformed expected identities fail before Auth is read
+  ---
+  duration_ms: 0.113209
+  type: 'test'
+  ...
+# Subtest: accepts a bounded XLSX workbook with the required OOXML entries
+ok 202 - accepts a bounded XLSX workbook with the required OOXML entries
+  ---
+  duration_ms: 8.712542
+  type: 'test'
+  ...
+# Subtest: rejects an arbitrary ZIP that is not an XLSX workbook
+ok 203 - rejects an arbitrary ZIP that is not an XLSX workbook
+  ---
+  duration_ms: 0.188667
+  type: 'test'
+  ...
+# Subtest: rejects a workbook served with an unapproved MIME type
+ok 204 - rejects a workbook served with an unapproved MIME type
+  ---
+  duration_ms: 0.427625
+  type: 'test'
+  ...
+# Subtest: rejects a redirect host before making the redirected request
+ok 205 - rejects a redirect host before making the redirected request
+  ---
+  duration_ms: 0.456542
+  type: 'test'
+  ...
+# Subtest: independently downloads and fingerprint-checks every source in a multi-artifact overlay
+ok 206 - independently downloads and fingerprint-checks every source in a multi-artifact overlay
+  ---
+  duration_ms: 4.79425
+  type: 'test'
+  ...
+# Subtest: records every source failure and preserves the last approved evidence before rejecting
+ok 207 - records every source failure and preserves the last approved evidence before rejecting
+  ---
+  duration_ms: 1.864042
+  type: 'test'
+  ...
+# Subtest: an invalid manifest produces a schema failure report without fetching or approving sources
+ok 208 - an invalid manifest produces a schema failure report without fetching or approving sources
+  ---
+  duration_ms: 1.199125
+  type: 'test'
+  ...
+1..208
+# tests 210
+# suites 0
+# pass 206
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8438.361625

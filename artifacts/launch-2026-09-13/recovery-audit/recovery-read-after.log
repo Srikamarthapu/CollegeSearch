@@ -1,0 +1,80 @@
+TAP version 13
+# {"component":"applicant profile","fault":"read-failure","status":"unavailable","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical"]}
+# {"component":"applicant profile","fault":"malformed-shared-copy","status":"invalid","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical"]}
+# {"component":"applicant profile","fault":"journal-removal-failure","status":"unavailable","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# {"component":"applicant profile","fault":"valid-shared-copy","status":"ready","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# {"component":"applicant profile","fault":"absent-shared-copy","status":"ready","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# {"component":"deadline planner","fault":"read-failure","status":"unavailable","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical"]}
+# {"component":"deadline planner","fault":"malformed-shared-copy","status":"invalid","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical"]}
+# {"component":"deadline planner","fault":"journal-removal-failure","status":"unavailable","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# {"component":"deadline planner","fault":"valid-shared-copy","status":"ready","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# {"component":"deadline planner","fault":"absent-shared-copy","status":"ready","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# Subtest: applicant profile: recovery read-failure
+ok 1 - applicant profile: recovery read-failure
+  ---
+  duration_ms: 1.007917
+  type: 'test'
+  ...
+# Subtest: applicant profile: recovery malformed-shared-copy
+ok 2 - applicant profile: recovery malformed-shared-copy
+  ---
+  duration_ms: 0.158458
+  type: 'test'
+  ...
+# Subtest: applicant profile: recovery journal-removal-failure
+ok 3 - applicant profile: recovery journal-removal-failure
+  ---
+  duration_ms: 0.086708
+  type: 'test'
+  ...
+# Subtest: applicant profile: recovery valid-shared-copy
+ok 4 - applicant profile: recovery valid-shared-copy
+  ---
+  duration_ms: 0.123958
+  type: 'test'
+  ...
+# Subtest: applicant profile: recovery absent-shared-copy
+ok 5 - applicant profile: recovery absent-shared-copy
+  ---
+  duration_ms: 0.059042
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery read-failure
+ok 6 - deadline planner: recovery read-failure
+  ---
+  duration_ms: 0.391958
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery malformed-shared-copy
+ok 7 - deadline planner: recovery malformed-shared-copy
+  ---
+  duration_ms: 0.133541
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery journal-removal-failure
+ok 8 - deadline planner: recovery journal-removal-failure
+  ---
+  duration_ms: 0.148459
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery valid-shared-copy
+ok 9 - deadline planner: recovery valid-shared-copy
+  ---
+  duration_ms: 0.369792
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery absent-shared-copy
+ok 10 - deadline planner: recovery absent-shared-copy
+  ---
+  duration_ms: 0.227709
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 80.842375

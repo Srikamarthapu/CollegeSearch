@@ -1,4 +1,9 @@
 import rawDataset from "@/data/colleges.json";
+import tuitionDataset from "@/data/college-tuition.json";
+import costOverrides from "@/data/college-cost-overrides.json";
+import { assertCollegeCosts, type CollegeCosts } from "./college-costs";
+import { assertCollegeEvidence } from "./college-evidence";
+import type { CollegeCatalogCategory } from "./catalog-categories";
 
 export type ObservationStatus =
   | "reported"
@@ -32,6 +37,8 @@ export type MajorEvidence = {
   name: string;
   share: number;
   bachelorsAvailable: boolean;
+  associatesAvailable?: boolean;
+  degreeLevel?: "bachelors" | "associate" | "bachelors-and-associate";
   evidence: string;
   reportingYear: number;
   periodLabel: string;
@@ -40,7 +47,7 @@ export type MajorEvidence = {
   sourceField: string;
   cohort: string;
   definition: string;
-  deliveryMode?: "campus-or-mixed" | "exclusively-distance";
+  deliveryMode?: "delivery-not-specified" | "includes-distance-program";
 };
 
 export type CollegeObservations = {
@@ -58,12 +65,19 @@ export type CollegeObservations = {
 };
 
 export type College = {
+  costs: CollegeCosts;
+  catalogCategory: CollegeCatalogCategory;
+  inclusionReason: string;
   unitId: number;
   opeId: string;
   opeId6: string;
   mainCampus: boolean;
   branchCount: number;
   currentlyOperating: boolean;
+  institutionLevel: "Four-year" | "Two-year";
+  highestDegree: number;
+  predominantDegree: number;
+  undergraduateOffering: boolean;
   slug: string;
   name: string;
   aliases: string[];
@@ -99,7 +113,7 @@ export type SourceRelease = {
   artifactUrl?: string;
   artifactSha256?: string;
   artifactHashMode?: "raw" | "html-without-volatile-assets-and-edge-challenge";
-  artifactKind?: "html" | "pdf";
+  artifactKind?: "html" | "pdf" | "xlsx";
   review?: {
     status: "approved";
     reviewedOn: string;
@@ -218,8 +232,10 @@ function validateDataset(value: unknown): CollegeDataset {
     if (
       !college.opeId ||
       !college.opeId6 ||
-      !college.mainCampus ||
+      typeof college.mainCampus !== "boolean" ||
       !college.currentlyOperating ||
+      !college.undergraduateOffering ||
+      !["Four-year", "Two-year"].includes(college.institutionLevel ?? "") ||
       !Number.isInteger(college.branchCount) ||
       college.branchCount < 1
     ) {
@@ -244,7 +260,7 @@ function validateDataset(value: unknown): CollegeDataset {
           !Number.isFinite(major.share) ||
           major.share < 0 ||
           major.share > 1 ||
-          major.bachelorsAvailable !== true,
+          (major.bachelorsAvailable !== true && major.associatesAvailable !== true),
       )
     ) {
       throw new Error(`${college.name} has invalid major evidence.`);
@@ -265,89 +281,43 @@ function validateDataset(value: unknown): CollegeDataset {
     }
   }
 
+  assertCollegeEvidence(dataset as CollegeDataset);
   return dataset as CollegeDataset;
 }
 
 export const collegeDataset = validateDataset(rawDataset);
-export const colleges = collegeDataset.colleges;
+const tuitionById = new Map(tuitionDataset.colleges.map((row) => [row.unitId, row]));
+const costOverridesById = new Map(costOverrides.colleges.map((row) => [row.unitId, row]));
+if (tuitionById.size !== tuitionDataset.colleges.length || tuitionById.size !== collegeDataset.colleges.length || costOverridesById.size !== costOverrides.colleges.length) {
+  throw new Error("Tuition evidence has duplicate or incomplete catalog identities.");
+}
+export const colleges = collegeDataset.colleges.map((college): College => {
+  const row = tuitionById.get(college.unitId);
+  if (!row) throw new Error(`${college.name}: missing tuition evidence record.`);
+  const costs = (costOverridesById.get(college.unitId)?.costs ?? {
+    tuitionInState: row.tuition.inState,
+    tuitionOutOfState: row.tuition.outOfState,
+    feesInState: row.fees.inState,
+    feesOutOfState: row.fees.outOfState,
+    feeBasis: "required",
+  }) as CollegeCosts;
+  assertCollegeCosts(costs, college.name);
+  return { ...college, costs };
+});
 export const release = collegeDataset.release;
 
-export const currencyFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  maximumFractionDigits: 0,
-});
-
-export const numberFormatter = new Intl.NumberFormat("en-US");
-
-export const percentFormatter = new Intl.NumberFormat("en-US", {
-  style: "percent",
-  maximumFractionDigits: 1,
-});
-
-export function formatObservation(observation: Observation) {
-  if (observation.value === null) return "Not reported";
-  if (observation.unit === "ratio") {
-    return percentFormatter.format(observation.value);
-  }
-  if (observation.unit === "usd") {
-    return currencyFormatter.format(observation.value);
-  }
-  return numberFormatter.format(observation.value);
-}
-
-export function observationSourceKind(observation: Observation) {
-  if (observation.sourceId.startsWith("uc-")) {
-    return { label: "UC official", className: "uc-source", isFederal: false };
-  }
-  if (observation.publisher === "U.S. Department of Education") {
-    return {
-      label: "Federal baseline",
-      className: "federal-source",
-      isFederal: true,
-    };
-  }
-  return {
-    label: "College official",
-    className: "official-source",
-    isFederal: false,
-  };
-}
-
-export function compactName(college: College) {
-  return (
-    college.aliases.find((alias) => alias.startsWith("UC ")) ||
-    college.aliases[0] ||
-    college.name
-  );
-}
-
-export function initials(name: string) {
-  return name
-    .replace("University of ", "")
-    .replace("California State University", "CSU")
-    .split(/[\s-]+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((word) => word[0])
-    .join("");
-}
-
-export function isUniversityOfCalifornia(college: College) {
-  return college.observations.admitRate.sourceId.startsWith("uc-");
-}
-
-export function selectivityLabel(rate: number | null) {
-  if (rate === null) return "Insufficient data";
-  if (rate <= 0.1) return "10% or fewer admitted";
-  if (rate <= 0.25) return "11%–25% admitted";
-  if (rate <= 0.5) return "26%–50% admitted";
-  return "More than 50% admitted";
-}
-
-export function majorEvidenceFor(college: College, major: string) {
-  return college.majors.find((item) => item.name === major) ?? null;
-}
+export {
+  compactName,
+  currencyFormatter,
+  formatObservation,
+  initials,
+  isUniversityOfCalifornia,
+  majorEvidenceFor,
+  numberFormatter,
+  observationSourceKind,
+  percentFormatter,
+  selectivityLabel,
+} from "./college-record-presentation";
 
 export function collegeBySlug(slug: string) {
   return colleges.find((college) => college.slug === slug) ?? null;

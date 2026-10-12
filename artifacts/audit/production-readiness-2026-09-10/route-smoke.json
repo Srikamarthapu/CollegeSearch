@@ -1,0 +1,450 @@
+[
+  {
+    "path": "/compare",
+    "status": 200,
+    "title": "CollegeSearch",
+    "bytes": 36827,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/saved",
+    "status": 200,
+    "title": "Saved colleges | CollegeSearch",
+    "bytes": 155079,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/explore",
+    "status": 200,
+    "title": "CollegeSearch",
+    "bytes": 271187,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/",
+    "status": 200,
+    "title": "CollegeSearch",
+    "bytes": 273048,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/majors",
+    "status": 200,
+    "title": "Broad fields of study · CollegeSearch",
+    "bytes": 60237,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/chances",
+    "status": 200,
+    "title": "Admit-rate context · CollegeSearch",
+    "bytes": 79423,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/match",
+    "status": 200,
+    "title": "Preference match · CollegeSearch",
+    "bytes": 144876,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/data-sources",
+    "status": 200,
+    "title": "Data sources · CollegeSearch",
+    "bytes": 284006,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/account",
+    "status": 200,
+    "title": "Account | CollegeSearch",
+    "bytes": 32646,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/methodology",
+    "status": 200,
+    "title": "Methodology · CollegeSearch",
+    "bytes": 54085,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/privacy",
+    "status": 200,
+    "title": "Privacy | CollegeSearch",
+    "bytes": 49570,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/data-health",
+    "status": 200,
+    "title": "Data health | CollegeSearch",
+    "bytes": 101261,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/california-state-polytechnic-university-pomona",
+    "status": 200,
+    "title": "Cal Poly Pomona evidence profile · CollegeSearch",
+    "bytes": 91767,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/california-institute-of-technology",
+    "status": 200,
+    "title": "Caltech evidence profile · CollegeSearch",
+    "bytes": 88727,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/arizona-state-university-campus-immersion",
+    "status": 200,
+    "title": "ASU evidence profile · CollegeSearch",
+    "bytes": 101084,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/california-polytechnic-state-university-san-luis-obispo",
+    "status": 200,
+    "title": "Cal Poly evidence profile · CollegeSearch",
+    "bytes": 105528,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/california-state-university-fresno",
+    "status": 200,
+    "title": "Fresno State evidence profile · CollegeSearch",
+    "bytes": 91509,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/california-state-university-fullerton",
+    "status": 200,
+    "title": "Cal State Fullerton evidence profile · CollegeSearch",
+    "bytes": 91676,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/california-state-university-long-beach",
+    "status": 200,
+    "title": "Cal State Long Beach evidence profile · CollegeSearch",
+    "bytes": 91611,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/california-state-university-los-angeles",
+    "status": 200,
+    "title": "Cal State LA evidence profile · CollegeSearch",
+    "bytes": 91619,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/california-state-university-sacramento",
+    "status": 200,
+    "title": "Sac State evidence profile · CollegeSearch",
+    "bytes": 91563,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/california-state-university-northridge",
+    "status": 200,
+    "title": "Cal State Northridge evidence profile · CollegeSearch",
+    "bytes": 91611,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/columbia-university-in-the-city-of-new-york",
+    "status": 200,
+    "title": "Columbia evidence profile · CollegeSearch",
+    "bytes": 90452,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/chapman-university",
+    "status": 200,
+    "title": "Chapman evidence profile · CollegeSearch",
+    "bytes": 101685,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/duke-university",
+    "status": 200,
+    "title": "Duke evidence profile · CollegeSearch",
+    "bytes": 92420,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/harvard-university",
+    "status": 200,
+    "title": "Harvard evidence profile · CollegeSearch",
+    "bytes": 102391,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/georgia-institute-of-technology-main-campus",
+    "status": 200,
+    "title": "Georgia Tech evidence profile · CollegeSearch",
+    "bytes": 98228,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/loyola-marymount-university",
+    "status": 200,
+    "title": "LMU evidence profile · CollegeSearch",
+    "bytes": 101287,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/ohio-state-university-main-campus",
+    "status": 200,
+    "title": "Ohio State evidence profile · CollegeSearch",
+    "bytes": 91451,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/massachusetts-institute-of-technology",
+    "status": 200,
+    "title": "MIT evidence profile · CollegeSearch",
+    "bytes": 98598,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/new-york-university",
+    "status": 200,
+    "title": "NYU evidence profile · CollegeSearch",
+    "bytes": 105289,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/northwestern-university",
+    "status": 200,
+    "title": "Northwestern evidence profile · CollegeSearch",
+    "bytes": 92033,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/pomona-college",
+    "status": 200,
+    "title": "Pomona evidence profile · CollegeSearch",
+    "bytes": 89220,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/purdue-university-main-campus",
+    "status": 200,
+    "title": "Purdue evidence profile · CollegeSearch",
+    "bytes": 91347,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/oregon-state-university",
+    "status": 200,
+    "title": "Oregon State evidence profile · CollegeSearch",
+    "bytes": 91967,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/princeton-university",
+    "status": 200,
+    "title": "Princeton evidence profile · CollegeSearch",
+    "bytes": 98483,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/san-jose-state-university",
+    "status": 200,
+    "title": "San Jose State evidence profile · CollegeSearch",
+    "bytes": 91332,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/stanford-university",
+    "status": 200,
+    "title": "Stanford evidence profile · CollegeSearch",
+    "bytes": 97637,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/santa-clara-university",
+    "status": 200,
+    "title": "Santa Clara evidence profile · CollegeSearch",
+    "bytes": 102671,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/san-diego-state-university",
+    "status": 200,
+    "title": "San Diego State evidence profile · CollegeSearch",
+    "bytes": 103611,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-california-davis",
+    "status": 200,
+    "title": "UC Davis evidence profile · CollegeSearch",
+    "bytes": 101716,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/the-university-of-texas-at-austin",
+    "status": 200,
+    "title": "UT Austin evidence profile · CollegeSearch",
+    "bytes": 104014,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-california-berkeley",
+    "status": 200,
+    "title": "UC Berkeley evidence profile · CollegeSearch",
+    "bytes": 101833,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-arizona",
+    "status": 200,
+    "title": "University of Arizona evidence profile · CollegeSearch",
+    "bytes": 91315,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-california-los-angeles",
+    "status": 200,
+    "title": "UC Los Angeles evidence profile · CollegeSearch",
+    "bytes": 101862,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-california-irvine",
+    "status": 200,
+    "title": "UC Irvine evidence profile · CollegeSearch",
+    "bytes": 101748,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-california-merced",
+    "status": 200,
+    "title": "UC Merced evidence profile · CollegeSearch",
+    "bytes": 100150,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-california-riverside",
+    "status": 200,
+    "title": "UC Riverside evidence profile · CollegeSearch",
+    "bytes": 101096,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-california-san-diego",
+    "status": 200,
+    "title": "UC San Diego evidence profile · CollegeSearch",
+    "bytes": 101889,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-california-santa-barbara",
+    "status": 200,
+    "title": "UC Santa Barbara evidence profile · CollegeSearch",
+    "bytes": 101219,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-illinois-urbana-champaign",
+    "status": 200,
+    "title": "UIUC evidence profile · CollegeSearch",
+    "bytes": 104321,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-california-santa-cruz",
+    "status": 200,
+    "title": "UC Santa Cruz evidence profile · CollegeSearch",
+    "bytes": 101875,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-san-francisco",
+    "status": 200,
+    "title": "USF evidence profile · CollegeSearch",
+    "bytes": 90225,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-north-carolina-at-chapel-hill",
+    "status": 200,
+    "title": "UNC evidence profile · CollegeSearch",
+    "bytes": 104188,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-massachusetts-amherst",
+    "status": 200,
+    "title": "UMass Amherst evidence profile · CollegeSearch",
+    "bytes": 103987,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-michigan-ann-arbor",
+    "status": 200,
+    "title": "Michigan evidence profile · CollegeSearch",
+    "bytes": 102012,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-virginia-main-campus",
+    "status": 200,
+    "title": "UVA evidence profile · CollegeSearch",
+    "bytes": 91534,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-wisconsin-madison",
+    "status": 200,
+    "title": "Wisconsin evidence profile · CollegeSearch",
+    "bytes": 91505,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-southern-california",
+    "status": 200,
+    "title": "USC evidence profile · CollegeSearch",
+    "bytes": 103108,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/university-of-washington-seattle-campus",
+    "status": 200,
+    "title": "UW evidence profile · CollegeSearch",
+    "bytes": 104429,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/majors/nonexistent-audit-field",
+    "status": 404,
+    "title": "CollegeSearch",
+    "bytes": 26319,
+    "expectedStatus": 404
+  },
+  {
+    "path": "/colleges/nonexistent-audit-college",
+    "status": 404,
+    "title": "CollegeSearch",
+    "bytes": 26295,
+    "expectedStatus": 404
+  },
+  {
+    "path": "/colleges/washington-state-university",
+    "status": 200,
+    "title": "Washington State evidence profile · CollegeSearch",
+    "bytes": 91345,
+    "expectedStatus": 200
+  },
+  {
+    "path": "/colleges/yale-university",
+    "status": 200,
+    "title": "Yale University evidence profile · CollegeSearch",
+    "bytes": 90749,
+    "expectedStatus": 200
+  }
+]

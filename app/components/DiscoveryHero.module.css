@@ -1,0 +1,53 @@
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: 28px;
+  width: min(var(--page-width), calc(100% - 64px));
+  margin: 24px auto 28px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--paper-bright);
+}
+
+.intro { min-width: 0; padding: 4px 10px 20px; }
+.eyebrow { margin: 0 0 18px; color: var(--forest); font-size: 11px; font-weight: 700; letter-spacing: .1em; }
+.intro h1 { margin: 0; color: var(--ink); font: 500 clamp(40px, 4.1vw, 60px)/1.06 var(--font-newsreader), Georgia, serif; letter-spacing: -.035em; }
+.intro h1 em { font-style: normal; color: var(--forest); }
+.description { max-width: 440px; margin: 20px 0 0; color: var(--ink-soft); font-size: 16px; line-height: 1.65; }
+.actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 24px; margin-top: 24px; }
+.actions > * { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; gap: 10px; font-size: 14px; font-weight: 600; }
+.actions button { padding: 0 18px; border: 1px solid var(--forest); border-radius: 8px; color: white; background: var(--forest); }
+.actions button:hover { background: var(--forest-raised); }
+.actions a:hover { color: var(--forest); }
+.sources { display: flex; align-items: center; gap: 9px; max-width: 440px; margin-top: 26px; padding-top: 17px; border-top: 1px solid var(--line); color: var(--ink-faint); font-size: 12px; line-height: 1.5; }
+.sources > svg { flex-shrink: 0; color: var(--forest); }
+.sources > svg:last-child { margin-left: auto; }
+.sources strong { font-weight: 600; color: var(--ink-soft); }
+.sources:hover { color: var(--forest); }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
+  .intro h1 { font-size: 42px; }
+  .description { font-size: 15px; }
+  .actions { gap: 10px 16px; }
+  .sources { margin-top: 20px; }
+}
+
+@media (max-width: 700px) {
+  .hero { grid-template-columns: minmax(0, 1fr); width: calc(100% - 36px); gap: 22px; margin: 18px auto 22px; padding: 20px; }
+  .intro { padding: 0; }
+  .intro h1 { font-size: clamp(36px, 8.8vw, 52px); }
+  .eyebrow { margin-bottom: 12px; }
+  .description { margin-top: 14px; max-width: 440px; }
+  .actions { margin-top: 18px; }
+  .sources { margin-top: 18px; padding-top: 13px; font-size: 11px; }
+}
+
+@media (max-width: 360px) {
+  .hero { padding: 16px; }
+  .actions { gap: 8px 14px; }
+  .actions > * { font-size: 13px; gap: 7px; }
+  .actions button { padding: 0 13px; }
+}

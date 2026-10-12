@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "startedAt": "2026-09-13T21:24:38.401Z",
+  "checkedAt": "2026-09-13T21:24:38.422Z",
+  "origin": "http://127.0.0.1:4173",
+  "profile": "smoke",
+  "status": "failed",
+  "checks": [
+    {
+      "path": "/",
+      "ms": 13.2,
+      "httpStatus": null,
+      "setCookiePresent": false,
+      "failures": [
+        "fetch failed"
+      ]
+    },
+    {
+      "path": "/",
+      "ms": 1.1,
+      "httpStatus": null,
+      "setCookiePresent": false,
+      "failures": [
+        "fetch failed"
+      ]
+    },
+    {
+      "path": "/explore",
+      "ms": 0.5,
+      "httpStatus": null,
+      "setCookiePresent": false,
+      "failures": [
+        "fetch failed"
+      ]
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 0.3,
+      "httpStatus": null,
+      "setCookiePresent": false,
+      "failures": [
+        "fetch failed"
+      ]
+    },
+    {
+      "path": "/compare",
+      "ms": 0.3,
+      "httpStatus": null,
+      "setCookiePresent": false,
+      "failures": [
+        "fetch failed"
+      ]
+    },
+    {
+      "path": "/saved",
+      "ms": 0.3,
+      "httpStatus": null,
+      "setCookiePresent": false,
+      "failures": [
+        "fetch failed"
+      ]
+    },
+    {
+      "path": "/match",
+      "ms": 0.3,
+      "httpStatus": null,
+      "setCookiePresent": false,
+      "failures": [
+        "fetch failed"
+      ]
+    },
+    {
+      "path": "/plan",
+      "ms": 0.5,
+      "httpStatus": null,
+      "setCookiePresent": false,
+      "failures": [
+        "fetch failed"
+      ]
+    },
+    {
+      "path": "/account",
+      "ms": 1.2,
+      "httpStatus": null,
+      "setCookiePresent": false,
+      "failures": [
+        "fetch failed"
+      ]
+    },
+    {
+      "path": "/privacy",
+      "ms": 0.6,
+      "httpStatus": null,
+      "setCookiePresent": false,
+      "failures": [
+        "fetch failed"
+      ]
+    },
+    {
+      "path": "/data-health",
+      "ms": 0.4,
+      "httpStatus": null,
+      "setCookiePresent": false,
+      "failures": [
+        "fetch failed"
+      ]
+    },
+    {
+      "path": "/ (nonce pair)",
+      "failures": [
+        "two fresh documents must have distinct CSP nonces"
+      ]
+    },
+    {
+      "path": "/auth/callback",
+      "ms": 0.2,
+      "httpStatus": null,
+      "setCookiePresent": false,
+      "failures": [
+        "fetch failed"
+      ]
+    },
+    {
+      "path": "/auth/recovery-callback",
+      "ms": 0.2,
+      "httpStatus": null,
+      "setCookiePresent": false,
+      "failures": [
+        "fetch failed"
+      ]
+    },
+    {
+      "path": "(home script asset)",
+      "failures": [
+        "same-origin compiled script reference was not found"
+      ]
+    },
+    {
+      "path": "/favicon.svg",
+      "ms": 0.1,
+      "httpStatus": null,
+      "setCookiePresent": false,
+      "failures": [
+        "fetch failed"
+      ]
+    },
+    {
+      "path": "/_vinext/image?url=%2Fberkeley-campus.jpg&w=640&q=75",
+      "ms": 0.1,
+      "httpStatus": null,
+      "setCookiePresent": false,
+      "failures": [
+        "fetch failed"
+      ]
+    }
+  ],
+  "sourceSnapshot": {
+    "state": "unknown"
+  },
+  "freshnessStatus": "needs_review",
+  "scope": "Read-only HTTP probe. No OAuth, emails, database writes, browser interaction, alert delivery, or rollback was performed."
+}

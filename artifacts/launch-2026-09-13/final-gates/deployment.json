@@ -1,0 +1,53 @@
+{
+  "sourceCommit": "07672e6603fe43980fbb5923d9c05fe348a746c1",
+  "version": {
+    "id": "appgprj_6a64f648520081919bb6328932d2ff1c~appgver_be6af339104881918578ab7555ee9d2e",
+    "project_id": "appgprj_6a64f648520081919bb6328932d2ff1c",
+    "version_number": 5,
+    "source": {
+      "commit_sha": "07672e6603fe43980fbb5923d9c05fe348a746c1"
+    },
+    "archive_storage": {
+      "archive_format": "tar",
+      "sediment_file_id": "file_00000000dfbc8230a3ae8d66fea7afcc",
+      "content_hash": "sha256:c3f1eb4597b16dbd6eadbe332e3136f8a01f4d150e0156d58851f5d0decb21a7",
+      "size_bytes": 10127360,
+      "file_count": 355
+    },
+    "screenshot_url": null,
+    "deployment_id": null
+  },
+  "deployment": {
+    "id": "appgdep_6aa70d86e930819181e56743bec5ad4a",
+    "project_id": "appgprj_6a64f648520081919bb6328932d2ff1c",
+    "title": "CollegeSearch",
+    "version_id": "appgprj_6a64f648520081919bb6328932d2ff1c~appgver_be6af339104881918578ab7555ee9d2e",
+    "type": "publish",
+    "status": "succeeded",
+    "url": "https://college-compass-students.kamarthapusri.chatgpt.site",
+    "screenshot_asset_pointer": null,
+    "provider_deployment_id": "kamarthapusri--college-compass-students",
+    "failure_message": null,
+    "env_set_revision": 1,
+    "updated_at": "2026-09-13T20:54:46.563513+00:00"
+  },
+  "privacy": "Owner-only access preserved; anonymous HTTP 401 without application content confirmed.",
+  "ci": {
+    "id": 34782168718,
+    "url": "https://github.com/Srikamarthapu/CollegeSearch/actions/runs/34782168718",
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "browserQA": {
+    "status": "passed",
+    "checks": [
+      "revoked-session pending intent and same-account recovery",
+      "cross-tab sign-out without peer reload",
+      "notebook preview heading/list/Cancel focus",
+      "long textarea native scrolling",
+      "published source recency notice"
+    ],
+    "scope": "Targeted real browser tests on this private deployment; no new full hosted HTTP smoke, capacity or natural-expiry claim."
+  },
+  "disposableAccountCleanup": "passed: exact user absent, zero saved rows; credential manifest removed"
+}

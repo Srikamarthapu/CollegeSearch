@@ -1,0 +1,80 @@
+{
+  "date": "2026-09-10",
+  "local_url": "http://127.0.0.1:4173/",
+  "head": "d46557be9c30198603a8910f1442a09004d35e6a",
+  "branch": "codex/production-foundation",
+  "origin_main": "4519fc12f2eb0e13c68bb56d0fd9d199a5f13559",
+  "uncommitted_redesign": true,
+  "hosted": {
+    "title": "College Compass",
+    "version": 1,
+    "source_sha": "190ccd3d0c4cc5f209c79708284f53957cddb173",
+    "access": "custom, one allowed account, no groups or external visitors",
+    "runtime_env_keys": [],
+    "anonymous_http_status": 401,
+    "current_redesign_deployed": false
+  },
+  "checks": {
+    "build": "pass",
+    "typecheck": "pass",
+    "tests": {
+      "passed": 199,
+      "total": 200,
+      "failure": "privacy content contract"
+    },
+    "lint": "fail: CampusCarousel.tsx22 react-hooks/set-state-in-effect",
+    "offline_data_tests": 28,
+    "live_overlay_artifacts": {
+      "passed": 20,
+      "total": 26
+    },
+    "route_smoke": {
+      "passed": 64,
+      "total": 64
+    },
+    "production_dependency_audit": {
+      "critical": 1,
+      "high": 1,
+      "moderate": 1
+    },
+    "all_dependency_audit": {
+      "critical": 1,
+      "high": 9,
+      "moderate": 1
+    }
+  },
+  "browser": {
+    "engine": "Codex in-app Chromium",
+    "desktop_viewport_request": [
+      1440,
+      1000
+    ],
+    "mobile_viewport_request": [
+      390,
+      844
+    ],
+    "narrow_viewport_request": [
+      320,
+      844
+    ],
+    "narrow_document_client_width": 305,
+    "narrow_document_scroll_width": 324,
+    "narrow_culprit": "sort control and Copy search link button",
+    "console_errors_or_warnings_captured": 0,
+    "draft_loss_reproduced": true,
+    "dirty_export_success_reproduced": true,
+    "explicit_save_reload_persistence": true,
+    "test_saves_and_note_contents_cleared": true,
+    "viewport_override_reset": true
+  },
+  "not_performed": [
+    "deployment",
+    "live account/provider/database mutation",
+    "real two-user hosted RLS",
+    "email/OAuth delivery",
+    "full accessibility certification",
+    "real mobile device testing",
+    "load or performance benchmark",
+    "real concurrent browser-tab notebook race"
+  ]
+}

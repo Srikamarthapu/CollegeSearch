@@ -1,0 +1,222 @@
+TAP version 13
+# {"component":"applicant profile","fault":"read-failure","status":"unavailable","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["remove-draft","read-canonical"]}
+# {"component":"applicant profile","fault":"malformed-shared-copy","status":"invalid","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["remove-draft","read-canonical"]}
+# {"component":"applicant profile","fault":"journal-removal-failure","status":"unavailable","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["remove-draft"]}
+# {"component":"applicant profile","fault":"valid-shared-copy","status":"ready","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["remove-draft","read-canonical"]}
+# {"component":"applicant profile","fault":"absent-shared-copy","status":"ready","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["remove-draft","read-canonical"]}
+# {"component":"deadline planner","fault":"read-failure","status":"unavailable","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["remove-draft","read-canonical"]}
+# {"component":"deadline planner","fault":"malformed-shared-copy","status":"invalid","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["remove-draft","read-canonical"]}
+# {"component":"deadline planner","fault":"journal-removal-failure","status":"unavailable","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["remove-draft"]}
+# {"component":"deadline planner","fault":"valid-shared-copy","status":"ready","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["remove-draft","read-canonical"]}
+# {"component":"deadline planner","fault":"absent-shared-copy","status":"ready","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["remove-draft","read-canonical"]}
+# Subtest: applicant profile: recovery read-failure
+not ok 1 - applicant profile: recovery read-failure
+  ---
+  duration_ms: 1.63
+  type: 'test'
+  location: '/private/tmp/collegesearch-recovery-read.test.mjs:34:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      {
+        canonicalUntouched: true,
+    +   retainedDraft: false,
+    +   retainedJournal: false,
+    -   retainedDraft: true,
+    -   retainedJournal: true,
+        status: 'unavailable'
+      }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    status: 'unavailable'
+    retainedDraft: true
+    retainedJournal: true
+    canonicalUntouched: true
+  actual:
+    status: 'unavailable'
+    retainedDraft: false
+    retainedJournal: false
+    canonicalUntouched: true
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///private/tmp/collegesearch-recovery-read.test.mjs:79:16)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: applicant profile: recovery malformed-shared-copy
+not ok 2 - applicant profile: recovery malformed-shared-copy
+  ---
+  duration_ms: 0.604209
+  type: 'test'
+  location: '/private/tmp/collegesearch-recovery-read.test.mjs:34:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      {
+        canonicalUntouched: true,
+    +   retainedDraft: false,
+    +   retainedJournal: false,
+    -   retainedDraft: true,
+    -   retainedJournal: true,
+        status: 'invalid'
+      }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    status: 'invalid'
+    retainedDraft: true
+    retainedJournal: true
+    canonicalUntouched: true
+  actual:
+    status: 'invalid'
+    retainedDraft: false
+    retainedJournal: false
+    canonicalUntouched: true
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///private/tmp/collegesearch-recovery-read.test.mjs:79:16)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: applicant profile: recovery journal-removal-failure
+ok 3 - applicant profile: recovery journal-removal-failure
+  ---
+  duration_ms: 0.119917
+  type: 'test'
+  ...
+# Subtest: applicant profile: recovery valid-shared-copy
+ok 4 - applicant profile: recovery valid-shared-copy
+  ---
+  duration_ms: 0.141084
+  type: 'test'
+  ...
+# Subtest: applicant profile: recovery absent-shared-copy
+ok 5 - applicant profile: recovery absent-shared-copy
+  ---
+  duration_ms: 0.072958
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery read-failure
+not ok 6 - deadline planner: recovery read-failure
+  ---
+  duration_ms: 0.491083
+  type: 'test'
+  location: '/private/tmp/collegesearch-recovery-read.test.mjs:34:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      {
+        canonicalUntouched: true,
+    +   retainedDraft: false,
+    +   retainedJournal: false,
+    -   retainedDraft: true,
+    -   retainedJournal: true,
+        status: 'unavailable'
+      }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    status: 'unavailable'
+    retainedDraft: true
+    retainedJournal: true
+    canonicalUntouched: true
+  actual:
+    status: 'unavailable'
+    retainedDraft: false
+    retainedJournal: false
+    canonicalUntouched: true
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///private/tmp/collegesearch-recovery-read.test.mjs:79:16)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: deadline planner: recovery malformed-shared-copy
+not ok 7 - deadline planner: recovery malformed-shared-copy
+  ---
+  duration_ms: 0.275042
+  type: 'test'
+  location: '/private/tmp/collegesearch-recovery-read.test.mjs:34:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      {
+        canonicalUntouched: true,
+    +   retainedDraft: false,
+    +   retainedJournal: false,
+    -   retainedDraft: true,
+    -   retainedJournal: true,
+        status: 'invalid'
+      }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    status: 'invalid'
+    retainedDraft: true
+    retainedJournal: true
+    canonicalUntouched: true
+  actual:
+    status: 'invalid'
+    retainedDraft: false
+    retainedJournal: false
+    canonicalUntouched: true
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///private/tmp/collegesearch-recovery-read.test.mjs:79:16)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: deadline planner: recovery journal-removal-failure
+ok 8 - deadline planner: recovery journal-removal-failure
+  ---
+  duration_ms: 0.110625
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery valid-shared-copy
+ok 9 - deadline planner: recovery valid-shared-copy
+  ---
+  duration_ms: 0.341083
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery absent-shared-copy
+ok 10 - deadline planner: recovery absent-shared-copy
+  ---
+  duration_ms: 0.241875
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 6
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 106.484875

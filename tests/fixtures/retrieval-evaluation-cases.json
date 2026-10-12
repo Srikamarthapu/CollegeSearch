@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "releaseId": "sha256:29f7d5e5b891020771ce191ae16d4da8250487a51682ba9763f01cb6ccb64563",
+  "candidateScope": "global-current-release",
+  "cases": [
+    {
+      "id": "berkeley-davis-engineering",
+      "query": "Do UC Berkeley and UC Davis both report bachelor's engineering fields?",
+      "judgment": { "type": "supported", "unitIds": [110635, 110644], "cipCode": "14", "degreeLevel": "bachelors" },
+      "rationale": "Both named institutions have an official broad-field bachelor indicator; the passage locator must identify CIP 14."
+    },
+    {
+      "id": "csulb-engineering-technologies",
+      "query": "Does Cal State Long Beach report a bachelor's field in engineering technologies?",
+      "judgment": { "type": "supported", "unitIds": [110583], "cipCode": "15", "degreeLevel": "bachelors" },
+      "rationale": "Named-campus query with a distinct CIP family from Engineering."
+    },
+    {
+      "id": "appalachian-education",
+      "query": "What broad education field does Appalachian State report?",
+      "judgment": { "type": "supported", "unitIds": [197869], "cipCode": "13", "degreeLevel": "bachelors" },
+      "rationale": "Named institution and source-backed bachelor-level CIP 13 availability."
+    },
+    {
+      "id": "baylor-engineering",
+      "query": "Does Baylor University report an engineering degree field at the bachelor level?",
+      "judgment": { "type": "supported", "unitIds": [223232], "cipCode": "14", "degreeLevel": "bachelors" },
+      "rationale": "Named private nonprofit institution with a canonical CIP 14 bachelor locator."
+    },
+    {
+      "id": "moorpark-associate-computing",
+      "query": "Does Moorpark College report associate-level computing and information sciences?",
+      "judgment": { "type": "supported", "unitIds": [119137], "cipCode": "11", "degreeLevel": "associate" },
+      "rationale": "Named college with a reported associate computing field, judged against the CIP11ASSOC locator."
+    },
+    {
+      "id": "aaniiih-associate-natural-resources",
+      "query": "Is an associate Natural Resources and Conservation field reported for Aaniiih Nakoda College?",
+      "judgment": { "type": "supported", "unitIds": [180203], "cipCode": "03", "degreeLevel": "associate" },
+      "rationale": "Named tribal college query judged against its canonical CIP03ASSOC source locator."
+    },
+    {
+      "id": "california-associate-computing",
+      "query": "Which California colleges report associate-level computing and information sciences fields?",
+      "judgment": { "type": "supported", "states": ["CA"], "cipCode": "11", "degreeLevel": "associate" },
+      "rationale": "Statewide location and field query judged against all matching California records in the canonical roster."
+    },
+    {
+      "id": "north-carolina-education",
+      "query": "Which North Carolina colleges report education degree fields?",
+      "judgment": { "type": "supported", "states": ["NC"], "cipCode": "13" },
+      "rationale": "Statewide query includes either canonical associate or bachelor CIP13 locator."
+    },
+    {
+      "id": "texas-health-professions",
+      "query": "Which Texas colleges report health professions fields of study?",
+      "judgment": { "type": "supported", "states": ["TX"], "cipCode": "51" },
+      "rationale": "State and broad CIP51 field are both represented in the locator-based judgment."
+    },
+    {
+      "id": "montana-natural-resources",
+      "query": "Which Montana colleges report natural resources and conservation fields?",
+      "judgment": { "type": "supported", "states": ["MT"], "cipCode": "03" },
+      "rationale": "Statewide query includes the canonical associate and bachelor CIP03 indicators."
+    },
+    {
+      "id": "oregon-biological-sciences",
+      "query": "Which Oregon colleges report biological and biomedical sciences fields?",
+      "judgment": { "type": "supported", "states": ["OR"], "cipCode": "26" },
+      "rationale": "Location and CIP26 evidence are independently required for relevance."
+    },
+    {
+      "id": "puerto-rico-computing",
+      "query": "Which colleges in Puerto Rico report computing and information sciences?",
+      "judgment": { "type": "supported", "states": ["PR"], "cipCode": "11" },
+      "rationale": "Territory query uses the official location code and exact CIP11 locators."
+    },
+    {
+      "id": "new-york-psychology",
+      "query": "Which New York colleges report psychology degree fields?",
+      "judgment": { "type": "supported", "states": ["NY"], "cipCode": "42" },
+      "rationale": "Statewide query judged against all canonical CIP42 college passages in New York."
+    },
+    {
+      "id": "california-associate-engineering-technology",
+      "query": "Which California colleges report associate fields in engineering technologies?",
+      "judgment": { "type": "supported", "states": ["CA"], "cipCode": "15", "degreeLevel": "associate" },
+      "rationale": "Distinguishes CIP15 associate availability from CIP14 engineering and from bachelor-only records."
+    },
+    {
+      "id": "texas-private-engineering",
+      "query": "Which private nonprofit colleges in Texas report bachelor's engineering fields?",
+      "judgment": { "type": "supported", "states": ["TX"], "ownership": "Private nonprofit", "cipCode": "14", "degreeLevel": "bachelors" },
+      "rationale": "Requires both official ownership category and bachelor CIP14 evidence."
+    },
+    {
+      "id": "california-bachelor-agriculture",
+      "query": "Which California colleges report bachelor's fields in agriculture and related sciences?",
+      "judgment": { "type": "supported", "states": ["CA"], "cipCode": "01", "degreeLevel": "bachelors" },
+      "rationale": "Broad California comparison judged against bachelor CIP01 source locators."
+    },
+    {
+      "id": "great-lakes-associate-business",
+      "query": "Which colleges in Illinois, Indiana, Michigan, Ohio, or Wisconsin report associate business and marketing fields?",
+      "judgment": { "type": "supported", "states": ["IL", "IN", "MI", "OH", "WI"], "cipCode": "52", "degreeLevel": "associate" },
+      "rationale": "Multi-state comparison requires a Great Lakes location and associate CIP52 locator."
+    },
+    {
+      "id": "guam-computing",
+      "query": "Do colleges in Guam report computing and information sciences fields?",
+      "judgment": { "type": "supported", "states": ["GU"], "cipCode": "11" },
+      "rationale": "Territory coverage case judged only where the official roster has a CIP11 field record."
+    },
+    {
+      "id": "personal-admission-odds",
+      "query": "As a California applicant with a 3.4 GPA, what are my personal odds of admission to UC Berkeley for engineering?",
+      "judgment": { "type": "unsupported", "reason": "personal-admission-probability" },
+      "rationale": "Institution-wide historical rates and broad program indicators cannot support a personal admission probability."
+    },
+    {
+      "id": "dorm-safety-campus-vibe",
+      "query": "Which colleges guarantee safe on-campus dorms and the friendliest campus culture?",
+      "judgment": { "type": "unsupported", "reason": "campus-life-and-safety" },
+      "rationale": "The source-bound catalog contains no dorm safety or campus-culture observations."
+    },
+    {
+      "id": "program-and-outcome-guarantees",
+      "query": "Which schools guarantee admission to a specific engineering major and a job after graduation?",
+      "judgment": { "type": "unsupported", "reason": "program-or-outcome-guarantee" },
+      "rationale": "Broad federal program availability, earnings, and institution-wide admissions records do not establish these guarantees."
+    }
+  ]
+}

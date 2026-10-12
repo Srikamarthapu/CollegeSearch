@@ -1,0 +1,70 @@
+TAP version 13
+# Subtest: a failed second freeze cannot release the first deletion's active write fence
+ok 1 - a failed second freeze cannot release the first deletion's active write fence
+  ---
+  duration_ms: 0.357
+  type: 'test'
+  ...
+# Subtest: a captured release is idempotent and cannot clear a later deletion's freeze
+ok 2 - a captured release is idempotent and cannot clear a later deletion's freeze
+  ---
+  duration_ms: 0.054167
+  type: 'test'
+  ...
+# Subtest: a scope-mismatched acquisition never unfreezes another account
+ok 3 - a scope-mismatched acquisition never unfreezes another account
+  ---
+  duration_ms: 0.043
+  type: 'test'
+  ...
+# Subtest: completed and partial cleanup results reach the UI unchanged
+ok 4 - completed and partial cleanup results reach the UI unchanged
+  ---
+  duration_ms: 0.332958
+  type: 'test'
+  ...
+# Subtest: an indefinitely occupied cleanup lock no longer blocks the confirmed-delete result
+ok 5 - an indefinitely occupied cleanup lock no longer blocks the confirmed-delete result
+  ---
+  duration_ms: 7.833667
+  type: 'test'
+  ...
+# Subtest: cleanup failure is still reported as failure, including after a timeout race
+ok 6 - cleanup failure is still reported as failure, including after a timeout race
+  ---
+  duration_ms: 6.569958
+  type: 'test'
+  ...
+# Subtest: deletion uses verified identity and revokes all sessions before deletion
+ok 7 - deletion uses verified identity and revokes all sessions before deletion
+  ---
+  duration_ms: 9.618458
+  type: 'test'
+  ...
+# Subtest: cross-origin, missing confirmation, malformed bearer, and wrong method cannot call Auth
+ok 8 - cross-origin, missing confirmation, malformed bearer, and wrong method cannot call Auth
+  ---
+  duration_ms: 0.88075
+  type: 'test'
+  ...
+# Subtest: a revoked session and provider verification errors fail closed
+ok 9 - a revoked session and provider verification errors fail closed
+  ---
+  duration_ms: 0.624875
+  type: 'test'
+  ...
+# Subtest: failed revocation prevents deletion and failed deletion reports retry after sign-in
+ok 10 - failed revocation prevents deletion and failed deletion reports retry after sign-in
+  ---
+  duration_ms: 0.787541
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 146.941375

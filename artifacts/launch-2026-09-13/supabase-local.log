@@ -1,0 +1,49 @@
+Starting database...
+Initialising schema...
+v2.130.0: Pulling from supabase/realtime
+4f4fb700ef54: Pulling fs layer
+8fc4cf9dd855: Pulling fs layer
+32cc7eba81b7: Pulling fs layer
+14f857dd57ab: Pulling fs layer
+f7270503f2ca: Pulling fs layer
+22d19c76d973: Pulling fs layer
+959fc3eb61da: Pulling fs layer
+7c44b49d6133: Pulling fs layer
+245b0f5688f5: Pulling fs layer
+59f54fbcd984: Pulling fs layer
+27efdc38fdf7: Pulling fs layer
+2f633c67e704: Pulling fs layer
+4f4fb700ef54: Already exists
+4f4fb700ef54: Pull complete
+32cc7eba81b7: Download complete
+22d19c76d973: Download complete
+7c44b49d6133: Download complete
+2f633c67e704: Download complete
+f7270503f2ca: Download complete
+245b0f5688f5: Download complete
+14f857dd57ab: Download complete
+f7116be75d04: Download complete
+8fc4cf9dd855: Download complete
+959fc3eb61da: Download complete
+59f54fbcd984: Download complete
+27efdc38fdf7: Download complete
+59f54fbcd984: Pull complete
+27efdc38fdf7: Pull complete
+32cc7eba81b7: Pull complete
+22d19c76d973: Pull complete
+2f633c67e704: Pull complete
+f7270503f2ca: Pull complete
+245b0f5688f5: Pull complete
+14f857dd57ab: Pull complete
+8fc4cf9dd855: Pull complete
+7c44b49d6133: Pull complete
+959fc3eb61da: Pull complete
+Digest: sha256:002193c9ff840a4946918641901bb6aa9e2036dc9ff7590e2b11e91d1e06bf86
+Status: Downloaded newer image for public.ecr.aws/supabase/realtime:v2.130.0
+public.ecr.aws/supabase/realtime:v2.130.0
+Seeding globals from roles.sql...
+Skipping migration ._20260810042855_create_saved_colleges.sql... (file name must match pattern "<timestamp>_name.sql")
+Skipping migration ._20260913184505_account_session_validation.sql... (file name must match pattern "<timestamp>_name.sql")
+Applying migration 20260810042855_create_saved_colleges.sql...
+Applying migration 20260913184505_account_session_validation.sql...
+{"status": "running", "apiUrl": "http://127.0.0.1:55321", "credentials": "Stored only in ignored work/local-supabase.json"}

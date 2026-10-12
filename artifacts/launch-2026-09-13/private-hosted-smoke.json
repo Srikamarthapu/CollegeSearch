@@ -1,0 +1,123 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "path": "/",
+      "ms": 1407,
+      "httpStatus": 200,
+      "setCookiePresent": true,
+      "failures": []
+    },
+    {
+      "path": "/",
+      "ms": 802.5,
+      "httpStatus": 200,
+      "setCookiePresent": true,
+      "failures": []
+    },
+    {
+      "path": "/explore",
+      "ms": 1909.2,
+      "httpStatus": 200,
+      "setCookiePresent": true,
+      "failures": []
+    },
+    {
+      "path": "/colleges/university-of-california-berkeley",
+      "ms": 542,
+      "httpStatus": 200,
+      "setCookiePresent": true,
+      "failures": []
+    },
+    {
+      "path": "/compare",
+      "ms": 574.5,
+      "httpStatus": 200,
+      "setCookiePresent": true,
+      "failures": []
+    },
+    {
+      "path": "/saved",
+      "ms": 395.9,
+      "httpStatus": 200,
+      "setCookiePresent": true,
+      "failures": []
+    },
+    {
+      "path": "/match",
+      "ms": 519.1,
+      "httpStatus": 200,
+      "setCookiePresent": true,
+      "failures": []
+    },
+    {
+      "path": "/account",
+      "ms": 642.9,
+      "httpStatus": 200,
+      "setCookiePresent": true,
+      "failures": []
+    },
+    {
+      "path": "/privacy",
+      "ms": 678.6,
+      "httpStatus": 200,
+      "setCookiePresent": true,
+      "failures": []
+    },
+    {
+      "path": "/data-health",
+      "ms": 506.5,
+      "httpStatus": 200,
+      "setCookiePresent": true,
+      "failures": []
+    },
+    {
+      "path": "/auth/callback",
+      "ms": 1225.9,
+      "httpStatus": 307,
+      "setCookiePresent": true,
+      "failures": []
+    },
+    {
+      "path": "/auth/recovery-callback",
+      "ms": 1021.8,
+      "httpStatus": 307,
+      "setCookiePresent": true,
+      "failures": []
+    },
+    {
+      "path": "/favicon.svg",
+      "ms": 372.1,
+      "httpStatus": 200,
+      "setCookiePresent": true,
+      "failures": []
+    },
+    {
+      "path": "/_vinext/image?url=%2Fberkeley-campus.jpg&w=640&q=75",
+      "ms": 724.1,
+      "httpStatus": 200,
+      "setCookiePresent": true,
+      "failures": []
+    },
+    {
+      "path": "/_next/static/chunks/rolldown-runtime-B0Z9INg1.js",
+      "ms": 571.9,
+      "httpStatus": 200,
+      "setCookiePresent": true,
+      "failures": []
+    }
+  ],
+  "sourceSnapshot": {
+    "state": "within_window",
+    "checkedAt": "2026-09-13T18:44:26.956Z",
+    "ageHours": 1.02,
+    "passed": 26,
+    "total": 26,
+    "maxAgeHours": 192
+  },
+  "freshnessStatus": "passed",
+  "privateAccessCheck": {
+    "httpStatus": 401,
+    "appVisible": false
+  }
+}

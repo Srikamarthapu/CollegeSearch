@@ -1,0 +1,32 @@
+[
+  {
+    "case": "owner_a_read_write_and_cross_owner_denial",
+    "status": "passed"
+  },
+  {
+    "case": "owner_b_isolation",
+    "status": "passed"
+  },
+  {
+    "case": "anonymous_jwt_claim_denied",
+    "status": "passed"
+  },
+  {
+    "case": "anon_role_table_and_rpc_denied",
+    "status": "passed"
+  },
+  {
+    "case": "restored_session_revocation_denies_read_write",
+    "status": "passed"
+  },
+  {
+    "case": "post_checkpoint_deletion_reconciled_exactly",
+    "status": "passed"
+  },
+  {
+    "case": "final_counts",
+    "users": 2,
+    "sessions": 1,
+    "savedRows": 3
+  }
+]

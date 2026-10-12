@@ -1,0 +1,29 @@
+.fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--forest-pale);
+  color: var(--forest);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.profileFallback {
+  font-size: 1.35rem;
+}
+
+.suggestionFallback {
+  font-size: 0.7rem;
+}
+
+.trayFallback {
+  font-size: 0.58rem;
+}
+
+.comparisonFallback {
+  font-size: 0.78rem;
+}

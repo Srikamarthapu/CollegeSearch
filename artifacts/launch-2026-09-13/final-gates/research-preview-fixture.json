@@ -1,0 +1,457 @@
+{
+  "format": "collegesearch-research",
+  "version": 1,
+  "exportedAt": "2026-09-13T20:00:00.000Z",
+  "notebooks": [
+    {
+      "unitId": 104151,
+      "collegeName": "Arizona State University Campus Immersion",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 110404,
+      "collegeName": "California Institute of Technology",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 110422,
+      "collegeName": "California Polytechnic State University-San Luis Obispo",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 110529,
+      "collegeName": "California State Polytechnic University-Pomona",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 110556,
+      "collegeName": "California State University-Fresno",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 110565,
+      "collegeName": "California State University-Fullerton",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 110583,
+      "collegeName": "California State University-Long Beach",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 110592,
+      "collegeName": "California State University-Los Angeles",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 110608,
+      "collegeName": "California State University-Northridge",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 110617,
+      "collegeName": "California State University-Sacramento",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 111948,
+      "collegeName": "Chapman University",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 190150,
+      "collegeName": "Columbia University in the City of New York",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 198419,
+      "collegeName": "Duke University",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 139755,
+      "collegeName": "Georgia Institute of Technology-Main Campus",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 166027,
+      "collegeName": "Harvard University",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 117946,
+      "collegeName": "Loyola Marymount University",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 166683,
+      "collegeName": "Massachusetts Institute of Technology",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 193900,
+      "collegeName": "New York University",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 147767,
+      "collegeName": "Northwestern University",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 204796,
+      "collegeName": "Ohio State University-Main Campus",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 209542,
+      "collegeName": "Oregon State University",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 121345,
+      "collegeName": "Pomona College",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 186131,
+      "collegeName": "Princeton University",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 243780,
+      "collegeName": "Purdue University-Main Campus",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 122409,
+      "collegeName": "San Diego State University",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 122755,
+      "collegeName": "San Jose State University",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 122931,
+      "collegeName": "Santa Clara University",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 243744,
+      "collegeName": "Stanford University",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 228778,
+      "collegeName": "The University of Texas at Austin",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 104179,
+      "collegeName": "University of Arizona",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 110635,
+      "collegeName": "University of California-Berkeley",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 110644,
+      "collegeName": "University of California-Davis",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 110653,
+      "collegeName": "University of California-Irvine",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 110662,
+      "collegeName": "University of California-Los Angeles",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 445188,
+      "collegeName": "University of California-Merced",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 110671,
+      "collegeName": "University of California-Riverside",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 110680,
+      "collegeName": "University of California-San Diego",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 110705,
+      "collegeName": "University of California-Santa Barbara",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 110714,
+      "collegeName": "University of California-Santa Cruz",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 145637,
+      "collegeName": "University of Illinois Urbana-Champaign",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 166629,
+      "collegeName": "University of Massachusetts-Amherst",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 170976,
+      "collegeName": "University of Michigan-Ann Arbor",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 199120,
+      "collegeName": "University of North Carolina at Chapel Hill",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 122612,
+      "collegeName": "University of San Francisco",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 123961,
+      "collegeName": "University of Southern California",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 234076,
+      "collegeName": "University of Virginia-Main Campus",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 236948,
+      "collegeName": "University of Washington-Seattle Campus",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 240444,
+      "collegeName": "University of Wisconsin-Madison",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 236939,
+      "collegeName": "Washington State University",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    },
+    {
+      "unitId": 130794,
+      "collegeName": "Yale University",
+      "data": {
+        "version": 1,
+        "notes": "Synthetic backup preview QA. No college facts or personal student data.",
+        "checked": []
+      }
+    }
+  ]
+}

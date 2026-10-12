@@ -1,0 +1,94 @@
+TAP version 13
+# Subtest: only explicit HTTPS origins and loopback HTTP origins are accepted
+ok 1 - only explicit HTTPS origins and loopback HTTP origins are accepted
+  ---
+  duration_ms: 0.7865
+  type: 'test'
+  ...
+# Subtest: published freshness is separate from availability and handles React comment separators
+ok 2 - published freshness is separate from availability and handles React comment separators
+  ---
+  duration_ms: 0.503625
+  type: 'test'
+  ...
+# Subtest: document identity, private caching, and all executable inline nonces are checked
+ok 3 - document identity, private caching, and all executable inline nonces are checked
+  ---
+  duration_ms: 9.369375
+  type: 'test'
+  ...
+# Subtest: callbacks must fail on the expected same-origin path without exchanging an auth code
+ok 4 - callbacks must fail on the expected same-origin path without exchanging an auth code
+  ---
+  duration_ms: 0.203792
+  type: 'test'
+  ...
+# Subtest: smoke records all checked routes, assets, callbacks and freshness without keeping bodies or cookies
+ok 5 - smoke records all checked routes, assets, callbacks and freshness without keeping bodies or cookies
+  ---
+  duration_ms: 2.931959
+  type: 'test'
+  ...
+# Subtest: smoke reports independent endpoint failures instead of stopping at the first
+ok 6 - smoke reports independent endpoint failures instead of stopping at the first
+  ---
+  duration_ms: 0.796708
+  type: 'test'
+  ...
+# Subtest: classroom scenario is capped at thirty students and 120 GET requests
+ok 7 - classroom scenario is capped at thirty students and 120 GET requests
+  ---
+  duration_ms: 3.83275
+  type: 'test'
+  ...
+# Subtest: classroom scenario stops issuing new work after repeated errors
+ok 8 - classroom scenario stops issuing new work after repeated errors
+  ---
+  duration_ms: 0.97125
+  type: 'test'
+  ...
+# Subtest: latency summary uses a real nearest-rank p95 and retains failures
+ok 9 - latency summary uses a real nearest-rank p95 and retains failures
+  ---
+  duration_ms: 0.291542
+  type: 'test'
+  ...
+# Subtest: verification becomes overdue after the exact eight-day boundary, before rounding
+ok 10 - verification becomes overdue after the exact eight-day boundary, before rounding
+  ---
+  duration_ms: 0.322084
+  type: 'test'
+  ...
+# Subtest: future verification timestamps tolerate at most one hour of clock skew
+ok 11 - future verification timestamps tolerate at most one hour of clock skew
+  ---
+  duration_ms: 0.049
+  type: 'test'
+  ...
+# Subtest: unverified coverage takes precedence over overdue age
+ok 12 - unverified coverage takes precedence over overdue age
+  ---
+  duration_ms: 0.443875
+  type: 'test'
+  ...
+# Subtest: unusable timestamps and inconsistent artifact coverage fail closed
+ok 13 - unusable timestamps and inconsistent artifact coverage fail closed
+  ---
+  duration_ms: 0.077166
+  type: 'test'
+  ...
+# Subtest: the HTML probe and page classifier share the same clock and coverage policy
+ok 14 - the HTML probe and page classifier share the same clock and coverage policy
+  ---
+  duration_ms: 2.902166
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 89.414583

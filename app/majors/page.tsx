@@ -10,8 +10,11 @@ import {
 
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
-import { colleges, release } from "@/app/lib/college-data";
-import { broadFields } from "@/app/majors/major-data";
+import {
+  broadFieldSources,
+  broadFields,
+  colleges,
+} from "@/app/majors/major-data";
 import styles from "@/app/majors/majors.module.css";
 
 type MajorsPageProps = {
@@ -21,7 +24,7 @@ type MajorsPageProps = {
 export const metadata: Metadata = {
   title: "Broad fields of study · CollegeSearch",
   description:
-    "Browse clearly labeled federal bachelor's-program and award-share evidence across the CollegeSearch cohort.",
+    "Browse clearly labeled federal bachelor's or associate program and award-share evidence across the CollegeSearch cohort.",
 };
 
 function firstValue(value: string | string[] | undefined) {
@@ -36,7 +39,7 @@ export default async function MajorsPage({ searchParams }: MajorsPageProps) {
         field.name.toLocaleLowerCase().includes(normalizedQuery),
       )
     : broadFields;
-  const federalSource = release.sources.find((source) =>
+  const federalSource = broadFieldSources.find((source) =>
     broadFields.some((field) => field.sourceIds.includes(source.id)),
   );
 
@@ -57,23 +60,21 @@ export default async function MajorsPage({ searchParams }: MajorsPageProps) {
           <div className={styles.mastheadCopy}>
             <span className="page-eyebrow">
               <BookOpenCheck size={15} aria-hidden="true" />
-              Broad federal field evidence
+              Find your field
             </span>
-            <h1>Start with a field. Keep the claim honest.</h1>
+            <h1>What would you like to study?</h1>
             <p>
-              Explore bachelor&apos;s-program indicators and the share of all
-              institutional awards reported in each broad federal field. These
-              records help you find places to investigate—not estimate your
-              chance of admission to a particular major.
+              Follow a subject you enjoy. Find colleges with reported bachelor&apos;s or associate
+              programs in that broad field, then explore the details.
             </p>
           </div>
 
           <aside className={styles.boundaryCard}>
-            <span>What this page can answer</span>
-            <strong>Where broad-field evidence appears</strong>
+            <span>Before you choose a program</span>
+            <strong>A starting point for exploring majors</strong>
             <p>
-              It cannot confirm an exact current major, capacity, or
-              program-specific admit rate. Always check the college catalog.
+              These are broad fields from federal records. Check each college’s
+              current catalog for specific majors, requirements, and availability.
             </p>
           </aside>
         </header>
@@ -124,7 +125,7 @@ export default async function MajorsPage({ searchParams }: MajorsPageProps) {
                       <strong>{field.name}</strong>
                       <small>
                         {field.records.length} of {colleges.length} colleges have a
-                        bachelor&apos;s indicator in this field
+                        bachelor&apos;s or associate indicator in this field
                       </small>
                       <span>{field.periodLabels.join(" · ")}</span>
                     </span>
@@ -157,7 +158,7 @@ export default async function MajorsPage({ searchParams }: MajorsPageProps) {
             <p>
               A reported 0% is a source value rounded to the available
               precision. No field record means the release did not meet the
-              bachelor&apos;s-indicator rule; it does not prove that no related
+              degree-availability indicator rule; it does not prove that no related
               program exists.
             </p>
           </div>

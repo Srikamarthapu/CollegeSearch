@@ -1,29 +1,72 @@
 "use client";
 
-import { Check, Eye, EyeOff, KeyRound, LoaderCircle } from "lucide-react";
+import { newPasswordError } from "@/app/lib/password-validation";
+
+import {
+  Check,
+  Eye,
+  EyeOff,
+  KeyRound,
+  LoaderCircle,
+  RefreshCw,
+  ShieldAlert,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
+import { resolveAuthConsumerState } from "@/app/components/auth/auth-consumer-state";
 import { useAuth } from "@/app/components/auth/AuthProvider";
 import { getSupabaseBrowserClient } from "@/app/lib/supabase/browser";
+import { createVerifiedSupabaseMutationClient } from "@/app/lib/supabase/verified-session";
 import styles from "./auth-page.module.css";
 
 export function UpdatePasswordForm() {
   const router = useRouter();
-  const { status } = useAuth();
+  const {
+    refreshUser,
+    status,
+    user,
+    verification,
+    verificationError,
+  } = useAuth();
   const [busy, setBusy] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const decision = resolveAuthConsumerState({
+    hasUser: Boolean(user),
+    status,
+    verification,
+  });
+  const currentAuthRef = useRef({
+    canUseAccount: decision.canUseAccount,
+    userId: user?.id ?? null,
+  });
+
+  useEffect(() => {
+    currentAuthRef.current = {
+      canUseAccount: decision.canUseAccount,
+      userId: user?.id ?? null,
+    };
+  }, [decision.canUseAccount, user?.id]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const activeAuth = currentAuthRef.current;
+    if (!activeAuth.canUseAccount || !activeAuth.userId) {
+      setMessage(
+        "Password changes are paused until CollegeSearch verifies this account.",
+      );
+      return;
+    }
+
     const formData = new FormData(event.currentTarget);
     const password = String(formData.get("password") ?? "");
     const confirmation = String(formData.get("confirmation") ?? "");
 
-    if (password.length < 8) {
-      setMessage("Use at least 8 characters for your new password.");
+    const passwordError = newPasswordError(password);
+    if (passwordError) {
+      setMessage(passwordError);
       return;
     }
     if (password !== confirmation) {
@@ -39,30 +82,116 @@ export function UpdatePasswordForm() {
 
     setBusy(true);
     setMessage(null);
-    const { error } = await supabase.auth.updateUser({ password });
-    setBusy(false);
+    try {
+      const passwordClient = await createVerifiedSupabaseMutationClient(
+        supabase,
+        activeAuth.userId,
+      );
+      if (
+        !currentAuthRef.current.canUseAccount ||
+        currentAuthRef.current.userId !== activeAuth.userId
+      ) {
+        return;
+      }
 
-    if (error) {
-      setMessage(error.message);
-      return;
+      const { data, error } = await passwordClient.auth.updateUser({ password });
+      if (currentAuthRef.current.userId !== activeAuth.userId) return;
+
+      if (error) {
+        setMessage(error.message);
+        return;
+      }
+      if (data.user?.id !== activeAuth.userId) {
+        setMessage(
+          "CollegeSearch could not confirm which account received the password update.",
+        );
+        return;
+      }
+
+      setSuccess(true);
+      window.setTimeout(() => router.replace("/"), 1000);
+    } catch {
+      if (currentAuthRef.current.userId === activeAuth.userId) {
+        setMessage(
+          "CollegeSearch could not update the password. Check your connection and try again.",
+        );
+      }
+    } finally {
+      setBusy(false);
     }
-
-    setSuccess(true);
-    window.setTimeout(() => router.replace("/"), 1000);
   }
 
-  if (status === "loading") {
+  if (
+    decision.state === "checking" ||
+    decision.state === "checking-last-verified"
+  ) {
     return (
       <main id="main-content" className={styles.page}>
         <section className={styles.card} aria-live="polite">
           <LoaderCircle className={styles.spinner} size={25} />
-          <h1>Checking your reset link…</h1>
+          <h1>Checking your account session…</h1>
+          <p>Password changes stay paused until this check finishes.</p>
         </section>
       </main>
     );
   }
 
-  if (status !== "signed-in") {
+  if (
+    decision.state === "unavailable" ||
+    decision.state === "last-verified-unavailable"
+  ) {
+    return (
+      <main id="main-content" className={styles.page}>
+        <section className={styles.card} aria-live="polite">
+          <span className={styles.icon} aria-hidden="true">
+            <ShieldAlert size={24} />
+          </span>
+          <span className={styles.eyebrow}>Account verification</span>
+          <h1>Password changes are paused.</h1>
+          <p role="alert">
+            {verificationError ??
+              "CollegeSearch could not verify this account session."}
+          </p>
+          <div className={styles.stateActions}>
+            <button
+              className={styles.primaryLink}
+              type="button"
+              onClick={() => void refreshUser()}
+            >
+              <RefreshCw size={16} aria-hidden="true" />
+              Retry verification
+            </button>
+            <Link className={styles.secondaryLink} href="/account">
+              Return to account
+            </Link>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  if (decision.state === "unconfigured") {
+    return (
+      <main id="main-content" className={styles.page}>
+        <section className={styles.card}>
+          <span className={styles.icon} aria-hidden="true">
+            <KeyRound size={24} />
+          </span>
+          <span className={styles.eyebrow}>Password update</span>
+          <h1>Accounts are not connected yet.</h1>
+          <p>
+            This deployment still needs its Supabase project configuration
+            before it can update an account password.
+          </p>
+          <Link className={styles.primaryLink} href="/">
+            Return to CollegeSearch
+          </Link>
+        </section>
+      </main>
+    );
+  }
+
+  if (decision.state === "verified-signed-out") {
     return (
       <main id="main-content" className={styles.page}>
         <section className={styles.card}>
@@ -82,6 +211,8 @@ export function UpdatePasswordForm() {
       </main>
     );
   }
+
+  if (!decision.canUseAccount || !user) return null;
 
   return (
     <main id="main-content" className={styles.page}>
@@ -134,7 +265,11 @@ export function UpdatePasswordForm() {
               </span>
             </label>
             {message ? <p className={styles.error} role="alert">{message}</p> : null}
-            <button className={styles.submit} type="submit" disabled={busy}>
+            <button
+              className={styles.submit}
+              type="submit"
+              disabled={busy || !decision.canUseAccount}
+            >
               {busy ? <LoaderCircle className={styles.spinner} size={18} /> : null}
               Update password
             </button>

@@ -1,0 +1,134 @@
+TAP version 13
+# Subtest: explicit applicant clear outcome: successful-clear
+ok 1 - explicit applicant clear outcome: successful-clear
+  ---
+  duration_ms: 2.239458
+  type: 'test'
+  ...
+# Subtest: explicit applicant clear outcome: newer-local-edit
+ok 2 - explicit applicant clear outcome: newer-local-edit
+  ---
+  duration_ms: 0.529458
+  type: 'test'
+  ...
+# Subtest: explicit applicant clear outcome: newer-shared-copy
+ok 3 - explicit applicant clear outcome: newer-shared-copy
+  ---
+  duration_ms: 0.2235
+  type: 'test'
+  ...
+# Subtest: explicit applicant clear outcome: auth-boundary
+ok 4 - explicit applicant clear outcome: auth-boundary
+  ---
+  duration_ms: 0.139042
+  type: 'test'
+  ...
+# Subtest: explicit applicant clear outcome: canonical-removal-failure
+ok 5 - explicit applicant clear outcome: canonical-removal-failure
+  ---
+  duration_ms: 0.150333
+  type: 'test'
+  ...
+# Subtest: explicit applicant clear outcome: journal-removal-failure
+ok 6 - explicit applicant clear outcome: journal-removal-failure
+  ---
+  duration_ms: 0.062291
+  type: 'test'
+  ...
+# Subtest: explicit applicant clear outcome: missing-locks
+ok 7 - explicit applicant clear outcome: missing-locks
+  ---
+  duration_ms: 0.085458
+  type: 'test'
+  ...
+# Subtest: explicit applicant clear outcome: missing-storage
+ok 8 - explicit applicant clear outcome: missing-storage
+  ---
+  duration_ms: 0.044458
+  type: 'test'
+  ...
+# Subtest: explicit applicant clear outcome: unseen-shared-revision
+ok 9 - explicit applicant clear outcome: unseen-shared-revision
+  ---
+  duration_ms: 0.661833
+  type: 'test'
+  ...
+# {"component":"applicant profile","fault":"read-failure","status":"unavailable","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical"]}
+# {"component":"applicant profile","fault":"malformed-shared-copy","status":"invalid","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical"]}
+# {"component":"applicant profile","fault":"journal-removal-failure","status":"unavailable","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# {"component":"applicant profile","fault":"valid-shared-copy","status":"ready","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# {"component":"applicant profile","fault":"absent-shared-copy","status":"ready","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# {"component":"deadline planner","fault":"read-failure","status":"unavailable","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical"]}
+# {"component":"deadline planner","fault":"malformed-shared-copy","status":"invalid","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical"]}
+# {"component":"deadline planner","fault":"journal-removal-failure","status":"unavailable","retainedDraft":true,"retainedJournal":true,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# {"component":"deadline planner","fault":"valid-shared-copy","status":"ready","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# {"component":"deadline planner","fault":"absent-shared-copy","status":"ready","retainedDraft":false,"retainedJournal":false,"canonicalUntouched":true,"operations":["read-canonical","remove-draft"]}
+# Subtest: applicant profile: recovery read-failure
+ok 10 - applicant profile: recovery read-failure
+  ---
+  duration_ms: 1.127834
+  type: 'test'
+  ...
+# Subtest: applicant profile: recovery malformed-shared-copy
+ok 11 - applicant profile: recovery malformed-shared-copy
+  ---
+  duration_ms: 0.475
+  type: 'test'
+  ...
+# Subtest: applicant profile: recovery journal-removal-failure
+ok 12 - applicant profile: recovery journal-removal-failure
+  ---
+  duration_ms: 0.08825
+  type: 'test'
+  ...
+# Subtest: applicant profile: recovery valid-shared-copy
+ok 13 - applicant profile: recovery valid-shared-copy
+  ---
+  duration_ms: 0.133333
+  type: 'test'
+  ...
+# Subtest: applicant profile: recovery absent-shared-copy
+ok 14 - applicant profile: recovery absent-shared-copy
+  ---
+  duration_ms: 0.065375
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery read-failure
+ok 15 - deadline planner: recovery read-failure
+  ---
+  duration_ms: 0.432584
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery malformed-shared-copy
+ok 16 - deadline planner: recovery malformed-shared-copy
+  ---
+  duration_ms: 0.1435
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery journal-removal-failure
+ok 17 - deadline planner: recovery journal-removal-failure
+  ---
+  duration_ms: 0.161458
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery valid-shared-copy
+ok 18 - deadline planner: recovery valid-shared-copy
+  ---
+  duration_ms: 0.376459
+  type: 'test'
+  ...
+# Subtest: deadline planner: recovery absent-shared-copy
+ok 19 - deadline planner: recovery absent-shared-copy
+  ---
+  duration_ms: 0.264458
+  type: 'test'
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 90.470042

@@ -1,0 +1,107 @@
+TAP version 13
+# Subtest: two tabs serialize the same unit and preserve the newer intent
+ok 1 - two tabs serialize the same unit and preserve the newer intent
+  ---
+  duration_ms: 1.131083
+  type: 'test'
+  ...
+# Subtest: an invalid outbox stops before every network and cache operation
+ok 2 - an invalid outbox stops before every network and cache operation
+  ---
+  duration_ms: 0.250708
+  type: 'test'
+  ...
+# Subtest: cache and acknowledgement failures retain exact pending records
+    # Subtest: cache failure retains the pending record
+    ok 1 - cache failure retains the pending record
+      ---
+      duration_ms: 0.439916
+      type: 'test'
+      ...
+    # Subtest: ack failure retains the pending record
+    ok 2 - ack failure retains the pending record
+      ---
+      duration_ms: 0.131958
+      type: 'test'
+      ...
+    1..2
+ok 3 - cache and acknowledgement failures retain exact pending records
+  ---
+  duration_ms: 0.681833
+  type: 'test'
+  ...
+# Subtest: a no-op authoritative read still persists the complete account cache
+ok 4 - a no-op authoritative read still persists the complete account cache
+  ---
+  duration_ms: 0.094958
+  type: 'test'
+  ...
+# Subtest: listOwned selects only unit IDs and applies the exact owner filter
+ok 5 - listOwned selects only unit IDs and applies the exact owner filter
+  ---
+  duration_ms: 0.728208
+  type: 'test'
+  ...
+# Subtest: upsertOwned sends explicit owners and uses conflict-safe duplicate ignoring
+ok 6 - upsertOwned sends explicit owners and uses conflict-safe duplicate ignoring
+  ---
+  duration_ms: 0.089917
+  type: 'test'
+  ...
+# Subtest: removeOwned applies both the owner and unit filters before execution
+ok 7 - removeOwned applies both the owner and unit filters before execution
+  ---
+  duration_ms: 0.073667
+  type: 'test'
+  ...
+# Subtest: empty mutations do not issue Supabase requests
+ok 8 - empty mutations do not issue Supabase requests
+  ---
+  duration_ms: 0.225834
+  type: 'test'
+  ...
+# Subtest: Supabase adapter errors are surfaced without leaking query details
+ok 9 - Supabase adapter errors are surfaced without leaking query details
+  ---
+  duration_ms: 0.258917
+  type: 'test'
+  ...
+# Subtest: the adapter rejects a caller whose UUID differs from its bound token owner
+ok 10 - the adapter rejects a caller whose UUID differs from its bound token owner
+  ---
+  duration_ms: 0.145
+  type: 'test'
+  ...
+# Subtest: revoked or unverified sessions cannot turn filtered rows into a successful read or mutation
+ok 11 - revoked or unverified sessions cannot turn filtered rows into a successful read or mutation
+  ---
+  duration_ms: 0.350667
+  type: 'test'
+  ...
+# Subtest: revocation during a successful query fails before the result is acknowledged
+ok 12 - revocation during a successful query fails before the result is acknowledged
+  ---
+  duration_ms: 0.139708
+  type: 'test'
+  ...
+# Subtest: a verified empty account remains a valid empty snapshot
+ok 13 - a verified empty account remains a valid empty snapshot
+  ---
+  duration_ms: 0.164166
+  type: 'test'
+  ...
+# Subtest: the full sync cycle preserves cached colleges and pending intent when revocation races a read or delete
+ok 14 - the full sync cycle preserves cached colleges and pending intent when revocation races a read or delete
+  ---
+  duration_ms: 1.06875
+  type: 'test'
+  ...
+1..14
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 835.555

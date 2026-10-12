@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-09-13T19:54:20.000454+00:00",
+  "status": "passed",
+  "scope": "Private application deployment recovery; not a database restore",
+  "schemaAndApplicationDataCodeUnchanged": true,
+  "changedRuntimeFile": "worker/index.ts",
+  "rollback": {
+    "version": 2,
+    "versionId": "appgprj_6a64f648520081919bb6328932d2ff1c~appgver_5f081e8b80148191af9964c7db4bb1e5",
+    "deploymentId": "appgdep_6aa6ff337d008191af6eaa3510ca2ead",
+    "status": "succeeded",
+    "httpStatus": 200,
+    "identityVerified": true,
+    "privateNoStore": true
+  },
+  "restored": {
+    "version": 3,
+    "versionId": "appgprj_6a64f648520081919bb6328932d2ff1c~appgver_1b5c1c43322c8191b90db042a5b3b9a0",
+    "deploymentId": "appgdep_6aa6ff62e1b481918b64ea0c5a020d6c",
+    "status": "succeeded",
+    "httpStatus": 200,
+    "identityVerified": true,
+    "privateNoStore": true
+  },
+  "limitations": [
+    "No database backup restore performed",
+    "No re-entry of student research or account writes during the short rollback window; the app/data/database code is identical between these releases"
+  ]
+}

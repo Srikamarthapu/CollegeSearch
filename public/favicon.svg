@@ -1,6 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="18" fill="#174f43"/>
-  <circle cx="32" cy="32" r="18" fill="none" stroke="#f5f0e5" stroke-width="4"/>
-  <path d="M39.5 23.5 35 35l-11.5 5.5L28 29z" fill="#ef8b6c"/>
-  <circle cx="32" cy="32" r="3" fill="#f5f0e5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <title>CollegeSearch campus pin</title>
+  <rect width="64" height="64" rx="14" fill="#fff"/>
+  <path d="M13 32c0-11 8-19 19-19s19 8 19 19c0 12-19 27-19 27S13 44 13 32Z" fill="#18263d"/>
+  <path d="m5 18 27-13 27 13-27 13L5 18Z" fill="#18263d"/>
+  <path d="M55 20v12" stroke="#18263d" stroke-width="3" stroke-linecap="round"/>
+  <path d="M20 37V27l12-8 12 8v10" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M27 37V28l5-3 5 3v9H27Z" fill="#fff"/>
+  <path d="M30 37v-6a2 2 0 0 1 4 0v6h-4Z" fill="#18263d"/>
+  <path d="M13.5 36c12-4 25-4 37 0C47 46 37 55 32 59c-6-5-15-13-18.5-23Z" fill="#3559d5"/>
+  <path d="M27 34c20 5 18 10 8 17-3 2-4 5-3 8-7-7-7-11-1-15 7-5 7-7-4-10Z" fill="#fff"/>
 </svg>

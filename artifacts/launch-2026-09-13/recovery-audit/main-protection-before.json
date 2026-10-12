@@ -1,0 +1,40 @@
+{
+  "checkedAt": "2026-09-13T21:35:38Z",
+  "repository": "Srikamarthapu/CollegeSearch",
+  "readOnly": true,
+  "defaultBranch": "main",
+  "defaultBranchSha": "4519fc12f2eb0e13c68bb56d0fd9d199a5f13559",
+  "public": true,
+  "adminVisibility": true,
+  "protectionEndpoint": {
+    "status": 404,
+    "message": "Branch not protected"
+  },
+  "rulesetsIncludingParents": [],
+  "checkRun": {
+    "id": 103796501118,
+    "name": "Verify application and committed evidence",
+    "app": {
+      "id": 15368,
+      "slug": "github-actions",
+      "name": "GitHub Actions"
+    },
+    "status": "completed",
+    "conclusion": "success",
+    "headSha": "4e7aba698ac7d6905368ef61c079d33f56040ab1",
+    "checkSuiteId": 94201827654,
+    "url": "https://github.com/Srikamarthapu/CollegeSearch/actions/runs/34784168964/job/103796501118",
+    "completedAt": "2026-09-13T21:34:26Z"
+  },
+  "pullRequest": {
+    "number": 1,
+    "draft": true,
+    "mergeable": true,
+    "mergeableState": "clean",
+    "aheadBy": 12,
+    "behindBy": 0,
+    "headSha": "4e7aba698ac7d6905368ef61c079d33f56040ab1",
+    "baseSha": "4519fc12f2eb0e13c68bb56d0fd9d199a5f13559"
+  },
+  "settingsChanged": false
+}

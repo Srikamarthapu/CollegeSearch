@@ -11,19 +11,36 @@ export type ClientObservation = Pick<
 
 export type ClientMajorEvidence = Pick<
   College["majors"][number],
-  "name" | "share"
+  "name" | "share" | "bachelorsAvailable" | "associatesAvailable"
 >;
 
 export type ClientCollege = Pick<
   College,
-  "unitId" | "slug" | "name" | "aliases" | "city" | "state" | "ownership"
+  | "unitId"
+  | "slug"
+  | "name"
+  | "aliases"
+  | "city"
+  | "state"
+  | "ownership"
+  | "catalogCategory"
+  | "setting"
+  | "institutionLevel"
+  | "undergraduateOffering"
+  | "mainCampus"
 > & {
+  costs: {
+    tuitionInState: ClientObservation;
+    tuitionOutOfState: ClientObservation;
+    feeBasis: "required" | "allowance";
+  };
   observations: {
     admitRate: ClientObservation;
     averageNetPrice: ClientObservation;
     graduationRate: ClientObservation;
     undergraduateEnrollment: ClientObservation;
     medianEarnings: ClientObservation;
+    tuitionOutOfState: ClientObservation;
   };
   majors: ClientMajorEvidence[];
 };
@@ -61,6 +78,16 @@ export function projectCollegeForClient(college: College): ClientCollege {
     city: college.city,
     state: college.state,
     ownership: college.ownership,
+    catalogCategory: college.catalogCategory,
+    setting: college.setting,
+    institutionLevel: college.institutionLevel,
+    undergraduateOffering: college.undergraduateOffering,
+    mainCampus: college.mainCampus,
+    costs: {
+      tuitionInState: projectObservation(college.costs.tuitionInState),
+      tuitionOutOfState: projectObservation(college.costs.tuitionOutOfState),
+      feeBasis: college.costs.feeBasis,
+    },
     observations: {
       admitRate: projectObservation(college.observations.admitRate),
       averageNetPrice: projectObservation(
@@ -73,8 +100,18 @@ export function projectCollegeForClient(college: College): ClientCollege {
       medianEarnings: projectObservation(
         college.observations.medianEarnings,
       ),
+      tuitionOutOfState: projectObservation(
+        college.observations.tuitionOutOfState,
+      ),
     },
-    majors: college.majors.map(({ name, share }) => ({ name, share })),
+    majors: college.majors.map(
+      ({ name, share, bachelorsAvailable, associatesAvailable }) => ({
+        name,
+        share,
+        bachelorsAvailable,
+        associatesAvailable,
+      }),
+    ),
   };
 }
 
@@ -117,12 +154,13 @@ export function observationSourceKind(observation: {
   };
 }
 
-export function compactName(college: Pick<ClientCollege, "aliases" | "name">) {
-  return (
-    college.aliases.find((alias) => alias.startsWith("UC ")) ||
-    college.aliases[0] ||
-    college.name
-  );
+export function compactName(college: Pick<ClientCollege, "aliases" | "name" | "catalogCategory">) {
+  if (college.catalogCategory.startsWith("federal-")) return college.name;
+  const aliases = college.aliases.filter((alias) => {
+    const value = alias.trim();
+    return value.length > 0 && !/^(?:n\/?a|not available|unknown|null)$/i.test(value);
+  });
+  return aliases.find((alias) => alias.startsWith("UC ")) || aliases[0] || college.name;
 }
 
 export function isUniversityOfCalifornia(
@@ -143,5 +181,27 @@ export function majorEvidenceFor(
   college: Pick<ClientCollege, "majors">,
   major: string,
 ) {
-  return college.majors.find((item) => item.name === major) ?? null;
+  return (
+    college.majors.find(
+      (item) =>
+        item.name === major &&
+        (item.bachelorsAvailable || item.associatesAvailable),
+    ) ?? null
+  );
+}
+
+export function majorEvidenceAtDegree(
+  college: Pick<ClientCollege, "majors">,
+  major: string,
+  degree: "bachelors" | "associate",
+) {
+  return (
+    college.majors.find(
+      (item) =>
+        item.name === major &&
+        (degree === "bachelors"
+          ? item.bachelorsAvailable
+          : item.associatesAvailable),
+    ) ?? null
+  );
 }

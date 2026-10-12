@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-13T21:13:43.748035+00:00",
+  "status": "passed",
+  "projectId": "CSRestoregsg4rkw2",
+  "scope": "Synthetic-only local logical restore of auth/public/private/supabase_migrations into a new isolated database; no hosted data or production services used.",
+  "sourceDatabase": "postgres in disposable supabase_db_CSRestoregsg4rkw2",
+  "targetDatabase": "college_restore_target in same disposable cluster",
+  "postgresVersion": "17.6",
+  "cliVersion": "2.117.0",
+  "images": [
+    "public.ecr.aws/supabase/postgrest:v16.2",
+    "public.ecr.aws/supabase/gotrue:v2.196.0",
+    "public.ecr.aws/supabase/kong:2.8.1",
+    "public.ecr.aws/supabase/postgres:17.6.1.167"
+  ],
+  "migrations": [
+    {
+      "file": "20260810042855_create_saved_colleges.sql",
+      "sha256": "e8dcd3e5c446d8b0b64d7fe2cdfac026594abfb88d69c1df81df4181aa1b9765"
+    },
+    {
+      "file": "20260913184505_account_session_validation.sql",
+      "sha256": "272d6bb5fcec226a19160b9ed26559083a52edb951b999ac42e8262663766d60"
+    }
+  ],
+  "archive": {
+    "format": "pg_dump custom",
+    "bytes": 111806,
+    "sha256": "bb530876427e82e40c310f97dd32dac30330594e377f8ac8fa6813ffe87127d2",
+    "ownersAndAclsPreserved": true,
+    "retained": false,
+    "removedAfterVerification": true
+  },
+  "schemaChecks": {
+    "columnsAndConstraints": true,
+    "rlsEnabled": true,
+    "policies": 4,
+    "restrictiveSessionPolicy": true,
+    "tableAndRpcGrants": true,
+    "functionSecurityAndEmptySearchPath": true,
+    "migrationHistory": true
+  },
+  "checkpointCounts": {
+    "users": 3,
+    "sessions": 3,
+    "savedRows": 4
+  },
+  "sourceAfterDeletion": {
+    "users": 2,
+    "sessions": 2,
+    "savedRows": 3
+  },
+  "restoredBeforeReconciliation": {
+    "users": 3,
+    "sessions": 3,
+    "savedRows": 4
+  },
+  "assertions": [
+    {
+      "case": "owner_a_read_write_and_cross_owner_denial",
+      "status": "passed"
+    },
+    {
+      "case": "owner_b_isolation",
+      "status": "passed"
+    },
+    {
+      "case": "anonymous_jwt_claim_denied",
+      "status": "passed"
+    },
+    {
+      "case": "anon_role_table_and_rpc_denied",
+      "status": "passed"
+    },
+    {
+      "case": "restored_session_revocation_denies_read_write",
+      "status": "passed"
+    },
+    {
+      "case": "post_checkpoint_deletion_reconciled_exactly",
+      "status": "passed"
+    },
+    {
+      "case": "final_counts",
+      "users": 2,
+      "sessions": 1,
+      "savedRows": 3
+    }
+  ],
+  "setupCorrection": "Temporary auth.email.enable_signup needed true for password provider; global auth.enable_signup remained false. The first disposable stack was reset before the final fixture. No SMTP service was started.",
+  "cleanup": "passed",
+  "limitations": [
+    "Does not prove hosted backup availability, off-site retention or operator ownership.",
+    "Restored role/JWT claims were tested in PostgreSQL; no Auth HTTP service was connected to the restored target.",
+    "Does not test external JWT signature verification, SMTP, provider control-plane metadata, full cluster role recovery or school-scale data size."
+  ],
+  "cleanupEvidence": "cleanup.json",
+  "appSchemaEquivalent": true
+}

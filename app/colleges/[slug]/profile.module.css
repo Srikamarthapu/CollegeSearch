@@ -1,0 +1,12 @@
+.masthead:global(.profile-masthead) { padding-top: 24px; padding-bottom: 24px; }
+.identity { display: grid; grid-template-columns: 96px minmax(0, 1fr); column-gap: 20px; align-items: start; }
+.masthead .identity > :global(.college-logo-profile) { grid-row: 1 / span 4; width: 96px; height: 64px; margin: 0; }
+.masthead .identity h1 { margin-top: 8px; font-size: clamp(30px, 3.4vw, 44px); text-wrap: balance; }
+.identity > :global(.profile-deck) { margin-top: 12px; font-size: 14px; }
+
+@media (max-width: 640px) {
+  .masthead:global(.profile-masthead) { padding-top: 20px; gap: 20px; }
+  .identity { display: block; }
+  .masthead .identity > :global(.college-logo-profile) { display: flex; width: 84px; height: 48px; margin-bottom: 12px; }
+  .masthead .identity h1 { font-size: 32px; }
+}

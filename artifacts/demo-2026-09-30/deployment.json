@@ -1,0 +1,53 @@
+{
+  "id": "dpl_2dZMHA7E8yNqwGa25XBKfendZgfr",
+  "url": "https://collegesearch-9t3va2chj-swis-projects-066d8b1d.vercel.app",
+  "productionUrl": "https://collegesearch-steel.vercel.app",
+  "inspectorUrl": "https://vercel.com/swis-projects-066d8b1d/collegesearch/2dZMHA7E8yNqwGa25XBKfendZgfr",
+  "readyState": "READY",
+  "target": "production",
+  "source": {
+    "baseCommit": "f380b372ba587ecaa80e84de4c1b46b89275290b",
+    "configurationCommit": "086f6dc511182f017e631006928051dec65cf417",
+    "note": "Deploy ran from the base source plus the three Vercel configuration changes, committed afterward. Application code is unchanged."
+  },
+  "checks": {
+    "localNextBuild": "passed; includes typecheck and 80 generated pages",
+    "publicRoutes": {
+      "/": 200,
+      "/explore": 200,
+      "/saved": 200,
+      "/plan": 200,
+      "/compare?colleges=110404,104151": 200
+    },
+    "browserSearch": "Caltech -> one result",
+    "guestSaveReload": "passed",
+    "comparison": "Caltech and ASU table rendered",
+    "capturedWarningsAndErrors": [],
+    "testBookmarkCleanup": "empty shortlist restored",
+    "serverSecretClientBundleCheck": "absent from all 97 client build files",
+    "finalEndpoints": [
+      {
+        "name": "account-unauthenticated",
+        "status": 403,
+        "location": null
+      },
+      {
+        "name": "callback-missing-code",
+        "status": 307,
+        "location": "https://collegesearch-steel.vercel.app/auth/auth-code-error?reason=missing-code"
+      },
+      {
+        "name": "supabase-auth-health",
+        "status": 521,
+        "location": null
+      }
+    ]
+  },
+  "supabase": {
+    "project": "ptdbmseeooboqbpyvcgw",
+    "restartRequested": true,
+    "lastControlPlaneStatus": "COMING_UP",
+    "callbackConfiguration": "site URL and four Vercel callback entries applied and verified; earlier redirects and undeclared auth security settings retained",
+    "emailDelivery": "SMTP and real student confirmation/recovery remain unverified"
+  }
+}
