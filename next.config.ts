@@ -14,6 +14,10 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   images: { formats: ["image/avif", "image/webp"] },
+  outputFileTracingIncludes: {
+    "/colleges/*": ["./data/college-records/*.json"],
+    "/compare": ["./data/college-records/*.json"],
+  },
   // Each build worker loads the nationwide source artifact. Bound parallelism
   // so static rendering also fits the existing deployment's memory budget.
   experimental: { cpus: 2 },

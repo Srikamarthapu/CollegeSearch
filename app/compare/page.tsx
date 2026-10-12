@@ -15,14 +15,13 @@ import { SiteHeader } from "@/app/components/SiteHeader";
 import { CollegeLogo } from "@/app/components/CollegeLogo";
 import { NegativeNetPriceNote } from "@/app/components/NegativeNetPriceNote";
 import {
-  collegesByUnitIds,
   compactName,
   formatObservation,
   majorEvidenceFor,
   percentFormatter,
-  type College,
-  type Observation,
-} from "@/app/lib/college-data";
+} from "@/app/lib/college-record-presentation";
+import { collegesByUnitIds } from "@/app/lib/college-record-loader";
+import type { College, Observation } from "@/app/lib/college-data";
 import { MAJOR_OPTIONS } from "@/app/lib/college-search";
 
 type ComparePageProps = {
@@ -194,7 +193,7 @@ export default async function ComparePage({
   const query = await searchParams;
   const rawCollegeIds = first(query.colleges) ?? first(query.ids);
   const requestedIds = parseUnitIds(rawCollegeIds);
-  const selected = collegesByUnitIds(requestedIds).sort(
+  const selected = (await collegesByUnitIds(requestedIds)).sort(
     (left, right) =>
       requestedIds.indexOf(left.unitId) - requestedIds.indexOf(right.unitId),
   );

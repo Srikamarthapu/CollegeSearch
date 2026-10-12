@@ -21,16 +21,17 @@ import { CampusBanner } from "@/app/components/CampusBanner";
 import styles from "./profile.module.css";
 import {
   collegeBySlug,
-  colleges,
+  collegeRecordManifest,
+} from "@/app/lib/college-record-loader";
+import {
   compactName,
   formatObservation,
   isUniversityOfCalifornia,
   observationSourceKind,
   percentFormatter,
-  release,
   selectivityLabel,
-  type Observation,
-} from "@/app/lib/college-data";
+} from "@/app/lib/college-record-presentation";
+import type { Observation } from "@/app/lib/college-data";
 
 type ProfilePageProps = {
   params: Promise<{ slug: string }>;
@@ -143,14 +144,14 @@ function EvidenceNote({
 }
 
 export function generateStaticParams() {
-  return colleges.filter((college) => college.catalogCategory === "existing-curated").map((college) => ({ slug: college.slug }));
+  return collegeRecordManifest.colleges.filter((college) => college.catalogCategory === "existing-curated").map(({ slug }) => ({ slug }));
 }
 
 export async function generateMetadata({
   params,
 }: ProfilePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const college = collegeBySlug(slug);
+  const college = await collegeBySlug(slug);
 
   if (!college) {
     return { title: "College not found · CollegeSearch" };
@@ -166,7 +167,7 @@ export default async function CollegeProfilePage({
   params,
 }: ProfilePageProps) {
   const { slug } = await params;
-  const college = collegeBySlug(slug);
+  const college = await collegeBySlug(slug);
 
   if (!college) notFound();
 
@@ -186,7 +187,7 @@ export default async function CollegeProfilePage({
   const reviewedInstitutionSourceIds = new Set(
     reviewedInstitutionObservations.map((observation) => observation.sourceId),
   );
-  const reviewedInstitutionSources = release.sources.filter((source) =>
+  const reviewedInstitutionSources = collegeRecordManifest.release.sources.filter((source) =>
     reviewedInstitutionSourceIds.has(source.id),
   );
   const reviewedObservationAreas = new Set<string>();

@@ -1,19 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 import { readBoundedJson } from "@/app/lib/bounded-json";
-import { colleges } from "@/app/lib/college-data";
-import knowledgeRelease from "@/data/college-knowledge-release.json";
-import { directoryFacets } from "@/app/lib/college-directory";
-import { toMatchCollege } from "@/app/match/college-record";
+import matchDirectory from "@/data/college-match-directory.json";
+import runtimeSummary from "@/data/college-runtime-summary.json";
 import {
   balancedObservedShortlist,
   hasActiveMatchSignal,
   MATCH_CRITERIA,
   RESIDENCY_STATES,
   rankMatches,
+  type MatchCollege,
   type MatchCriterion,
   type MatchPreferences,
   type MatchWeights,
 } from "@/app/match/scoring";
+
+const eligibleColleges = matchDirectory.colleges as MatchCollege[];
+if (
+  matchDirectory.schemaVersion !== 1 ||
+  matchDirectory.releaseId !== runtimeSummary.releaseId ||
+  matchDirectory.cacheVersion !== runtimeSummary.cacheVersion ||
+  matchDirectory.sourceHashes["colleges.json"] !== matchDirectory.releaseId ||
+  !Array.isArray(matchDirectory.colleges)
+) {
+  throw new Error(
+    "The generated Find My Fit directory is stale or inconsistent. Run scripts/build-college-directory-artifact.mjs.",
+  );
+}
 
 const validRegions = new Set(["anywhere", "west", "midwest", "northeast", "south", "territories"]);
 const validResidency = new Set(["unknown", "international", ...RESIDENCY_STATES]);
@@ -31,7 +43,7 @@ function readWeights(value: unknown): MatchWeights | null {
 function readPreferences(value: unknown): MatchPreferences | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const record = value as Record<string, unknown>;
-  const facets = directoryFacets();
+  const facets = runtimeSummary.directoryFacets;
   const region = typeof record.region === "string" ? record.region : "";
   const validRegion = validRegions.has(region) || (
     region.startsWith("state:") && facets.states.includes(region.slice(6))
@@ -107,15 +119,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Choose at least one active match preference." }, { status: 400 });
   }
 
-  const eligibleColleges = colleges
-    .filter((college) => college.institutionLevel === "Four-year" && college.undergraduateOffering)
-    .map(toMatchCollege);
   const allResults = rankMatches(eligibleColleges, { ...preferences, weights }, eligibleColleges.length);
   const balanced = balancedObservedShortlist(allResults);
   return NextResponse.json({
     results: allResults.slice(0, 10),
     balancedShortlist: balanced,
-    releaseId: knowledgeRelease.releaseId,
+    releaseId: runtimeSummary.releaseId,
   }, {
     headers: {
       "Cache-Control": "private, no-store",

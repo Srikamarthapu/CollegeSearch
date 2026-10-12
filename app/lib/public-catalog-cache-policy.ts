@@ -1,18 +1,18 @@
 import { COLLEGE_DIRECTORY_CACHE_VERSION } from "./college-directory-cache-version.ts";
 
 export const PRIVATE_CATALOG_CACHE_CONTROL = "private, no-store";
+export const PRIVATE_CATALOG_CACHE_BYPASS_QUERY = "__private";
 
 /**
- * Only these deterministic public GETs may bypass the auth-refresh proxy and
- * use a shared CDN cache. Search terms, filters, comparisons, and saved rows
- * remain request-specific and never enter this allowlist.
+ * Identify only canonical public catalog URLs. HEAD is included so a request
+ * with credentials cannot fall through to a GET cache entry for the same URL.
+ * This intentionally ignores Cookie and Authorization; use
+ * isPublicCatalogCacheRequest before allowing shared caching.
  */
-export function isPublicCatalogCacheRequest(
+export function isPublicCatalogCachePath(
   request: Pick<Request, "method" | "url" | "headers">,
 ) {
-  if (request.method !== "GET") return false;
-  if (request.headers.get("cookie")?.trim()) return false;
-  if (request.headers.get("authorization")?.trim()) return false;
+  if (request.method !== "GET" && request.method !== "HEAD") return false;
 
   const url = new URL(request.url);
   if (
@@ -30,6 +30,40 @@ export function isPublicCatalogCacheRequest(
     releaseParameters.length === 1 &&
     releaseParameters[0] === COLLEGE_DIRECTORY_CACHE_VERSION
   );
+}
+
+export function hasCatalogRequestCredentials(
+  request: Pick<Request, "headers">,
+) {
+  return Boolean(
+    request.headers.get("cookie")?.trim() ||
+      request.headers.get("authorization")?.trim(),
+  );
+}
+
+/** Only GETs without credentials may receive the public cache policy. */
+export function isPublicCatalogCacheRequest(
+  request: Pick<Request, "method" | "url" | "headers">,
+) {
+  return (
+    request.method === "GET" &&
+    isPublicCatalogCachePath(request) &&
+    !hasCatalogRequestCredentials(request)
+  );
+}
+
+/**
+ * Add a fixed internal query marker that cannot match an allowlisted public URL.
+ * The catalog route parsers ignore this unknown parameter and return the same
+ * deterministic public data, while their shared-cache policy rejects the URL.
+ */
+export function privateCatalogCacheRewriteUrl(
+  request: Pick<Request, "method" | "url" | "headers">,
+) {
+  if (!isPublicCatalogCachePath(request)) return null;
+  const url = new URL(request.url);
+  url.searchParams.set(PRIVATE_CATALOG_CACHE_BYPASS_QUERY, "1");
+  return url;
 }
 
 /** Route handlers use this too, so a proxy bypass can never make a response public by itself. */

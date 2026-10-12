@@ -1,6 +1,11 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { updateSupabaseSession } from "@/app/lib/supabase/update-session";
-import { isPublicCatalogCacheRequest } from "@/app/lib/public-catalog-cache-policy";
+import {
+  isPublicCatalogCachePath,
+  isPublicCatalogCacheRequest,
+  PRIVATE_CATALOG_CACHE_CONTROL,
+  privateCatalogCacheRewriteUrl,
+} from "@/app/lib/public-catalog-cache-policy";
 import {
   createContentSecurityPolicy,
   createCspNonce,
@@ -9,6 +14,8 @@ import {
 
 const PRIVATE_NO_STORE_CACHE_CONTROL =
   "private, no-cache, no-store, must-revalidate, max-age=0";
+const PUBLIC_JSON_CONTENT_SECURITY_POLICY =
+  "default-src 'none'; frame-ancestors 'none'; base-uri 'none'";
 
 function enforcePrivateNoStore(response: Response) {
   const cacheControl = response.headers.get("Cache-Control") ?? "";
@@ -27,15 +34,28 @@ function enforcePrivateNoStore(response: Response) {
 }
 
 export async function proxy(request: NextRequest) {
-  // These responses are deterministic JSON without a session or an HTML CSP
-  // nonce. Let their route choose a bounded public TTL; every other request
-  // keeps the private boundary below, including filtered/personal queries.
-  if (isPublicCatalogCacheRequest(request)) {
-    const response = NextResponse.next();
+  // Only canonical, credential-free GETs may share a CDN entry. A credentialed
+  // request (and HEAD, which can share a GET cache key) must use a distinct
+  // internal URL so a previously cached public response cannot be selected.
+  // These routes return public catalog data, so they do not need session refresh.
+  if (isPublicCatalogCachePath(request)) {
+    const mayUseSharedCache = isPublicCatalogCacheRequest(request);
+    const rewriteUrl = mayUseSharedCache
+      ? null
+      : privateCatalogCacheRewriteUrl(request);
+    const response = rewriteUrl
+      ? NextResponse.rewrite(rewriteUrl)
+      : NextResponse.next();
     response.headers.set(
       "Content-Security-Policy",
-      "default-src 'none'; frame-ancestors 'none'; base-uri 'none'",
+      PUBLIC_JSON_CONTENT_SECURITY_POLICY,
     );
+    if (!mayUseSharedCache) {
+      response.headers.set(
+        "Cache-Control",
+        PRIVATE_CATALOG_CACHE_CONTROL,
+      );
+    }
     for (const { key, value } of NON_CSP_SECURITY_HEADERS) {
       response.headers.set(key, value);
     }
