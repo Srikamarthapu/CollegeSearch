@@ -13,36 +13,46 @@ import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import logoSourcesFirst from "@/data/college-logo-sources-01-25.json";
 import logoSourcesSecond from "@/data/college-logo-sources-26-50.json";
-import tuitionDataset from "@/data/college-tuition.json";
-import costOverrides from "@/data/college-cost-overrides.json";
+import trustMetadata from "@/data/college-trust-metadata.json";
 import { approvedProfileCampusPhotoCount } from "@/app/lib/profile-campus-photos";
-import {
-  colleges,
-  observationSourceKind,
-  release,
-  type SourceRelease,
-} from "@/app/lib/college-data";
+import type { SourceRelease } from "@/app/lib/college-data";
 
 const logoSources = [...logoSourcesFirst, ...logoSourcesSecond];
-const collegeNames = new Map(
-  colleges.map((college) => [college.slug, college.name]),
-);
-const reviewedInstitutionRecords = colleges.filter((college) =>
-  Object.values(college.observations).some(
-    (observation) =>
-      observation !== null &&
-      !observation.sourceId.startsWith("uc-") &&
-      !observationSourceKind(observation).isFederal,
-  ),
-);
-const reviewedAdmissionHeadlines = reviewedInstitutionRecords.filter(
-  (college) => !observationSourceKind(college.observations.admitRate).isFederal,
-);
-const firstPartyAdmissionHeadlines = colleges.filter(
-  (college) => !observationSourceKind(college.observations.admitRate).isFederal,
-);
-const federalAdmissionBaselines =
-  colleges.length - firstPartyAdmissionHeadlines.length;
+const collegeNames = new Map(Object.entries(trustMetadata.logoCollegeNames));
+const { release, coverage, tuitionSourceUrl, budgetReview } = trustMetadata;
+function parseSourceRelease(source: (typeof release.sources)[number]): SourceRelease {
+  let publicationStatus: SourceRelease["publicationStatus"];
+  if (source.publicationStatus === undefined) {
+    publicationStatus = undefined;
+  } else if (source.publicationStatus === "published") {
+    publicationStatus = "published";
+  } else {
+    throw new Error(`Unsupported publication status for source ${source.id}.`);
+  }
+  const { finality, artifactHashMode, artifactKind, review } = source;
+  if (finality !== undefined && finality !== "snapshot" && finality !== "provisional" && finality !== "finalized") {
+    throw new Error(`Unsupported finality for source ${source.id}.`);
+  }
+  if (artifactHashMode !== undefined && artifactHashMode !== "raw" && artifactHashMode !== "html-without-volatile-assets-and-edge-challenge") {
+    throw new Error(`Unsupported artifact hash mode for source ${source.id}.`);
+  }
+  if (artifactKind !== undefined && artifactKind !== "html" && artifactKind !== "pdf" && artifactKind !== "xlsx") {
+    throw new Error(`Unsupported artifact kind for source ${source.id}.`);
+  }
+  let validatedReview: SourceRelease["review"];
+  if (review !== undefined) {
+    if (review.status !== "approved" || review.method !== "manual") {
+      throw new Error(`Unsupported review for source ${source.id}.`);
+    }
+    validatedReview = { ...review, status: review.status, method: review.method };
+  }
+  return { ...source, publicationStatus, finality, artifactHashMode, artifactKind, review: validatedReview };
+}
+const sourceReleases: SourceRelease[] = release.sources.map(parseSourceRelease);
+const reviewedInstitutionRecords = coverage.reviewedInstitutionRecordCount;
+const reviewedAdmissionHeadlines = coverage.reviewedCollegeAdmissionCount;
+const firstPartyAdmissionHeadlines = coverage.firstPartyAdmissionCount;
+const federalAdmissionBaselines = coverage.federalAdmissionCount;
 
 export const metadata: Metadata = {
   title: "Data sources · CollegeSearch",
@@ -208,15 +218,15 @@ export default function DataSourcesPage() {
             </div>
             <div>
               <dt>Reviewed institution records</dt>
-              <dd>{reviewedInstitutionRecords.length}</dd>
+              <dd>{reviewedInstitutionRecords}</dd>
             </div>
             <div>
               <dt>Reviewed admission headlines</dt>
-              <dd>{reviewedAdmissionHeadlines.length}</dd>
+              <dd>{reviewedAdmissionHeadlines}</dd>
             </div>
             <div>
               <dt>Total first-party admission headlines</dt>
-              <dd>{firstPartyAdmissionHeadlines.length}</dd>
+              <dd>{firstPartyAdmissionHeadlines}</dd>
             </div>
             <div>
               <dt>Federal admission baselines</dt>
@@ -234,13 +244,13 @@ export default function DataSourcesPage() {
             </article>
             <article>
               <h3>IPEDS reports tuition separately</h3>
-              <p>{colleges.filter((college) => college.costs.tuitionOutOfState.value !== null).length.toLocaleString()} of {colleges.length.toLocaleString()} colleges have a separately reported or reviewed annual tuition amount. Missing figures stay “Not reported.” Federal figures are historical institutional reports, not a current bill; IPEDS may flag values as imputed or adjusted in their source definitions.</p>
-              <a href={tuitionDataset.release.sourceUrl} target="_blank" rel="noreferrer">Open the federal tuition source</a>
+              <p>{coverage.tuitionReportedCount.toLocaleString()} of {coverage.institutionCount.toLocaleString()} colleges have a separately reported or reviewed annual tuition amount. Missing figures stay “Not reported.” Federal figures are historical institutional reports, not a current bill; IPEDS may flag values as imputed or adjusted in their source definitions.</p>
+              <a href={tuitionSourceUrl} target="_blank" rel="noreferrer">Open the federal tuition source</a>
             </article>
             <article>
               <h3>Full attendance costs are separate</h3>
-              <p>Official {costOverrides.colleges.length}-college budget review checked {costOverrides.reviewedOn}. Stanford and Berkeley profiles include sourced 2026–2027 budgets. A fee allowance is an estimate, not a fixed charge. Other colleges link to their official website where a full budget has not yet been reviewed.</p>
-              {costOverrides.colleges.map((row) => <p key={row.unitId}><a href={row.budget.sourceUrl} target="_blank" rel="noreferrer">{row.costs.tuitionOutOfState.publisher}: official budget</a></p>)}
+              <p>Official {budgetReview.collegeCount}-college budget review checked {budgetReview.reviewedOn}. Stanford and Berkeley profiles include sourced 2026–2027 budgets. A fee allowance is an estimate, not a fixed charge. Other colleges link to their official website where a full budget has not yet been reviewed.</p>
+              {budgetReview.colleges.map((row) => <p key={row.unitId}><a href={row.budgetSourceUrl} target="_blank" rel="noreferrer">{row.publisher}: official budget</a></p>)}
             </article>
           </div>
         </section>
@@ -254,10 +264,10 @@ export default function DataSourcesPage() {
               <span className="page-section-index">01</span>
               <h2 id="active-sources-heading">Sources in the current release</h2>
             </div>
-            <p>{release.sources.length} normalized source releases</p>
+            <p>{sourceReleases.length} normalized source releases</p>
           </div>
           <div className="sources-record-list">
-            {release.sources.map((source, index) => (
+            {sourceReleases.map((source, index) => (
               <SourceRecord
                 source={source}
                 position={index + 1}
@@ -395,7 +405,7 @@ export default function DataSourcesPage() {
           <div className="sources-field-map">
             <article>
               <h3>Matched to the college</h3>
-              <p>{approvedProfileCampusPhotoCount.toLocaleString()} of {colleges.length.toLocaleString()} profiles have a reviewed campus photograph. Photos are matched to the exact college record and checked for campus identity, subject and reuse license. Automatically discovered images stay unpublished until reviewed.</p>
+              <p>{approvedProfileCampusPhotoCount.toLocaleString()} of {coverage.institutionCount.toLocaleString()} profiles have a reviewed campus photograph. Photos are matched to the exact college record and checked for campus identity, subject and reuse license. Automatically discovered images stay unpublished until reviewed.</p>
             </article>
             <article>
               <h3>Credit stays with the image</h3>

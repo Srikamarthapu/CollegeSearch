@@ -21,7 +21,7 @@ async function get(path, options = {}) {
   return { response, body, result };
 }
 const documents = [];
-for (const path of ['/', '/', '/explore']) {
+for (const path of ['/', '/', '/explore', '/majors', '/majors/engineering', '/data-sources', '/methodology']) {
   const item = await get(path);
   const inspected = inspectDocument(item.response, item.body, path);
   item.result.failures.push(...inspected.failures);

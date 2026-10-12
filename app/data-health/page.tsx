@@ -4,9 +4,9 @@ import Link from "next/link";
 
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
-import { colleges, observationSourceKind, release } from "@/app/lib/college-data";
 import styles from "./data-health.module.css";
 import verification from "@/data/institution-source-verification.json";
+import trustMetadata from "@/data/college-trust-metadata.json";
 import { verificationRecency } from "@/app/lib/verification-recency.mjs";
 
 export const dynamic = "force-dynamic";
@@ -20,6 +20,7 @@ const institutionList = new Intl.ListFormat("en-US", {
   style: "long",
   type: "conjunction",
 });
+const { release, coverage } = trustMetadata;
 
 export default function DataHealthPage() {
   // This force-dynamic server page evaluates age per request; no client render reads the clock.
@@ -33,30 +34,6 @@ export default function DataHealthPage() {
     : recency.state === "needs_review"
     ? { title: "Some artifact checks need review.", detail: "The published check did not verify every registered artifact. The last approved college records remain available; confirm important details with the college." }
     : { title: "Artifact-check recency is unavailable.", detail: "The published timestamp or coverage could not be verified. Confirm important details with the college." };
-  const reviewedInstitutionRecords = colleges.filter((college) =>
-    Object.values(college.observations).some(
-      (observation) =>
-        observation !== null &&
-        !observation.sourceId.startsWith("uc-") &&
-        !observationSourceKind(observation).isFederal,
-    ),
-  );
-  const firstPartyAdmissions = colleges.filter(
-    (college) => !observationSourceKind(college.observations.admitRate).isFederal,
-  );
-  const federalAdmissions = colleges.filter(
-    (college) => observationSourceKind(college.observations.admitRate).isFederal,
-  );
-  const preliminaryUc = firstPartyAdmissions.filter((college) =>
-    college.observations.admitRate.sourceId.startsWith("uc-"),
-  );
-  const reviewedCollegeAdmissions = reviewedInstitutionRecords.filter(
-    (college) => !observationSourceKind(college.observations.admitRate).isFederal,
-  );
-  const partialInstitutionRecords = reviewedInstitutionRecords.filter(
-    (college) => observationSourceKind(college.observations.admitRate).isFederal,
-  );
-
   return (
     <>
       <SiteHeader />
@@ -107,29 +84,27 @@ export default function DataHealthPage() {
           <div className={styles.summaryGrid}>
             <article>
               <CheckCircle2 size={19} aria-hidden="true" />
-              <strong>{reviewedInstitutionRecords.length}</strong>
+              <strong>{coverage.reviewedInstitutionRecordCount}</strong>
               <span>reviewed institutional records</span>
               <p>
-                {reviewedCollegeAdmissions.length} supply reviewed admission
-                headlines. {institutionList.format(
-                  partialInstitutionRecords.map((college) => college.name),
-                )} are partial records: their official enrollment
+                {coverage.reviewedCollegeAdmissionCount} supply reviewed admission
+                headlines. {institutionList.format(coverage.partialInstitutionNames)} are partial records: their official enrollment
                 or outcome fields do not replace the federal admission baseline.
               </p>
             </article>
             <article>
               <AlertCircle size={19} aria-hidden="true" />
-              <strong>{firstPartyAdmissions.length}</strong>
+              <strong>{coverage.firstPartyAdmissionCount}</strong>
               <span>total first-party admission headlines</span>
               <p>
-                {preliminaryUc.length} preliminary UC campus snapshots plus{" "}
-                {reviewedCollegeAdmissions.length} reviewed institution
+                {coverage.preliminaryUcSnapshotCount} preliminary UC campus snapshots plus{" "}
+                {coverage.reviewedCollegeAdmissionCount} reviewed institution
                 admission records. Source period and finality remain attached.
               </p>
             </article>
             <article>
               <Database size={19} aria-hidden="true" />
-              <strong>{federalAdmissions.length}</strong>
+              <strong>{coverage.federalAdmissionCount}</strong>
               <span>federal admission baselines</span>
               <p>
                 These use Fall 2024 admissions from the current Scorecard
@@ -181,7 +156,7 @@ export default function DataHealthPage() {
             <strong>Known refresh work is visible, not hidden.</strong>
             <p>
               The next data pass should expand beyond the current{" "}
-              {reviewedInstitutionRecords.length} reviewed institutional records
+              {coverage.reviewedInstitutionRecordCount} reviewed institutional records
               and add newer UC cost/outcome records while retaining federal
               observations as comparable alternates.
             </p>

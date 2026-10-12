@@ -15,11 +15,11 @@ import { CollegeLogo } from "@/app/components/CollegeLogo";
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
 import {
-  colleges,
   formatObservation,
   percentFormatter,
-} from "@/app/lib/college-data";
+} from "@/app/lib/college-record-presentation";
 import {
+  broadFieldCollegeCount,
   broadFieldBySlug,
   broadFields,
   collegesWithoutBroadField,
@@ -125,7 +125,7 @@ export default async function BroadFieldPage({
           <div>
             <span>College coverage</span>
             <strong>
-              {field.records.length} <small>of {colleges.length}</small>
+              {field.records.length} <small>of {broadFieldCollegeCount}</small>
             </strong>
             <p>Bachelor&apos;s or associate indicator present in this release</p>
           </div>

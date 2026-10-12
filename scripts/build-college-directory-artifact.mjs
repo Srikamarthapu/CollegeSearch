@@ -9,9 +9,16 @@ import { projectCollegeForClient } from "../app/lib/college-client-record.ts";
 import { toChancesCollege } from "../app/chances/admissions-record.ts";
 
 register();
-const [{ colleges: validatedColleges, release }, { projectEligibleMatchColleges }] = await Promise.all([
+const [
+  { colleges: validatedColleges, release },
+  { projectEligibleMatchColleges },
+  { summarizeCollegeTrustCoverage },
+  { projectCollegeBroadFields },
+] = await Promise.all([
   import("../app/lib/college-data.ts"),
   import("../app/match/college-artifact.ts"),
+  import("../app/lib/college-trust-coverage.ts"),
+  import("../app/majors/major-artifact.ts"),
 ]);
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -21,11 +28,17 @@ const sourceNames = [
   "college-cost-overrides.json",
   "college-actions.json",
 ];
+const logoSourceNames = [
+  "college-logo-sources-01-25.json",
+  "college-logo-sources-26-50.json",
+];
 const outputNames = [
   "data/college-directory-client.json",
   "data/college-admissions-directory.json",
   "data/college-runtime-summary.json",
   "data/college-match-directory.json",
+  "data/college-trust-metadata.json",
+  "data/college-broad-fields.json",
   "data/college-records/manifest.json",
   "app/lib/college-directory-cache-version.ts",
 ];
@@ -48,9 +61,10 @@ function uniqueMap(rows, label) {
 }
 
 async function buildArtifacts() {
-  const [sourceBuffers, markerBuffer] = await Promise.all([
+  const [sourceBuffers, markerBuffer, logoSourceBuffers] = await Promise.all([
     Promise.all(sourceNames.map((name) => readFile(path.join(root, "data", name)))),
     readFile(path.join(root, "data", "college-knowledge-release.json")),
+    Promise.all(logoSourceNames.map((name) => readFile(path.join(root, "data", name)))),
   ]);
   const [catalogBytes, tuitionBytes, costOverridesBytes, actionsBytes] = sourceBuffers;
   const marker = JSON.parse(markerBuffer.toString("utf8"));
@@ -124,10 +138,18 @@ async function buildArtifacts() {
   const sourceHashes = Object.fromEntries(
     sourceNames.map((name, index) => [name, `sha256:${sha256(sourceBuffers[index])}`]),
   );
+  const logoSourceHashes = Object.fromEntries(
+    logoSourceNames.map((name, index) => [name, `sha256:${sha256(logoSourceBuffers[index])}`]),
+  );
   const cacheVersionInput = sourceNames
     .map((name) => `${name}:${sourceHashes[name]}`)
     .join("\n");
   const cacheVersion = `sha256:${sha256(cacheVersionInput)}`;
+  const trustSourceNames = [...sourceNames, ...logoSourceNames];
+  const trustSourceHashes = { ...sourceHashes, ...logoSourceHashes };
+  const trustCacheVersion = `sha256:${sha256(
+    trustSourceNames.map((name) => `${name}:${trustSourceHashes[name]}`).join("\n"),
+  )}`;
   const recordManifest = {
     schemaVersion: 1,
     releaseId,
@@ -147,6 +169,38 @@ async function buildArtifacts() {
     sourceHashes,
     colleges: projectEligibleMatchColleges(validatedColleges),
   };
+  const logoSources = logoSourceBuffers.flatMap((buffer) => JSON.parse(buffer.toString("utf8")));
+  const collegeNamesBySlug = new Map(validatedColleges.map(({ slug, name }) => [slug, name]));
+  const logoCollegeNames = Object.fromEntries(
+    [...new Set(logoSources.map(({ slug }) => slug))]
+      .filter((slug) => collegeNamesBySlug.has(slug))
+      .map((slug) => [slug, collegeNamesBySlug.get(slug)]),
+  );
+  const trustMetadata = {
+    schemaVersion: 1,
+    releaseId,
+    cacheVersion: trustCacheVersion,
+    sourceHashes: trustSourceHashes,
+    release,
+    coverage: summarizeCollegeTrustCoverage(validatedColleges),
+    tuitionSourceUrl: tuition.release.sourceUrl,
+    budgetReview: {
+      collegeCount: costOverrides.colleges.length,
+      reviewedOn: costOverrides.reviewedOn,
+      colleges: costOverrides.colleges.map((row) => ({
+        unitId: row.unitId,
+        publisher: row.costs.tuitionOutOfState.publisher,
+        budgetSourceUrl: row.budget.sourceUrl,
+      })),
+    },
+    logoCollegeNames,
+  };
+  const broadFieldArtifact = projectCollegeBroadFields(
+    validatedColleges,
+    release,
+    releaseId,
+    cacheVersion,
+  );
   const artifact = {
     schemaVersion: 1,
     releaseId,
@@ -182,6 +236,8 @@ async function buildArtifacts() {
     ],
     ["data/college-runtime-summary.json", `${JSON.stringify(runtimeSummary)}\n`],
     ["data/college-match-directory.json", `${JSON.stringify(matchArtifact)}\n`],
+    ["data/college-trust-metadata.json", `${JSON.stringify(trustMetadata)}\n`],
+    ["data/college-broad-fields.json", `${JSON.stringify(broadFieldArtifact)}\n`],
     ["data/college-records/manifest.json", `${JSON.stringify(recordManifest)}\n`],
     [
       "app/lib/college-directory-cache-version.ts",
@@ -260,6 +316,7 @@ async function buildArtifacts() {
     bytes: Buffer.byteLength(outputs.get("data/college-directory-client.json")),
     admissionsBytes: Buffer.byteLength(outputs.get("data/college-admissions-directory.json")),
     matchInstitutions: matchArtifact.colleges.length,
+    broadFields: broadFieldArtifact.fields.length,
     recordBytes,
   };
 }

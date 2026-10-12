@@ -10,7 +10,9 @@ import {
 
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
-import { release } from "@/app/lib/college-data";
+import trustMetadata from "@/data/college-trust-metadata.json";
+
+const { release } = trustMetadata;
 
 export const metadata: Metadata = {
   title: "Methodology · CollegeSearch",

@@ -10,8 +10,11 @@ import {
 
 import { SiteFooter } from "@/app/components/SiteFooter";
 import { SiteHeader } from "@/app/components/SiteHeader";
-import { colleges, release } from "@/app/lib/college-data";
-import { broadFields } from "@/app/majors/major-data";
+import {
+  broadFieldSources,
+  broadFields,
+  colleges,
+} from "@/app/majors/major-data";
 import styles from "@/app/majors/majors.module.css";
 
 type MajorsPageProps = {
@@ -36,7 +39,7 @@ export default async function MajorsPage({ searchParams }: MajorsPageProps) {
         field.name.toLocaleLowerCase().includes(normalizedQuery),
       )
     : broadFields;
-  const federalSource = release.sources.find((source) =>
+  const federalSource = broadFieldSources.find((source) =>
     broadFields.some((field) => field.sourceIds.includes(source.id)),
   );
 

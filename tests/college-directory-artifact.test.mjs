@@ -14,6 +14,7 @@ const [
   stateModule,
   { colleges: mergedColleges, release },
   { projectEligibleMatchColleges },
+  { observationSourceKind },
   recordLoader,
 ] =
   await Promise.all([
@@ -23,6 +24,7 @@ const [
     import("../app/lib/college-directory-state.ts"),
     import("../app/lib/college-data.ts"),
     import("../app/match/college-artifact.ts"),
+    import("../app/lib/college-record-presentation.ts"),
     import("../app/lib/college-record-loader.ts"),
   ]);
 
@@ -31,6 +33,10 @@ const sourceNames = [
   "college-tuition.json",
   "college-cost-overrides.json",
   "college-actions.json",
+];
+const logoSourceNames = [
+  "college-logo-sources-01-25.json",
+  "college-logo-sources-26-50.json",
 ];
 
 function sha256(value) {
@@ -44,8 +50,10 @@ test("generated directory, admissions, and runtime artifacts preserve source pro
     admissionsBuffer,
     summaryBuffer,
     matchBuffer,
+    trustMetadataBuffer,
     recordManifestBuffer,
     markerBuffer,
+    logoSourceBuffers,
   ] =
     await Promise.all([
       Promise.all(sourceNames.map((name) => readFile(new URL(`../data/${name}`, import.meta.url)))),
@@ -53,8 +61,10 @@ test("generated directory, admissions, and runtime artifacts preserve source pro
       readFile(new URL("../data/college-admissions-directory.json", import.meta.url)),
       readFile(new URL("../data/college-runtime-summary.json", import.meta.url)),
       readFile(new URL("../data/college-match-directory.json", import.meta.url)),
+      readFile(new URL("../data/college-trust-metadata.json", import.meta.url)),
       readFile(new URL("../data/college-records/manifest.json", import.meta.url)),
       readFile(new URL("../data/college-knowledge-release.json", import.meta.url)),
+      Promise.all(logoSourceNames.map((name) => readFile(new URL(`../data/${name}`, import.meta.url)))),
     ]);
   const [catalogBytes, tuitionBytes, overridesBytes, actionsBytes] = sourceBuffers;
   const catalog = JSON.parse(catalogBytes.toString("utf8"));
@@ -121,6 +131,79 @@ test("generated directory, admissions, and runtime artifacts preserve source pro
       slug,
       catalogCategory,
     })),
+  });
+
+  const firstPartyAdmissions = mergedColleges.filter(
+    (college) => !observationSourceKind(college.observations.admitRate).isFederal,
+  );
+  const federalAdmissions = mergedColleges.filter(
+    (college) => observationSourceKind(college.observations.admitRate).isFederal,
+  );
+  const reviewedInstitutionRecords = mergedColleges.filter((college) =>
+    Object.values(college.observations).some(
+      (observation) =>
+        observation !== null &&
+        !observation.sourceId.startsWith("uc-") &&
+        !observationSourceKind(observation).isFederal,
+    ),
+  );
+  const reviewedCollegeAdmissions = reviewedInstitutionRecords.filter(
+    (college) => !observationSourceKind(college.observations.admitRate).isFederal,
+  );
+  const partialInstitutionRecords = reviewedInstitutionRecords.filter(
+    (college) => observationSourceKind(college.observations.admitRate).isFederal,
+  );
+  const logoSources = logoSourceBuffers.flatMap((buffer) => JSON.parse(buffer.toString("utf8")));
+  const namesBySlug = new Map(mergedColleges.map(({ slug, name }) => [slug, name]));
+  const expectedLogoNames = Object.fromEntries(
+    [...new Set(logoSources.map(({ slug }) => slug))]
+      .filter((slug) => namesBySlug.has(slug))
+      .map((slug) => [slug, namesBySlug.get(slug)]),
+  );
+  const trustSourceHashes = Object.fromEntries(
+    [...sourceNames, ...logoSourceNames].map((name, index) => {
+      const bytes = index < sourceBuffers.length
+        ? sourceBuffers[index]
+        : logoSourceBuffers[index - sourceBuffers.length];
+      return [name, `sha256:${sha256(bytes)}`];
+    }),
+  );
+  const trustCacheVersion = `sha256:${sha256(
+    [...sourceNames, ...logoSourceNames]
+      .map((name) => `${name}:${trustSourceHashes[name]}`)
+      .join("\n"),
+  )}`;
+  assert.deepEqual(JSON.parse(trustMetadataBuffer.toString("utf8")), {
+    schemaVersion: 1,
+    releaseId,
+    cacheVersion: trustCacheVersion,
+    sourceHashes: trustSourceHashes,
+    release,
+    coverage: {
+      institutionCount: mergedColleges.length,
+      reviewedInstitutionRecordCount: reviewedInstitutionRecords.length,
+      reviewedCollegeAdmissionCount: reviewedCollegeAdmissions.length,
+      firstPartyAdmissionCount: firstPartyAdmissions.length,
+      federalAdmissionCount: federalAdmissions.length,
+      preliminaryUcSnapshotCount: firstPartyAdmissions.filter((college) =>
+        college.observations.admitRate.sourceId.startsWith("uc-"),
+      ).length,
+      partialInstitutionNames: partialInstitutionRecords.map(({ name }) => name),
+      tuitionReportedCount: mergedColleges.filter(
+        (college) => college.costs.tuitionOutOfState.value !== null,
+      ).length,
+    },
+    tuitionSourceUrl: tuition.release.sourceUrl,
+    budgetReview: {
+      collegeCount: overrides.colleges.length,
+      reviewedOn: overrides.reviewedOn,
+      colleges: overrides.colleges.map((row) => ({
+        unitId: row.unitId,
+        publisher: row.costs.tuitionOutOfState.publisher,
+        budgetSourceUrl: row.budget.sourceUrl,
+      })),
+    },
+    logoCollegeNames: expectedLogoNames,
   });
 
   const recordDirectory = new URL("../data/college-records/", import.meta.url);
@@ -265,4 +348,24 @@ test("profile and compare runtime imports stay detached from the full source cat
   assert.match(comparePage, /import type \{ College, Observation \} from ["']@\/app\/lib\/college-data["']/);
   assert.match(nextConfig, /"\/colleges\/\*": \["\.\/data\/college-records\/\*\.json"\]/);
   assert.match(nextConfig, /"\/compare": \["\.\/data\/college-records\/\*\.json"\]/);
+});
+
+test("trust pages render generated release and coverage metadata without runtime source catalogs", async () => {
+  const [healthPage, sourcesPage, methodologyPage] = await Promise.all([
+    readFile(new URL("../app/data-health/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/data-sources/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/methodology/page.tsx", import.meta.url), "utf8"),
+  ]);
+  for (const pageSource of [healthPage, sourcesPage, methodologyPage]) {
+    assert.match(pageSource, /college-trust-metadata\.json/);
+    assert.doesNotMatch(
+      pageSource,
+      /^import\s+(?!type\b)[^\n]*from\s+["'][^"']*(?:college-data(?:\.ts)?|college-tuition\.json|college-cost-overrides\.json|colleges\.json)/m,
+    );
+  }
+  assert.match(sourcesPage, /import type \{ SourceRelease \} from ["']@\/app\/lib\/college-data["']/);
+  assert.match(healthPage, /institution-source-verification\.json/);
+  assert.match(healthPage, /verificationRecency\(/);
+  assert.match(healthPage, /Date\.now\(\)/);
+  assert.match(healthPage, /export const dynamic = ["']force-dynamic["']/);
 });
