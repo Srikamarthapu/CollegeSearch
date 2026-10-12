@@ -1,5 +1,15 @@
 # CollegeSearch expansion progress
 
+## Released — M16 scaling foundation, October 11, 2026
+
+Added bounded versioned catalog caching, three narrowly scoped CDN-cached public JSON endpoints, credential-safe private cache variants, compact generated runtime projections, selective profile/Compare record loading, and responsive AVIF/WebP assets. Startup routes no longer initialize the full source archives. The database passage lookup now uses a verified composite index, and existing query batching/index coverage was reviewed without adding redundant indexes.
+
+Adviser work now has a durable database queue, owner-only status reads, retry/lease recovery, and a conditional one-minute dispatcher. Worker authentication and the disabled-provider response were verified live; isolated database fixtures covered ownership, idempotency, retry/exhaustion, concurrency and cleanup. The public AI gate remains closed. Account-scoped polling recovery prevents stale requests from clearing a newer job or affecting another account; temporary verification failures preserve drafts.
+
+GPT-6-Luna workers implemented scoped changes under root review. Code `d00d65a` is live in READY deployment `dpl_7EH4k3SzoJRJoDqEgxPMgSY43AEP` at https://collegesearch-steel.vercel.app. The 559-test regression suite, final 16 focused checks, both builds, TypeScript, and ESLint passed. Final live verification passed 29 cache/security checks, 15 smoke checks, and 120/120 requests in a bounded 30-visitor anonymous document workload (p50 224 ms, p95 1.12 seconds, maximum 1.68 seconds). This is not a browser-interactivity or broad-capacity guarantee. Live browser reference-page/filter checks passed without errors or overflow.
+
+Next: controlled concurrent signed-in account testing and real queued model completions after the existing provider gate is resolved, with p95/p99 latency and queue-age monitoring. See [scaling implementation and evidence](M16_SCALING.md) and [queue operations](M16_ADVISER_QUEUE.md). No new paid service, reset credit, or unrelated application changes were introduced.
+
 ## Released — M15 uniform tuition cards, October 7, 2026
 
 Restored a shared long-form card structure in discovery and saved colleges: tuition above outcome metrics for every college, with one centered price for reliable single-rate colleges. Distinct or incomplete public residency rates remain paired. Discovery grid rows now stretch and retain bottom-aligned footers, removing the short-card gaps without fixed card heights. Data and source disclosures are unchanged.
